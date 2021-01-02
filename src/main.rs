@@ -1,3 +1,31 @@
+mod class_gui_data;
+mod class_results;
+mod class_rules;
+mod class_status;
+mod class_upper_buttons;
+mod connect_tree_view;
+mod file_entry;
+mod help_function;
+mod initialize_gui;
+mod recalculate_results;
+
+use crate::class_gui_data::GuiData;
+use crate::initialize_gui::*;
+use gtk::prelude::*;
+
 fn main() {
-    println!("Hello, world!");
+    gtk::init().expect("Failed to initialize GTK.");
+
+    let gui_data: GuiData = GuiData::new();
+
+    initialize_gui(&gui_data);
+
+    // Quit the program when X in main window was clicked
+    gui_data.window_main.connect_delete_event(|_, _| {
+        gtk::main_quit();
+        Inhibit(false)
+    });
+
+    // We start the gtk main loop.
+    gtk::main();
 }

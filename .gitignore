@@ -1,4 +1,7 @@
 /target
-*.iml
 .idea/
+*.iml
+*~
 *#
+TestSuite*
+*.snap
