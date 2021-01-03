@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=szyszka
+Name=Szyszka
+Comment=App to fast rename thousands of files.
+Icon=pl.qarmin.szyszka
+Categories=System;
+StartupWMClass=szyszka
+TryExec=szyszka
+Name[pl_PL]=pl.qarmin.szyszka.desktop
