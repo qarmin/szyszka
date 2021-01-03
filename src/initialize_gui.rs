@@ -3,7 +3,7 @@ use crate::connect_tree_view::create_tree_view_results;
 use glib::*;
 use gtk::*;
 
-pub fn initialize_gui(gui_data: &GuiData) {
+pub fn initialize_gui(gui_data: &mut GuiData) {
     // Create TreeView in Scrolled Window
     {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
@@ -20,5 +20,7 @@ pub fn initialize_gui(gui_data: &GuiData) {
 
         scrolled_window_results.add(&tree_view);
         scrolled_window_results.show_all();
+
+        gui_data.results.tree_view_results = tree_view;
     }
 }

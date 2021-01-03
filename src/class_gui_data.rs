@@ -2,8 +2,11 @@ use crate::class_results::Results;
 use crate::class_rules::Rules;
 use crate::class_status::Status;
 use crate::class_upper_buttons::*;
+use crate::file_entry::ResultEntries;
 use gtk::prelude::*;
 use gtk::Builder;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct GuiData {
@@ -19,6 +22,9 @@ pub struct GuiData {
 
     // Window
     pub window_main: gtk::Window,
+
+    //
+    pub shared_result_entries: Rc<RefCell<ResultEntries>>,
 }
 
 impl GuiData {
@@ -37,6 +43,8 @@ impl GuiData {
         window_main.show_all();
         window_main.set_title("Szyszka");
 
+        let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![] }));
+
         Self {
             // glade_src,
             // builder,
@@ -45,6 +53,7 @@ impl GuiData {
             rules,
             status,
             window_main,
+            shared_result_entries,
         }
     }
 }
