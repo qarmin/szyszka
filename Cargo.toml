@@ -3,7 +3,7 @@ name = "szyszka"
 version = "0.0.1"
 authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
 edition = "2018"
-description = "Simple and primitive Linux file manager"
+description = "Simple, powerful and easy to use file renamer"
 license = "MIT"
 homepage = "https://github.com/qarmin/szyszka"
 repository = "https://github.com/qarmin/szyszka"
@@ -14,9 +14,6 @@ gio = "0.9.1"
 glib = "0.10.1"
 
 humansize = "1"
-# chrono = "0.4"
-
-# crossbeam-channel = "0.4.4"
 
 # For opening files
 open = "1.4.0"
