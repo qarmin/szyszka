@@ -10,7 +10,7 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 
 parts:
   szyszka:
-    plugin: nil
+    plugin: rust
     source: https://github.com/qarmin/szyszka.git
     build-packages:
       - libgtk-3-dev
