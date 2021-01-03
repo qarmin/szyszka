@@ -8,7 +8,6 @@ mod connect_tree_view;
 mod file_entry;
 mod help_function;
 mod initialize_gui;
-mod recalculate_results;
 
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
