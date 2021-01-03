@@ -22,7 +22,7 @@ parts:
 
 apps:
   szyszka:
-    command: bin/szyszka
+    command: szyszka
     extensions: [gnome-3-34]
     plugs:
       - home
