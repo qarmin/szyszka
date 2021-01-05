@@ -11,7 +11,7 @@ Currently Szyszka is in very early WIP and doesn't even work for now
 
 I want to add before 1.0 release:
 - Multiple Rules:
-  - Upercase/Downcase names
+  - Uppercase/Downcase names
   - Search and Replace
   - Add text(date, file size, modification date)
   - Remove specific text
