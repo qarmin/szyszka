@@ -1,8 +1,10 @@
+use crate::class_dialog_rules::DialogRules;
 use crate::class_results::Results;
-use crate::class_rules::Rules;
+use crate::class_rules_bottom_panel::RulesBottomPanel;
 use crate::class_status::Status;
 use crate::class_upper_buttons::*;
 use crate::file_entry::ResultEntries;
+use crate::rules::Rules;
 use gtk::prelude::*;
 use gtk::Builder;
 use std::cell::RefCell;
@@ -14,14 +16,18 @@ pub struct GuiData {
     // pub glade_src: String,
     // pub builder: Builder,
 
+    // Window
+    pub window_main: gtk::Window,
+
     // Subcategories
     pub upper_buttons: UpperButtons,
     pub results: Results,
-    pub rules: Rules,
     pub status: Status,
+    pub rules_bottom_panel: RulesBottomPanel,
 
-    // Window
-    pub window_main: gtk::Window,
+    pub dialog_rules: DialogRules,
+
+    pub rules: Rc<RefCell<Rules>>,
 
     //
     pub shared_result_entries: Rc<RefCell<ResultEntries>>,
@@ -33,15 +39,19 @@ impl GuiData {
         let glade_src = include_str!("../szyszka.glade").to_string();
         let builder = Builder::from_string(glade_src.as_str());
 
-        let upper_buttons: UpperButtons = UpperButtons::create_from_builder(&builder);
-        let results: Results = Results::create_from_builder(&builder);
-        let rules: Rules = Rules::create_from_builder(&builder);
-        let status: Status = Status::create_from_builder(&builder);
-
         //// Windows
         let window_main: gtk::Window = builder.get_object("window_main").unwrap();
         window_main.show_all();
         window_main.set_title("Szyszka");
+
+        let upper_buttons: UpperButtons = UpperButtons::create_from_builder(&builder);
+        let results: Results = Results::create_from_builder(&builder);
+        let status: Status = Status::create_from_builder(&builder);
+        let rules_bottom_panel: RulesBottomPanel = RulesBottomPanel::create_from_builder(&builder);
+
+        let dialog_rules: DialogRules = DialogRules::create_from_builder(&builder);
+
+        let rules = Rc::new(RefCell::new(Rules::new()));
 
         let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![] }));
 
@@ -50,9 +60,11 @@ impl GuiData {
             // builder,
             upper_buttons,
             results,
-            rules,
             status,
+            rules_bottom_panel,
+            dialog_rules,
             window_main,
+            rules,
             shared_result_entries,
         }
     }
