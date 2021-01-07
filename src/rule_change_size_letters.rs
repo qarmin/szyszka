@@ -23,24 +23,22 @@ pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule
                 panic!("Not implemented function");
             }
         },
-        RuleType::LowerCase => {
-            match rule_place {
-                RulePlace::Name => {
-                    name = name.to_lowercase();
-                }
-                RulePlace::ExtensionAndName => {
-                    name = name.to_lowercase();
-                    extension = extension.to_lowercase();
-                }
-                RulePlace::Extension => {
-                    extension = extension.to_lowercase();
-                }
-                _ => {
-                    panic!("Not implemented function");
-                }
+        RuleType::LowerCase => match rule_place {
+            RulePlace::Name => {
+                name = name.to_lowercase();
             }
-            //_ => panic!("Invalid Rule Type for change size of letter");
-        }
+            RulePlace::ExtensionAndName => {
+                name = name.to_lowercase();
+                extension = extension.to_lowercase();
+            }
+            RulePlace::Extension => {
+                extension = extension.to_lowercase();
+            }
+            _ => {
+                panic!("Not implemented function");
+            }
+        },
+        _ => panic!("Invalid Rule Type for change size of letter"),
     }
 
     // Handle also situation when e.g. file is "file." where there is not extension, but

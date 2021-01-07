@@ -1,3 +1,5 @@
+mod class_dialog_rule_remove;
+mod class_dialog_rule_size_letters;
 mod class_dialog_rules;
 mod class_gui_data;
 mod class_results;
@@ -5,6 +7,7 @@ mod class_rules_bottom_panel;
 mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
+mod connect_dialog_remove_click;
 mod connect_dialog_rule_buttons;
 mod connect_dialog_size_letters_click;
 mod connect_rule_close;
@@ -14,11 +17,13 @@ mod file_entry;
 mod help_function;
 mod initialize_gui;
 mod rule_change_size_letters;
+mod rule_remove;
 mod rules;
 mod update_records;
 
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
+use crate::connect_dialog_remove_click::*;
 use crate::connect_dialog_rule_buttons::*;
 use crate::connect_dialog_size_letters_click::*;
 use crate::connect_rule_close::*;
@@ -42,6 +47,7 @@ fn main() {
 
     // Connect buttons in dialog to reflect change to examples
     connect_dialog_size_letters_click(&gui_data);
+    connect_dialog_remove_click(&gui_data);
 
     // Connect rule buttons in main window
     connect_dialog_rule_buttons(&gui_data);
