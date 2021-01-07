@@ -3,6 +3,8 @@ use gtk::prelude::*;
 use gtk::*;
 use std::path::Path;
 
+pub const EXAMPLE_NAME: &str = "Ziemniak.jpG";
+
 pub enum ColumnsResults {
     CurrentName = 0,
     FutureName,
@@ -39,7 +41,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: &Rules) {
 
     let col_indices = [0, 1, 2];
     for number in 0..rules.rules_number {
-        let values: [&dyn ToValue; 3] = [&number, &rule_type_to_string(&rules.rule_types[number as usize]), &rule_place_to_string(&rules.rule_place[number as usize])];
+        let values: [&dyn ToValue; 3] = [&(number as u32), &rule_type_to_string(&rules.rule_types[number]), &rule_place_to_string(&rules.rule_place[number])];
         list_store.set(&list_store.append(), &col_indices, &values);
     }
 }

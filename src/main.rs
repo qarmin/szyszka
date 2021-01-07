@@ -6,17 +6,21 @@ mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_dialog_rule_buttons;
+mod connect_dialog_size_letters_click;
 mod connect_rule_close;
 mod connect_rule_ok;
 mod create_tree_view;
 mod file_entry;
 mod help_function;
 mod initialize_gui;
+mod rule_change_size_letters;
 mod rules;
+mod update_records;
 
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_dialog_rule_buttons::*;
+use crate::connect_dialog_size_letters_click::*;
 use crate::connect_rule_close::*;
 use crate::connect_rule_ok::*;
 use crate::initialize_gui::*;
@@ -35,6 +39,9 @@ fn main() {
     // Connect buttons OK and Close in select dialog
     connect_rule_close(&gui_data);
     connect_rule_ok(&gui_data);
+
+    // Connect buttons in dialog to reflect change to examples
+    connect_dialog_size_letters_click(&gui_data);
 
     // Connect rule buttons in main window
     connect_dialog_rule_buttons(&gui_data);

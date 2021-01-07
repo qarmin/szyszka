@@ -1,0 +1,62 @@
+use crate::file_entry::ResultEntries;
+use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
+use crate::rules::Rules;
+use glib::Value;
+use gtk::prelude::GtkListStoreExtManual;
+use gtk::{TreeModelExt, TreeView};
+use std::cell::RefCell;
+use std::ops::DerefMut;
+use std::rc::Rc;
+
+#[allow(dead_code)]
+pub enum UpdateMode {
+    FileAdded,
+    FileRemoved,
+    // FileMoved - Not sure if it is possible
+    RuleAdded,
+    RuleRemoved,
+    RuleMoved,
+}
+
+// TODO currently everything is counted from begginng
+pub fn update_records(tree_view: &TreeView, _shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode) {
+    let list_store = get_list_store_from_tree_view(&tree_view);
+    // let mut shared_result_entries = shared_result_entries.borrow_mut();
+    let mut rules = rules.borrow_mut();
+    // let shared_result_entries = shared_result_entries.deref_mut();
+    let rules = rules.deref_mut();
+
+    match update_mode {
+        UpdateMode::FileAdded => {
+            if let Some(iter) = list_store.get_iter_first() {
+                // We count how much
+                // let mut current_index = 1;
+                // let mut end_of_records = false;
+
+                // TODO Properly count number of added elements
+                // loop {
+                //     if current_index == shared_result_entries.entries.len() {
+                //         break;
+                //     }
+                //     if !list_store.iter_next(&iter) {
+                //         panic!("This should never happens, looks that elements was not added but even removed");
+                //         //break;
+                //     }
+                //     current_index += 1;
+                // }
+                // TODO get info about current row and change it
+                loop {
+                    let value_to_change = list_store.get_value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
+                    let changed_value = rules.apply_all_rules_to_item(value_to_change);
+                    list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
+                    if !list_store.iter_next(&iter) {
+                        break; // This is the end
+                    }
+                }
+            }
+        } // UpdateMode::Re => {}
+        _ => {
+            panic!("Not implemented yet")
+        }
+    }
+}

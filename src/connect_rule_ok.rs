@@ -33,7 +33,7 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
                 if radio_button_letters_type_uppercase.get_active() {
                     rule_type = RuleType::UpperCase;
                 } else if radio_button_letters_type_lowercase.get_active() {
-                    rule_type = RuleType::SmallCase;
+                    rule_type = RuleType::LowerCase;
                 } else {
                     panic!("Button not available");
                 }
