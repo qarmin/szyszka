@@ -1,7 +1,7 @@
-use crate::class_dialog_rules::DialogRules;
-use crate::class_results::Results;
-use crate::class_rules_bottom_panel::RulesBottomPanel;
-use crate::class_status::Status;
+use crate::class_dialog_rules::GUIDialogRules;
+use crate::class_results::GUIResults;
+use crate::class_rules_bottom_panel::GUIRulesBottomPanel;
+use crate::class_status::GUIStatus;
 use crate::class_upper_buttons::*;
 use crate::file_entry::ResultEntries;
 use crate::rules::Rules;
@@ -20,12 +20,12 @@ pub struct GuiData {
     pub window_main: gtk::Window,
 
     // Subcategories
-    pub upper_buttons: UpperButtons,
-    pub results: Results,
-    pub status: Status,
-    pub rules_bottom_panel: RulesBottomPanel,
+    pub upper_buttons: GUIUpperButtons,
+    pub results: GUIResults,
+    pub status: GUIStatus,
+    pub rules_bottom_panel: GUIRulesBottomPanel,
 
-    pub dialog_rules: DialogRules,
+    pub dialog_rules: GUIDialogRules,
 
     pub rules: Rc<RefCell<Rules>>,
 
@@ -44,12 +44,12 @@ impl GuiData {
         window_main.show_all();
         window_main.set_title("Szyszka");
 
-        let upper_buttons: UpperButtons = UpperButtons::create_from_builder(&builder);
-        let results: Results = Results::create_from_builder(&builder);
-        let status: Status = Status::create_from_builder(&builder);
-        let rules_bottom_panel: RulesBottomPanel = RulesBottomPanel::create_from_builder(&builder);
+        let upper_buttons: GUIUpperButtons = GUIUpperButtons::create_from_builder(&builder);
+        let results: GUIResults = GUIResults::create_from_builder(&builder);
+        let status: GUIStatus = GUIStatus::create_from_builder(&builder);
+        let rules_bottom_panel: GUIRulesBottomPanel = GUIRulesBottomPanel::create_from_builder(&builder);
 
-        let dialog_rules: DialogRules = DialogRules::create_from_builder(&builder);
+        let dialog_rules: GUIDialogRules = GUIDialogRules::create_from_builder(&builder);
 
         let rules = Rc::new(RefCell::new(Rules::new()));
 

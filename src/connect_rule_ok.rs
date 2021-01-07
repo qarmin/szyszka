@@ -13,11 +13,15 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
     let rules = gui_data.rules.clone();
     let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
 
-    let radio_button_letters_type_uppercase = gui_data.dialog_rules.radio_button_letters_type_uppercase.clone();
-    let radio_button_letters_type_lowercase = gui_data.dialog_rules.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_usage_name = gui_data.dialog_rules.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = gui_data.dialog_rules.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_usage_both = gui_data.dialog_rules.radio_button_letters_usage_both.clone();
+    let radio_button_letters_type_uppercase = gui_data.dialog_rules.size_letters.radio_button_letters_type_uppercase.clone();
+    let radio_button_letters_type_lowercase = gui_data.dialog_rules.size_letters.radio_button_letters_type_lowercase.clone();
+    let radio_button_letters_usage_name = gui_data.dialog_rules.size_letters.radio_button_letters_usage_name.clone();
+    let radio_button_letters_usage_extension = gui_data.dialog_rules.size_letters.radio_button_letters_usage_extension.clone();
+    let radio_button_letters_usage_both = gui_data.dialog_rules.size_letters.radio_button_letters_usage_both.clone();
+
+    let radio_button_remove_name = gui_data.dialog_rules.remove.radio_button_remove_name.clone();
+    let radio_button_remove_extension = gui_data.dialog_rules.remove.radio_button_remove_extension.clone();
+    let radio_button_remove_both = gui_data.dialog_rules.remove.radio_button_remove_both.clone();
 
     button_dialog_ok.connect_clicked(move |_e| {
         dialog_with_rules.hide();
@@ -42,6 +46,18 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
                 } else if radio_button_letters_usage_both.get_active() {
                     rule_place = RulePlace::ExtensionAndName;
                 } else if radio_button_letters_usage_name.get_active() {
+                    rule_place = RulePlace::Name;
+                } else {
+                    panic!("Invalid Button Clicked");
+                }
+            }
+            1 => {
+                rule_type = RuleType::Remove;
+                if radio_button_remove_extension.get_active() {
+                    rule_place = RulePlace::Extension;
+                } else if radio_button_remove_both.get_active() {
+                    rule_place = RulePlace::ExtensionAndName;
+                } else if radio_button_remove_name.get_active() {
                     rule_place = RulePlace::Name;
                 } else {
                     panic!("Invalid Button Clicked");

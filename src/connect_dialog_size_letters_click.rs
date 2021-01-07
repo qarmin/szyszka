@@ -1,49 +1,49 @@
-use crate::class_dialog_rules::DialogRules;
+use crate::class_dialog_rule_size_letters::GUISizeLetters;
 use crate::class_gui_data::GuiData;
 use crate::help_function::*;
 use gtk::{ButtonExt, LabelExt, ToggleButtonExt};
 
 pub fn connect_dialog_size_letters_click(gui_data: &GuiData) {
-    let dialog_rules = gui_data.dialog_rules.clone();
-    let radio_button_letters_usage_both = gui_data.dialog_rules.radio_button_letters_usage_both.clone();
-    let radio_button_letters_usage_name = gui_data.dialog_rules.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = gui_data.dialog_rules.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_type_lowercase = gui_data.dialog_rules.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_type_uppercase = gui_data.dialog_rules.radio_button_letters_type_uppercase.clone();
+    let size_letters = gui_data.dialog_rules.size_letters.clone();
+    let radio_button_letters_usage_both = gui_data.dialog_rules.size_letters.radio_button_letters_usage_both.clone();
+    let radio_button_letters_usage_name = gui_data.dialog_rules.size_letters.radio_button_letters_usage_name.clone();
+    let radio_button_letters_usage_extension = gui_data.dialog_rules.size_letters.radio_button_letters_usage_extension.clone();
+    let radio_button_letters_type_lowercase = gui_data.dialog_rules.size_letters.radio_button_letters_type_lowercase.clone();
+    let radio_button_letters_type_uppercase = gui_data.dialog_rules.size_letters.radio_button_letters_type_uppercase.clone();
 
     // Initial Update
-    check_how_should_look_example(&dialog_rules);
+    check_how_should_look_example(&size_letters);
 
     radio_button_letters_type_lowercase.connect_clicked(move |_e| {
-        check_how_should_look_example(&dialog_rules);
+        check_how_should_look_example(&size_letters);
     });
-    let dialog_rules = gui_data.dialog_rules.clone();
+    let size_letters = gui_data.dialog_rules.size_letters.clone();
     radio_button_letters_type_uppercase.connect_clicked(move |_e| {
-        check_how_should_look_example(&dialog_rules);
+        check_how_should_look_example(&size_letters);
     });
-    let dialog_rules = gui_data.dialog_rules.clone();
+    let size_letters = gui_data.dialog_rules.size_letters.clone();
     radio_button_letters_usage_extension.connect_clicked(move |_e| {
-        check_how_should_look_example(&dialog_rules);
+        check_how_should_look_example(&size_letters);
     });
-    let dialog_rules = gui_data.dialog_rules.clone();
+    let size_letters = gui_data.dialog_rules.size_letters.clone();
     radio_button_letters_usage_name.connect_clicked(move |_e| {
-        check_how_should_look_example(&dialog_rules);
+        check_how_should_look_example(&size_letters);
     });
-    let dialog_rules = gui_data.dialog_rules.clone();
+    let size_letters = gui_data.dialog_rules.size_letters.clone();
     radio_button_letters_usage_both.connect_clicked(move |_e| {
-        check_how_should_look_example(&dialog_rules);
+        check_how_should_look_example(&size_letters);
     });
 }
 
-fn check_how_should_look_example(dialog_rules: &DialogRules) {
-    let labels_letters_example_before = dialog_rules.labels_letters_example_before.clone();
-    let labels_letters_example_after = dialog_rules.labels_letters_example_after.clone();
+fn check_how_should_look_example(size_letters: &GUISizeLetters) {
+    let labels_letters_example_before = size_letters.labels_letters_example_before.clone();
+    let labels_letters_example_after = size_letters.labels_letters_example_after.clone();
 
-    let radio_button_letters_usage_both = dialog_rules.radio_button_letters_usage_both.clone();
-    let radio_button_letters_usage_name = dialog_rules.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = dialog_rules.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_type_lowercase = dialog_rules.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_type_uppercase = dialog_rules.radio_button_letters_type_uppercase.clone();
+    let radio_button_letters_usage_both = size_letters.radio_button_letters_usage_both.clone();
+    let radio_button_letters_usage_name = size_letters.radio_button_letters_usage_name.clone();
+    let radio_button_letters_usage_extension = size_letters.radio_button_letters_usage_extension.clone();
+    let radio_button_letters_type_lowercase = size_letters.radio_button_letters_type_lowercase.clone();
+    let radio_button_letters_type_uppercase = size_letters.radio_button_letters_type_uppercase.clone();
 
     labels_letters_example_before.set_text(EXAMPLE_NAME);
 
