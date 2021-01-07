@@ -8,7 +8,7 @@ pub struct DialogRules {
     pub button_dialog_close: gtk::Button,
     pub button_dialog_ok: gtk::Button,
 
-    // UpperCase/SmallCase
+    // UpperCase/LowerCase
     pub radio_button_letters_type_uppercase: gtk::RadioButton,
     pub radio_button_letters_type_lowercase: gtk::RadioButton,
 
@@ -28,7 +28,7 @@ impl DialogRules {
         let button_dialog_close: gtk::Button = builder.get_object("button_dialog_close").unwrap();
         let button_dialog_ok: gtk::Button = builder.get_object("button_dialog_ok").unwrap();
 
-        // UpperCase/SmallCase
+        // UpperCase/LowerCase
         let radio_button_letters_type_uppercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_uppercase").unwrap();
         let radio_button_letters_type_lowercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_lowercase").unwrap();
 

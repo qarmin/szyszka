@@ -1,7 +1,9 @@
+use crate::rule_change_size_letters::rule_change_size_letters;
+
 pub struct Rules {
     pub rule_types: Vec<RuleType>,
     pub rule_place: Vec<RulePlace>,
-    pub rules_number: u32,
+    pub rules_number: usize,
 }
 
 impl Rules {
@@ -17,11 +19,21 @@ impl Rules {
         self.rule_place.push(rule_place);
         self.rules_number += 1;
     }
+    pub fn apply_all_rules_to_item(&mut self, mut item: String) -> String {
+        for rule_number in 0..self.rules_number {
+            match self.rule_types[rule_number] {
+                RuleType::UpperCase | RuleType::LowerCase => {
+                    item = rule_change_size_letters(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
+                }
+            }
+        }
+        item
+    }
 }
 
 pub enum RuleType {
     UpperCase,
-    SmallCase,
+    LowerCase,
 }
 #[allow(dead_code)]
 pub enum RulePlace {
@@ -36,7 +48,7 @@ pub enum RulePlace {
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
         RuleType::UpperCase => "UpperCase",
-        RuleType::SmallCase => "SmallCase",
+        RuleType::LowerCase => "LowerCase",
     }
     .to_string()
 }
