@@ -1,5 +1,5 @@
 use crate::rule_change_size_letters::rule_change_size_letters;
-use crate::rule_remove::rule_remove;
+use crate::rule_purge::rule_purge;
 
 pub struct Rules {
     pub rule_types: Vec<RuleType>,
@@ -26,8 +26,8 @@ impl Rules {
                 RuleType::UpperCase | RuleType::LowerCase => {
                     item = rule_change_size_letters(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
                 }
-                RuleType::Remove => {
-                    item = rule_remove(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
+                RuleType::Purge => {
+                    item = rule_purge(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
                 }
             }
         }
@@ -38,7 +38,7 @@ impl Rules {
 pub enum RuleType {
     UpperCase,
     LowerCase,
-    Remove,
+    Purge,
 }
 #[allow(dead_code)]
 pub enum RulePlace {
@@ -54,7 +54,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
         RuleType::UpperCase => "UpperCase",
         RuleType::LowerCase => "LowerCase",
-        RuleType::Remove => "Remove",
+        RuleType::Purge => "Purge",
     }
     .to_string()
 }
