@@ -19,9 +19,9 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
     let radio_button_letters_usage_extension = gui_data.dialog_rules.size_letters.radio_button_letters_usage_extension.clone();
     let radio_button_letters_usage_both = gui_data.dialog_rules.size_letters.radio_button_letters_usage_both.clone();
 
-    let radio_button_remove_name = gui_data.dialog_rules.remove.radio_button_remove_name.clone();
-    let radio_button_remove_extension = gui_data.dialog_rules.remove.radio_button_remove_extension.clone();
-    let radio_button_remove_both = gui_data.dialog_rules.remove.radio_button_remove_both.clone();
+    let radio_button_purge_name = gui_data.dialog_rules.purge.radio_button_purge_name.clone();
+    let radio_button_purge_extension = gui_data.dialog_rules.purge.radio_button_purge_extension.clone();
+    let radio_button_purge_both = gui_data.dialog_rules.purge.radio_button_purge_both.clone();
 
     button_dialog_ok.connect_clicked(move |_e| {
         dialog_with_rules.hide();
@@ -33,7 +33,7 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
         let rule_place: RulePlace;
 
         match notebook_choose_rule.get_current_page().unwrap() {
-            0 => {
+            1 => {
                 if radio_button_letters_type_uppercase.get_active() {
                     rule_type = RuleType::UpperCase;
                 } else if radio_button_letters_type_lowercase.get_active() {
@@ -51,13 +51,13 @@ pub fn connect_rule_ok(gui_data: &GuiData) {
                     panic!("Invalid Button Clicked");
                 }
             }
-            1 => {
-                rule_type = RuleType::Remove;
-                if radio_button_remove_extension.get_active() {
+            2 => {
+                rule_type = RuleType::Purge;
+                if radio_button_purge_extension.get_active() {
                     rule_place = RulePlace::Extension;
-                } else if radio_button_remove_both.get_active() {
+                } else if radio_button_purge_both.get_active() {
                     rule_place = RulePlace::ExtensionAndName;
-                } else if radio_button_remove_name.get_active() {
+                } else if radio_button_purge_name.get_active() {
                     rule_place = RulePlace::Name;
                 } else {
                     panic!("Invalid Button Clicked");

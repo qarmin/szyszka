@@ -1,4 +1,4 @@
-use crate::class_dialog_rule_remove::GUIRemove;
+use crate::class_dialog_rule_purge::GUIPurge;
 use crate::class_dialog_rule_size_letters::GUISizeLetters;
 use gtk::prelude::*;
 
@@ -11,7 +11,7 @@ pub struct GUIDialogRules {
     pub button_dialog_ok: gtk::Button,
 
     pub size_letters: GUISizeLetters,
-    pub remove: GUIRemove,
+    pub purge: GUIPurge,
 }
 
 impl GUIDialogRules {
@@ -23,7 +23,7 @@ impl GUIDialogRules {
         let button_dialog_ok: gtk::Button = builder.get_object("button_dialog_ok").unwrap();
 
         let size_letters: GUISizeLetters = GUISizeLetters::create_from_builder(&builder);
-        let remove: GUIRemove = GUIRemove::create_from_builder(&builder);
+        let purge: GUIPurge = GUIPurge::create_from_builder(&builder);
 
         Self {
             notebook_choose_rule,
@@ -31,7 +31,7 @@ impl GUIDialogRules {
             button_dialog_close,
             button_dialog_ok,
             size_letters,
-            remove,
+            purge,
         }
     }
 }
