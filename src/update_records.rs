@@ -19,15 +19,15 @@ pub enum UpdateMode {
 }
 
 // TODO currently everything is counted from begginng
-pub fn update_records(tree_view: &TreeView, _shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode) {
-    let list_store = get_list_store_from_tree_view(&tree_view);
+pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode) {
+    let list_store = get_list_store_from_tree_view(&files_tree_view);
     // let mut shared_result_entries = shared_result_entries.borrow_mut();
     let mut rules = rules.borrow_mut();
     // let shared_result_entries = shared_result_entries.deref_mut();
     let rules = rules.deref_mut();
 
     match update_mode {
-        UpdateMode::FileAdded => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded => {
             if let Some(iter) = list_store.get_iter_first() {
                 // We count how much
                 // let mut current_index = 1;

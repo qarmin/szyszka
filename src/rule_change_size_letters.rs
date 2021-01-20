@@ -1,11 +1,9 @@
+use crate::help_function::split_file_name;
 use crate::rules::*;
-
-// TODO Add tests
+use std::path::Path;
 
 pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePlace) -> String {
-    let split = data_to_change.split('.').map(|e| e.to_string()).collect::<Vec<String>>();
-    let mut name = split[0].clone();
-    let mut extension = if split.len() > 1 { split[1].clone() } else { "".to_string() };
+    let (mut name, mut extension) = split_file_name(Path::new(data_to_change));
 
     match rule_type {
         RuleType::UpperCase => match rule_place {
@@ -46,5 +44,22 @@ pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule
         format!("{}.{}", name, extension)
     } else {
         name
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::rule_change_size_letters::rule_change_size_letters;
+    use crate::rules::{RulePlace, RuleType};
+
+    #[test]
+    fn test_size_letters() {
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::LowerCase, &RulePlace::Name), "roman.Txt");
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::LowerCase, &RulePlace::Extension), "Roman.txt");
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::LowerCase, &RulePlace::ExtensionAndName), "roman.txt");
+
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::UpperCase, &RulePlace::Name), "ROMAN.Txt");
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::UpperCase, &RulePlace::Extension), "Roman.TXT");
+        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::UpperCase, &RulePlace::ExtensionAndName), "ROMAN.TXT");
     }
 }

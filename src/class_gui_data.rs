@@ -56,8 +56,6 @@ impl GuiData {
         let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![] }));
 
         Self {
-            // glade_src,
-            // builder,
             upper_buttons,
             results,
             status,
