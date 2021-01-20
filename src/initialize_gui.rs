@@ -1,5 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::create_tree_view::{create_tree_view_results, create_tree_view_rules};
+use crate::example_fields::update_examples;
+use crate::notebook_enum::EXAMPLE_NAME;
 use glib::*;
 use gtk::*;
 
@@ -41,5 +43,12 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
         scrolled_window_rules.show_all();
 
         gui_data.rules_bottom_panel.tree_view_window_rules = tree_view;
+    }
+    // Set Example name to
+    {
+        let entry_example_before = gui_data.dialog_rules.entry_example_before.clone();
+        entry_example_before.set_text(EXAMPLE_NAME);
+
+        update_examples(&gui_data.dialog_rules, None);
     }
 }

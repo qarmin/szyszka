@@ -3,8 +3,6 @@ use gtk::prelude::*;
 use gtk::*;
 use std::path::Path;
 
-pub const EXAMPLE_NAME: &str = "Ziemniak.jpG";
-
 pub enum ColumnsResults {
     CurrentName = 0,
     FutureName,
@@ -26,6 +24,13 @@ pub fn split_path(path: &Path) -> (String, String) {
     match (path.parent(), path.file_name()) {
         (Some(dir), Some(file)) => (dir.display().to_string(), file.to_string_lossy().into_owned()),
         (Some(dir), None) => (dir.display().to_string(), String::new()),
+        (None, _) => (String::new(), String::new()),
+    }
+}
+pub fn split_file_name(path: &Path) -> (String, String) {
+    match (path.file_stem(), path.extension()) {
+        (Some(name), Some(extension)) => (name.to_string_lossy().to_string(), extension.to_string_lossy().to_string()),
+        (Some(name), None) => (name.to_string_lossy().to_string(), String::new()),
         (None, _) => (String::new(), String::new()),
     }
 }
