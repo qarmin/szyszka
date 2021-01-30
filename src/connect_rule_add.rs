@@ -1,7 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::populate_rules_tree_view;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
-use crate::rules::{RuleCaseSensitivity, RuleData, RulePlace, RuleType};
+use crate::rules::{RuleData, RulePlace, RuleType};
 use gtk::prelude::*;
 use gtk::{ButtonExt, WidgetExt};
 use std::ops::DerefMut;
@@ -45,15 +45,17 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
         let rule_type: RuleType;
         let rule_place: RulePlace;
-        let mut rule_case_sensitivity = RuleCaseSensitivity::Sensitive;
         let mut rule_data: RuleData = RuleData::new();
 
         match to_notebook_enum(notebook_choose_rule.get_current_page().unwrap()) {
             NotebookEnum::CaseSize => {
+                rule_type = RuleType::CaseSize;
+
+                rule_data.to_lowercase = true;
                 if radio_button_letters_type_uppercase.get_active() {
-                    rule_type = RuleType::UpperCase;
+                    rule_data.to_lowercase = false;
                 } else if radio_button_letters_type_lowercase.get_active() {
-                    rule_type = RuleType::LowerCase;
+                    rule_data.to_lowercase = true;
                 } else {
                     panic!("Button not available");
                 }
@@ -94,9 +96,9 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 rule_type = RuleType::Trim;
 
                 if radio_button_trim_case_sensitive.get_active() {
-                    rule_case_sensitivity = RuleCaseSensitivity::Sensitive;
+                    rule_data.case_sensitive = true;
                 } else if radio_button_trim_case_insensitive.get_active() {
-                    rule_case_sensitivity = RuleCaseSensitivity::Insensitive;
+                    rule_data.case_sensitive = false;
                 } else {
                     panic!("Invalid Button Clicked");
                 }
@@ -118,7 +120,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 panic!("Invalid notebook name");
             }
         }
-        rule.add_rule(rule_type, rule_place, rule_case_sensitivity);
+        rule.add_rule(rule_type, rule_place, rule_data);
 
         // Reset TreeView and populate it again
         populate_rules_tree_view(&tree_view_window_rules, &rule);

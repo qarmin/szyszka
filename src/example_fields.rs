@@ -5,7 +5,7 @@ use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_purge::rule_purge;
 use crate::rule_trim::rule_trim;
-use crate::rules::{RuleCaseSensitivity, RuleData, RulePlace, RuleType};
+use crate::rules::{RuleData, RulePlace, RuleType};
 use gtk::prelude::*;
 
 pub fn connect_update_examples(gui_data: &GuiData) {
@@ -38,7 +38,6 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
 
     let rule_type: RuleType;
     let rule_place: RulePlace;
-    let rule_case_sensitivity;
     let mut rule_data: RuleData = RuleData::new();
 
     let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
@@ -71,10 +70,12 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
 
     match notebook_enum {
         NotebookEnum::CaseSize => {
+            rule_type = RuleType::CaseSize;
+
             if radio_button_letters_type_uppercase.get_active() {
-                rule_type = RuleType::UpperCase;
+                rule_data.to_lowercase = false;
             } else if radio_button_letters_type_lowercase.get_active() {
-                rule_type = RuleType::LowerCase;
+                rule_data.to_lowercase = true;
             } else {
                 panic!("Missing radio button");
             }
@@ -89,7 +90,7 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
                 panic!("Missing radio button");
             }
 
-            label_example_after.set_text(rule_change_size_letters(text_to_change.as_str(), &rule_type, &rule_place).as_str());
+            label_example_after.set_text(rule_change_size_letters(text_to_change.as_str(), &rule_type, &rule_place, &rule_data).as_str());
         }
         NotebookEnum::AddText => {
             rule_data.add_text_text = entry_add_text_text_to_add.get_text().to_string();
@@ -123,9 +124,9 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
             rule_type = RuleType::Trim;
             rule_data.trim_text = entry_add_text_text_to_trim.get_text().to_string();
             if radio_button_trim_case_sensitive.get_active() {
-                rule_case_sensitivity = RuleCaseSensitivity::Sensitive;
+                rule_data.case_sensitive = true;
             } else if radio_button_trim_case_insensitive.get_active() {
-                rule_case_sensitivity = RuleCaseSensitivity::Insensitive;
+                rule_data.case_sensitive = false;
             } else {
                 panic!("Invalid Button Clicked");
             }
@@ -141,7 +142,7 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
             } else {
                 panic!("Invalid Button Clicked");
             }
-            label_example_after.set_text(rule_trim(text_to_change.as_str(), &rule_type, &rule_place, &rule_case_sensitivity, &rule_data).as_str());
+            label_example_after.set_text(rule_trim(text_to_change.as_str(), &rule_type, &rule_place, &rule_data).as_str());
         }
         _ => {
             println!("Missing notebook Handler!, Needs to fix");

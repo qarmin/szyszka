@@ -6,7 +6,6 @@ use crate::rule_trim::rule_trim;
 pub struct Rules {
     pub rule_types: Vec<RuleType>,
     pub rule_place: Vec<RulePlace>,
-    pub rule_case_sensitivity: Vec<RuleCaseSensitivity>,
     pub rules_number: usize,
     pub rule_data: Vec<RuleData>,
 }
@@ -16,22 +15,21 @@ impl Rules {
         Rules {
             rule_types: vec![],
             rule_place: vec![],
-            rule_case_sensitivity: vec![],
             rules_number: 0,
             rule_data: vec![],
         }
     }
-    pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_case_sensitivity: RuleCaseSensitivity) {
+    pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData) {
         self.rule_types.push(rule_type);
         self.rule_place.push(rule_place);
-        self.rule_case_sensitivity.push(rule_case_sensitivity);
+        self.rule_data.push(rule_data);
         self.rules_number += 1;
     }
     pub fn apply_all_rules_to_item(&mut self, mut item: String) -> String {
         for rule_number in 0..self.rules_number {
             match self.rule_types[rule_number] {
-                RuleType::UpperCase | RuleType::LowerCase => {
-                    item = rule_change_size_letters(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
+                RuleType::CaseSize => {
+                    item = rule_change_size_letters(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
                 RuleType::Purge => {
                     item = rule_purge(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
@@ -40,7 +38,7 @@ impl Rules {
                     item = rule_add_text(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
                 RuleType::Trim => {
-                    item = rule_trim(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_case_sensitivity[rule_number], &self.rule_data[rule_number]);
+                    item = rule_trim(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
             }
         }
@@ -48,15 +46,8 @@ impl Rules {
     }
 }
 
-#[derive(Eq, PartialEq)]
-pub enum RuleCaseSensitivity {
-    Sensitive,
-    Insensitive,
-}
-
 pub enum RuleType {
-    UpperCase,
-    LowerCase,
+    CaseSize,
     Purge,
     AddText,
     Trim,
@@ -77,8 +68,7 @@ pub enum RulePlace {
 }
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
-        RuleType::UpperCase => "UpperCase",
-        RuleType::LowerCase => "LowerCase",
+        RuleType::CaseSize => "CaseSize",
         RuleType::Purge => "Purge",
         RuleType::AddText => "Add Text",
         RuleType::Trim => "Trim",
@@ -105,12 +95,16 @@ pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
 pub struct RuleData {
     pub add_text_text: String,
     pub trim_text: String,
+    pub to_lowercase: bool,
+    pub case_sensitive: bool,
 }
 impl RuleData {
     pub fn new() -> Self {
         RuleData {
             add_text_text: "".to_string(),
             trim_text: "".to_string(),
+            to_lowercase: false,
+            case_sensitive: false,
         }
     }
 }
