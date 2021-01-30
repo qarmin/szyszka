@@ -9,9 +9,8 @@ use gtk::{Button, Entry, Label};
 pub struct GUIDialogRules {
     pub notebook_choose_rule: gtk::Notebook,
 
-    pub dialog_with_rules: gtk::Dialog,
-    pub button_dialog_close: gtk::Button,
-    pub button_dialog_ok: gtk::Button,
+    pub window_with_rules: gtk::Window,
+    pub button_rule_window_add: gtk::Button,
 
     pub size_letters: GUISizeLetters,
     pub purge: GUIPurge,
@@ -27,9 +26,8 @@ impl GUIDialogRules {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let notebook_choose_rule: gtk::Notebook = builder.get_object("notebook_choose_rule").unwrap();
 
-        let dialog_with_rules: gtk::Dialog = builder.get_object("dialog_rules").unwrap();
-        let button_dialog_close: gtk::Button = builder.get_object("button_dialog_close").unwrap();
-        let button_dialog_ok: gtk::Button = builder.get_object("button_dialog_ok").unwrap();
+        let window_with_rules: gtk::Window = builder.get_object("window_with_rules").unwrap();
+        let button_rule_window_add: gtk::Button = builder.get_object("button_rule_window_add").unwrap();
 
         let size_letters: GUISizeLetters = GUISizeLetters::create_from_builder(&builder);
         let purge: GUIPurge = GUIPurge::create_from_builder(&builder);
@@ -42,9 +40,8 @@ impl GUIDialogRules {
 
         Self {
             notebook_choose_rule,
-            dialog_with_rules,
-            button_dialog_close,
-            button_dialog_ok,
+            window_with_rules,
+            button_rule_window_add,
             size_letters,
             purge,
             add_text,

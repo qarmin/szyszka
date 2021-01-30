@@ -9,13 +9,13 @@ mod class_rules_bottom_panel;
 mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
-mod connect_dialog_add_text_click;
-mod connect_dialog_purge_click;
-mod connect_dialog_rule_buttons;
-mod connect_dialog_size_letters_click;
-mod connect_dialog_trim_click;
-mod connect_rule_close;
-mod connect_rule_ok;
+mod connect_rule_add;
+mod connect_rule_window_add_text_click;
+mod connect_rule_window_close;
+mod connect_rule_window_purge_click;
+mod connect_rule_window_rule_buttons;
+mod connect_rule_window_size_letters_click;
+mod connect_rule_window_trim_click;
 mod create_tree_view;
 mod example_fields;
 mod file_entry;
@@ -31,13 +31,13 @@ mod update_records;
 
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
-use crate::connect_dialog_add_text_click::*;
-use crate::connect_dialog_purge_click::*;
-use crate::connect_dialog_rule_buttons::*;
-use crate::connect_dialog_size_letters_click::*;
-use crate::connect_dialog_trim_click::*;
-use crate::connect_rule_close::*;
-use crate::connect_rule_ok::*;
+use crate::connect_rule_add::*;
+use crate::connect_rule_window_add_text_click::*;
+use crate::connect_rule_window_close::*;
+use crate::connect_rule_window_purge_click::*;
+use crate::connect_rule_window_rule_buttons::*;
+use crate::connect_rule_window_size_letters_click::*;
+use crate::connect_rule_window_trim_click::*;
 use crate::example_fields::connect_update_examples;
 use crate::initialize_gui::*;
 use gtk::prelude::*;
@@ -53,20 +53,20 @@ fn main() {
     connect_add_files_button(&gui_data);
 
     // Connect buttons OK and Close in select dialog
-    connect_rule_close(&gui_data);
-    connect_rule_ok(&gui_data);
+    connect_rule_window_close(&gui_data);
+    connect_rule_add(&gui_data);
 
     // Connect buttons in dialog to reflect change to examples
-    connect_dialog_size_letters_click(&gui_data);
-    connect_dialog_purge_click(&gui_data);
-    connect_dialog_add_text_click(&gui_data);
-    connect_dialog_trim_click(&gui_data);
+    connect_rule_window_size_letters_click(&gui_data);
+    connect_rule_window_purge_click(&gui_data);
+    connect_rule_window_add_text_click(&gui_data);
+    connect_rule_window_trim_click(&gui_data);
 
     // Connect update examples in Rule Dialog
     connect_update_examples(&gui_data);
 
     // Connect rule buttons in main window
-    connect_dialog_rule_buttons(&gui_data);
+    connect_rule_window_rule_buttons(&gui_data);
 
     // Quit the program when X in main window was clicked
     gui_data.window_main.connect_delete_event(|_, _| {
