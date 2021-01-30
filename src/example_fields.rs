@@ -9,59 +9,59 @@ use crate::rules::{RuleCaseSensitivity, RuleData, RulePlace, RuleType};
 use gtk::prelude::*;
 
 pub fn connect_update_examples(gui_data: &GuiData) {
-    let notebook_choose_rule = gui_data.dialog_rules.notebook_choose_rule.clone();
+    let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();
 
-    let button_example_reset = gui_data.dialog_rules.button_example_reset.clone();
+    let button_example_reset = gui_data.window_rules.button_example_reset.clone();
 
-    let dialog_rules = gui_data.dialog_rules.clone();
+    let window_rules = gui_data.window_rules.clone();
     notebook_choose_rule.connect_switch_page(move |_e, _y, z| {
-        update_examples(&dialog_rules, Some(z));
+        update_examples(&window_rules, Some(z));
     });
 
-    let entry_example_before = gui_data.dialog_rules.entry_example_before.clone();
+    let entry_example_before = gui_data.window_rules.entry_example_before.clone();
     button_example_reset.connect_clicked(move |_e| {
         entry_example_before.set_text(EXAMPLE_NAME);
     });
 
-    let dialog_rules = gui_data.dialog_rules.clone();
-    let entry_example_before = gui_data.dialog_rules.entry_example_before.clone();
+    let window_rules = gui_data.window_rules.clone();
+    let entry_example_before = gui_data.window_rules.entry_example_before.clone();
     entry_example_before.connect_changed(move |_e| {
-        update_examples(&dialog_rules, None);
+        update_examples(&window_rules, None);
     });
 }
 
-pub fn update_examples(dialog_rules: &GUIDialogRules, notebook_number: Option<u32>) {
-    let notebook_choose_rule = dialog_rules.notebook_choose_rule.clone();
+pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u32>) {
+    let notebook_choose_rule = window_rules.notebook_choose_rule.clone();
 
-    let text_to_change: String = dialog_rules.entry_example_before.get_text().to_string();
-    let label_example_after = dialog_rules.label_example_after.clone();
+    let text_to_change: String = window_rules.entry_example_before.get_text().to_string();
+    let label_example_after = window_rules.label_example_after.clone();
 
     let rule_type: RuleType;
     let rule_place: RulePlace;
     let rule_case_sensitivity;
     let mut rule_data: RuleData = RuleData::new();
 
-    let radio_button_letters_type_uppercase = dialog_rules.size_letters.radio_button_letters_type_uppercase.clone();
-    let radio_button_letters_type_lowercase = dialog_rules.size_letters.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_usage_name = dialog_rules.size_letters.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = dialog_rules.size_letters.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_usage_both = dialog_rules.size_letters.radio_button_letters_usage_both.clone();
+    let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
+    let radio_button_letters_type_lowercase = window_rules.size_letters.radio_button_letters_type_lowercase.clone();
+    let radio_button_letters_usage_name = window_rules.size_letters.radio_button_letters_usage_name.clone();
+    let radio_button_letters_usage_extension = window_rules.size_letters.radio_button_letters_usage_extension.clone();
+    let radio_button_letters_usage_both = window_rules.size_letters.radio_button_letters_usage_both.clone();
 
-    let radio_button_purge_name = dialog_rules.purge.radio_button_purge_name.clone();
-    let radio_button_purge_extension = dialog_rules.purge.radio_button_purge_extension.clone();
-    let radio_button_purge_both = dialog_rules.purge.radio_button_purge_both.clone();
+    let radio_button_purge_name = window_rules.purge.radio_button_purge_name.clone();
+    let radio_button_purge_extension = window_rules.purge.radio_button_purge_extension.clone();
+    let radio_button_purge_both = window_rules.purge.radio_button_purge_both.clone();
 
-    let radio_button_add_text_after_name = dialog_rules.add_text.radio_button_add_text_after_name.clone();
-    let radio_button_add_text_before_name = dialog_rules.add_text.radio_button_add_text_before_name.clone();
-    let entry_add_text_text_to_add = dialog_rules.add_text.entry_add_text_text_to_add.clone();
+    let radio_button_add_text_after_name = window_rules.add_text.radio_button_add_text_after_name.clone();
+    let radio_button_add_text_before_name = window_rules.add_text.radio_button_add_text_before_name.clone();
+    let entry_add_text_text_to_add = window_rules.add_text.entry_add_text_text_to_add.clone();
 
-    let radio_button_trim_name_start = dialog_rules.trim.radio_button_trim_name_start.clone();
-    let radio_button_trim_name_end = dialog_rules.trim.radio_button_trim_name_end.clone();
-    let radio_button_trim_extension_start = dialog_rules.trim.radio_button_trim_extension_start.clone();
-    let radio_button_trim_extension_end = dialog_rules.trim.radio_button_trim_extension_end.clone();
-    let radio_button_trim_case_insensitive = dialog_rules.trim.radio_button_trim_case_insensitive.clone();
-    let radio_button_trim_case_sensitive = dialog_rules.trim.radio_button_trim_case_sensitive.clone();
-    let entry_add_text_text_to_trim = dialog_rules.trim.entry_add_text_text_to_trim.clone();
+    let radio_button_trim_name_start = window_rules.trim.radio_button_trim_name_start.clone();
+    let radio_button_trim_name_end = window_rules.trim.radio_button_trim_name_end.clone();
+    let radio_button_trim_extension_start = window_rules.trim.radio_button_trim_extension_start.clone();
+    let radio_button_trim_extension_end = window_rules.trim.radio_button_trim_extension_end.clone();
+    let radio_button_trim_case_insensitive = window_rules.trim.radio_button_trim_case_insensitive.clone();
+    let radio_button_trim_case_sensitive = window_rules.trim.radio_button_trim_case_sensitive.clone();
+    let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
 
     let notebook_enum = if let Some(notebook_number) = notebook_number {
         to_notebook_enum(notebook_number)

@@ -25,7 +25,7 @@ pub struct GuiData {
     pub status: GUIStatus,
     pub rules_bottom_panel: GUIRulesBottomPanel,
 
-    pub dialog_rules: GUIDialogRules,
+    pub window_rules: GUIDialogRules,
 
     pub rules: Rc<RefCell<Rules>>,
 
@@ -49,7 +49,7 @@ impl GuiData {
         let status: GUIStatus = GUIStatus::create_from_builder(&builder);
         let rules_bottom_panel: GUIRulesBottomPanel = GUIRulesBottomPanel::create_from_builder(&builder);
 
-        let dialog_rules: GUIDialogRules = GUIDialogRules::create_from_builder(&builder);
+        let window_rules: GUIDialogRules = GUIDialogRules::create_from_builder(&builder);
 
         let rules = Rc::new(RefCell::new(Rules::new()));
 
@@ -60,7 +60,7 @@ impl GuiData {
             results,
             status,
             rules_bottom_panel,
-            dialog_rules,
+            window_rules,
             window_main,
             rules,
             shared_result_entries,

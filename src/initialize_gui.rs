@@ -46,9 +46,9 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
     }
     // Set Example name to
     {
-        let entry_example_before = gui_data.dialog_rules.entry_example_before.clone();
+        let entry_example_before = gui_data.window_rules.entry_example_before.clone();
         entry_example_before.set_text(EXAMPLE_NAME);
 
-        update_examples(&gui_data.dialog_rules, None);
+        update_examples(&gui_data.window_rules, None);
     }
 }
