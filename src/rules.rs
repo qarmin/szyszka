@@ -27,7 +27,7 @@ impl Rules {
         self.rule_data.push(rule_data);
         self.rules_number += 1;
     }
-    pub fn apply_all_rules_to_item(&mut self, mut item: String) -> String {
+    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64) -> String {
         for rule_number in 0..self.rules_number {
             match self.rule_types[rule_number] {
                 RuleType::CaseSize => {
@@ -43,7 +43,7 @@ impl Rules {
                     item = rule_trim(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
                 RuleType::Custom => {
-                    item = rule_custom(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], rule_number as u64, false);
+                    item = rule_custom(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], current_index, false);
                 }
                 RuleType::Replace => {
                     item = rule_replace(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);

@@ -61,6 +61,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                       <object class="GtkEntry" id="entry_custom_text_to_change">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="max_length">150</property>
                         <property name="text" translatable="yes">$(NAME).$(EXT)</property>
                       </object>
                       <packing>
@@ -478,6 +479,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               <object class="GtkEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="max_length">30</property>
+                                <property name="text" translatable="yes">1</property>
+                                <property name="input_purpose">digits</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -485,42 +489,12 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Filling with zeros</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Number of size to fill</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="max_length">30</property>
+                                <property name="text" translatable="yes">1</property>
+                                <property name="input_purpose">digits</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -528,33 +502,27 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton">
-                                <property name="label" translatable="yes">Yes</property>
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="halign">center</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Fill with zeros</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton">
-                                <property name="label" translatable="yes">No</property>
+                              <object class="GtkEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="halign">center</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="max_length">4</property>
+                                <property name="text" translatable="yes">0</property>
+                                <property name="input_purpose">digits</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                           </object>
@@ -880,7 +848,8 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               <object class="GtkEntry" id="entry_replace_text_to_change">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="text" translatable="yes">karamba</property>
+                                <property name="max_length">100</property>
+                                <property name="text" translatable="yes">k</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -891,6 +860,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               <object class="GtkEntry" id="entry_replace_text_to_remove">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="max_length">100</property>
                                 <property name="text" translatable="yes">a</property>
                               </object>
                               <packing>
@@ -1254,6 +1224,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               <object class="GtkEntry" id="entry_example_before">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="max_length">100</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

@@ -2,6 +2,7 @@ use crate::class_gui_data::GuiData;
 use crate::help_function::populate_rules_tree_view;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rules::{RuleData, RulePlace, RuleType};
+use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 use gtk::{ButtonExt, WidgetExt};
 use std::ops::DerefMut;
@@ -11,8 +12,10 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();
     let window_main = gui_data.window_main.clone();
     let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();
-    let rules = gui_data.rules.clone();
+    let tree_view_results = gui_data.results.tree_view_results.clone();
     let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
+    let shared_result_entries = gui_data.shared_result_entries.clone();
+    let rules = gui_data.rules.clone();
 
     let window_rules = gui_data.window_rules.clone();
 
@@ -50,119 +53,123 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     button_rule_window_add.connect_clicked(move |_e| {
         window_with_rules.hide();
         window_main.set_sensitive(true);
-        let mut rule = rules.borrow_mut();
-        let rule = rule.deref_mut();
+        {
+            let mut rule = rules.borrow_mut();
+            let rule = rule.deref_mut();
 
-        let rule_type: RuleType;
-        let rule_place: RulePlace;
-        let mut rule_data: RuleData = RuleData::new();
+            let rule_type: RuleType;
+            let rule_place: RulePlace;
+            let mut rule_data: RuleData = RuleData::new();
 
-        match to_notebook_enum(notebook_choose_rule.get_current_page().unwrap()) {
-            NotebookEnum::CaseSize => {
-                rule_type = RuleType::CaseSize;
+            match to_notebook_enum(notebook_choose_rule.get_current_page().unwrap()) {
+                NotebookEnum::CaseSize => {
+                    rule_type = RuleType::CaseSize;
 
-                rule_data.to_lowercase = true;
-                if radio_button_letters_type_uppercase.get_active() {
-                    rule_data.to_lowercase = false;
-                } else if radio_button_letters_type_lowercase.get_active() {
                     rule_data.to_lowercase = true;
-                } else {
-                    panic!("Button not available");
+                    if radio_button_letters_type_uppercase.get_active() {
+                        rule_data.to_lowercase = false;
+                    } else if radio_button_letters_type_lowercase.get_active() {
+                        rule_data.to_lowercase = true;
+                    } else {
+                        panic!("Button not available");
+                    }
+                    if radio_button_letters_usage_extension.get_active() {
+                        rule_place = RulePlace::Extension;
+                    } else if radio_button_letters_usage_both.get_active() {
+                        rule_place = RulePlace::ExtensionAndName;
+                    } else if radio_button_letters_usage_name.get_active() {
+                        rule_place = RulePlace::Name;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
                 }
-                if radio_button_letters_usage_extension.get_active() {
-                    rule_place = RulePlace::Extension;
-                } else if radio_button_letters_usage_both.get_active() {
-                    rule_place = RulePlace::ExtensionAndName;
-                } else if radio_button_letters_usage_name.get_active() {
-                    rule_place = RulePlace::Name;
-                } else {
-                    panic!("Invalid Button Clicked");
+                NotebookEnum::Purge => {
+                    rule_type = RuleType::Purge;
+                    if radio_button_purge_extension.get_active() {
+                        rule_place = RulePlace::Extension;
+                    } else if radio_button_purge_both.get_active() {
+                        rule_place = RulePlace::ExtensionAndName;
+                    } else if radio_button_purge_name.get_active() {
+                        rule_place = RulePlace::Name;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
+                }
+                NotebookEnum::AddText => {
+                    rule_type = RuleType::AddText;
+                    if radio_button_add_text_after_name.get_active() {
+                        rule_place = RulePlace::BeforeName;
+                    } else if radio_button_add_text_before_name.get_active() {
+                        rule_place = RulePlace::AfterName;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
+                    rule_data.add_text_text = entry_add_text_text_to_add.get_text().to_string();
+                }
+                NotebookEnum::Trim => {
+                    rule_type = RuleType::Trim;
+
+                    if radio_button_trim_case_sensitive.get_active() {
+                        rule_data.case_sensitive = true;
+                    } else if radio_button_trim_case_insensitive.get_active() {
+                        rule_data.case_sensitive = false;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
+
+                    if radio_button_trim_name_start.get_active() {
+                        rule_place = RulePlace::FromNameStart;
+                    } else if radio_button_trim_name_end.get_active() {
+                        rule_place = RulePlace::FromNameEndReverse;
+                    } else if radio_button_trim_extension_start.get_active() {
+                        rule_place = RulePlace::FromExtensionStart;
+                    } else if radio_button_trim_extension_end.get_active() {
+                        rule_place = RulePlace::FromExtensionEndReverse;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
+                }
+                NotebookEnum::Custom => {
+                    rule_type = RuleType::Custom;
+                    rule_place = RulePlace::None;
+
+                    rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
+                }
+                NotebookEnum::Replace => {
+                    rule_type = RuleType::Replace;
+
+                    if radio_button_replace_both.get_active() {
+                        rule_place = RulePlace::ExtensionAndName;
+                    } else if radio_button_replace_name.get_active() {
+                        rule_place = RulePlace::Name;
+                    } else if radio_button_replace_extension.get_active() {
+                        rule_place = RulePlace::Extension;
+                    } else {
+                        panic!("Invalid Rule Type for purge rule");
+                    }
+
+                    if radio_button_replace_case_sensitive.get_active() {
+                        rule_data.case_sensitive = true;
+                    } else if radio_button_replace_case_insensitive.get_active() {
+                        rule_data.case_sensitive = false;
+                    } else {
+                        panic!("Invalid Button Clicked");
+                    }
+
+                    rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
+                    rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
+                }
+
+                _ => {
+                    panic!("Invalid notebook name");
                 }
             }
-            NotebookEnum::Purge => {
-                rule_type = RuleType::Purge;
-                if radio_button_purge_extension.get_active() {
-                    rule_place = RulePlace::Extension;
-                } else if radio_button_purge_both.get_active() {
-                    rule_place = RulePlace::ExtensionAndName;
-                } else if radio_button_purge_name.get_active() {
-                    rule_place = RulePlace::Name;
-                } else {
-                    panic!("Invalid Button Clicked");
-                }
-            }
-            NotebookEnum::AddText => {
-                rule_type = RuleType::AddText;
-                if radio_button_add_text_after_name.get_active() {
-                    rule_place = RulePlace::BeforeName;
-                } else if radio_button_add_text_before_name.get_active() {
-                    rule_place = RulePlace::AfterName;
-                } else {
-                    panic!("Invalid Button Clicked");
-                }
-                rule_data.add_text_text = entry_add_text_text_to_add.get_text().to_string();
-            }
-            NotebookEnum::Trim => {
-                rule_type = RuleType::Trim;
-
-                if radio_button_trim_case_sensitive.get_active() {
-                    rule_data.case_sensitive = true;
-                } else if radio_button_trim_case_insensitive.get_active() {
-                    rule_data.case_sensitive = false;
-                } else {
-                    panic!("Invalid Button Clicked");
-                }
-
-                if radio_button_trim_name_start.get_active() {
-                    rule_place = RulePlace::FromNameStart;
-                } else if radio_button_trim_name_end.get_active() {
-                    rule_place = RulePlace::FromNameEndReverse;
-                } else if radio_button_trim_extension_start.get_active() {
-                    rule_place = RulePlace::FromExtensionStart;
-                } else if radio_button_trim_extension_end.get_active() {
-                    rule_place = RulePlace::FromExtensionEndReverse;
-                } else {
-                    panic!("Invalid Button Clicked");
-                }
-            }
-            NotebookEnum::Custom => {
-                rule_type = RuleType::Custom;
-                rule_place = RulePlace::None;
-
-                rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
-            }
-            NotebookEnum::Replace => {
-                rule_type = RuleType::Replace;
-
-                if radio_button_replace_both.get_active() {
-                    rule_place = RulePlace::ExtensionAndName;
-                } else if radio_button_replace_name.get_active() {
-                    rule_place = RulePlace::Name;
-                } else if radio_button_replace_extension.get_active() {
-                    rule_place = RulePlace::Extension;
-                } else {
-                    panic!("Invalid Rule Type for purge rule");
-                }
-
-                if radio_button_replace_case_sensitive.get_active() {
-                    rule_data.case_sensitive = true;
-                } else if radio_button_replace_case_insensitive.get_active() {
-                    rule_data.case_sensitive = false;
-                } else {
-                    panic!("Invalid Button Clicked");
-                }
-
-                rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
-                rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
-            }
-
-            _ => {
-                panic!("Invalid notebook name");
-            }
+            rule.add_rule(rule_type, rule_place, rule_data);
         }
-        rule.add_rule(rule_type, rule_place, rule_data);
 
         // Reset TreeView and populate it again
-        populate_rules_tree_view(&tree_view_window_rules, &rule);
+
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded);
+        populate_rules_tree_view(&tree_view_window_rules, rules.clone());
     });
 }

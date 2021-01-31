@@ -2,6 +2,7 @@ use crate::help_function::split_file_name;
 use crate::rules::*;
 use chrono::NaiveDateTime;
 use humansize::{file_size_opts as options, FileSize};
+use std::cmp::min;
 use std::fs::File;
 use std::path::Path;
 use std::time::UNIX_EPOCH;
@@ -68,6 +69,9 @@ pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &Rule
                                     if let Ok(start_number) = str_start_number.parse::<u64>() {
                                         if let Ok(step_number) = str_step_number.parse::<u64>() {
                                             if let Ok(fill_zeros) = str_fill_zeros.parse::<u64>() {
+                                                // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app
+                                                let fill_zeros = min(fill_zeros, 50);
+
                                                 let mut number;
                                                 if step_number.checked_mul(rule_number).is_none() {
                                                     number = 0;

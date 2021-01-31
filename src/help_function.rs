@@ -1,7 +1,10 @@
 use crate::rules::*;
 use gtk::prelude::*;
 use gtk::*;
+use std::cell::RefCell;
+use std::ops::DerefMut;
 use std::path::Path;
+use std::rc::Rc;
 
 pub enum ColumnsResults {
     CurrentName = 0,
@@ -57,7 +60,10 @@ pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
     tree_view.get_model().unwrap().downcast::<gtk::ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: &Rules) {
+pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rules>>) {
+    let mut rules = rules.borrow_mut();
+    let rules = rules.deref_mut();
+
     let list_store = get_list_store_from_tree_view(&tree_view);
 
     list_store.clear();

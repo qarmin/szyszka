@@ -29,6 +29,8 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
     match update_mode {
         UpdateMode::FileAdded | UpdateMode::RuleAdded => {
             if let Some(iter) = list_store.get_iter_first() {
+                let mut current_index = 0;
+
                 // We count how much
                 // let mut current_index = 1;
                 // let mut end_of_records = false;
@@ -47,11 +49,12 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                 // TODO get info about current row and change it
                 loop {
                     let value_to_change = list_store.get_value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
-                    let changed_value = rules.apply_all_rules_to_item(value_to_change);
+                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index);
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {
                         break; // This is the end
                     }
+                    current_index += 1;
                 }
             }
         } // UpdateMode::Re => {}
