@@ -5,10 +5,11 @@
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">$(NAME) - prints file name
 $(EXT) - prints extension
-$(M_DATE) - prints file modification date
-$(C_DATE) - prints file creation
+$(MODIF) - prints file modification date
+$(CREAT) - prints file creation
 $(CURR) - prints current file name with extension
-$(8:2) - prints numbers with step 2, starts with 8 -&gt; 8,10,12 etc. </property>
+$(N:6:3:2) - prints numbers with step 3, 
+starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
   </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="can_focus">False</property>
@@ -57,10 +58,10 @@ $(8:2) - prints numbers with step 2, starts with 8 -&gt; 8,10,12 etc. </property
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="entry_custom_text_to_change">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">$(NAME)$(EXT)</property>
+                        <property name="text" translatable="yes">$(NAME).$(EXT)</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

@@ -1,4 +1,5 @@
 use crate::class_dialog_rule_add_text::GUIAddText;
+use crate::class_dialog_rule_custom::GUICustom;
 use crate::class_dialog_rule_purge::GUIPurge;
 use crate::class_dialog_rule_size_letters::GUISizeLetters;
 use crate::class_dialog_rule_trim::GUITrim;
@@ -16,6 +17,7 @@ pub struct GUIDialogRules {
     pub purge: GUIPurge,
     pub add_text: GUIAddText,
     pub trim: GUITrim,
+    pub custom: GUICustom,
 
     pub entry_example_before: Entry,
     pub label_example_after: Label,
@@ -33,6 +35,7 @@ impl GUIDialogRules {
         let purge: GUIPurge = GUIPurge::create_from_builder(&builder);
         let add_text: GUIAddText = GUIAddText::create_from_builder(&builder);
         let trim: GUITrim = GUITrim::create_from_builder(&builder);
+        let custom: GUICustom = GUICustom::create_from_builder(&builder);
 
         let entry_example_before: gtk::Entry = builder.get_object("entry_example_before").unwrap();
         let label_example_after: gtk::Label = builder.get_object("label_example_after").unwrap();
@@ -46,6 +49,7 @@ impl GUIDialogRules {
             purge,
             add_text,
             trim,
+            custom,
             entry_example_before,
             label_example_after,
             button_example_reset,

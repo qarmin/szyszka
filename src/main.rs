@@ -1,4 +1,5 @@
 mod class_dialog_rule_add_text;
+mod class_dialog_rule_custom;
 mod class_dialog_rule_purge;
 mod class_dialog_rule_size_letters;
 mod class_dialog_rule_trim;
@@ -12,6 +13,7 @@ mod connect_add_files_button;
 mod connect_rule_add;
 mod connect_rule_window_add_text_click;
 mod connect_rule_window_close;
+mod connect_rule_window_custom_click;
 mod connect_rule_window_purge_click;
 mod connect_rule_window_rule_buttons;
 mod connect_rule_window_size_letters_click;
@@ -24,6 +26,7 @@ mod initialize_gui;
 mod notebook_enum;
 mod rule_add_text;
 mod rule_change_size_letters;
+mod rule_custom;
 mod rule_purge;
 mod rule_trim;
 mod rules;
@@ -34,6 +37,7 @@ use crate::connect_add_files_button::*;
 use crate::connect_rule_add::*;
 use crate::connect_rule_window_add_text_click::*;
 use crate::connect_rule_window_close::*;
+use crate::connect_rule_window_custom_click::*;
 use crate::connect_rule_window_purge_click::*;
 use crate::connect_rule_window_rule_buttons::*;
 use crate::connect_rule_window_size_letters_click::*;
@@ -61,6 +65,7 @@ fn main() {
     connect_rule_window_purge_click(&gui_data);
     connect_rule_window_add_text_click(&gui_data);
     connect_rule_window_trim_click(&gui_data);
+    connect_rule_window_custom_click(&gui_data);
 
     // Connect update examples in Rule Dialog
     connect_update_examples(&gui_data);
