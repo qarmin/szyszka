@@ -6,6 +6,7 @@ use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_custom::rule_custom;
 use crate::rule_purge::rule_purge;
+use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
 use crate::rules::{RuleData, RulePlace, RuleType};
 use gtk::prelude::*;
@@ -66,6 +67,14 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
     let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
+
+    let radio_button_replace_extension = window_rules.replace.radio_button_replace_extension.clone();
+    let radio_button_replace_name = window_rules.replace.radio_button_replace_name.clone();
+    let radio_button_replace_both = window_rules.replace.radio_button_replace_both.clone();
+    let radio_button_replace_case_insensitive = window_rules.replace.radio_button_replace_case_insensitive.clone();
+    let radio_button_replace_case_sensitive = window_rules.replace.radio_button_replace_case_sensitive.clone();
+    let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
+    let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change.clone();
 
     let notebook_enum = if let Some(notebook_number) = notebook_number {
         to_notebook_enum(notebook_number)
@@ -128,6 +137,7 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
         NotebookEnum::Trim => {
             rule_type = RuleType::Trim;
             rule_data.trim_text = entry_add_text_text_to_trim.get_text().to_string();
+
             if radio_button_trim_case_sensitive.get_active() {
                 rule_data.case_sensitive = true;
             } else if radio_button_trim_case_insensitive.get_active() {
@@ -156,6 +166,31 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
             rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
 
             label_example_after.set_text(rule_custom(text_to_change.as_str(), &rule_type, &rule_place, &rule_data, 0, true).as_str());
+        }
+        NotebookEnum::Replace => {
+            rule_type = RuleType::Replace;
+
+            if radio_button_replace_both.get_active() {
+                rule_place = RulePlace::ExtensionAndName;
+            } else if radio_button_replace_name.get_active() {
+                rule_place = RulePlace::Name;
+            } else if radio_button_replace_extension.get_active() {
+                rule_place = RulePlace::Extension;
+            } else {
+                panic!("Invalid Rule Type for purge rule");
+            }
+
+            if radio_button_replace_case_sensitive.get_active() {
+                rule_data.case_sensitive = true;
+            } else if radio_button_replace_case_insensitive.get_active() {
+                rule_data.case_sensitive = false;
+            } else {
+                panic!("Invalid Button Clicked");
+            }
+
+            rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
+            rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
+            label_example_after.set_text(rule_replace(text_to_change.as_str(), &rule_type, &rule_place, &rule_data).as_str());
         }
         _ => {
             println!("Missing notebook Handler!, Needs to fix");

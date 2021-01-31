@@ -37,6 +37,16 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let radio_button_trim_case_insensitive = window_rules.trim.radio_button_trim_case_insensitive.clone();
     let radio_button_trim_case_sensitive = window_rules.trim.radio_button_trim_case_sensitive;
 
+    let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
+
+    let radio_button_replace_extension = window_rules.replace.radio_button_replace_extension.clone();
+    let radio_button_replace_name = window_rules.replace.radio_button_replace_name.clone();
+    let radio_button_replace_both = window_rules.replace.radio_button_replace_both.clone();
+    let radio_button_replace_case_insensitive = window_rules.replace.radio_button_replace_case_insensitive.clone();
+    let radio_button_replace_case_sensitive = window_rules.replace.radio_button_replace_case_sensitive.clone();
+    let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
+    let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change;
+
     button_rule_window_add.connect_clicked(move |_e| {
         window_with_rules.hide();
         window_main.set_sensitive(true);
@@ -114,6 +124,36 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 } else {
                     panic!("Invalid Button Clicked");
                 }
+            }
+            NotebookEnum::Custom => {
+                rule_type = RuleType::Custom;
+                rule_place = RulePlace::None;
+
+                rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
+            }
+            NotebookEnum::Replace => {
+                rule_type = RuleType::Replace;
+
+                if radio_button_replace_both.get_active() {
+                    rule_place = RulePlace::ExtensionAndName;
+                } else if radio_button_replace_name.get_active() {
+                    rule_place = RulePlace::Name;
+                } else if radio_button_replace_extension.get_active() {
+                    rule_place = RulePlace::Extension;
+                } else {
+                    panic!("Invalid Rule Type for purge rule");
+                }
+
+                if radio_button_replace_case_sensitive.get_active() {
+                    rule_data.case_sensitive = true;
+                } else if radio_button_replace_case_insensitive.get_active() {
+                    rule_data.case_sensitive = false;
+                } else {
+                    panic!("Invalid Button Clicked");
+                }
+
+                rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
+                rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
             }
 
             _ => {

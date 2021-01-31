@@ -10,7 +10,7 @@ pub fn rule_trim(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePl
     let name_lowercase = name.to_lowercase();
     let extension_lowercase = extension.to_lowercase();
     let text_to_trim = rule_data.trim_text.clone();
-    let text_to_trim_lowerspace = text_to_trim.to_lowercase();
+    let text_to_trim_lowercase = text_to_trim.to_lowercase();
 
     match rule_type {
         RuleType::Trim => match rule_place {
@@ -21,11 +21,11 @@ pub fn rule_trim(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePl
                     } else {
                         return_string = format!("{}.{}", name, extension[text_to_trim.len()..extension.len()].to_string());
                     }
-                } else if !rule_data.case_sensitive && extension_lowercase.starts_with(&text_to_trim_lowerspace) {
-                    if text_to_trim_lowerspace.len() == extension_lowercase.len() {
+                } else if !rule_data.case_sensitive && extension_lowercase.starts_with(&text_to_trim_lowercase) {
+                    if text_to_trim_lowercase.len() == extension_lowercase.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = format!("{}.{}", name, extension[text_to_trim_lowerspace.len()..extension_lowercase.len()].to_string());
+                        return_string = format!("{}.{}", name, extension[text_to_trim_lowercase.len()..extension_lowercase.len()].to_string());
                     }
                 }
             }
@@ -36,11 +36,11 @@ pub fn rule_trim(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePl
                     } else {
                         return_string = data_to_change[text_to_trim.len()..data_to_change.len()].to_string();
                     }
-                } else if !rule_data.case_sensitive && data_to_change_lowercase.starts_with(&text_to_trim_lowerspace) {
-                    if text_to_trim_lowerspace.len() == data_to_change_lowercase.len() {
+                } else if !rule_data.case_sensitive && data_to_change_lowercase.starts_with(&text_to_trim_lowercase) {
+                    if text_to_trim_lowercase.len() == data_to_change_lowercase.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = data_to_change[text_to_trim_lowerspace.len()..data_to_change_lowercase.len()].to_string();
+                        return_string = data_to_change[text_to_trim_lowercase.len()..data_to_change_lowercase.len()].to_string();
                     }
                 }
             }
@@ -51,11 +51,11 @@ pub fn rule_trim(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePl
                     } else {
                         return_string = format!("{}.{}", name[0..(name.len() - text_to_trim.len())].to_string(), extension);
                     }
-                } else if !rule_data.case_sensitive && name_lowercase.ends_with(&text_to_trim_lowerspace) {
-                    if text_to_trim_lowerspace.len() == name_lowercase.len() {
+                } else if !rule_data.case_sensitive && name_lowercase.ends_with(&text_to_trim_lowercase) {
+                    if text_to_trim_lowercase.len() == name_lowercase.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = format!("{}.{}", name[0..(name_lowercase.len() - text_to_trim_lowerspace.len())].to_string(), extension);
+                        return_string = format!("{}.{}", name[0..(name_lowercase.len() - text_to_trim_lowercase.len())].to_string(), extension);
                     }
                 }
             }
@@ -66,11 +66,11 @@ pub fn rule_trim(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePl
                     } else {
                         return_string = data_to_change[0..(data_to_change.len() - text_to_trim.len())].to_string();
                     }
-                } else if !rule_data.case_sensitive && data_to_change_lowercase.ends_with(&text_to_trim_lowerspace) {
-                    if text_to_trim_lowerspace.len() == data_to_change_lowercase.len() {
+                } else if !rule_data.case_sensitive && data_to_change_lowercase.ends_with(&text_to_trim_lowercase) {
+                    if text_to_trim_lowercase.len() == data_to_change_lowercase.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = data_to_change[0..(data_to_change_lowercase.len() - text_to_trim_lowerspace.len())].to_string();
+                        return_string = data_to_change[0..(data_to_change_lowercase.len() - text_to_trim_lowercase.len())].to_string();
                     }
                 }
             }

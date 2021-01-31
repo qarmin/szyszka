@@ -2,6 +2,7 @@ use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_custom::rule_custom;
 use crate::rule_purge::rule_purge;
+use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
 
 pub struct Rules {
@@ -44,6 +45,9 @@ impl Rules {
                 RuleType::Custom => {
                     item = rule_custom(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], rule_number as u64, false);
                 }
+                RuleType::Replace => {
+                    item = rule_replace(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
+                }
             }
         }
         item
@@ -56,6 +60,7 @@ pub enum RuleType {
     Purge,
     AddText,
     Trim,
+    Replace,
 }
 #[allow(dead_code)]
 pub enum RulePlace {
@@ -79,6 +84,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
         RuleType::Purge => "Purge",
         RuleType::AddText => "Add Text",
         RuleType::Trim => "Trim",
+        RuleType::Replace => "Replace",
     }
     .to_string()
 }
@@ -110,6 +116,9 @@ pub struct RuleData {
     pub number_start: i64,
     pub number_step: i64,
     pub fill_with_zeros: i64,
+
+    pub text_to_remove: String,
+    pub text_to_replace: String,
 }
 impl RuleData {
     pub fn new() -> Self {
@@ -122,6 +131,8 @@ impl RuleData {
             number_start: 0,
             number_step: 0,
             fill_with_zeros: 0,
+            text_to_remove: "".to_string(),
+            text_to_replace: "".to_string(),
         }
     }
 }

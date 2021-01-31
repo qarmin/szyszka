@@ -796,6 +796,71 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Case Sensitivity</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_button_replace_case_sensitive">
+                                    <property name="label" translatable="yes">Case Sensitive</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_button_replace_case_insensitive">
+                                    <property name="label" translatable="yes">Case Insensitive</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">radio_button_replace_case_sensitive</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -812,7 +877,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="entry_replace_text_to_change">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="text" translatable="yes">karamba</property>
@@ -823,7 +888,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="entry_replace_text_to_remove">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="text" translatable="yes">a</property>
@@ -848,7 +913,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Replaacing Strings:</property>
+                                <property name="label" translatable="yes">Replacing Strings:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -860,7 +925,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
