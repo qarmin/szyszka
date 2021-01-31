@@ -40,6 +40,9 @@ pub fn validate_name(before_name: String) -> String {
     }
     after_name
 }
+pub fn validate_number(before_name: String) -> String {
+    before_name.chars().filter(|e| e.is_digit(10)).collect::<String>()
+}
 
 pub fn split_path(path: &Path) -> (String, String) {
     match (path.parent(), path.file_name()) {

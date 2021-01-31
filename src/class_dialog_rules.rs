@@ -1,3 +1,4 @@
+use crate::class_dialog_rule_add_number::GUIAddNumber;
 use crate::class_dialog_rule_add_text::GUIAddText;
 use crate::class_dialog_rule_custom::GUICustom;
 use crate::class_dialog_rule_purge::GUIPurge;
@@ -20,6 +21,7 @@ pub struct GUIDialogRules {
     pub trim: GUITrim,
     pub custom: GUICustom,
     pub replace: GUIReplace,
+    pub add_number: GUIAddNumber,
 
     pub entry_example_before: Entry,
     pub label_example_after: Label,
@@ -39,6 +41,7 @@ impl GUIDialogRules {
         let trim: GUITrim = GUITrim::create_from_builder(&builder);
         let custom: GUICustom = GUICustom::create_from_builder(&builder);
         let replace: GUIReplace = GUIReplace::create_from_builder(&builder);
+        let add_number: GUIAddNumber = GUIAddNumber::create_from_builder(&builder);
 
         let entry_example_before: gtk::Entry = builder.get_object("entry_example_before").unwrap();
         let label_example_after: gtk::Label = builder.get_object("label_example_after").unwrap();
@@ -54,6 +57,7 @@ impl GUIDialogRules {
             trim,
             custom,
             replace,
+            add_number,
             entry_example_before,
             label_example_after,
             button_example_reset,

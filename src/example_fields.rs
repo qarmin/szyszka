@@ -2,6 +2,7 @@ use crate::class_dialog_rules::GUIDialogRules;
 use crate::class_gui_data::GuiData;
 use crate::help_function::validate_name;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum, EXAMPLE_NAME};
+use crate::rule_add_number::rule_add_number;
 use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_custom::rule_custom;
@@ -75,6 +76,12 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
     let radio_button_replace_case_sensitive = window_rules.replace.radio_button_replace_case_sensitive.clone();
     let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change.clone();
+
+    let radio_button_add_number_before_name = window_rules.add_number.radio_button_add_number_before_name.clone();
+    let radio_button_add_number_after_name = window_rules.add_number.radio_button_add_number_after_name.clone();
+    let entry_add_number_start_number = window_rules.add_number.entry_add_number_start_number.clone();
+    let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
+    let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros.clone();
 
     let notebook_enum = if let Some(notebook_number) = notebook_number {
         to_notebook_enum(notebook_number)
@@ -192,8 +199,21 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
             rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
             label_example_after.set_text(rule_replace(text_to_change.as_str(), &rule_type, &rule_place, &rule_data).as_str());
         }
-        _ => {
-            println!("Missing notebook Handler!, Needs to fix");
+        NotebookEnum::AddNumber => {
+            rule_type = RuleType::AddNumber;
+
+            if radio_button_add_number_before_name.get_active() {
+                rule_place = RulePlace::BeforeName;
+            } else if radio_button_add_number_after_name.get_active() {
+                rule_place = RulePlace::AfterName;
+            } else {
+                panic!("Invalid Rule Type for purge rule");
+            }
+
+            rule_data.fill_with_zeros = entry_add_number_zeros.get_text().to_string().parse::<i64>().unwrap_or(0);
+            rule_data.number_step = entry_add_number_step.get_text().to_string().parse::<i64>().unwrap_or(1);
+            rule_data.number_start = entry_add_number_start_number.get_text().to_string().parse::<i64>().unwrap_or(1);
+            label_example_after.set_text(rule_add_number(text_to_change.as_str(), &rule_type, &rule_place, &rule_data, 0).as_str());
         }
     }
 }

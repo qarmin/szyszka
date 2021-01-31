@@ -403,7 +403,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_add_number_extension">
+                              <object class="GtkRadioButton" id="radio_button_add_number_after_name">
                                 <property name="label" translatable="yes">After Name</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -476,7 +476,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="entry_add_number_start_number">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="max_length">30</property>
@@ -489,7 +489,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="entry_add_number_step">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="max_length">30</property>
@@ -513,7 +513,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="entry_add_number_zeros">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="max_length">4</property>

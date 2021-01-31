@@ -50,6 +50,12 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change;
 
+    let radio_button_add_number_before_name = window_rules.add_number.radio_button_add_number_before_name.clone();
+    let radio_button_add_number_after_name = window_rules.add_number.radio_button_add_number_after_name.clone();
+    let entry_add_number_start_number = window_rules.add_number.entry_add_number_start_number.clone();
+    let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
+    let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros;
+
     button_rule_window_add.connect_clicked(move |_e| {
         window_with_rules.hide();
         window_main.set_sensitive(true);
@@ -159,9 +165,20 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
                     rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
                 }
+                NotebookEnum::AddNumber => {
+                    rule_type = RuleType::AddNumber;
 
-                _ => {
-                    panic!("Invalid notebook name");
+                    if radio_button_add_number_before_name.get_active() {
+                        rule_place = RulePlace::BeforeName;
+                    } else if radio_button_add_number_after_name.get_active() {
+                        rule_place = RulePlace::AfterName;
+                    } else {
+                        panic!("Invalid Rule Type for purge rule");
+                    }
+
+                    rule_data.fill_with_zeros = entry_add_number_zeros.get_text().to_string().parse::<i64>().unwrap_or(0);
+                    rule_data.number_step = entry_add_number_step.get_text().to_string().parse::<i64>().unwrap_or(1);
+                    rule_data.number_start = entry_add_number_start_number.get_text().to_string().parse::<i64>().unwrap_or(1);
                 }
             }
             rule.add_rule(rule_type, rule_place, rule_data);

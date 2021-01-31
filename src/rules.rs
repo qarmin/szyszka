@@ -1,3 +1,4 @@
+use crate::rule_add_number::rule_add_number;
 use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_custom::rule_custom;
@@ -48,6 +49,9 @@ impl Rules {
                 RuleType::Replace => {
                     item = rule_replace(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
+                RuleType::AddNumber => {
+                    item = rule_add_number(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], current_index);
+                }
             }
         }
         item
@@ -61,6 +65,7 @@ pub enum RuleType {
     AddText,
     Trim,
     Replace,
+    AddNumber,
 }
 #[allow(dead_code)]
 pub enum RulePlace {
@@ -80,11 +85,12 @@ pub enum RulePlace {
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
         RuleType::Custom => "Custom",
-        RuleType::CaseSize => "CaseSize",
+        RuleType::CaseSize => "Case Size",
         RuleType::Purge => "Purge",
         RuleType::AddText => "Add Text",
         RuleType::Trim => "Trim",
         RuleType::Replace => "Replace",
+        RuleType::AddNumber => "Add Number",
     }
     .to_string()
 }
