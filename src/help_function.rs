@@ -20,6 +20,22 @@ pub enum ColumnsRules {
     // Dimensions,
 }
 
+pub fn validate_name(before_name: String) -> String {
+    let mut after_name = before_name;
+    after_name = after_name.replace("\\", "");
+    if cfg!(target_family = "windows") {
+        after_name = after_name.replace("/", "");
+        after_name = after_name.replace("<", "");
+        after_name = after_name.replace(">", "");
+        after_name = after_name.replace(":", "");
+        after_name = after_name.replace("", "");
+        after_name = after_name.replace("|", "");
+        after_name = after_name.replace("?", "");
+        after_name = after_name.replace("*", "");
+    }
+    after_name
+}
+
 pub fn split_path(path: &Path) -> (String, String) {
     match (path.parent(), path.file_name()) {
         (Some(dir), Some(file)) => (dir.display().to_string(), file.to_string_lossy().into_owned()),

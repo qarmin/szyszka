@@ -1,8 +1,10 @@
 use crate::class_dialog_rules::GUIDialogRules;
 use crate::class_gui_data::GuiData;
+use crate::help_function::validate_name;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum, EXAMPLE_NAME};
 use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
+use crate::rule_custom::rule_custom;
 use crate::rule_purge::rule_purge;
 use crate::rule_trim::rule_trim;
 use crate::rules::{RuleData, RulePlace, RuleType};
@@ -25,7 +27,8 @@ pub fn connect_update_examples(gui_data: &GuiData) {
 
     let window_rules = gui_data.window_rules.clone();
     let entry_example_before = gui_data.window_rules.entry_example_before.clone();
-    entry_example_before.connect_changed(move |_e| {
+    entry_example_before.connect_changed(move |e| {
+        e.set_text(validate_name(e.get_text().to_string()).as_str());
         update_examples(&window_rules, None);
     });
 }
@@ -61,6 +64,8 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
     let radio_button_trim_case_insensitive = window_rules.trim.radio_button_trim_case_insensitive.clone();
     let radio_button_trim_case_sensitive = window_rules.trim.radio_button_trim_case_sensitive.clone();
     let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
+
+    let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
     let notebook_enum = if let Some(notebook_number) = notebook_number {
         to_notebook_enum(notebook_number)
@@ -143,6 +148,14 @@ pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u3
                 panic!("Invalid Button Clicked");
             }
             label_example_after.set_text(rule_trim(text_to_change.as_str(), &rule_type, &rule_place, &rule_data).as_str());
+        }
+        NotebookEnum::Custom => {
+            rule_type = RuleType::Custom;
+            rule_place = RulePlace::None;
+
+            rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
+
+            label_example_after.set_text(rule_custom(text_to_change.as_str(), &rule_type, &rule_place, &rule_data, 0, true).as_str());
         }
         _ => {
             println!("Missing notebook Handler!, Needs to fix");

@@ -1,6 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::example_fields::update_examples;
-use gtk::{ButtonExt, EditableSignals};
+use crate::help_function::validate_name;
+use gtk::{ButtonExt, EditableSignals, EntryExt};
 
 pub fn connect_rule_window_add_text_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
@@ -18,7 +19,8 @@ pub fn connect_rule_window_add_text_click(gui_data: &GuiData) {
         update_examples(&window_rules, None);
     });
     let window_rules = gui_data.window_rules.clone();
-    entry_add_text_text_to_add.connect_changed(move |_e| {
+    entry_add_text_text_to_add.connect_changed(move |e| {
+        e.set_text(validate_name(e.get_text().to_string()).as_str());
         update_examples(&window_rules, None);
     });
 }

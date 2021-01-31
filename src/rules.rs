@@ -1,5 +1,6 @@
 use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
+use crate::rule_custom::rule_custom;
 use crate::rule_purge::rule_purge;
 use crate::rule_trim::rule_trim;
 
@@ -40,6 +41,9 @@ impl Rules {
                 RuleType::Trim => {
                     item = rule_trim(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
                 }
+                RuleType::Custom => {
+                    item = rule_custom(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], rule_number as u64, false);
+                }
             }
         }
         item
@@ -47,6 +51,7 @@ impl Rules {
 }
 
 pub enum RuleType {
+    Custom,
     CaseSize,
     Purge,
     AddText,
@@ -54,6 +59,7 @@ pub enum RuleType {
 }
 #[allow(dead_code)]
 pub enum RulePlace {
+    None,
     Extension,
     Name,
     ExtensionAndName,
@@ -68,6 +74,7 @@ pub enum RulePlace {
 }
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
+        RuleType::Custom => "Custom",
         RuleType::CaseSize => "CaseSize",
         RuleType::Purge => "Purge",
         RuleType::AddText => "Add Text",
@@ -77,6 +84,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
 }
 pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     match rule_type {
+        RulePlace::None => "N/A",
         RulePlace::Extension => "Only Extension",
         RulePlace::Name => "Only Name",
         RulePlace::ExtensionAndName => "Extension and Name",
@@ -97,6 +105,11 @@ pub struct RuleData {
     pub trim_text: String,
     pub to_lowercase: bool,
     pub case_sensitive: bool,
+    pub custom_text: String,
+
+    pub number_start: i64,
+    pub number_step: i64,
+    pub fill_with_zeros: i64,
 }
 impl RuleData {
     pub fn new() -> Self {
@@ -105,6 +118,10 @@ impl RuleData {
             trim_text: "".to_string(),
             to_lowercase: false,
             case_sensitive: false,
+            custom_text: "".to_string(),
+            number_start: 0,
+            number_step: 0,
+            fill_with_zeros: 0,
         }
     }
 }
