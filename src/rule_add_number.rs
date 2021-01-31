@@ -74,7 +74,7 @@ mod test {
         rule_data.number_start = 10;
         rule_data.number_step = 5;
         rule_data.fill_with_zeros = 4;
-        assert_eq!(rule_add_number("Roman.txt", &RuleType::Trim, &RulePlace::FromExtensionEndReverse, &rule_data, 0), "Roman.");
-        assert_eq!(rule_add_number("Roman.txt", &RuleType::Trim, &RulePlace::FromExtensionEndReverse, &rule_data, 0), "Roman.");
+        assert_eq!(rule_add_number("Roman.txt", &RuleType::AddNumber, &RulePlace::BeforeName, &rule_data, 0), "0010Roman.txt");
+        assert_eq!(rule_add_number("Roman.txt", &RuleType::AddNumber, &RulePlace::AfterName, &rule_data, 1), "Roman0015.txt");
     }
 }
