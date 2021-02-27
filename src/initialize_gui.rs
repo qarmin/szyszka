@@ -27,15 +27,20 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
     }
     // Create TreeView in Rules
     {
+        gui_data.rules_bottom_panel.button_one_up.hide();
+        gui_data.rules_bottom_panel.button_one_down.hide();
+        gui_data.rules_bottom_panel.button_to_top.hide();
+        gui_data.rules_bottom_panel.button_to_bottom.hide();
+
         let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 
-        let col_types: [Type; 3] = [glib::types::Type::U32, glib::types::Type::String, glib::types::Type::String];
+        let col_types: [Type; 2] = [glib::types::Type::String, glib::types::Type::String];
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 
         let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
 
-        tree_view.get_selection().set_mode(SelectionMode::Multiple);
+        // tree_view.get_selection().set_mode(SelectionMode::Multiple);
 
         create_tree_view_rules(&tree_view);
 
@@ -44,7 +49,7 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         gui_data.rules_bottom_panel.tree_view_window_rules = tree_view;
     }
-    // Set Example name to
+    // Set Example name
     {
         let entry_example_before = gui_data.window_rules.entry_example_before.clone();
         entry_example_before.set_text(EXAMPLE_NAME);

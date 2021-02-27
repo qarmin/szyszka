@@ -27,7 +27,7 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
     let rules = rules.deref_mut();
 
     match update_mode {
-        UpdateMode::FileAdded | UpdateMode::RuleAdded => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved => {
             if let Some(iter) = list_store.get_iter_first() {
                 let mut current_index = 0;
 
@@ -58,8 +58,8 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                 }
             }
         } // UpdateMode::Re => {}
-        _ => {
-            panic!("Not implemented yet")
-        }
+          // _ => {
+          //     panic!("Not implemented yet")
+          // }
     }
 }

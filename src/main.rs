@@ -13,13 +13,13 @@ mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_rule_add;
+mod connect_rule_buttons_modify_rules;
 mod connect_rule_window_add_number_click;
 mod connect_rule_window_add_text_click;
 mod connect_rule_window_close;
 mod connect_rule_window_custom_click;
 mod connect_rule_window_purge_click;
 mod connect_rule_window_replace_click;
-mod connect_rule_window_rule_buttons;
 mod connect_rule_window_size_letters_click;
 mod connect_rule_window_trim_click;
 mod create_tree_view;
@@ -41,13 +41,13 @@ mod update_records;
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_rule_add::*;
+use crate::connect_rule_buttons_modify_rules::*;
 use crate::connect_rule_window_add_number_click::*;
 use crate::connect_rule_window_add_text_click::*;
 use crate::connect_rule_window_close::*;
 use crate::connect_rule_window_custom_click::*;
 use crate::connect_rule_window_purge_click::*;
 use crate::connect_rule_window_replace_click::*;
-use crate::connect_rule_window_rule_buttons::*;
 use crate::connect_rule_window_size_letters_click::*;
 use crate::connect_rule_window_trim_click::*;
 use crate::example_fields::connect_update_examples;
@@ -66,6 +66,8 @@ fn main() {
 
     // Connect buttons OK and Close in select dialog
     connect_rule_window_close(&gui_data);
+
+    // Connect buttons about rules at the bottom
     connect_rule_add(&gui_data);
 
     // Connect buttons in dialog to reflect change to examples
@@ -81,7 +83,9 @@ fn main() {
     connect_update_examples(&gui_data);
 
     // Connect rule buttons in main window
-    connect_rule_window_rule_buttons(&gui_data);
+    connect_rule_modify_add(&gui_data);
+    connect_rule_modify_remove(&gui_data);
+    connect_rule_modify_one_up(&gui_data);
 
     // Quit the program when X in main window was clicked
     gui_data.window_main.connect_delete_event(|_, _| {

@@ -51,7 +51,7 @@ pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &Rule
                 return_string = return_string.replace("$(CURR)", data_to_change);
 
                 // Part with numbers
-                if return_string.find("$(N:").is_some() {
+                if return_string.contains("$(N:") {
                     let mut index = 0;
                     while let Some(mut start_index) = return_string[index..].find("$(N:") {
                         start_index += index + 4;
