@@ -7,9 +7,9 @@ use std::fs::File;
 use std::path::Path;
 use std::time::UNIX_EPOCH;
 
-pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePlace, rule_data: &RuleData, rule_number: u64, example: bool) -> String {
+pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, example: bool) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
-    let mut return_string = rule_data.custom_text.clone();
+    let mut return_string = rule.rule_data.custom_text.clone();
 
     let mut creation_date: String = "".to_string();
     let mut modification_date: String = "".to_string();
@@ -41,8 +41,8 @@ pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &Rule
         }
     }
 
-    match rule_type {
-        RuleType::Custom => match rule_place {
+    match rule.rule_type {
+        RuleType::Custom => match rule.rule_place {
             RulePlace::None => {
                 return_string = return_string.replace("$(NAME)", name.as_str());
                 return_string = return_string.replace("$(EXT)", extension.as_str());
@@ -122,7 +122,7 @@ pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &Rule
 #[cfg(test)]
 mod test {
     use crate::rule_custom::rule_custom;
-    use crate::rules::{RuleData, RulePlace, RuleType};
+    use crate::rules::{RulePlace, RuleType, SingleRule};
     use std::fs;
     use std::fs::OpenOptions;
     use std::io::Write;
@@ -130,60 +130,62 @@ mod test {
 
     #[test]
     fn test_custom() {
-        let mut rule_data: RuleData = RuleData::new();
+        let mut rule: SingleRule = SingleRule::new();
+        rule.rule_type = RuleType::Custom;
+        rule.rule_place = RulePlace::None;
 
         let mut file_handler = OpenOptions::new().truncate(true).write(true).create(true).open(Path::new("wombat.txt")).unwrap();
         write!(file_handler, "50").unwrap();
         file_handler.flush().unwrap();
 
-        rule_data.custom_text = "$(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "wombat.txt");
+        rule.rule_data.custom_text = "$(CURR)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "wombat.txt");
 
-        rule_data.custom_text = "$(NAME)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "wombat");
+        rule.rule_data.custom_text = "$(NAME)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "wombat");
 
-        rule_data.custom_text = "$(EXT)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "txt");
+        rule.rule_data.custom_text = "$(EXT)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "txt");
 
-        rule_data.custom_text = "$(N:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "$(N:)");
-        rule_data.custom_text = "$(N:20:22:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "$(N:20:22:)");
-        rule_data.custom_text = "$(20::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "$(20::22)");
-        rule_data.custom_text = "$(N:::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "$(N:::22)");
-        rule_data.custom_text = "$(:::)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "$(:::)");
-        rule_data.custom_text = "$(N:20:22:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "0020");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 1, false), "0042");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 2, false), "0064");
-        rule_data.custom_text = "$(N:1:10:3)$(N:2:10:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "0010002");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 1, false), "0110012");
-        rule_data.custom_text = "$(N:0:2:5)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "00000");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 1, false), "00002");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 2, false), "00004");
-        rule_data.custom_text = "$(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "10");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 1, false), "15");
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 2, false), "20");
-        rule_data.custom_text = "$(EXT)$(())$(($(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "txt$(())$((10");
+        rule.rule_data.custom_text = "$(N:)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:)");
+        rule.rule_data.custom_text = "$(N:20:22:)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:20:22:)");
+        rule.rule_data.custom_text = "$(20::22)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(20::22)");
+        rule.rule_data.custom_text = "$(N:::22)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:::22)");
+        rule.rule_data.custom_text = "$(:::)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(:::)");
+        rule.rule_data.custom_text = "$(N:20:22:4)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "0020");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "0042");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "0064");
+        rule.rule_data.custom_text = "$(N:1:10:3)$(N:2:10:4)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "0010002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "0110012");
+        rule.rule_data.custom_text = "$(N:0:2:5)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "00000");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "00002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "00004");
+        rule.rule_data.custom_text = "$(N:10:5:1)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "10");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "15");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "20");
+        rule.rule_data.custom_text = "$(EXT)$(())$(($(N:10:5:1)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "txt$(())$((10");
 
         // This depends on files which doesn't exists, so result should be an empty string
 
-        rule_data.custom_text = "$(SIZE)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false), "2 B");
+        rule.rule_data.custom_text = "$(SIZE)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "2 B");
 
-        rule_data.custom_text = "$(MODIF)".to_string();
-        let text = rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false);
+        rule.rule_data.custom_text = "$(MODIF)".to_string();
+        let text = rule_custom("wombat.txt", &rule, 0, false);
         assert!(text.contains('-') && text.contains("20"));
 
-        rule_data.custom_text = "$(CREAT)".to_string();
-        let text = rule_custom("wombat.txt", &RuleType::Custom, &RulePlace::None, &rule_data, 0, false);
+        rule.rule_data.custom_text = "$(CREAT)".to_string();
+        let text = rule_custom("wombat.txt", &rule, 0, false);
         assert!(text.contains('-') && text.contains("20"));
 
         fs::remove_file("wombat.txt").unwrap();

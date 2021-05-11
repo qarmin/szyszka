@@ -2,13 +2,13 @@ use crate::help_function::split_file_name;
 use crate::rules::*;
 use std::path::Path;
 
-pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePlace, rule_data: &RuleData) -> String {
+pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> String {
     let (mut name, mut extension) = split_file_name(Path::new(data_to_change));
 
-    match rule_type {
+    match rule.rule_type {
         RuleType::CaseSize => {
-            if !rule_data.to_lowercase {
-                match rule_place {
+            if !rule.rule_data.to_lowercase {
+                match rule.rule_place {
                     RulePlace::Name => {
                         name = name.to_uppercase();
                     }
@@ -24,7 +24,7 @@ pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule
                     }
                 }
             } else {
-                match rule_place {
+                match rule.rule_place {
                     RulePlace::Name => {
                         name = name.to_lowercase();
                     }
@@ -57,19 +57,29 @@ pub fn rule_change_size_letters(data_to_change: &str, rule_type: &RuleType, rule
 #[cfg(test)]
 mod test {
     use crate::rule_change_size_letters::rule_change_size_letters;
-    use crate::rules::{RuleData, RulePlace, RuleType};
+    use crate::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_size_letters() {
-        let mut rule_data = RuleData::new();
-        rule_data.to_lowercase = true;
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::Name, &rule_data), "roman.Txt");
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::Extension, &rule_data), "Roman.txt");
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::ExtensionAndName, &rule_data), "roman.txt");
+        let mut rule = SingleRule::new();
+        rule.rule_type = RuleType::CaseSize;
 
-        rule_data.to_lowercase = false;
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::Name, &rule_data), "ROMAN.Txt");
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::Extension, &rule_data), "Roman.TXT");
-        assert_eq!(rule_change_size_letters("Roman.Txt", &RuleType::CaseSize, &RulePlace::ExtensionAndName, &rule_data), "ROMAN.TXT");
+        rule.rule_data.to_lowercase = true;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "roman.Txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "Roman.txt");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "roman.txt");
+
+        rule.rule_data.to_lowercase = false;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "ROMAN.Txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "Roman.TXT");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "ROMAN.TXT");
     }
 }

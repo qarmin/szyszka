@@ -6,62 +6,68 @@ use crate::rule_purge::rule_purge;
 use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
 
-// TODO Add single rule
-// pub struct SingleRule {
-//     pub rule_types: RuleType,
-//     pub rule_place: RulePlace,
-//     pub rule_data: RuleData,
-//     pub rule_description: <String,
-// }
+pub struct SingleRule {
+    pub rule_type: RuleType,
+    pub rule_place: RulePlace,
+    pub rule_data: RuleData,
+    pub rule_description: String,
+}
+impl SingleRule {
+    pub fn new() -> Self {
+        SingleRule {
+            rule_type: RuleType::Custom,
+            rule_place: RulePlace::None,
+            rule_data: RuleData::new(),
+            rule_description: "".to_string(),
+        }
+    }
+    pub fn create_rule(rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) -> Self {
+        SingleRule {
+            rule_type,
+            rule_place,
+            rule_data,
+            rule_description,
+        }
+    }
+}
 
 pub struct Rules {
-    pub rule_types: Vec<RuleType>,
-    pub rule_place: Vec<RulePlace>,
-    pub rules_number: usize,
-    pub rule_data: Vec<RuleData>,
-    pub rule_description: Vec<String>,
+    pub rules: Vec<SingleRule>,
 }
 
 impl Rules {
     pub fn new() -> Self {
-        Rules {
-            rule_types: vec![],
-            rule_place: vec![],
-            rules_number: 0,
-            rule_data: vec![],
-            rule_description: vec![],
-        }
+        Rules { rules: vec![] }
     }
     pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
-        self.rule_types.push(rule_type);
-        self.rule_place.push(rule_place);
-        self.rule_data.push(rule_data);
-        self.rule_description.push(rule_description);
-        self.rules_number += 1;
+        self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
+    }
+    pub fn remove_rule(&mut self, index: usize) {
+        self.rules.remove(index);
     }
     pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64) -> String {
-        for rule_number in 0..self.rules_number {
-            match self.rule_types[rule_number] {
+        for rule in &self.rules {
+            match rule.rule_type {
                 RuleType::CaseSize => {
-                    item = rule_change_size_letters(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
+                    item = rule_change_size_letters(item.as_str(), rule);
                 }
                 RuleType::Purge => {
-                    item = rule_purge(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number]);
+                    item = rule_purge(item.as_str(), rule);
                 }
                 RuleType::AddText => {
-                    item = rule_add_text(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
+                    item = rule_add_text(item.as_str(), rule);
                 }
                 RuleType::Trim => {
-                    item = rule_trim(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
+                    item = rule_trim(item.as_str(), rule);
                 }
                 RuleType::Custom => {
-                    item = rule_custom(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], current_index, false);
+                    item = rule_custom(item.as_str(), rule, current_index, false);
                 }
                 RuleType::Replace => {
-                    item = rule_replace(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number]);
+                    item = rule_replace(item.as_str(), rule);
                 }
                 RuleType::AddNumber => {
-                    item = rule_add_number(item.as_str(), &self.rule_types[rule_number], &self.rule_place[rule_number], &self.rule_data[rule_number], current_index);
+                    item = rule_add_number(item.as_str(), rule, current_index);
                 }
             }
         }

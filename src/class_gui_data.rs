@@ -56,12 +56,12 @@ impl GuiData {
         let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![] }));
 
         Self {
+            window_main,
             upper_buttons,
             results,
             status,
             rules_bottom_panel,
             window_rules,
-            window_main,
             rules,
             shared_result_entries,
         }

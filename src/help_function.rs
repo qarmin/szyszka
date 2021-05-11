@@ -73,8 +73,8 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
     list_store.clear();
 
     let col_indices = [0, 1, 2];
-    for number in 0..rules.rules_number {
-        let values: [&dyn ToValue; 3] = [&rule_type_to_string(&rules.rule_types[number]), &rule_place_to_string(&rules.rule_place[number]), &rules.rule_description[number]];
+    for rule in &rules.rules {
+        let values: [&dyn ToValue; 3] = [&rule_type_to_string(&rule.rule_type), &rule_place_to_string(&rule.rule_place), &rule.rule_description];
         list_store.set(&list_store.append(), &col_indices, &values);
     }
 }

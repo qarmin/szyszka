@@ -60,10 +60,7 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
 
             // Remove rules
             for rule_to_delete in vec_rule_to_delete.iter().rev() {
-                rules.rules_number -= 1;
-                rules.rule_data.remove(*rule_to_delete);
-                rules.rule_place.remove(*rule_to_delete);
-                rules.rule_types.remove(*rule_to_delete);
+                rules.remove_rule(*rule_to_delete);
             }
 
             // Update rules in rule window

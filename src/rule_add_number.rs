@@ -3,16 +3,16 @@ use crate::rules::*;
 use std::cmp::min;
 use std::path::Path;
 
-pub fn rule_add_number(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePlace, rule_data: &RuleData, rule_number: u64) -> String {
+pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
     let mut return_string;
     let is_empty_extension_and_dot_at_the_end = extension.is_empty() && data_to_change.ends_with('.');
 
-    let start_number = rule_data.number_start;
-    let step_number = rule_data.number_step;
-    let fill_with_zeros = rule_data.fill_with_zeros;
+    let start_number = rule.rule_data.number_start;
+    let step_number = rule.rule_data.number_step;
+    let fill_with_zeros = rule.rule_data.fill_with_zeros;
 
-    match rule_type {
+    match rule.rule_type {
         RuleType::AddNumber => {
             // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app
             let fill_with_zeros = min(fill_with_zeros, 50);
@@ -36,7 +36,7 @@ pub fn rule_add_number(data_to_change: &str, rule_type: &RuleType, rule_place: &
                 text_to_add = zeros + text_to_add.as_str();
             }
 
-            match rule_place {
+            match rule.rule_place {
                 RulePlace::BeforeName => {
                     return_string = text_to_add + name.as_str();
                 }
@@ -65,16 +65,21 @@ pub fn rule_add_number(data_to_change: &str, rule_type: &RuleType, rule_place: &
 #[cfg(test)]
 mod test {
     use crate::rule_add_number::rule_add_number;
-    use crate::rules::{RuleData, RulePlace, RuleType};
+    use crate::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_add_number() {
-        let mut rule_data: RuleData = RuleData::new();
+        let mut rule = SingleRule::new();
 
-        rule_data.number_start = 10;
-        rule_data.number_step = 5;
-        rule_data.fill_with_zeros = 4;
-        assert_eq!(rule_add_number("Roman.txt", &RuleType::AddNumber, &RulePlace::BeforeName, &rule_data, 0), "0010Roman.txt");
-        assert_eq!(rule_add_number("Roman.txt", &RuleType::AddNumber, &RulePlace::AfterName, &rule_data, 1), "Roman0015.txt");
+        rule.rule_data.number_start = 10;
+        rule.rule_data.number_step = 5;
+        rule.rule_data.fill_with_zeros = 4;
+        rule.rule_type = RuleType::AddNumber;
+
+        rule.rule_place = RulePlace::BeforeName;
+        assert_eq!(rule_add_number("Roman.txt", &rule, 0), "0010Roman.txt");
+
+        rule.rule_place = RulePlace::AfterName;
+        assert_eq!(rule_add_number("Roman.txt", &rule, 1), "Roman0015.txt");
     }
 }

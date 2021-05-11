@@ -2,12 +2,12 @@ use crate::help_function::split_file_name;
 use crate::rules::*;
 use std::path::Path;
 
-pub fn rule_purge(data_to_change: &str, rule_type: &RuleType, rule_place: &RulePlace) -> String {
+pub fn rule_purge(data_to_change: &str, rule: &SingleRule) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
     let return_string;
 
-    match rule_type {
-        RuleType::Purge => match rule_place {
+    match rule.rule_type {
+        RuleType::Purge => match rule.rule_place {
             RulePlace::Name => {
                 return_string = extension;
             }
@@ -30,12 +30,19 @@ pub fn rule_purge(data_to_change: &str, rule_type: &RuleType, rule_place: &RuleP
 #[cfg(test)]
 mod test {
     use crate::rule_purge::rule_purge;
-    use crate::rules::{RulePlace, RuleType};
+    use crate::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_purge() {
-        assert_eq!(rule_purge("Roman.txt", &RuleType::Purge, &RulePlace::Name), "txt");
-        assert_eq!(rule_purge("Roman.txt", &RuleType::Purge, &RulePlace::Extension), "Roman");
-        assert_eq!(rule_purge("Roman.txt", &RuleType::Purge, &RulePlace::ExtensionAndName), "");
+        let mut rule = SingleRule::new();
+
+        rule.rule_type = RuleType::Purge;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_purge("Roman.txt", &rule), "txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_purge("Roman.txt", &rule), "Roman");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_purge("Roman.txt", &rule), "");
     }
 }
