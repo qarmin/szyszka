@@ -1,4 +1,4 @@
-use crate::class_dialog_rules::GUIDialogRules;
+use crate::class_dialog_rules::GuiDialogRules;
 use crate::class_gui_data::GuiData;
 use crate::help_function::validate_name;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum, EXAMPLE_NAME};
@@ -35,7 +35,7 @@ pub fn connect_update_examples(gui_data: &GuiData) {
     });
 }
 
-pub fn update_examples(window_rules: &GUIDialogRules, notebook_number: Option<u32>) {
+pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u32>) {
     let notebook_choose_rule = window_rules.notebook_choose_rule.clone();
 
     let text_to_change: String = window_rules.entry_example_before.get_text().to_string();

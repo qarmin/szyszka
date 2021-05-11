@@ -1,7 +1,7 @@
 use gtk::prelude::*;
 
 #[derive(Clone)]
-pub struct GUIAddNumber {
+pub struct GuiAddNumber {
     pub radio_button_add_number_before_name: gtk::RadioButton,
     pub radio_button_add_number_after_name: gtk::RadioButton,
 
@@ -10,7 +10,7 @@ pub struct GUIAddNumber {
     pub entry_add_number_zeros: gtk::Entry,
 }
 
-impl GUIAddNumber {
+impl GuiAddNumber {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let radio_button_add_number_before_name: gtk::RadioButton = builder.get_object("radio_button_add_number_before_name").unwrap();
         let radio_button_add_number_after_name: gtk::RadioButton = builder.get_object("radio_button_add_number_after_name").unwrap();

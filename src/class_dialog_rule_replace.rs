@@ -1,7 +1,7 @@
 use gtk::prelude::*;
 
 #[derive(Clone)]
-pub struct GUIReplace {
+pub struct GuiReplace {
     pub radio_button_replace_name: gtk::RadioButton,
     pub radio_button_replace_extension: gtk::RadioButton,
     pub radio_button_replace_both: gtk::RadioButton,
@@ -13,7 +13,7 @@ pub struct GUIReplace {
     pub entry_replace_text_to_change: gtk::Entry,
 }
 
-impl GUIReplace {
+impl GuiReplace {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let radio_button_replace_name: gtk::RadioButton = builder.get_object("radio_button_replace_name").unwrap();
         let radio_button_replace_extension: gtk::RadioButton = builder.get_object("radio_button_replace_extension").unwrap();

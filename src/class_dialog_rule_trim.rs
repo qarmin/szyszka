@@ -1,7 +1,7 @@
 use gtk::prelude::*;
 
 #[derive(Clone)]
-pub struct GUITrim {
+pub struct GuiTrim {
     pub radio_button_trim_name_start: gtk::RadioButton,
     pub radio_button_trim_name_end: gtk::RadioButton,
     pub radio_button_trim_extension_start: gtk::RadioButton,
@@ -13,7 +13,7 @@ pub struct GUITrim {
     pub entry_add_text_text_to_trim: gtk::Entry,
 }
 
-impl GUITrim {
+impl GuiTrim {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let radio_button_trim_name_start: gtk::RadioButton = builder.get_object("radio_button_trim_name_start").unwrap();
         let radio_button_trim_name_end: gtk::RadioButton = builder.get_object("radio_button_trim_name_end").unwrap();

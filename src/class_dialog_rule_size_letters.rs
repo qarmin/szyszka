@@ -1,7 +1,7 @@
 use gtk::prelude::*;
 
 #[derive(Clone)]
-pub struct GUISizeLetters {
+pub struct GuiSizeLetters {
     pub radio_button_letters_type_uppercase: gtk::RadioButton,
     pub radio_button_letters_type_lowercase: gtk::RadioButton,
 
@@ -10,7 +10,7 @@ pub struct GUISizeLetters {
     pub radio_button_letters_usage_both: gtk::RadioButton,
 }
 
-impl GUISizeLetters {
+impl GuiSizeLetters {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let radio_button_letters_type_uppercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_uppercase").unwrap();
         let radio_button_letters_type_lowercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_lowercase").unwrap();

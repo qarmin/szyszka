@@ -2,7 +2,7 @@ use gtk::prelude::*;
 use gtk::TreeView;
 
 #[derive(Clone)]
-pub struct GUIRulesBottomPanel {
+pub struct GuiRulesBottomPanel {
     pub button_add_rule: gtk::Button,
     pub button_remove_rule: gtk::Button,
     pub button_one_up: gtk::Button,
@@ -13,7 +13,7 @@ pub struct GUIRulesBottomPanel {
     pub tree_view_window_rules: gtk::TreeView,
 }
 
-impl GUIRulesBottomPanel {
+impl GuiRulesBottomPanel {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
         let button_add_rule: gtk::Button = builder.get_object("button_add_rule").unwrap();
         let button_remove_rule: gtk::Button = builder.get_object("button_remove_rule").unwrap();

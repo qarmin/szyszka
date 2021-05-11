@@ -16,6 +16,7 @@ pub fn rule_custom(data_to_change: &str, rule_type: &RuleType, rule_place: &Rule
     let mut size: String = "".to_string();
 
     #[allow(clippy::collapsible_if)]
+    #[allow(clippy::collapsible_else_if)]
     // Random data to visualize typical
     if example {
         creation_date = "2021-01-31 08:42:12".to_string();
