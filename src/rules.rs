@@ -6,11 +6,20 @@ use crate::rule_purge::rule_purge;
 use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
 
+// TODO Add single rule
+// pub struct SingleRule {
+//     pub rule_types: RuleType,
+//     pub rule_place: RulePlace,
+//     pub rule_data: RuleData,
+//     pub rule_description: <String,
+// }
+
 pub struct Rules {
     pub rule_types: Vec<RuleType>,
     pub rule_place: Vec<RulePlace>,
     pub rules_number: usize,
     pub rule_data: Vec<RuleData>,
+    pub rule_description: Vec<String>,
 }
 
 impl Rules {
@@ -20,12 +29,14 @@ impl Rules {
             rule_place: vec![],
             rules_number: 0,
             rule_data: vec![],
+            rule_description: vec![],
         }
     }
-    pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData) {
+    pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
         self.rule_types.push(rule_type);
         self.rule_place.push(rule_place);
         self.rule_data.push(rule_data);
+        self.rule_description.push(rule_description);
         self.rules_number += 1;
     }
     pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64) -> String {

@@ -66,6 +66,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
             let rule_type: RuleType;
             let rule_place: RulePlace;
             let mut rule_data: RuleData = RuleData::new();
+            let rule_description: String;
 
             match to_notebook_enum(notebook_choose_rule.get_current_page().unwrap()) {
                 NotebookEnum::CaseSize => {
@@ -88,6 +89,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     } else {
                         panic!("Invalid Button Clicked");
                     }
+                    rule_description = "".to_string();
                 }
                 NotebookEnum::Purge => {
                     rule_type = RuleType::Purge;
@@ -100,6 +102,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     } else {
                         panic!("Invalid Button Clicked");
                     }
+                    rule_description = "".to_string();
                 }
                 NotebookEnum::AddText => {
                     rule_type = RuleType::AddText;
@@ -111,6 +114,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                         panic!("Invalid Button Clicked");
                     }
                     rule_data.add_text_text = entry_add_text_text_to_add.get_text().to_string();
+                    rule_description = format!("Added text: {}", rule_data.add_text_text);
                 }
                 NotebookEnum::Trim => {
                     rule_type = RuleType::Trim;
@@ -134,12 +138,14 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     } else {
                         panic!("Invalid Button Clicked");
                     }
+                    rule_description = "".to_string();
                 }
                 NotebookEnum::Custom => {
                     rule_type = RuleType::Custom;
                     rule_place = RulePlace::None;
 
                     rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
+                    rule_description = format!("Custom rule: {}", rule_data.custom_text);
                 }
                 NotebookEnum::Replace => {
                     rule_type = RuleType::Replace;
@@ -164,6 +170,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
                     rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
                     rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
+                    rule_description = format!("Replacing \"{}\" with \"{}\"", rule_data.text_to_remove, rule_data.text_to_replace);
                 }
                 NotebookEnum::AddNumber => {
                     rule_type = RuleType::AddNumber;
@@ -179,9 +186,16 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     rule_data.fill_with_zeros = entry_add_number_zeros.get_text().to_string().parse::<i64>().unwrap_or(0);
                     rule_data.number_step = entry_add_number_step.get_text().to_string().parse::<i64>().unwrap_or(1);
                     rule_data.number_start = entry_add_number_start_number.get_text().to_string().parse::<i64>().unwrap_or(1);
+
+                    let zeros = if rule_data.fill_with_zeros > 0 {
+                        format!(" and filling with {} zeros,", rule_data.fill_with_zeros)
+                    } else {
+                        "".to_string()
+                    };
+                    rule_description = format!("Starting with {} with step {}{}", rule_data.number_step, rule_data.number_start, zeros);
                 }
             }
-            rule.add_rule(rule_type, rule_place, rule_data);
+            rule.add_rule(rule_type, rule_place, rule_data, rule_description);
         }
 
         // Reset TreeView and populate it again

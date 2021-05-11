@@ -34,7 +34,7 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 
-        let col_types: [Type; 2] = [glib::types::Type::String, glib::types::Type::String];
+        let col_types: [Type; 3] = [glib::types::Type::String, glib::types::Type::String, glib::types::Type::String];
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 
