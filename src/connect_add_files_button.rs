@@ -27,6 +27,21 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
             // TODO Update names to be
             let col_indices = [0, 1, 2];
             for file_entry in &folder {
+                let (path, name) = split_path(file_entry);
+                let full_name = match file_entry.to_str() {
+                    Some(t) => t,
+                    None => {
+                        println!("Failed to read name of {:?} (some characters are missing in this name)", file_entry);
+                        continue;
+                    }
+                };
+
+                if result_entries.files.contains(full_name) {
+                    // Remove this println
+                    println!("Already is used file name {}", full_name);
+                    continue; // There is already
+                }
+
                 //// Read Metadata
                 let file_metadata = match fs::metadata(&file_entry) {
                     Ok(t) => t,
@@ -64,10 +79,10 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 };
 
                 //// Create entry and save it to metadata
-                let (path, name) = split_path(file_entry);
                 let values: [&dyn ToValue; 3] = [&name, &name, &path];
                 list_store.set(&list_store.append(), &col_indices, &values);
 
+                result_entries.files.insert(full_name.to_string());
                 result_entries.entries.push(FileEntry {
                     current_name: name.clone(),
                     future_names: vec![name],

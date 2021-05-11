@@ -62,7 +62,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="max-length">150</property>
-                        <property name="text" translatable="yes">$(NAME).$(EXT)</property>
+                        <property name="text" translatable="yes">$(CURR)</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

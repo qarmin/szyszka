@@ -1,5 +1,8 @@
+use std::collections::BTreeSet;
+
 pub struct ResultEntries {
     pub entries: Vec<FileEntry>,
+    pub files: BTreeSet<String>,
 }
 
 #[derive(Clone)]

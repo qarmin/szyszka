@@ -6,7 +6,7 @@ use crate::class_dialog_rule_replace::GuiReplace;
 use crate::class_dialog_rule_size_letters::GuiSizeLetters;
 use crate::class_dialog_rule_trim::GuiTrim;
 use gtk::prelude::*;
-use gtk::{Button, Entry, Label};
+use gtk::{Button, Entry, Label, WindowPosition};
 
 #[derive(Clone)]
 pub struct GuiDialogRules {
@@ -33,6 +33,7 @@ impl GuiDialogRules {
         let notebook_choose_rule: gtk::Notebook = builder.get_object("notebook_choose_rule").unwrap();
 
         let window_with_rules: gtk::Window = builder.get_object("window_with_rules").unwrap();
+        window_with_rules.set_position(WindowPosition::CenterAlways);
         let button_rule_window_add: gtk::Button = builder.get_object("button_rule_window_add").unwrap();
 
         let size_letters: GuiSizeLetters = GuiSizeLetters::create_from_builder(&builder);

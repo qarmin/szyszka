@@ -6,7 +6,7 @@ use crate::class_upper_buttons::*;
 use crate::file_entry::ResultEntries;
 use crate::rules::Rules;
 use gtk::prelude::*;
-use gtk::Builder;
+use gtk::{Builder, WindowPosition};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -43,6 +43,7 @@ impl GuiData {
         let window_main: gtk::Window = builder.get_object("window_main").unwrap();
         window_main.show_all();
         window_main.set_title("Szyszka");
+        window_main.set_position(WindowPosition::CenterAlways);
 
         let upper_buttons: GuiUpperButtons = GuiUpperButtons::create_from_builder(&builder);
         let results: GuiResults = GuiResults::create_from_builder(&builder);
@@ -53,7 +54,7 @@ impl GuiData {
 
         let rules = Rc::new(RefCell::new(Rules::new()));
 
-        let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![] }));
+        let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![], files: Default::default() }));
 
         Self {
             window_main,
