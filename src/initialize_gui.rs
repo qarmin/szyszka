@@ -1,9 +1,12 @@
 use crate::class_gui_data::GuiData;
 use crate::create_tree_view::{create_tree_view_results, create_tree_view_rules};
 use crate::example_fields::update_examples;
+use crate::help_function::{ColumnsResults, CHARACTER};
 use crate::notebook_enum::EXAMPLE_NAME;
-use glib::*;
-use gtk::*;
+use glib::prelude::*;
+use glib::Type;
+use gtk::prelude::*;
+use gtk::{ScrolledWindow, SelectionMode, TreeView};
 
 pub fn initialize_gui(gui_data: &mut GuiData) {
     // Create TreeView in Scrolled Window
@@ -24,6 +27,15 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
         let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
 
         tree_view.get_selection().set_mode(SelectionMode::Multiple);
+
+        tree_view.connect_button_press_event(|tree_view, event| {
+            if event.get_event_type() == gdk::EventType::DoubleButtonPress && event.get_button() == 1 {
+                common_open_function(tree_view, OpenMode::PathAndName);
+            } else if event.get_event_type() == gdk::EventType::DoubleButtonPress && event.get_button() == 3 {
+                common_open_function(tree_view, OpenMode::OnlyPath);
+            }
+            gtk::Inhibit(false)
+        });
 
         create_tree_view_results(&tree_view);
 
@@ -62,5 +74,40 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
         entry_example_before.set_text(EXAMPLE_NAME);
 
         update_examples(&gui_data.window_rules, None);
+    }
+}
+pub enum OpenMode {
+    OnlyPath,
+    PathAndName,
+}
+
+pub fn common_open_function(tree_view: &gtk::TreeView, opening_mode: OpenMode) {
+    let selection = tree_view.get_selection();
+    let (selection_rows, tree_model) = selection.get_selected_rows();
+
+    for tree_path in selection_rows.iter().rev() {
+        let end_path;
+        let current_name = tree_model.get_value(&tree_model.get_iter(tree_path).unwrap(), ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
+        let path = tree_model.get_value(&tree_model.get_iter(tree_path).unwrap(), ColumnsResults::Path as i32).get::<String>().unwrap().unwrap();
+
+        match opening_mode {
+            OpenMode::OnlyPath => {
+                end_path = path;
+            }
+            OpenMode::PathAndName => {
+                end_path = format!("{}{}{}", path, CHARACTER, current_name);
+            }
+        }
+
+        match open::that(&end_path) {
+            Ok(t) => {
+                if !t.success() {
+                    println!("Failed to open {}, status {:?}", end_path, t.code());
+                }
+            }
+            Err(_) => {
+                println!("Failed to open {}", end_path);
+            }
+        }
     }
 }

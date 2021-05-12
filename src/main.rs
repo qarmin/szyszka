@@ -23,6 +23,7 @@ mod connect_rule_window_purge_click;
 mod connect_rule_window_replace_click;
 mod connect_rule_window_size_letters_click;
 mod connect_rule_window_trim_click;
+mod connect_start_renaming;
 mod create_tree_view;
 mod example_fields;
 mod file_entry;
@@ -52,6 +53,7 @@ use crate::connect_rule_window_purge_click::*;
 use crate::connect_rule_window_replace_click::*;
 use crate::connect_rule_window_size_letters_click::*;
 use crate::connect_rule_window_trim_click::*;
+use crate::connect_start_renaming::*;
 use crate::example_fields::connect_update_examples;
 use crate::initialize_gui::*;
 use gtk::prelude::*;
@@ -89,6 +91,9 @@ fn main() {
     connect_rule_modify_add(&gui_data);
     connect_rule_modify_remove(&gui_data);
     connect_rule_modify_one_up(&gui_data);
+
+    // Renaming
+    connect_start_renaming(&gui_data);
 
     // Quit the program when X in main window was clicked
     gui_data.window_main.connect_delete_event(|_, _| {

@@ -6,6 +6,7 @@ use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
 
+#[allow(dead_code)]
 pub enum ColumnsResults {
     CurrentName = 0,
     FutureName,
@@ -20,6 +21,12 @@ pub enum ColumnsRules {
     UsageType,
     Description,
 }
+
+#[cfg(target_family = "windows")]
+pub static CHARACTER: &str = "\\";
+
+#[cfg(not(target_family = "windows"))]
+pub static CHARACTER: &str = "/";
 
 pub fn validate_name(before_name: String) -> String {
     // TODO when trying to print text in middle of text, then caret change position, fix it
@@ -112,4 +119,60 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
         list_store.remove(&list_store.get_iter(selected_tree_path).unwrap());
     }
     vec_index_to_delete
+}
+pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<String> {
+    let selection = tree_view.get_selection();
+
+    let (selected_rows, _tree_model) = selection.get_selected_rows();
+
+    let mut return_vec = Vec::with_capacity(selected_rows.len());
+
+    // Nothing selected
+    if selected_rows.is_empty() {
+        return return_vec;
+    }
+
+    let list_store = get_list_store_from_tree_view(&tree_view);
+
+    // Get indexes of removed values
+    for selected_tree_path in &selected_rows {
+        let tree_iter = list_store.get_iter(selected_tree_path).unwrap();
+        return_vec.push(format!(
+            "{}{}{}",
+            list_store.get_value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap().unwrap(),
+            CHARACTER,
+            list_store.get_value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap()
+        ));
+    }
+
+    return_vec
+}
+
+pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
+    let list_store = get_list_store_from_tree_view(&tree_view);
+    let mut number = 0;
+
+    if let Some(curr_iter) = list_store.get_iter_first() {
+        loop {
+            number += 1;
+            if !list_store.iter_next(&curr_iter) {
+                break;
+            }
+        }
+    }
+
+    number
+}
+
+pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &str) {
+    let chooser = gtk::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok)]);
+
+    let question_label = gtk::Label::new(Some(message));
+
+    let chooser_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+    chooser_box.add(&question_label);
+    chooser_box.show_all();
+
+    chooser.run();
+    chooser.close();
 }

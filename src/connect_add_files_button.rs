@@ -23,7 +23,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
             let mut result_entries = shared_result_entries.borrow_mut();
 
             let list_store = get_list_store_from_tree_view(&tree_view_results);
-            // TODO Update names to be
+
             for file_entry in &folder {
                 let (path, name) = split_path(file_entry);
                 let full_name = match file_entry.to_str() {
@@ -37,14 +37,14 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 if result_entries.files.contains(full_name) {
                     // Remove this println
                     println!("Already is used file name {}", full_name);
-                    continue; // There is already
+                    continue; // There is already entry
                 }
 
                 //// Read Metadata
                 let file_metadata = match fs::metadata(&file_entry) {
                     Ok(t) => t,
                     Err(_) => {
-                        println!("Failed to load metadata of file {}", file_entry.display());
+                        eprintln!("Failed to load metadata of file {}", file_entry.display());
                         continue;
                     }
                 };
@@ -53,12 +53,12 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                     Ok(t) => match t.duration_since(UNIX_EPOCH) {
                         Ok(d) => d.as_secs(),
                         Err(_) => {
-                            println!("File {} seems to be modified before Unix Epoch.", file_entry.display());
+                            eprintln!("File {} seems to be modified before Unix Epoch.", file_entry.display());
                             0
                         }
                     },
                     Err(_) => {
-                        println!("Unable to get modification date from file {}", file_entry.display());
+                        eprintln!("Unable to get modification date from file {}", file_entry.display());
                         continue;
                     }
                 };
@@ -66,12 +66,12 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                     Ok(t) => match t.duration_since(UNIX_EPOCH) {
                         Ok(d) => d.as_secs(),
                         Err(_) => {
-                            println!("File {} seems to be created before Unix Epoch.", file_entry.display());
+                            eprintln!("File {} seems to be created before Unix Epoch.", file_entry.display());
                             0
                         }
                     },
                     Err(_) => {
-                        println!("Unable to get creation date from file {}", file_entry.display());
+                        eprintln!("Unable to get creation date from file {}", file_entry.display());
                         continue;
                     }
                 };
