@@ -10,7 +10,14 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
     {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
 
-        let col_types: [Type; 3] = [glib::types::Type::String, glib::types::Type::String, glib::types::Type::String];
+        let col_types: [Type; 6] = [
+            glib::types::Type::String,
+            glib::types::Type::String,
+            glib::types::Type::String,
+            glib::types::Type::U64,
+            glib::types::Type::U64,
+            glib::types::Type::U64,
+        ];
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 

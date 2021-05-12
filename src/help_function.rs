@@ -10,18 +10,15 @@ pub enum ColumnsResults {
     CurrentName = 0,
     FutureName,
     Path,
-    // Size,
-    // ModificationDate,
-    // Dimensions,
+    Size,
+    ModificationDate,
+    CreationDate,
 }
 pub enum ColumnsRules {
     //RuleNumber = 0,
     RuleType = 0,
     UsageType,
     Description,
-    // Size,
-    // ModificationDate,
-    // Dimensions,
 }
 
 pub fn validate_name(before_name: String) -> String {
@@ -77,4 +74,42 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
         let values: [&dyn ToValue; 3] = [&rule_type_to_string(&rule.rule_type), &rule_place_to_string(&rule.rule_place), &rule.rule_description];
         list_store.set(&list_store.append(), &col_indices, &values);
     }
+}
+
+pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
+    let selection = tree_view.get_selection();
+
+    let (selected_rows, _tree_model) = selection.get_selected_rows();
+
+    // Nothing selected
+    if selected_rows.is_empty() {
+        return Vec::new();
+    }
+
+    let list_store = get_list_store_from_tree_view(&tree_view);
+
+    let mut vec_index_to_delete: Vec<_> = Vec::new();
+    let mut current_iter: usize = 0;
+
+    let tree_iter = list_store.get_iter_first().unwrap();
+
+    // Get indexes of removed values
+    for selected_tree_path in &selected_rows {
+        loop {
+            if list_store.get_path(&tree_iter).unwrap() == *selected_tree_path {
+                vec_index_to_delete.push(current_iter);
+                list_store.iter_next(&tree_iter);
+                current_iter += 1;
+                break;
+            }
+            list_store.iter_next(&tree_iter);
+            current_iter += 1;
+        }
+    }
+
+    // Remove selected rows
+    for selected_tree_path in selected_rows.iter().rev() {
+        list_store.remove(&list_store.get_iter(selected_tree_path).unwrap());
+    }
+    vec_index_to_delete
 }

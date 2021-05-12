@@ -1,5 +1,4 @@
 use crate::class_gui_data::GuiData;
-use crate::file_entry::FileEntry;
 use crate::help_function::{get_list_store_from_tree_view, split_path};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
@@ -25,13 +24,12 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
             let list_store = get_list_store_from_tree_view(&tree_view_results);
             // TODO Update names to be
-            let col_indices = [0, 1, 2];
             for file_entry in &folder {
                 let (path, name) = split_path(file_entry);
                 let full_name = match file_entry.to_str() {
                     Some(t) => t,
                     None => {
-                        println!("Failed to read name of {:?} (some characters are missing in this name)", file_entry);
+                        println!("Failed to read name of {:?} (some characters may be missing in this name)", file_entry);
                         continue;
                     }
                 };
@@ -79,24 +77,15 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 };
 
                 //// Create entry and save it to metadata
-                let values: [&dyn ToValue; 3] = [&name, &name, &path];
+                let col_indices = [0, 1, 2, 3, 4, 5];
+                let values: [&dyn ToValue; 6] = [&name, &name, &path, &size, &modification_date, &creation_date];
                 list_store.set(&list_store.append(), &col_indices, &values);
 
+                // Used to check if already in treeview is this values
                 result_entries.files.insert(full_name.to_string());
-                result_entries.entries.push(FileEntry {
-                    current_name: name.clone(),
-                    future_names: vec![name],
-                    path,
-                    size,
-                    modification_date,
-                    creation_date,
-                    opening_date: 0,
-                    image_dimensions: 0,
-                });
             }
+            update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileAdded);
         }
-
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileAdded);
 
         chooser.close();
     });

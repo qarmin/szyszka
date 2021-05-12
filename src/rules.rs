@@ -144,6 +144,7 @@ pub struct RuleData {
     pub text_to_replace: String,
 }
 impl RuleData {
+    // A little wasteful, but rules will be max 10 most of time, so this is not necessary to optimize
     pub fn new() -> Self {
         RuleData {
             add_text_text: "".to_string(),

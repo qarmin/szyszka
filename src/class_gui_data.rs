@@ -54,7 +54,7 @@ impl GuiData {
 
         let rules = Rc::new(RefCell::new(Rules::new()));
 
-        let shared_result_entries = Rc::new(RefCell::new(ResultEntries { entries: vec![], files: Default::default() }));
+        let shared_result_entries = Rc::new(RefCell::new(ResultEntries { files: Default::default() }));
 
         Self {
             window_main,

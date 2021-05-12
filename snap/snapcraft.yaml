@@ -23,7 +23,7 @@ parts:
 apps:
   szyszka:
     command: szyszka
-    extensions: [gnome-3-34]
+    extensions: [gnome-3-28]
     plugs:
       - home
       - removable-media

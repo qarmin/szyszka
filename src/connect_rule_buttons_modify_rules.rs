@@ -1,5 +1,5 @@
 use crate::class_gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, populate_rules_tree_view};
+use crate::help_function::{get_list_store_from_tree_view, populate_rules_tree_view, remove_selected_rows};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 use gtk::{ButtonExt, WidgetExt};
@@ -26,47 +26,14 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
 
     // Multiselection Ready
     button_remove_rule.connect_clicked(move |_e| {
-        {
-            let selection = tree_view_window_rules.get_selection();
-            if selection.get_selected_rows().0.is_empty() {
-                return;
-            }
+        let vec_rule_to_delete = remove_selected_rows(&tree_view_window_rules);
 
+        {
             let mut rules = rules.borrow_mut();
             let rules = rules.deref_mut();
 
-            let list_store = get_list_store_from_tree_view(&tree_view_window_rules);
-
-            let (selected_rows, _tree_model) = selection.get_selected_rows();
-
-            let mut vec_rule_to_delete: Vec<_> = Vec::new();
-            let mut current_iter: usize = 0;
-
-            let tree_iter = list_store.get_iter_first().unwrap();
-
-            // Get rules number to delete
-            for selected_tree_path in &selected_rows {
-                loop {
-                    if list_store.get_path(&tree_iter).unwrap() == *selected_tree_path {
-                        vec_rule_to_delete.push(current_iter);
-                        list_store.iter_next(&tree_iter);
-                        current_iter += 1;
-                        break;
-                    }
-                    list_store.iter_next(&tree_iter);
-                    current_iter += 1;
-                }
-            }
-
-            // Remove rules
             for rule_to_delete in vec_rule_to_delete.iter().rev() {
                 rules.remove_rule(*rule_to_delete);
-            }
-
-            // Update rules in rule window
-
-            for selected_tree_path in selected_rows.iter().rev() {
-                list_store.remove(&list_store.get_iter(selected_tree_path).unwrap());
             }
         }
 
