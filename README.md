@@ -1,39 +1,26 @@
 # Szyszka
 
-Szyszka is simple but powerful file rename.
+Szyszka is simple but powerful batch file rename.
 
-It is multiplatform and runs
-
-Allows user to easily create rules which will be used to step by step rename files
-
-![Szyszka](https://user-images.githubusercontent.com/41945903/103483978-732e4e80-4deb-11eb-8cc0-a0d5d7be90fb.png)
-
+![Szyszka](https://user-images.githubusercontent.com/41945903/118101662-1e719480-b3d8-11eb-83d6-35e88fc919c5.png)
 ## Features
-Szyszka:
-- Is written in Rust
-- Is available for Linux, Max, Windows  
-- Have multiple rules to execute on name, extension or both:
+- Written in Rust
+- Available for Linux, Max, Windows
+- Very simple GUI created with GTK3
+- Multiple rules which can be freely combined:
   - Replace text
   - Trim text
   - Adding text
-  - Adding numbers  
+  - Adding numbers
   - Purge text
-  - Change size of text(Upper/Lower cases)
+  - Change letters to big/small
   - Use custom rule
 
 
-
-
-
-## Future work
-- Adding Regex support
-
-
-## TODO ADD ICON
 ## Requirements
 ### Linux
 You need to install GTK(it should be available by default on most distributions)
-```
+```shell
 sudo apt install libgtk3-dev
 ```
 ### MacOS
@@ -46,20 +33,52 @@ brew install rust gtk+3
 ### Windows
 Packed zip file contains all dependences, but if you want, you can install https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and move file whatever you want.
 
-## Status
-For now Szyszka
+## Installation
+### Precompiled Binaries
+Available in https://github.com/qarmin/szyszka/releases
 
-I want to add before 1.0 release:
-- Multiple Rules:
-  - Uppercase/Downcase names
-  - Search and Replace
-  - Add text(date, file size, modification date)
-  - Remove specific text
-  - Add specific number(01,02,001,002 etc.)
-  - Maybe Regex support(unlikely in short term)
-  - Append folder name
-- Better UI
-- Adding entire folders
+### Snap
+https://snapcraft.io/szyszka  
+```
+snap install szyszka
+sudo snap connect szyszka:removable-media # Allows to see files on external devices
+```
+
+### Flatpak
+TODO
+
+### Cargo/Crates.io
+https://crates.io/crates/szyszka
+```
+cargo install szyszka
+```
+
+## Future work
+- Adding Regex support
+- New icon
+- Allow to add folders
+- Recursive search of directories
+- Saving/loading presets
+- Reordering files/rules
+- Trim x number of characters
+
+## Contribution
+Very welcome - bug reporting, pull requests, testing etc.  
+If creating or modifing existing rule, don't forget about updating/adding tests!
 
 ## Name 
-Szyszka is Polish word which means Conifer Cone
+Szyszka is Polish word which means Pinecone
+
+Why such strange name?
+
+Would you remember another app name like Rename Files Ultra?  
+Probably no.  
+But will you remember name Szyszka?  
+Well... probably also no, but when you heard this name instantly you will think about this app.
+
+## Why?
+I know that on Linux which I primarily use, there is a lot of good file renamers(and even more on Windows), but I coulnd't find any feasible for me.  
+Available apps installs a lot of dependences, works slowly or just have very bloatet UI.  
+
+## License
+MIT

@@ -36,7 +36,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
                 if result_entries.files.contains(full_name) {
                     // Remove this println
-                    println!("Already is used file name {}", full_name);
+                    // println!("Already is used file name {}", full_name);
                     continue; // There is already entry
                 }
 

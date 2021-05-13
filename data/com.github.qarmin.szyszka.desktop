@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=szyszka
+Name=Szyszka
+Comment=Simple app to rename files but with powerful rules
+Icon=com.github.qarmin.szyszka
+Categories=System;
+StartupWMClass=szyszka
+TryExec=szyszka

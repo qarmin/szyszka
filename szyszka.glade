@@ -1477,7 +1477,6 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="spacing">7</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="icon-name">list-add</property>
                               </object>
@@ -1521,7 +1520,6 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="spacing">7</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="icon-name">list-remove</property>
                               </object>

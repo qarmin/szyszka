@@ -10,7 +10,7 @@
       Czkawka is written in Rust, simple, fast and easy to use app to remove unnecessary files from your computer.
     </p>
   </description>
-  <launchable type="desktop-id">com.github.qarmin.czkawka.desktop</launchable>
+  <launchable type="desktop-id">com.github.qarmin.szyszka.desktop</launchable>
   <screenshots>
     <screenshot type="default">
       <image>https://user-images.githubusercontent.com/41945903/105611697-04735e00-5db7-11eb-833b-120eff81cf48.png</image>
@@ -19,11 +19,11 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="3.1.0" date="2021-05-09"/>
+    <release version="1.0.0" date="2021-05-13"/>
   </releases>
   <content_rating type="oars-1.0"/>
   <developer_name>Rafał Mikrut</developer_name>
-  <url type="homepage">https://github.com/qarmin/czkawka</url>
-  <url type="bugtracker">https://github.com/qarmin/czkawka/issues</url>
+  <url type="homepage">https://github.com/qarmin/szyszka</url>
+  <url type="bugtracker">https://github.com/qarmin/szyszka/issues</url>
   <url type="donation">https://github.com/sponsors/qarmin</url>
 </component>
