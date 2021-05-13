@@ -1,5 +1,5 @@
 #!/bin/bash
-NUMBER="3.1.0"
+NUMBER="1.0.0"
 SZYSZKA_PATH="/home/rafal"
 
 cd "$SZYSZKA_PATH"
@@ -8,8 +8,6 @@ rm -rf $SZYSZKA_PATH
 git clone https://github.com/qarmin/szyszka.git "$SZYSZKA_PATH"
 cd $SZYSZKA_PATH
 git checkout "$NUMBER"
-
-cd "$SZYSZKA_PATH"
 cargo package
 if [ $(echo $?) != "0"  ]
 then
@@ -18,7 +16,6 @@ then
 fi
 git reset --hard
 
-cd "$SZYSZKA_PATH"
 cargo publish
 git reset --hard
 

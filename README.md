@@ -23,14 +23,14 @@ You need to install GTK(it should be available by default on most distributions)
 ```shell
 sudo apt install libgtk3-dev
 ```
-### MacOS
+### MacOS(not tested)
 You need to install GTK from brew
 ```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install rust gtk+3
 ```
 
-### Windows
+### Windows(not tested)
 Packed zip file contains all dependences, but if you want, you can install https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and move file whatever you want.
 
 ## Installation
