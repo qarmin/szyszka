@@ -90,7 +90,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                         panic!("Invalid Button Clicked");
                     }
 
-                    let mut text = if rule_data.to_lowercase == true { "Lowercase".to_string() } else { "Uppercase".to_string() };
+                    let mut text = if rule_data.to_lowercase { "Lowercase".to_string() } else { "Uppercase".to_string() };
                     text.push_str(" text");
                     rule_description = text;
                 }

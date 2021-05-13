@@ -21,7 +21,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
             return;
         }
         let rules = rules.borrow();
-        if rules.rules.len() == 0 {
+        if rules.rules.is_empty() {
             create_message_window(&window_main, "Missing Rules", "You need to use at least 1 rule");
             return;
         }
@@ -48,6 +48,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                 let new_name = format!("{}{}{}", path, CHARACTER, list_store.get_value(&tree_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap().unwrap());
 
                 // TODO Find method to not overwrite new function
+                #[allow(clippy::collapsible_else_if)]
                 if new_name == old_name {
                     ignored += 1
                 } else if Path::new(&new_name).exists() {
@@ -89,7 +90,7 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
     let label_bad = gtk::Label::new(Some(format!("Failed to rename {} files", failed_vector.len()).as_str()));
     chooser_box.add(&label_bad);
 
-    if failed_vector.len() > 0 {
+    if !failed_vector.is_empty() {
         chooser.set_default_size(800, 200);
         let label_info_bad = gtk::Label::new(Some("List of all failing renames"));
         label_info_bad.set_margin_top(10);
@@ -108,7 +109,7 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
             text.push_str(i.1.as_str());
             text.push_str(", error: ");
             text.push_str(i.2.as_str());
-            text.push_str("\n");
+            text.push('\n');
         }
         buffer.set_text(&text);
 

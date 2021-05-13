@@ -3,7 +3,6 @@ use crate::create_tree_view::{create_tree_view_results, create_tree_view_rules};
 use crate::example_fields::update_examples;
 use crate::help_function::{ColumnsResults, CHARACTER};
 use crate::notebook_enum::EXAMPLE_NAME;
-use glib::prelude::*;
 use glib::Type;
 use gtk::prelude::*;
 use gtk::{ScrolledWindow, SelectionMode, TreeView};
