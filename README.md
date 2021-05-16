@@ -83,7 +83,7 @@ But will you remember name Szyszka?
 Well... probably not, but when you hear this name you will think of this app.
 
 ## Why?
-I know that on Linux, which I primarily use, there is a lot of good file renamers (even more on Windows), but I coulnd't find any that would suit my needs.  
+I know that on Linux, which I primarily use, there is a lot of good file renamers (even more on Windows), but I couldn't find any that would suit my needs.  
 Available apps install a lot of dependencies, work slowly or just have very bloated UI.  
 
 ## License
