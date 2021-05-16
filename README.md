@@ -5,7 +5,7 @@ Szyszka is a simple but powerful batch file renamer.
 ![Szyszka](https://user-images.githubusercontent.com/41945903/118101662-1e719480-b3d8-11eb-83d6-35e88fc919c5.png)
 ## Features
 - Written in Rust
-- Available for Linux, Mac, Windows
+- Available for Linux, Mac and Windows
 - Very simple GUI created using GTK3
 - Multiple rules which can be freely combined:
   - Replace text
@@ -19,9 +19,9 @@ Szyszka is a simple but powerful batch file renamer.
 
 ## Requirements
 ### Linux
-You need to install GTK (it should be available by default on most distributions)
+You need to install GTK (it should be available by default on most distributions) and the canberra-gtk-module.
 ```shell
-sudo apt install libgtk3-dev
+sudo apt install libgtk3-dev libcanberra-gtk-module
 ```
 ### MacOS (not tested)
 You need to install GTK using brew
@@ -31,7 +31,7 @@ brew install rust gtk+3
 ```
 
 ### Windows (not tested)
-Packed zip file contains all dependencies, but if you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and move file whatever you want.
+Packed zip file contains all dependencies, but if you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and run file from anywhere.
 
 ## Installation
 ### Precompiled Binaries
@@ -53,9 +53,16 @@ https://crates.io/crates/szyszka
 cargo install szyszka
 ```
 
+### Gentoo Linux
+szyszka is available on Gentoo's GURU overlay
+```
+emerge -av gui-apps/szyszka
+```
+
 ## Future work
 - Adding Regex support
 - New icon
+
 - Allow folder addition
 - Recursive search of directories
 - Saving/loading presets
@@ -63,11 +70,11 @@ cargo install szyszka
 - Trim x number of characters
 
 ## Contribution
-Very welcome - bug reports, pull requests, testing etc.  
+Contributions are very welcome - bug reports, pull requests, testing etc.   
 When creating or modifying existing rules, don't forget about updating/adding tests!
 
 ## Name 
-Szyszka is Polish word which means Pinecone
+Szyszka is Polish word which means Pinecone.
 
 Why such a strange name?
 
@@ -77,8 +84,8 @@ But will you remember name Szyszka?
 Well... probably also not, but when you hear this name, you will instantly think of this app.
 
 ## Why?
-I know that on Linux, which I primarily use, there is a lot of good file renamers (and even more on Windows), but I coulnd't find any feasible ones for me.  
-Available apps install a lot of dependencies, work slowly or just have very bloated UI.  
+I know that on Linux, which I primarily use, there is a lot of good file renamers (and even more on Windows), but I couldn't find any that would suit my needs.
+Available apps install a lot of dependencies, work slowly or just have a very bloated UI.  
 
 ## License
 MIT
