@@ -31,7 +31,7 @@ brew install rust gtk+3
 ```
 
 ### Windows (not tested)
-Packed zip file contains all dependencies, but if you want to, you can install https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and move file whatever you want.
+Packed zip file contains all dependencies, but if you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and move file whatever you want.
 
 ## Installation
 ### Precompiled Binaries
@@ -56,7 +56,7 @@ cargo install szyszka
 ## Future work
 - Adding Regex support
 - New icon
-- Allow adding folders
+- Allow folder addition
 - Recursive search of directories
 - Saving/loading presets
 - Reordering files/rules
