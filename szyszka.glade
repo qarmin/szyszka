@@ -194,7 +194,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_usage_extension">
-                                <property name="label" translatable="yes">Only Extesion</property>
+                                <property name="label" translatable="yes">Only Extension</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
@@ -299,7 +299,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_purge_extension">
-                                <property name="label" translatable="yes">Only Extesion</property>
+                                <property name="label" translatable="yes">Only Extension</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
@@ -738,7 +738,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_replace_extension">
-                                <property name="label" translatable="yes">Only Extesion</property>
+                                <property name="label" translatable="yes">Only Extension</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>

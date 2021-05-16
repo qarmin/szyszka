@@ -19,9 +19,9 @@ Szyszka is simple but powerful batch file rename.
 
 ## Requirements
 ### Linux
-You need to install GTK (it should be available by default on most distributions)
+You need to install GTK (it should be available by default on most distributions) and the canberra-gtk-module.
 ```shell
-sudo apt install libgtk3-dev
+sudo apt install libgtk3-dev libcanberra-gtk-module
 ```
 ### MacOS (not tested)
 You need to install GTK from brew
@@ -51,6 +51,12 @@ TODO
 https://crates.io/crates/szyszka
 ```
 cargo install szyszka
+```
+
+### Gentoo Linux
+szyszka is available on Gentoo's GURU overlay
+```
+emerge -av gui-apps/szyszka
 ```
 
 ## Future work
