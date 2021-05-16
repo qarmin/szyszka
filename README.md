@@ -53,6 +53,12 @@ https://crates.io/crates/szyszka
 cargo install szyszka
 ```
 
+### Gentoo Linux
+szyszka is available on Gentoo's GURU overlay
+```
+emerge -av gui-apps/szyszka
+```
+
 ## Future work
 - Adding Regex support
 - New icon
