@@ -17,7 +17,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
     button_start_rename.connect_clicked(move |_e| {
         let number_of_renamed_files = count_rows_in_tree_view(&tree_view_results);
         if number_of_renamed_files == 0 {
-            create_message_window(&window_main, "Missing Files", "You need to ues at least 1 file");
+            create_message_window(&window_main, "Missing Files", "You need to use at least 1 file");
             return;
         }
         let rules = rules.borrow();
