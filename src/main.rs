@@ -12,6 +12,7 @@ mod class_rules_bottom_panel;
 mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
+mod connect_add_folders_button;
 mod connect_remove_files_button;
 mod connect_rule_add;
 mod connect_rule_buttons_modify_rules;
@@ -42,6 +43,7 @@ mod update_records;
 
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
+use crate::connect_add_folders_button::*;
 use crate::connect_remove_files_button::*;
 use crate::connect_rule_add::*;
 use crate::connect_rule_buttons_modify_rules::*;
@@ -67,6 +69,7 @@ fn main() {
 
     // Connect upper buttons
     connect_add_files_button(&gui_data);
+    connect_add_folders_button(&gui_data);
     connect_remove_files_button(&gui_data);
 
     // Connect buttons OK and Close in select dialog

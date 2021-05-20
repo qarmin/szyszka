@@ -10,7 +10,7 @@ pub fn connect_rule_modify_add(gui_data: &GuiData) {
     let window_main = gui_data.window_main.clone();
 
     button_add_rule.connect_clicked(move |_e| {
-        // window_rules.set_position(WindowPosition::CenterAlways);
+        // window_rules.set_position(WindowPosition::Center);
         window_with_rules.show();
         window_main.set_sensitive(false);
     });

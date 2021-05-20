@@ -41,9 +41,9 @@ impl GuiData {
 
         //// Windows
         let window_main: gtk::Window = builder.get_object("window_main").unwrap();
+        window_main.set_position(WindowPosition::Center);
         window_main.show_all();
         window_main.set_title("Szyszka");
-        window_main.set_position(WindowPosition::CenterAlways);
 
         let upper_buttons: GuiUpperButtons = GuiUpperButtons::create_from_builder(&builder);
         let results: GuiResults = GuiResults::create_from_builder(&builder);
