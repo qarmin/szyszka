@@ -2,30 +2,45 @@ use crate::class_gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
-use gtk::FileChooserAction;
+use gtk::{FileChooserAction, Orientation, PackType};
 use std::fs;
 use std::time::UNIX_EPOCH;
 use walkdir::WalkDir;
 
 pub fn connect_add_folders_button(gui_data: &GuiData) {
     let button_add_folders = gui_data.upper_buttons.button_add_folders.clone();
-    let check_button_recursive_folder_search = gui_data.upper_buttons.check_button_recursive_folder_search.clone();
     let tree_view_results = gui_data.results.tree_view_results.clone();
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
     let window_main = gui_data.window_main.clone();
-    // TODO change this to add folders and use
+
     button_add_folders.connect_clicked(move |_| {
         let chooser = gtk::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk::FileChooserAction::Open, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
         chooser.set_select_multiple(true);
         chooser.set_action(FileChooserAction::SelectFolder);
+
+        // Adds recursive button to FileDialog
+        let box_pack = gtk::Box::new(Orientation::Horizontal, 0);
+
+        let switch = gtk::Switch::new();
+        box_pack.add(&switch);
+        box_pack.set_child_packing(&switch, false, true, 5, PackType::End);
+
+        let label = gtk::Label::new(Some("Recursive check of folders "));
+        box_pack.add(&label);
+        box_pack.set_child_packing(&label, false, true, 0, PackType::End);
+
+        let internal_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+        internal_box.add(&box_pack);
+
+        chooser.set_title("Folders to include");
         chooser.show_all();
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
             let mut folders = chooser.get_filenames();
 
-            if check_button_recursive_folder_search.get_active() {
+            if switch.get_active() {
                 let mut new_entries = Vec::new();
                 for folder in folders {
                     for entry in WalkDir::new(folder).into_iter().filter_map(|e| e.ok()) {

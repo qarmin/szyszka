@@ -81,7 +81,7 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
     let chooser = gtk::Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok)]);
 
     let label_good = gtk::Label::new(Some(format!("Properly renamed {} files", properly_renamed).as_str()));
-    let label_ignored = gtk::Label::new(Some(format!("Ignored {} files, because there", ignored).as_str()));
+    let label_ignored = gtk::Label::new(Some(format!("Ignored {} files, because the name before and after the change are the same.", ignored).as_str()));
 
     let chooser_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
     chooser_box.add(&label_good);

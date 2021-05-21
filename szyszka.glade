@@ -1371,13 +1371,39 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Files/Folders</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">1</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
+                  <object class="GtkScrolledWindow" id="scrolled_window_results">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="shadow-type">in</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkButton" id="button_add_files">
                         <property name="label" translatable="yes">Add Files</property>
@@ -1389,6 +1415,19 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_add_folders">
+                        <property name="label" translatable="yes">Add Folders</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -1404,21 +1443,20 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                         <property name="position">2</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkButton" id="button_add_folders">
-                        <property name="label" translatable="yes">Add Folders</property>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_select">
+                        <property name="label" translatable="yes">Select</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -1426,21 +1464,18 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="check_button_recursive_folder_search">
-                        <property name="label" translatable="yes">Recursive</property>
+                      <object class="GtkSeparator">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
+                        <property name="can-focus">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
@@ -1452,21 +1487,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolled_window_results">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="shadow-type">in</property>
-              </object>
-              <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
@@ -1481,10 +1504,10 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="label_status">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Status</property>
+                <property name="label" translatable="yes">Rules</property>
               </object>
               <packing>
                 <property name="expand">False</property>
