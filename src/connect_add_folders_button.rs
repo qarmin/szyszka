@@ -2,29 +2,44 @@ use crate::class_gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
+use gtk::FileChooserAction;
 use std::fs;
 use std::time::UNIX_EPOCH;
+use walkdir::WalkDir;
 
-pub fn connect_add_files_button(gui_data: &GuiData) {
-    let button_add_files = gui_data.upper_buttons.button_add_files.clone();
+pub fn connect_add_folders_button(gui_data: &GuiData) {
+    let button_add_folders = gui_data.upper_buttons.button_add_folders.clone();
+    let check_button_recursive_folder_search = gui_data.upper_buttons.check_button_recursive_folder_search.clone();
     let tree_view_results = gui_data.results.tree_view_results.clone();
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
     let window_main = gui_data.window_main.clone();
-    button_add_files.connect_clicked(move |_| {
+    // TODO change this to add folders and use
+    button_add_folders.connect_clicked(move |_| {
         let chooser = gtk::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk::FileChooserAction::Open, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
         chooser.set_select_multiple(true);
+        chooser.set_action(FileChooserAction::SelectFolder);
         chooser.show_all();
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
-            let folder = chooser.get_filenames();
+            let mut folders = chooser.get_filenames();
+
+            if check_button_recursive_folder_search.get_active() {
+                let mut new_entries = Vec::new();
+                for folder in folders {
+                    for entry in WalkDir::new(folder).into_iter().filter_map(|e| e.ok()) {
+                        new_entries.push(entry.path().to_path_buf());
+                    }
+                }
+                folders = new_entries;
+            }
 
             let mut result_entries = shared_result_entries.borrow_mut();
 
             let list_store = get_list_store_from_tree_view(&tree_view_results);
 
-            for file_entry in &folder {
+            for file_entry in &folders {
                 let (path, name) = split_path(file_entry);
                 let full_name = match file_entry.to_str() {
                     Some(t) => t,
