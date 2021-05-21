@@ -1,3 +1,6 @@
+// Remove console window in Windows OS
+#![windows_subsystem = "windows"]
+
 mod class_dialog_rule_add_number;
 mod class_dialog_rule_add_text;
 mod class_dialog_rule_custom;
@@ -9,7 +12,6 @@ mod class_dialog_rules;
 mod class_gui_data;
 mod class_results;
 mod class_rules_bottom_panel;
-mod class_status;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_add_folders_button;

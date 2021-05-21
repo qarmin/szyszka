@@ -33,6 +33,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let radio_button_add_text_before_name = window_rules.add_text.radio_button_add_text_before_name.clone();
     let entry_add_text_text_to_add = window_rules.add_text.entry_add_text_text_to_add.clone();
 
+    let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
     let radio_button_trim_name_start = window_rules.trim.radio_button_trim_name_start.clone();
     let radio_button_trim_name_end = window_rules.trim.radio_button_trim_name_end.clone();
     let radio_button_trim_extension_start = window_rules.trim.radio_button_trim_extension_start.clone();
@@ -130,18 +131,25 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                         panic!("Invalid Button Clicked");
                     }
 
+                    let where_remove;
+
                     if radio_button_trim_name_start.get_active() {
                         rule_place = RulePlace::FromNameStart;
+                        where_remove = "start";
                     } else if radio_button_trim_name_end.get_active() {
                         rule_place = RulePlace::FromNameEndReverse;
+                        where_remove = "end of name";
                     } else if radio_button_trim_extension_start.get_active() {
                         rule_place = RulePlace::FromExtensionStart;
+                        where_remove = "extension";
                     } else if radio_button_trim_extension_end.get_active() {
                         rule_place = RulePlace::FromExtensionEndReverse;
+                        where_remove = "end of extension";
                     } else {
                         panic!("Invalid Button Clicked");
                     }
-                    rule_description = "".to_string();
+                    rule_data.trim_text = entry_add_text_text_to_trim.get_text().to_string();
+                    rule_description = format!("Trimming \"{}\" from {}", rule_data.trim_text, where_remove);
                 }
                 NotebookEnum::Custom => {
                     rule_type = RuleType::Custom;

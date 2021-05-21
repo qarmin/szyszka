@@ -170,7 +170,7 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
 
             rule.rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
 
-            label_example_after.set_text(rule_custom(text_to_change.as_str(), &rule, 0, true).as_str());
+            label_example_after.set_text(rule_custom(text_to_change.as_str(), &rule, 0, None).as_str());
         }
         NotebookEnum::Replace => {
             rule.rule_type = RuleType::Replace;

@@ -1,7 +1,6 @@
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::class_results::GuiResults;
 use crate::class_rules_bottom_panel::GuiRulesBottomPanel;
-use crate::class_status::GuiStatus;
 use crate::class_upper_buttons::*;
 use crate::file_entry::ResultEntries;
 use crate::rules::Rules;
@@ -22,7 +21,6 @@ pub struct GuiData {
     // Subcategories
     pub upper_buttons: GuiUpperButtons,
     pub results: GuiResults,
-    pub status: GuiStatus,
     pub rules_bottom_panel: GuiRulesBottomPanel,
 
     pub window_rules: GuiDialogRules,
@@ -47,7 +45,6 @@ impl GuiData {
 
         let upper_buttons: GuiUpperButtons = GuiUpperButtons::create_from_builder(&builder);
         let results: GuiResults = GuiResults::create_from_builder(&builder);
-        let status: GuiStatus = GuiStatus::create_from_builder(&builder);
         let rules_bottom_panel: GuiRulesBottomPanel = GuiRulesBottomPanel::create_from_builder(&builder);
 
         let window_rules: GuiDialogRules = GuiDialogRules::create_from_builder(&builder);
@@ -60,7 +57,6 @@ impl GuiData {
             window_main,
             upper_buttons,
             results,
-            status,
             rules_bottom_panel,
             window_rules,
             rules,
