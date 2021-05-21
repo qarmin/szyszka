@@ -45,7 +45,7 @@ impl Rules {
     pub fn remove_rule(&mut self, index: usize) {
         self.rules.remove(index);
     }
-    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64) -> String {
+    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64, file_data: (u64, u64, u64)) -> String {
         for rule in &self.rules {
             match rule.rule_type {
                 RuleType::CaseSize => {
@@ -61,7 +61,7 @@ impl Rules {
                     item = rule_trim(item.as_str(), rule);
                 }
                 RuleType::Custom => {
-                    item = rule_custom(item.as_str(), rule, current_index, false);
+                    item = rule_custom(item.as_str(), rule, current_index, Some(file_data));
                 }
                 RuleType::Replace => {
                     item = rule_replace(item.as_str(), rule);

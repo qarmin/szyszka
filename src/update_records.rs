@@ -49,7 +49,10 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                 // TODO get info about current row and change it
                 loop {
                     let value_to_change = list_store.get_value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
-                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index);
+                    let modification_date: u64 = list_store.get_value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap().unwrap();
+                    let creation_date: u64 = list_store.get_value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap().unwrap();
+                    let file_size: u64 = list_store.get_value(&iter, ColumnsResults::Size as i32).get::<u64>().unwrap().unwrap();
+                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, (modification_date, creation_date, file_size));
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {
                         break; // This is the end

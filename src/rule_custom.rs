@@ -3,42 +3,25 @@ use crate::rules::*;
 use chrono::NaiveDateTime;
 use humansize::{file_size_opts as options, FileSize};
 use std::cmp::min;
-use std::fs::File;
 use std::path::Path;
-use std::time::UNIX_EPOCH;
 
-pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, example: bool) -> String {
+pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, file_data: Option<(u64, u64, u64)>) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
     let mut return_string = rule.rule_data.custom_text.clone();
 
-    let mut creation_date: String = "".to_string();
-    let mut modification_date: String = "".to_string();
-    let mut size: String = "".to_string();
+    let creation_date: String;
+    let modification_date: String;
+    let size: String;
 
-    #[allow(clippy::collapsible_if)]
-    #[allow(clippy::collapsible_else_if)]
     // Random data to visualize typical
-    if example {
+    if let Some(f_data) = file_data {
+        modification_date = NaiveDateTime::from_timestamp(f_data.0 as i64, 0).to_string();
+        creation_date = NaiveDateTime::from_timestamp(f_data.1 as i64, 0).to_string();
+        size = f_data.2.file_size(options::BINARY).unwrap();
+    } else {
         creation_date = "2021-01-31 08:42:12".to_string();
         modification_date = "2015-11-15 14:24:55".to_string();
         size = "2 KB".to_string();
-    } else {
-        if let Ok(file) = File::open(data_to_change) {
-            if let Ok(metadata) = file.metadata() {
-                if let Ok(system_time) = metadata.created() {
-                    if let Ok(creation) = system_time.duration_since(UNIX_EPOCH) {
-                        creation_date = NaiveDateTime::from_timestamp(creation.as_secs() as i64, 0).to_string();
-                    }
-                }
-                if let Ok(system_time) = metadata.modified() {
-                    if let Ok(modified) = system_time.duration_since(UNIX_EPOCH) {
-                        modification_date = NaiveDateTime::from_timestamp(modified.as_secs() as i64, 0).to_string();
-                    }
-                }
-
-                size = metadata.len().file_size(options::BINARY).unwrap()
-            }
-        }
     }
 
     match rule.rule_type {
@@ -67,18 +50,19 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, ex
                                     let str_step_number = return_string[first_double + 1..second_double].to_string();
                                     let str_fill_zeros = return_string[second_double + 1..end_index].to_string();
 
-                                    if let Ok(start_number) = str_start_number.parse::<u64>() {
-                                        if let Ok(step_number) = str_step_number.parse::<u64>() {
+                                    if let Ok(start_number) = str_start_number.parse::<i64>() {
+                                        if let Ok(step_number) = str_step_number.parse::<i64>() {
                                             if let Ok(fill_zeros) = str_fill_zeros.parse::<u64>() {
-                                                // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app
+                                                // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
                                                 let fill_zeros = min(fill_zeros, 50);
 
                                                 let mut number;
-                                                if step_number.checked_mul(rule_number).is_none() {
+                                                if step_number.checked_mul(rule_number as i64).is_none() {
                                                     number = 0;
                                                 } else {
-                                                    number = step_number * rule_number;
+                                                    number = step_number * rule_number as i64;
                                                 }
+                                                // TODO Better handle negative numbers
 
                                                 if number.checked_add(start_number).is_none() {
                                                     number = 0;
@@ -139,53 +123,53 @@ mod test {
         file_handler.flush().unwrap();
 
         rule.rule_data.custom_text = "$(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "wombat.txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "wombat.txt");
 
         rule.rule_data.custom_text = "$(NAME)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "wombat");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "wombat");
 
         rule.rule_data.custom_text = "$(EXT)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "txt");
 
         rule.rule_data.custom_text = "$(N:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:)");
         rule.rule_data.custom_text = "$(N:20:22:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:20:22:)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:20:22:)");
         rule.rule_data.custom_text = "$(20::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(20::22)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(20::22)");
         rule.rule_data.custom_text = "$(N:::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(N:::22)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:::22)");
         rule.rule_data.custom_text = "$(:::)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "$(:::)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(:::)");
         rule.rule_data.custom_text = "$(N:20:22:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "0020");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "0042");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "0064");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "0020");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "0042");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "0064");
         rule.rule_data.custom_text = "$(N:1:10:3)$(N:2:10:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "0010002");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "0110012");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "0010002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "0110012");
         rule.rule_data.custom_text = "$(N:0:2:5)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "00000");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "00002");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "00004");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "00000");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "00002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "00004");
         rule.rule_data.custom_text = "$(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "10");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, false), "15");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, false), "20");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "10");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "15");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "20");
         rule.rule_data.custom_text = "$(EXT)$(())$(($(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "txt$(())$((10");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "txt$(())$((10");
 
         // This depends on files which doesn't exists, so result should be an empty string
 
         rule.rule_data.custom_text = "$(SIZE)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, false), "2 B");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "2 B");
 
         rule.rule_data.custom_text = "$(MODIF)".to_string();
-        let text = rule_custom("wombat.txt", &rule, 0, false);
+        let text = rule_custom("wombat.txt", &rule, 0, None);
         assert!(text.contains('-') && text.contains("20"));
 
         rule.rule_data.custom_text = "$(CREAT)".to_string();
-        let text = rule_custom("wombat.txt", &rule, 0, false);
+        let text = rule_custom("wombat.txt", &rule, 0, None);
         assert!(text.contains('-') && text.contains("20"));
 
         fs::remove_file("wombat.txt").unwrap();
