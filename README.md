@@ -30,8 +30,9 @@ You need to install GTK using brew
 brew install rust gtk+3
 ```
 
-### Windows (not tested)
-Packed zip file contains all dependencies, but if you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases and run file from anywhere.
+### Windows
+The released zip file contains all dependencies and has been tested to work out of the box on a freshly installed Windows 7 SP1.  
+If you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases, ensure that its environment variables are set properly and run Szyszka from anywhere.
 
 ## Installation
 ### Precompiled Binaries
