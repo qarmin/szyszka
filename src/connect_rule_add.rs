@@ -4,7 +4,6 @@ use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rules::{RuleData, RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
-use gtk::{ButtonExt, WidgetExt};
 use std::ops::DerefMut;
 
 pub fn connect_rule_add(gui_data: &GuiData) {
@@ -69,23 +68,23 @@ pub fn connect_rule_add(gui_data: &GuiData) {
             let mut rule_data: RuleData = RuleData::new();
             let rule_description: String;
 
-            match to_notebook_enum(notebook_choose_rule.get_current_page().unwrap()) {
+            match to_notebook_enum(notebook_choose_rule.current_page().unwrap()) {
                 NotebookEnum::CaseSize => {
                     rule_type = RuleType::CaseSize;
 
                     rule_data.to_lowercase = true;
-                    if radio_button_letters_type_uppercase.get_active() {
+                    if radio_button_letters_type_uppercase.is_active() {
                         rule_data.to_lowercase = false;
-                    } else if radio_button_letters_type_lowercase.get_active() {
+                    } else if radio_button_letters_type_lowercase.is_active() {
                         rule_data.to_lowercase = true;
                     } else {
                         panic!("Button not available");
                     }
-                    if radio_button_letters_usage_extension.get_active() {
+                    if radio_button_letters_usage_extension.is_active() {
                         rule_place = RulePlace::Extension;
-                    } else if radio_button_letters_usage_both.get_active() {
+                    } else if radio_button_letters_usage_both.is_active() {
                         rule_place = RulePlace::ExtensionAndName;
-                    } else if radio_button_letters_usage_name.get_active() {
+                    } else if radio_button_letters_usage_name.is_active() {
                         rule_place = RulePlace::Name;
                     } else {
                         panic!("Invalid Button Clicked");
@@ -97,11 +96,11 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 }
                 NotebookEnum::Purge => {
                     rule_type = RuleType::Purge;
-                    if radio_button_purge_extension.get_active() {
+                    if radio_button_purge_extension.is_active() {
                         rule_place = RulePlace::Extension;
-                    } else if radio_button_purge_both.get_active() {
+                    } else if radio_button_purge_both.is_active() {
                         rule_place = RulePlace::ExtensionAndName;
-                    } else if radio_button_purge_name.get_active() {
+                    } else if radio_button_purge_name.is_active() {
                         rule_place = RulePlace::Name;
                     } else {
                         panic!("Invalid Button Clicked");
@@ -110,22 +109,22 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 }
                 NotebookEnum::AddText => {
                     rule_type = RuleType::AddText;
-                    if radio_button_add_text_after_name.get_active() {
+                    if radio_button_add_text_after_name.is_active() {
                         rule_place = RulePlace::BeforeName;
-                    } else if radio_button_add_text_before_name.get_active() {
+                    } else if radio_button_add_text_before_name.is_active() {
                         rule_place = RulePlace::AfterName;
                     } else {
                         panic!("Invalid Button Clicked");
                     }
-                    rule_data.add_text_text = entry_add_text_text_to_add.get_text().to_string();
+                    rule_data.add_text_text = entry_add_text_text_to_add.text().to_string();
                     rule_description = format!("Added text: {}", rule_data.add_text_text);
                 }
                 NotebookEnum::Trim => {
                     rule_type = RuleType::Trim;
 
-                    if radio_button_trim_case_sensitive.get_active() {
+                    if radio_button_trim_case_sensitive.is_active() {
                         rule_data.case_sensitive = true;
-                    } else if radio_button_trim_case_insensitive.get_active() {
+                    } else if radio_button_trim_case_insensitive.is_active() {
                         rule_data.case_sensitive = false;
                     } else {
                         panic!("Invalid Button Clicked");
@@ -133,70 +132,70 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
                     let where_remove;
 
-                    if radio_button_trim_name_start.get_active() {
+                    if radio_button_trim_name_start.is_active() {
                         rule_place = RulePlace::FromNameStart;
                         where_remove = "start";
-                    } else if radio_button_trim_name_end.get_active() {
+                    } else if radio_button_trim_name_end.is_active() {
                         rule_place = RulePlace::FromNameEndReverse;
                         where_remove = "end of name";
-                    } else if radio_button_trim_extension_start.get_active() {
+                    } else if radio_button_trim_extension_start.is_active() {
                         rule_place = RulePlace::FromExtensionStart;
                         where_remove = "extension";
-                    } else if radio_button_trim_extension_end.get_active() {
+                    } else if radio_button_trim_extension_end.is_active() {
                         rule_place = RulePlace::FromExtensionEndReverse;
                         where_remove = "end of extension";
                     } else {
                         panic!("Invalid Button Clicked");
                     }
-                    rule_data.trim_text = entry_add_text_text_to_trim.get_text().to_string();
+                    rule_data.trim_text = entry_add_text_text_to_trim.text().to_string();
                     rule_description = format!("Trimming \"{}\" from {}", rule_data.trim_text, where_remove);
                 }
                 NotebookEnum::Custom => {
                     rule_type = RuleType::Custom;
                     rule_place = RulePlace::None;
 
-                    rule_data.custom_text = entry_custom_text_to_change.get_text().to_string();
+                    rule_data.custom_text = entry_custom_text_to_change.text().to_string();
                     rule_description = format!("Custom rule: {}", rule_data.custom_text);
                 }
                 NotebookEnum::Replace => {
                     rule_type = RuleType::Replace;
 
-                    if radio_button_replace_both.get_active() {
+                    if radio_button_replace_both.is_active() {
                         rule_place = RulePlace::ExtensionAndName;
-                    } else if radio_button_replace_name.get_active() {
+                    } else if radio_button_replace_name.is_active() {
                         rule_place = RulePlace::Name;
-                    } else if radio_button_replace_extension.get_active() {
+                    } else if radio_button_replace_extension.is_active() {
                         rule_place = RulePlace::Extension;
                     } else {
                         panic!("Invalid Rule Type for purge rule");
                     }
 
-                    if radio_button_replace_case_sensitive.get_active() {
+                    if radio_button_replace_case_sensitive.is_active() {
                         rule_data.case_sensitive = true;
-                    } else if radio_button_replace_case_insensitive.get_active() {
+                    } else if radio_button_replace_case_insensitive.is_active() {
                         rule_data.case_sensitive = false;
                     } else {
                         panic!("Invalid Button Clicked");
                     }
 
-                    rule_data.text_to_remove = entry_replace_text_to_remove.get_text().to_string();
-                    rule_data.text_to_replace = entry_replace_text_to_change.get_text().to_string();
+                    rule_data.text_to_remove = entry_replace_text_to_remove.text().to_string();
+                    rule_data.text_to_replace = entry_replace_text_to_change.text().to_string();
                     rule_description = format!("Replacing \"{}\" with \"{}\"", rule_data.text_to_remove, rule_data.text_to_replace);
                 }
                 NotebookEnum::AddNumber => {
                     rule_type = RuleType::AddNumber;
 
-                    if radio_button_add_number_before_name.get_active() {
+                    if radio_button_add_number_before_name.is_active() {
                         rule_place = RulePlace::BeforeName;
-                    } else if radio_button_add_number_after_name.get_active() {
+                    } else if radio_button_add_number_after_name.is_active() {
                         rule_place = RulePlace::AfterName;
                     } else {
                         panic!("Invalid Rule Type for purge rule");
                     }
 
-                    rule_data.fill_with_zeros = entry_add_number_zeros.get_text().to_string().parse::<i64>().unwrap_or(0);
-                    rule_data.number_step = entry_add_number_step.get_text().to_string().parse::<i64>().unwrap_or(1);
-                    rule_data.number_start = entry_add_number_start_number.get_text().to_string().parse::<i64>().unwrap_or(1);
+                    rule_data.fill_with_zeros = entry_add_number_zeros.text().to_string().parse::<i64>().unwrap_or(0);
+                    rule_data.number_step = entry_add_number_step.text().to_string().parse::<i64>().unwrap_or(1);
+                    rule_data.number_start = entry_add_number_start_number.text().to_string().parse::<i64>().unwrap_or(1);
 
                     let zeros = if rule_data.fill_with_zeros > 0 {
                         format!(" and filling with {} zeros,", rule_data.fill_with_zeros)

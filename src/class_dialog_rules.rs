@@ -30,11 +30,11 @@ pub struct GuiDialogRules {
 
 impl GuiDialogRules {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let notebook_choose_rule: gtk::Notebook = builder.get_object("notebook_choose_rule").unwrap();
+        let notebook_choose_rule: gtk::Notebook = builder.object("notebook_choose_rule").unwrap();
 
-        let window_with_rules: gtk::Window = builder.get_object("window_with_rules").unwrap();
+        let window_with_rules: gtk::Window = builder.object("window_with_rules").unwrap();
         window_with_rules.set_position(WindowPosition::Center);
-        let button_rule_window_add: gtk::Button = builder.get_object("button_rule_window_add").unwrap();
+        let button_rule_window_add: gtk::Button = builder.object("button_rule_window_add").unwrap();
 
         let size_letters: GuiSizeLetters = GuiSizeLetters::create_from_builder(&builder);
         let purge: GuiPurge = GuiPurge::create_from_builder(&builder);
@@ -44,9 +44,9 @@ impl GuiDialogRules {
         let replace: GuiReplace = GuiReplace::create_from_builder(&builder);
         let add_number: GuiAddNumber = GuiAddNumber::create_from_builder(&builder);
 
-        let entry_example_before: gtk::Entry = builder.get_object("entry_example_before").unwrap();
-        let label_example_after: gtk::Label = builder.get_object("label_example_after").unwrap();
-        let button_example_reset: gtk::Button = builder.get_object("button_example_reset").unwrap();
+        let entry_example_before: gtk::Entry = builder.object("entry_example_before").unwrap();
+        let label_example_after: gtk::Label = builder.object("label_example_after").unwrap();
+        let button_example_reset: gtk::Button = builder.object("button_example_reset").unwrap();
 
         Self {
             notebook_choose_rule,

@@ -15,15 +15,15 @@ pub struct GuiTrim {
 
 impl GuiTrim {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_trim_name_start: gtk::RadioButton = builder.get_object("radio_button_trim_name_start").unwrap();
-        let radio_button_trim_name_end: gtk::RadioButton = builder.get_object("radio_button_trim_name_end").unwrap();
-        let radio_button_trim_extension_start: gtk::RadioButton = builder.get_object("radio_button_trim_extension_start").unwrap();
-        let radio_button_trim_extension_end: gtk::RadioButton = builder.get_object("radio_button_trim_extension_end").unwrap();
+        let radio_button_trim_name_start: gtk::RadioButton = builder.object("radio_button_trim_name_start").unwrap();
+        let radio_button_trim_name_end: gtk::RadioButton = builder.object("radio_button_trim_name_end").unwrap();
+        let radio_button_trim_extension_start: gtk::RadioButton = builder.object("radio_button_trim_extension_start").unwrap();
+        let radio_button_trim_extension_end: gtk::RadioButton = builder.object("radio_button_trim_extension_end").unwrap();
 
-        let radio_button_trim_case_sensitive: gtk::RadioButton = builder.get_object("radio_button_trim_case_sensitive").unwrap();
-        let radio_button_trim_case_insensitive: gtk::RadioButton = builder.get_object("radio_button_trim_case_insensitive").unwrap();
+        let radio_button_trim_case_sensitive: gtk::RadioButton = builder.object("radio_button_trim_case_sensitive").unwrap();
+        let radio_button_trim_case_insensitive: gtk::RadioButton = builder.object("radio_button_trim_case_insensitive").unwrap();
 
-        let entry_add_text_text_to_trim: gtk::Entry = builder.get_object("entry_add_text_text_to_trim").unwrap();
+        let entry_add_text_text_to_trim: gtk::Entry = builder.object("entry_add_text_text_to_trim").unwrap();
 
         Self {
             radio_button_trim_name_start,

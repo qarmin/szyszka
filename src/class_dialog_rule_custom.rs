@@ -7,7 +7,7 @@ pub struct GuiCustom {
 
 impl GuiCustom {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let entry_custom_text_to_change: gtk::Entry = builder.get_object("entry_custom_text_to_change").unwrap();
+        let entry_custom_text_to_change: gtk::Entry = builder.object("entry_custom_text_to_change").unwrap();
 
         Self { entry_custom_text_to_change }
     }

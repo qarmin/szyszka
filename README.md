@@ -1,6 +1,6 @@
 # Szyszka
 
-Szyszka is a simple but powerful batch file renamer.
+Szyszka is a simple but powerful bulk file renamer.
 
 ![Szyszka](https://user-images.githubusercontent.com/41945903/118101662-1e719480-b3d8-11eb-83d6-35e88fc919c5.png)
 ## Features
@@ -62,9 +62,6 @@ emerge -av gui-apps/szyszka
 ## Future work
 - Adding Regex support
 - New icon
-
-- Allow folder addition
-- Recursive search of directories
 - Saving/loading presets
 - Reordering files/rules
 - Trim x number of characters

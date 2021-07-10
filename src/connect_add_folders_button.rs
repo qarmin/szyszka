@@ -31,16 +31,16 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
         box_pack.add(&label);
         box_pack.set_child_packing(&label, false, true, 0, PackType::End);
 
-        let internal_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+        let internal_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
         internal_box.add(&box_pack);
 
         chooser.set_title("Folders to include");
         chooser.show_all();
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
-            let mut folders = chooser.get_filenames();
+            let mut folders = chooser.filenames();
 
-            if switch.get_active() {
+            if switch.is_active() {
                 let mut new_entries = Vec::new();
                 for folder in folders {
                     for entry in WalkDir::new(folder).into_iter().filter_map(|e| e.ok()) {
@@ -107,9 +107,8 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                 };
 
                 //// Create entry and save it to metadata
-                let col_indices = [0, 1, 2, 3, 4, 5];
-                let values: [&dyn ToValue; 6] = [&name, &name, &path, &size, &modification_date, &creation_date];
-                list_store.set(&list_store.append(), &col_indices, &values);
+                let values: [(u32, &dyn ToValue); 6] = [(0, &name), (1, &name), (2, &path), (3, &size), (4, &modification_date), (5, &creation_date)];
+                list_store.set(&list_store.append(), &values);
 
                 // Used to check if already in treeview is this values
                 result_entries.files.insert(full_name.to_string());

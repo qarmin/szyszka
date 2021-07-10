@@ -18,7 +18,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
         chooser.show_all();
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
-            let folder = chooser.get_filenames();
+            let folder = chooser.filenames();
 
             let mut result_entries = shared_result_entries.borrow_mut();
 
@@ -77,9 +77,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 };
 
                 //// Create entry and save it to metadata
-                let col_indices = [0, 1, 2, 3, 4, 5];
-                let values: [&dyn ToValue; 6] = [&name, &name, &path, &size, &modification_date, &creation_date];
-                list_store.set(&list_store.append(), &col_indices, &values);
+                let values: [(u32, &dyn ToValue); 6] = [(0, &name), (1, &name), (2, &path), (3, &size), (4, &modification_date), (5, &creation_date)];
+                list_store.set(&list_store.append(), &values);
 
                 // Used to check if already in treeview is this values
                 result_entries.files.insert(full_name.to_string());

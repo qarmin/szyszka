@@ -1,7 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::example_fields::update_examples;
 use crate::help_function::validate_number;
-use gtk::{ButtonExt, EditableSignals, EntryExt};
+use gtk::prelude::*;
 
 pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
@@ -23,17 +23,17 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
 
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_start_number.connect_changed(move |e| {
-        e.set_text(validate_number(e.get_text().to_string()).as_str());
+        e.set_text(validate_number(e.text().to_string()).as_str());
         update_examples(&window_rules, None);
     });
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_step.connect_changed(move |e| {
-        e.set_text(validate_number(e.get_text().to_string()).as_str());
+        e.set_text(validate_number(e.text().to_string()).as_str());
         update_examples(&window_rules, None);
     });
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_zeros.connect_changed(move |e| {
-        e.set_text(validate_number(e.get_text().to_string()).as_str());
+        e.set_text(validate_number(e.text().to_string()).as_str());
         update_examples(&window_rules, None);
     });
 }
