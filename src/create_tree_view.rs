@@ -1,5 +1,6 @@
 use crate::help_function::{ColumnsResults, ColumnsRules};
-use gtk::*;
+use gtk::prelude::*;
+use gtk::TreeViewColumn;
 
 pub fn create_tree_view_results(tree_view: &gtk::TreeView) {
     let renderer = gtk::CellRendererText::new();

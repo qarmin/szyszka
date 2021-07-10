@@ -2,8 +2,8 @@ use crate::file_entry::ResultEntries;
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
 use crate::rules::Rules;
 use glib::Value;
-use gtk::prelude::GtkListStoreExtManual;
-use gtk::{TreeModelExt, TreeView};
+use gtk::prelude::*;
+use gtk::TreeView;
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
@@ -28,7 +28,7 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
 
     match update_mode {
         UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved => {
-            if let Some(iter) = list_store.get_iter_first() {
+            if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
 
                 // We count how much
@@ -48,10 +48,10 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                 // }
                 // TODO get info about current row and change it
                 loop {
-                    let value_to_change = list_store.get_value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
-                    let modification_date: u64 = list_store.get_value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap().unwrap();
-                    let creation_date: u64 = list_store.get_value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap().unwrap();
-                    let file_size: u64 = list_store.get_value(&iter, ColumnsResults::Size as i32).get::<u64>().unwrap().unwrap();
+                    let value_to_change = list_store.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                    let modification_date: u64 = list_store.value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
+                    let creation_date: u64 = list_store.value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
+                    let file_size: u64 = list_store.value(&iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
                     let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, (modification_date, creation_date, file_size));
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {

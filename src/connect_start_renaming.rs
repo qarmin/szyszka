@@ -1,7 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk::prelude::*;
-use gtk::{ButtonExt, ContainerExt, DialogExt, DialogFlags, ScrolledWindow, TextTagTable, TextView};
+use gtk::{DialogFlags, ScrolledWindow, TextTagTable, TextView};
 use std::fs;
 use std::path::Path;
 
@@ -30,7 +30,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         let question_label = gtk::Label::new(Some(format!("Are you sure that you want to rename {} files", number_of_renamed_files).as_str()));
 
-        let chooser_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+        let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
         chooser_box.add(&question_label);
         chooser_box.show_all();
 
@@ -41,11 +41,11 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
-            let tree_iter = list_store.get_iter_first().unwrap();
+            let tree_iter = list_store.iter_first().unwrap();
             loop {
-                let path = list_store.get_value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap().unwrap();
-                let old_name = format!("{}{}{}", path, CHARACTER, list_store.get_value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap());
-                let new_name = format!("{}{}{}", path, CHARACTER, list_store.get_value(&tree_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap().unwrap());
+                let path = list_store.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
+                let old_name = format!("{}{}{}", path, CHARACTER, list_store.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap());
+                let new_name = format!("{}{}{}", path, CHARACTER, list_store.value(&tree_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap());
 
                 // TODO Find method to not overwrite new function
                 #[allow(clippy::collapsible_else_if)]
@@ -83,7 +83,7 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
     let label_good = gtk::Label::new(Some(format!("Properly renamed {} files", properly_renamed).as_str()));
     let label_ignored = gtk::Label::new(Some(format!("Ignored {} files, because the name before and after the change are the same.", ignored).as_str()));
 
-    let chooser_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+    let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
     chooser_box.add(&label_good);
     chooser_box.add(&label_ignored);
 
@@ -98,7 +98,7 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
 
         let scrolled_window = ScrolledWindow::new::<gtk::Adjustment, gtk::Adjustment>(None, None);
         let text_view = TextView::new();
-        text_view.set_property_expand(true);
+        text_view.set_expand(true);
         let buffer = gtk::TextBuffer::new::<TextTagTable>(None);
         text_view.set_buffer(Some(&buffer));
         let mut text = "".to_string();

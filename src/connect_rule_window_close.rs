@@ -1,6 +1,6 @@
 use crate::class_gui_data::GuiData;
 use gtk::prelude::WidgetExtManual;
-use gtk::WidgetExt;
+use gtk::prelude::*;
 
 pub fn connect_rule_window_close(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();

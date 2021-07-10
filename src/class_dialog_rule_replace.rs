@@ -15,15 +15,15 @@ pub struct GuiReplace {
 
 impl GuiReplace {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_replace_name: gtk::RadioButton = builder.get_object("radio_button_replace_name").unwrap();
-        let radio_button_replace_extension: gtk::RadioButton = builder.get_object("radio_button_replace_extension").unwrap();
-        let radio_button_replace_both: gtk::RadioButton = builder.get_object("radio_button_replace_both").unwrap();
+        let radio_button_replace_name: gtk::RadioButton = builder.object("radio_button_replace_name").unwrap();
+        let radio_button_replace_extension: gtk::RadioButton = builder.object("radio_button_replace_extension").unwrap();
+        let radio_button_replace_both: gtk::RadioButton = builder.object("radio_button_replace_both").unwrap();
 
-        let entry_replace_text_to_remove: gtk::Entry = builder.get_object("entry_replace_text_to_remove").unwrap();
-        let entry_replace_text_to_change: gtk::Entry = builder.get_object("entry_replace_text_to_change").unwrap();
+        let entry_replace_text_to_remove: gtk::Entry = builder.object("entry_replace_text_to_remove").unwrap();
+        let entry_replace_text_to_change: gtk::Entry = builder.object("entry_replace_text_to_change").unwrap();
 
-        let radio_button_replace_case_sensitive: gtk::RadioButton = builder.get_object("radio_button_replace_case_sensitive").unwrap();
-        let radio_button_replace_case_insensitive: gtk::RadioButton = builder.get_object("radio_button_replace_case_insensitive").unwrap();
+        let radio_button_replace_case_sensitive: gtk::RadioButton = builder.object("radio_button_replace_case_sensitive").unwrap();
+        let radio_button_replace_case_insensitive: gtk::RadioButton = builder.object("radio_button_replace_case_insensitive").unwrap();
 
         Self {
             radio_button_replace_name,

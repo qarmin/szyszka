@@ -10,10 +10,10 @@ pub struct GuiUpperButtons {
 
 impl GuiUpperButtons {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let button_start_rename: gtk::Button = builder.get_object("button_start_rename").unwrap();
-        let button_remove_selection: gtk::Button = builder.get_object("button_remove_selection").unwrap();
-        let button_add_files: gtk::Button = builder.get_object("button_add_files").unwrap();
-        let button_add_folders: gtk::Button = builder.get_object("button_add_folders").unwrap();
+        let button_start_rename: gtk::Button = builder.object("button_start_rename").unwrap();
+        let button_remove_selection: gtk::Button = builder.object("button_remove_selection").unwrap();
+        let button_add_files: gtk::Button = builder.object("button_add_files").unwrap();
+        let button_add_folders: gtk::Button = builder.object("button_add_folders").unwrap();
 
         Self {
             button_start_rename,

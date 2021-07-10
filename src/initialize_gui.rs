@@ -13,9 +13,9 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
 
         let col_types: [Type; 6] = [
-            glib::types::Type::String,
-            glib::types::Type::String,
-            glib::types::Type::String,
+            glib::types::Type::STRING,
+            glib::types::Type::STRING,
+            glib::types::Type::STRING,
             glib::types::Type::U64,
             glib::types::Type::U64,
             glib::types::Type::U64,
@@ -25,12 +25,12 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
 
-        tree_view.get_selection().set_mode(SelectionMode::Multiple);
+        tree_view.selection().set_mode(SelectionMode::Multiple);
 
         tree_view.connect_button_press_event(|tree_view, event| {
-            if event.get_event_type() == gdk::EventType::DoubleButtonPress && event.get_button() == 1 {
+            if event.event_type() == gdk::EventType::DoubleButtonPress && event.button() == 1 {
                 common_open_function(tree_view, OpenMode::PathAndName);
-            } else if event.get_event_type() == gdk::EventType::DoubleButtonPress && event.get_button() == 3 {
+            } else if event.event_type() == gdk::EventType::DoubleButtonPress && event.button() == 3 {
                 common_open_function(tree_view, OpenMode::OnlyPath);
             }
             gtk::Inhibit(false)
@@ -52,13 +52,13 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 
-        let col_types: [Type; 3] = [glib::types::Type::String, glib::types::Type::String, glib::types::Type::String];
+        let col_types: [Type; 3] = [glib::types::Type::STRING, glib::types::Type::STRING, glib::types::Type::STRING];
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 
         let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
 
-        // tree_view.get_selection().set_mode(SelectionMode::Multiple);
+        // tree_view.selection().set_mode(SelectionMode::Multiple);
 
         create_tree_view_rules(&tree_view);
 
@@ -81,13 +81,13 @@ pub enum OpenMode {
 }
 
 pub fn common_open_function(tree_view: &gtk::TreeView, opening_mode: OpenMode) {
-    let selection = tree_view.get_selection();
-    let (selection_rows, tree_model) = selection.get_selected_rows();
+    let selection = tree_view.selection();
+    let (selection_rows, tree_model) = selection.selected_rows();
 
     for tree_path in selection_rows.iter().rev() {
         let end_path;
-        let current_name = tree_model.get_value(&tree_model.get_iter(tree_path).unwrap(), ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap();
-        let path = tree_model.get_value(&tree_model.get_iter(tree_path).unwrap(), ColumnsResults::Path as i32).get::<String>().unwrap().unwrap();
+        let current_name = tree_model.value(&tree_model.iter(tree_path).unwrap(), ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+        let path = tree_model.value(&tree_model.iter(tree_path).unwrap(), ColumnsResults::Path as i32).get::<String>().unwrap();
 
         match opening_mode {
             OpenMode::OnlyPath => {

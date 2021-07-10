@@ -38,7 +38,7 @@ impl GuiData {
         let builder = Builder::from_string(glade_src.as_str());
 
         //// Windows
-        let window_main: gtk::Window = builder.get_object("window_main").unwrap();
+        let window_main: gtk::Window = builder.object("window_main").unwrap();
         window_main.set_position(WindowPosition::Center);
         window_main.show_all();
         window_main.set_title("Szyszka");

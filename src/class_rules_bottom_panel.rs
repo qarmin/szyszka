@@ -15,13 +15,13 @@ pub struct GuiRulesBottomPanel {
 
 impl GuiRulesBottomPanel {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let button_add_rule: gtk::Button = builder.get_object("button_add_rule").unwrap();
-        let button_remove_rule: gtk::Button = builder.get_object("button_remove_rule").unwrap();
-        let button_one_up: gtk::Button = builder.get_object("button_one_up").unwrap();
-        let button_one_down: gtk::Button = builder.get_object("button_one_down").unwrap();
-        let button_to_top: gtk::Button = builder.get_object("button_to_top").unwrap();
-        let button_to_bottom: gtk::Button = builder.get_object("button_to_bottom").unwrap();
-        let scrolled_window_rules: gtk::ScrolledWindow = builder.get_object("scrolled_window_rules").unwrap();
+        let button_add_rule: gtk::Button = builder.object("button_add_rule").unwrap();
+        let button_remove_rule: gtk::Button = builder.object("button_remove_rule").unwrap();
+        let button_one_up: gtk::Button = builder.object("button_one_up").unwrap();
+        let button_one_down: gtk::Button = builder.object("button_one_down").unwrap();
+        let button_to_top: gtk::Button = builder.object("button_to_top").unwrap();
+        let button_to_bottom: gtk::Button = builder.object("button_to_bottom").unwrap();
+        let scrolled_window_rules: gtk::ScrolledWindow = builder.object("scrolled_window_rules").unwrap();
 
         let tree_view_window_rules: gtk::TreeView = TreeView::new();
 

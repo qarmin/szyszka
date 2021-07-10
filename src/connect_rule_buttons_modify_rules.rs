@@ -1,7 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::{populate_rules_tree_view, remove_selected_rows};
 use crate::update_records::{update_records, UpdateMode};
-use gtk::{ButtonExt, WidgetExt};
+use gtk::prelude::*;
 use std::ops::DerefMut;
 
 pub fn connect_rule_modify_add(gui_data: &GuiData) {
@@ -52,7 +52,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
     // TODO only works with single selection
     button_one_up.connect_clicked(move |_e| {
         // { // TODO Enable
-        //     let selection = tree_view_window_rules.get_selection();
+        //     let selection = tree_view_window_rules.selection();
         //     if selection.get_selected_rows().0.is_empty() {
         //         return;
         //     }
@@ -67,7 +67,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
         //     let mut vec_rule_to_move: Vec<_> = Vec::new();
         //     let mut current_iter: usize = 0;
         //
-        //     let tree_iter = list_store.get_iter_first().unwrap();
+        //     let tree_iter = list_store.iter_first().unwrap();
         //
         //     // Get rules number to move
         //     for selected_tree_path in &selected_rows {
@@ -108,7 +108,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
         //     // Restore selection
         //
         //     // let mut current_rule = 0;
-        //     // let iter = list_store.get_iter_first().unwrap();
+        //     // let iter = list_store.iter_first().unwrap();
         //     // selection.unselect_all();
         //     // selection.select_iter(&iter);
         //     // selection.select_iter(&iter);

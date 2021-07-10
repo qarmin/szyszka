@@ -12,12 +12,12 @@ pub struct GuiSizeLetters {
 
 impl GuiSizeLetters {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_letters_type_uppercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_uppercase").unwrap();
-        let radio_button_letters_type_lowercase: gtk::RadioButton = builder.get_object("radio_button_letters_type_lowercase").unwrap();
+        let radio_button_letters_type_uppercase: gtk::RadioButton = builder.object("radio_button_letters_type_uppercase").unwrap();
+        let radio_button_letters_type_lowercase: gtk::RadioButton = builder.object("radio_button_letters_type_lowercase").unwrap();
 
-        let radio_button_letters_usage_name: gtk::RadioButton = builder.get_object("radio_button_letters_usage_name").unwrap();
-        let radio_button_letters_usage_extension: gtk::RadioButton = builder.get_object("radio_button_letters_usage_extension").unwrap();
-        let radio_button_letters_usage_both: gtk::RadioButton = builder.get_object("radio_button_letters_usage_both").unwrap();
+        let radio_button_letters_usage_name: gtk::RadioButton = builder.object("radio_button_letters_usage_name").unwrap();
+        let radio_button_letters_usage_extension: gtk::RadioButton = builder.object("radio_button_letters_usage_extension").unwrap();
+        let radio_button_letters_usage_both: gtk::RadioButton = builder.object("radio_button_letters_usage_both").unwrap();
 
         Self {
             radio_button_letters_type_uppercase,

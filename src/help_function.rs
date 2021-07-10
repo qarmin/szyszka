@@ -65,7 +65,7 @@ pub fn split_file_name(path: &Path) -> (String, String) {
 }
 
 pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
-    tree_view.get_model().unwrap().downcast::<gtk::ListStore>().unwrap()
+    tree_view.model().unwrap().downcast::<gtk::ListStore>().unwrap()
 }
 
 pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rules>>) {
@@ -76,17 +76,16 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
 
     list_store.clear();
 
-    let col_indices = [0, 1, 2];
     for rule in &rules.rules {
-        let values: [&dyn ToValue; 3] = [&rule_type_to_string(&rule.rule_type), &rule_place_to_string(&rule.rule_place), &rule.rule_description];
-        list_store.set(&list_store.append(), &col_indices, &values);
+        let values: [(u32, &dyn ToValue); 3] = [(0, &rule_type_to_string(&rule.rule_type)), (1, &rule_place_to_string(&rule.rule_place)), (2, &rule.rule_description)];
+        list_store.set(&list_store.append(), &values);
     }
 }
 
 pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
-    let selection = tree_view.get_selection();
+    let selection = tree_view.selection();
 
-    let (selected_rows, _tree_model) = selection.get_selected_rows();
+    let (selected_rows, _tree_model) = selection.selected_rows();
 
     // Nothing selected
     if selected_rows.is_empty() {
@@ -98,12 +97,12 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
     let mut vec_index_to_delete: Vec<_> = Vec::new();
     let mut current_iter: usize = 0;
 
-    let tree_iter = list_store.get_iter_first().unwrap();
+    let tree_iter = list_store.iter_first().unwrap();
 
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
         loop {
-            if list_store.get_path(&tree_iter).unwrap() == *selected_tree_path {
+            if list_store.path(&tree_iter).unwrap() == *selected_tree_path {
                 vec_index_to_delete.push(current_iter);
                 list_store.iter_next(&tree_iter);
                 current_iter += 1;
@@ -116,14 +115,14 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
 
     // Remove selected rows
     for selected_tree_path in selected_rows.iter().rev() {
-        list_store.remove(&list_store.get_iter(selected_tree_path).unwrap());
+        list_store.remove(&list_store.iter(selected_tree_path).unwrap());
     }
     vec_index_to_delete
 }
 pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<String> {
-    let selection = tree_view.get_selection();
+    let selection = tree_view.selection();
 
-    let (selected_rows, _tree_model) = selection.get_selected_rows();
+    let (selected_rows, _tree_model) = selection.selected_rows();
 
     let mut return_vec = Vec::with_capacity(selected_rows.len());
 
@@ -136,12 +135,12 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<Stri
 
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
-        let tree_iter = list_store.get_iter(selected_tree_path).unwrap();
+        let tree_iter = list_store.iter(selected_tree_path).unwrap();
         return_vec.push(format!(
             "{}{}{}",
-            list_store.get_value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap().unwrap(),
+            list_store.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap(),
             CHARACTER,
-            list_store.get_value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap().unwrap()
+            list_store.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap()
         ));
     }
 
@@ -152,7 +151,7 @@ pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(&tree_view);
     let mut number = 0;
 
-    if let Some(curr_iter) = list_store.get_iter_first() {
+    if let Some(curr_iter) = list_store.iter_first() {
         loop {
             number += 1;
             if !list_store.iter_next(&curr_iter) {
@@ -169,7 +168,7 @@ pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &s
 
     let question_label = gtk::Label::new(Some(message));
 
-    let chooser_box = chooser.get_children()[0].clone().downcast::<gtk::Box>().unwrap();
+    let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
     chooser_box.add(&question_label);
     chooser_box.show_all();
 
