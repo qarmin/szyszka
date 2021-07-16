@@ -75,9 +75,13 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                         continue;
                     }
                 };
+                let is_dir = match file_metadata.is_dir() {
+                    true => "Dir",
+                    false => "File",
+                };
 
                 //// Create entry and save it to metadata
-                let values: [(u32, &dyn ToValue); 6] = [(0, &name), (1, &name), (2, &path), (3, &size), (4, &modification_date), (5, &creation_date)];
+                let values: [(u32, &dyn ToValue); 7] = [(0, &is_dir), (1, &name), (2, &name), (3, &path), (4, &size), (5, &modification_date), (6, &creation_date)];
                 list_store.set(&list_store.append(), &values);
 
                 // Used to check if already in treeview is this values

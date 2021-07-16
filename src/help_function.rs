@@ -8,7 +8,8 @@ use std::rc::Rc;
 
 #[allow(dead_code)]
 pub enum ColumnsResults {
-    CurrentName = 0,
+    Type = 0,
+    CurrentName,
     FutureName,
     Path,
     Size,
