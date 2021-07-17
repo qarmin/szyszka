@@ -159,10 +159,8 @@ mod test {
         rule.rule_data.custom_text = "$(EXT)$(())$(($(N:10:5:1)".to_string();
         assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "txt$(())$((10");
 
-        // This depends on files which doesn't exists, so result should be an empty string
-
         rule.rule_data.custom_text = "$(SIZE)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "2 B");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "2 KB");
 
         rule.rule_data.custom_text = "$(MODIF)".to_string();
         let text = rule_custom("wombat.txt", &rule, 0, None);

@@ -12,7 +12,8 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
     {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
 
-        let col_types: [Type; 6] = [
+        let col_types: [Type; 7] = [
+            glib::types::Type::STRING,
             glib::types::Type::STRING,
             glib::types::Type::STRING,
             glib::types::Type::STRING,

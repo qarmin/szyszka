@@ -23,31 +23,64 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
         // Adds recursive button to FileDialog
         let box_pack = gtk::Box::new(Orientation::Horizontal, 0);
 
-        let switch = gtk::Switch::new();
-        box_pack.add(&switch);
-        box_pack.set_child_packing(&switch, false, true, 5, PackType::End);
+        let switch_scan_inside = gtk::Switch::new();
+        box_pack.add(&switch_scan_inside);
+        box_pack.set_child_packing(&switch_scan_inside, false, true, 5, PackType::End);
 
-        let label = gtk::Label::new(Some("Recursive check of folders "));
-        box_pack.add(&label);
-        box_pack.set_child_packing(&label, false, true, 0, PackType::End);
+        let label_scan_inside = gtk::Label::new(Some("Scan inside "));
+        box_pack.add(&label_scan_inside);
+        box_pack.set_child_packing(&label_scan_inside, false, true, 0, PackType::End);
+
+        let switch_ignore_folders = gtk::Switch::new();
+        box_pack.add(&switch_ignore_folders);
+        box_pack.set_child_packing(&switch_ignore_folders, false, true, 5, PackType::End);
+
+        let label_ignore_folders = gtk::Label::new(Some("Ignore folders "));
+        box_pack.add(&label_ignore_folders);
+        box_pack.set_child_packing(&label_ignore_folders, false, true, 0, PackType::End);
 
         let internal_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
         internal_box.add(&box_pack);
+
+        switch_ignore_folders.set_sensitive(false);
+        let sif = switch_ignore_folders.clone();
+        switch_scan_inside.connect_changed_active(move |e| {
+            sif.set_sensitive(e.is_active());
+        });
 
         chooser.set_title("Folders to include");
         chooser.show_all();
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
-            let mut folders = chooser.filenames();
+            let folders_to_check = chooser.filenames();
+            let folders;
 
-            if switch.is_active() {
-                let mut new_entries = Vec::new();
-                for folder in folders {
-                    for entry in WalkDir::new(folder).into_iter().filter_map(|e| e.ok()) {
-                        new_entries.push(entry.path().to_path_buf());
+            let ignore_folders = switch_ignore_folders.is_active();
+            let check_folders_inside = switch_scan_inside.is_active();
+
+            let mut new_entries = Vec::new();
+
+            if check_folders_inside {
+                if ignore_folders {
+                    for folder in folders_to_check {
+                        for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(|e| e.ok()) {
+                            if let Ok(metadata) = entry.metadata() {
+                                if metadata.is_file() {
+                                    new_entries.push(entry.path().to_path_buf());
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for folder in folders_to_check {
+                        for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(|e| e.ok()) {
+                            new_entries.push(entry.path().to_path_buf());
+                        }
                     }
                 }
                 folders = new_entries;
+            } else {
+                folders = folders_to_check;
             }
 
             let mut result_entries = shared_result_entries.borrow_mut();
@@ -105,9 +138,13 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         continue;
                     }
                 };
+                let is_dir = match file_metadata.is_dir() {
+                    true => "Dir",
+                    false => "File",
+                };
 
                 //// Create entry and save it to metadata
-                let values: [(u32, &dyn ToValue); 6] = [(0, &name), (1, &name), (2, &path), (3, &size), (4, &modification_date), (5, &creation_date)];
+                let values: [(u32, &dyn ToValue); 7] = [(0, &is_dir), (1, &name), (2, &name), (3, &path), (4, &size), (5, &modification_date), (6, &creation_date)];
                 list_store.set(&list_store.append(), &values);
 
                 // Used to check if already in treeview is this values
