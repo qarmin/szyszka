@@ -1,5 +1,5 @@
 use crate::class_gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, split_path};
+use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 use std::fs;
@@ -81,7 +81,15 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 };
 
                 //// Create entry and save it to metadata
-                let values: [(u32, &dyn ToValue); 7] = [(0, &is_dir), (1, &name), (2, &name), (3, &path), (4, &size), (5, &modification_date), (6, &creation_date)];
+                let values: [(u32, &dyn ToValue); 7] = [
+                    (ColumnsResults::Type as u32, &is_dir),
+                    (ColumnsResults::CurrentName as u32, &name),
+                    (ColumnsResults::FutureName as u32, &name),
+                    (ColumnsResults::Path as u32, &path),
+                    (ColumnsResults::Size as u32, &size),
+                    (ColumnsResults::ModificationDate as u32, &modification_date),
+                    (ColumnsResults::CreationDate as u32, &creation_date),
+                ];
                 list_store.set(&list_store.append(), &values);
 
                 // Used to check if already in treeview is this values

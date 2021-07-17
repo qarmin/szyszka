@@ -6,6 +6,7 @@ pub struct GuiUpperButtons {
     pub button_remove_selection: gtk::Button,
     pub button_add_files: gtk::Button,
     pub button_add_folders: gtk::Button,
+    pub button_select_popup: gtk::Button,
 }
 
 impl GuiUpperButtons {
@@ -14,12 +15,14 @@ impl GuiUpperButtons {
         let button_remove_selection: gtk::Button = builder.object("button_remove_selection").unwrap();
         let button_add_files: gtk::Button = builder.object("button_add_files").unwrap();
         let button_add_folders: gtk::Button = builder.object("button_add_folders").unwrap();
+        let button_select_popup: gtk::Button = builder.object("button_select_popup").unwrap();
 
         Self {
             button_start_rename,
             button_remove_selection,
             button_add_files,
             button_add_folders,
+            button_select_popup,
         }
     }
 }

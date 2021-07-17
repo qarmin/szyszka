@@ -78,7 +78,11 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
     list_store.clear();
 
     for rule in &rules.rules {
-        let values: [(u32, &dyn ToValue); 3] = [(0, &rule_type_to_string(&rule.rule_type)), (1, &rule_place_to_string(&rule.rule_place)), (2, &rule.rule_description)];
+        let values: [(u32, &dyn ToValue); 3] = [
+            (ColumnsRules::RuleType as u32, &rule_type_to_string(&rule.rule_type)),
+            (ColumnsRules::UsageType as u32, &rule_place_to_string(&rule.rule_place)),
+            (ColumnsRules::Description as u32, &rule.rule_description),
+        ];
         list_store.set(&list_store.append(), &values);
     }
 }
@@ -175,4 +179,59 @@ pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &s
 
     chooser.run();
     chooser.close();
+}
+pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
+    // if !expression.contains('*') {
+    //     #[cfg(debug_assertions)]
+    //     {
+    //         println!("Invalid expression Warning: Expression should have *,");
+    //     }
+    //     //return false;
+    // }
+
+    let temp_splits: Vec<&str> = expression.split('*').collect();
+    let mut splits: Vec<&str> = Vec::new();
+    for i in temp_splits {
+        if !i.is_empty() {
+            splits.push(i);
+        }
+    }
+    if splits.is_empty() {
+        return false;
+    }
+
+    // Get rid of non unicode characters
+    let directory = directory.as_ref().to_string_lossy();
+
+    // Early checking if directory contains all parts needed by expression
+    for split in &splits {
+        if !directory.contains(split) {
+            return false;
+        }
+    }
+
+    let mut position_of_splits: Vec<usize> = Vec::new();
+
+    // `git*` shouldn't be true for `/gitsfafasfs`
+    if !expression.starts_with('*') && directory.find(&splits[0]).unwrap() > 0 {
+        return false;
+    }
+    // `*home` shouldn't be true for `/homeowner`
+    if !expression.ends_with('*') && !directory.ends_with(splits.last().unwrap()) {
+        return false;
+    }
+
+    // At the end we check if parts between * are correctly positioned
+    position_of_splits.push(directory.find(&splits[0]).unwrap());
+    let mut current_index: usize;
+    let mut found_index: usize;
+    for i in splits[1..].iter().enumerate() {
+        current_index = *position_of_splits.get(i.0).unwrap() + i.1.len();
+        found_index = match directory[current_index..].find(i.1) {
+            Some(t) => t,
+            None => return false,
+        };
+        position_of_splits.push(found_index + current_index);
+    }
+    true
 }
