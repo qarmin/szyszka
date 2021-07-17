@@ -16,6 +16,7 @@ mod class_rules_bottom_panel;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_add_folders_button;
+mod connect_button_update_names;
 mod connect_remove_files_button;
 mod connect_rule_add;
 mod connect_rule_buttons_modify_rules;
@@ -48,6 +49,7 @@ mod update_records;
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_add_folders_button::*;
+use crate::connect_button_update_names::*;
 use crate::connect_remove_files_button::*;
 use crate::connect_rule_add::*;
 use crate::connect_rule_buttons_modify_rules::*;
@@ -102,6 +104,9 @@ fn main() {
 
     // Renaming
     connect_start_renaming(&gui_data);
+
+    // Update Names
+    connect_button_update_names(&gui_data);
 
     // Select
     connect_select_records(&gui_data);

@@ -9,7 +9,7 @@ pub fn create_tree_view_results(tree_view: &gtk::TreeView) {
     column.set_title("Type");
     column.set_resizable(false);
     column.set_min_width(10);
-    column.set_sort_column_id(ColumnsResults::Type as i32);
+    // column.set_sort_column_id(ColumnsResults::Type as i32); // TODO GTK Bug
     column.add_attribute(&renderer, "text", ColumnsResults::Type as i32);
     tree_view.append_column(&column);
 
@@ -19,7 +19,7 @@ pub fn create_tree_view_results(tree_view: &gtk::TreeView) {
     column.set_title("Current Name");
     column.set_resizable(true);
     column.set_min_width(50);
-    column.set_sort_column_id(ColumnsResults::CurrentName as i32);
+    // column.set_sort_column_id(ColumnsResults::CurrentName as i32); // TODO GTK BUG
     column.add_attribute(&renderer, "text", ColumnsResults::CurrentName as i32);
     tree_view.append_column(&column);
 
@@ -29,7 +29,7 @@ pub fn create_tree_view_results(tree_view: &gtk::TreeView) {
     column.set_title("Future Name");
     column.set_resizable(true);
     column.set_min_width(50);
-    column.set_sort_column_id(ColumnsResults::FutureName as i32);
+    // column.set_sort_column_id(ColumnsResults::FutureName as i32); // TODO GTK BUG
     column.add_attribute(&renderer, "text", ColumnsResults::FutureName as i32);
     tree_view.append_column(&column);
 
@@ -39,7 +39,7 @@ pub fn create_tree_view_results(tree_view: &gtk::TreeView) {
     column.set_title("Path");
     column.set_resizable(true);
     column.set_min_width(50);
-    column.set_sort_column_id(ColumnsResults::Path as i32);
+    // column.set_sort_column_id(ColumnsResults::Path as i32); // TODO GTK BUG
     column.add_attribute(&renderer, "text", ColumnsResults::Path as i32);
     tree_view.append_column(&column);
 

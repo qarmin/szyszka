@@ -16,6 +16,7 @@ pub enum UpdateMode {
     RuleAdded,
     RuleRemoved,
     RuleMoved,
+    UpdateRecords, // User clicked update names button
 }
 
 // TODO currently everything is counted from begginng
@@ -27,9 +28,10 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
     let rules = rules.deref_mut();
 
     match update_mode {
-        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords => {
             if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
+                println!("{}", current_index);
 
                 // We count how much
                 // let mut current_index = 1;
@@ -48,6 +50,7 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                 // }
                 // TODO get info about current row and change it
                 loop {
+                    println!("{}", current_index);
                     let value_to_change = list_store.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
                     let modification_date: u64 = list_store.value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
                     let creation_date: u64 = list_store.value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
