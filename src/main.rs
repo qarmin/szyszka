@@ -101,6 +101,7 @@ fn main() {
     connect_rule_modify_add(&gui_data);
     connect_rule_modify_remove(&gui_data);
     connect_rule_modify_one_up(&gui_data);
+    connect_rule_modify_one_down(&gui_data);
 
     // Renaming
     connect_start_renaming(&gui_data);

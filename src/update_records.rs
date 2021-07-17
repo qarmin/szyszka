@@ -31,26 +31,7 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
         UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords => {
             if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
-                println!("{}", current_index);
-
-                // We count how much
-                // let mut current_index = 1;
-                // let mut end_of_records = false;
-
-                // TODO Properly count number of added elements
-                // loop {
-                //     if current_index == shared_result_entries.entries.len() {
-                //         break;
-                //     }
-                //     if !list_store.iter_next(&iter) {
-                //         panic!("This should never happens, looks that elements was not added but even removed");
-                //         //break;
-                //     }
-                //     current_index += 1;
-                // }
-                // TODO get info about current row and change it
                 loop {
-                    println!("{}", current_index);
                     let value_to_change = list_store.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
                     let modification_date: u64 = list_store.value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
                     let creation_date: u64 = list_store.value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
@@ -63,7 +44,24 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                     current_index += 1;
                 }
             }
-        } // UpdateMode::Re => {}
+        } //                 // TODO Add Optimized version this
+          //                 println!("{}", current_index);
+          //
+          //                 // We count how much
+          //                 // let mut current_index = 1;
+          //                 // let mut end_of_records = false;
+          //
+          //                 // loop {
+          //                 //     if current_index == shared_result_entries.entries.len() {
+          //                 //         break;
+          //                 //     }
+          //                 //     if !list_store.iter_next(&iter) {
+          //                 //         panic!("This should never happens, looks that elements was not added but even removed");
+          //                 //         //break;
+          //                 //     }
+          //                 //     current_index += 1;
+          //                 // }
+          // UpdateMode::Re => {}
           // _ => {
           //     panic!("Not implemented yet")
           // }

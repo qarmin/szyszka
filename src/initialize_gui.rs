@@ -46,11 +46,6 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
     }
     // Create TreeView in Rules
     {
-        gui_data.rules_bottom_panel.button_one_up.hide();
-        gui_data.rules_bottom_panel.button_one_down.hide();
-        gui_data.rules_bottom_panel.button_to_top.hide();
-        gui_data.rules_bottom_panel.button_to_bottom.hide();
-
         let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 
         let col_types: [Type; 3] = [glib::types::Type::STRING, glib::types::Type::STRING, glib::types::Type::STRING];
