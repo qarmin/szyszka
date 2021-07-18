@@ -1,5 +1,5 @@
 use crate::class_gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, populate_rules_tree_view, remove_selected_rows, ColumnsRules};
+use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows, ColumnsRules};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 use std::ops::DerefMut;
@@ -38,9 +38,7 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
             }
         }
 
-        // Reset TreeView and populate it again
         update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
-        populate_rules_tree_view(&tree_view_window_rules, rules.clone());
     });
 }
 
