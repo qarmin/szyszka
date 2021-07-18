@@ -6,6 +6,7 @@ use crate::rule_purge::rule_purge;
 use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
 
+#[derive(Clone)]
 pub struct SingleRule {
     pub rule_type: RuleType,
     pub rule_place: RulePlace,
@@ -33,11 +34,12 @@ impl SingleRule {
 
 pub struct Rules {
     pub rules: Vec<SingleRule>,
+    pub edit_mode: Option<usize>,
 }
 
 impl Rules {
     pub fn new() -> Self {
-        Rules { rules: vec![] }
+        Rules { rules: vec![], edit_mode: None }
     }
     pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
         self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
@@ -75,18 +77,20 @@ impl Rules {
     }
 }
 
+#[derive(Clone)]
 pub enum RuleType {
-    Custom,
+    Custom = 0,
     CaseSize,
     Purge,
-    AddText,
-    Trim,
-    Replace,
     AddNumber,
+    AddText,
+    Replace,
+    Trim,
 }
 #[allow(dead_code)]
+#[derive(Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum RulePlace {
-    None,
+    None = 0,
     Extension,
     Name,
     ExtensionAndName,
@@ -129,6 +133,7 @@ pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     .to_string()
 }
 
+#[derive(Clone)]
 pub struct RuleData {
     pub add_text_text: String,
     pub trim_text: String,
