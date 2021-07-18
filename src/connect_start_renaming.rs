@@ -2,6 +2,7 @@ use crate::class_gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk::prelude::*;
 use gtk::{DialogFlags, ScrolledWindow, TextTagTable, TextView};
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
@@ -42,11 +43,32 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         let response_type = chooser.run();
         if response_type == gtk::ResponseType::Ok {
             let tree_iter = list_store.iter_first().unwrap();
+            let mut file_renames: Vec<(String, String)> = Vec::new();
+            // let folder_renames: Vec<(String, String)> = Vec::new(); // Folder renames must be
+            let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
+
             loop {
                 let path = list_store.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
                 let old_name = format!("{}{}{}", path, CHARACTER, list_store.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap());
                 let new_name = format!("{}{}{}", path, CHARACTER, list_store.value(&tree_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap());
+                let typ = list_store.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
 
+                if typ == "Dir" {
+                    let how_much = old_name.matches(CHARACTER).count();
+                    folder_renames.entry(how_much).or_insert_with(Vec::new);
+                    folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
+                } else if typ == "File" {
+                    file_renames.push((old_name, new_name));
+                } else {
+                    panic!();
+                }
+
+                if !list_store.iter_next(&tree_iter) {
+                    break;
+                }
+            }
+
+            for (old_name, new_name) in file_renames {
                 // TODO Find method to not overwrite new function
                 #[allow(clippy::collapsible_else_if)]
                 if new_name == old_name {
@@ -60,9 +82,24 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                         properly_renamed += 1;
                     }
                 }
-
-                if !list_store.iter_next(&tree_iter) {
-                    break;
+            }
+            for (_size, vec) in folder_renames.iter().rev() {
+                for (old_name, new_name) in vec {
+                    let old_name = old_name.clone();
+                    let new_name = new_name.clone();
+                    // TODO Find method to not overwrite new function
+                    #[allow(clippy::collapsible_else_if)]
+                    if new_name == old_name {
+                        ignored += 1
+                    } else if Path::new(&new_name).exists() {
+                        failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
+                    } else {
+                        if let Err(e) = fs::rename(&old_name, &new_name) {
+                            failed_renames.push((old_name, new_name, e.to_string()));
+                        } else {
+                            properly_renamed += 1;
+                        }
+                    }
                 }
             }
         }
