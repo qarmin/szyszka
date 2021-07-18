@@ -1,4 +1,5 @@
 use crate::class_dialog_rules::GuiDialogRules;
+use crate::class_popover_select::GuiPopoverSelect;
 use crate::class_results::GuiResults;
 use crate::class_rules_bottom_panel::GuiRulesBottomPanel;
 use crate::class_upper_buttons::*;
@@ -22,6 +23,7 @@ pub struct GuiData {
     pub upper_buttons: GuiUpperButtons,
     pub results: GuiResults,
     pub rules_bottom_panel: GuiRulesBottomPanel,
+    pub popover_select: GuiPopoverSelect,
 
     pub window_rules: GuiDialogRules,
 
@@ -46,6 +48,7 @@ impl GuiData {
         let upper_buttons: GuiUpperButtons = GuiUpperButtons::create_from_builder(&builder);
         let results: GuiResults = GuiResults::create_from_builder(&builder);
         let rules_bottom_panel: GuiRulesBottomPanel = GuiRulesBottomPanel::create_from_builder(&builder);
+        let popover_select: GuiPopoverSelect = GuiPopoverSelect::create_from_builder(&builder);
 
         let window_rules: GuiDialogRules = GuiDialogRules::create_from_builder(&builder);
 
@@ -58,6 +61,7 @@ impl GuiData {
             upper_buttons,
             results,
             rules_bottom_panel,
+            popover_select,
             window_rules,
             rules,
             shared_result_entries,

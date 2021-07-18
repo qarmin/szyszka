@@ -10,12 +10,15 @@ mod class_dialog_rule_size_letters;
 mod class_dialog_rule_trim;
 mod class_dialog_rules;
 mod class_gui_data;
+mod class_popover_select;
 mod class_results;
 mod class_rules_bottom_panel;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_add_folders_button;
+mod connect_button_update_names;
 mod connect_remove_files_button;
+mod connect_results_move;
 mod connect_rule_add;
 mod connect_rule_buttons_modify_rules;
 mod connect_rule_window_add_number_click;
@@ -26,6 +29,7 @@ mod connect_rule_window_purge_click;
 mod connect_rule_window_replace_click;
 mod connect_rule_window_size_letters_click;
 mod connect_rule_window_trim_click;
+mod connect_select_records;
 mod connect_start_renaming;
 mod create_tree_view;
 mod example_fields;
@@ -46,7 +50,9 @@ mod update_records;
 use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_add_folders_button::*;
+use crate::connect_button_update_names::*;
 use crate::connect_remove_files_button::*;
+use crate::connect_results_move::*;
 use crate::connect_rule_add::*;
 use crate::connect_rule_buttons_modify_rules::*;
 use crate::connect_rule_window_add_number_click::*;
@@ -57,6 +63,7 @@ use crate::connect_rule_window_purge_click::*;
 use crate::connect_rule_window_replace_click::*;
 use crate::connect_rule_window_size_letters_click::*;
 use crate::connect_rule_window_trim_click::*;
+use crate::connect_select_records::*;
 use crate::connect_start_renaming::*;
 use crate::example_fields::connect_update_examples;
 use crate::initialize_gui::*;
@@ -94,11 +101,27 @@ fn main() {
 
     // Connect rule buttons in main window
     connect_rule_modify_add(&gui_data);
+    connect_rule_modify_edit(&gui_data);
     connect_rule_modify_remove(&gui_data);
     connect_rule_modify_one_up(&gui_data);
+    connect_rule_modify_one_down(&gui_data);
 
     // Renaming
     connect_start_renaming(&gui_data);
+
+    // Update Names
+    connect_button_update_names(&gui_data);
+
+    // Select
+    connect_select_records(&gui_data);
+    connect_select_all(&gui_data);
+    connect_select_reverse(&gui_data);
+    connect_select_custom(&gui_data);
+    connect_unselect_custom(&gui_data);
+
+    // Moving results
+    connect_results_modify_one_up(&gui_data);
+    connect_results_modify_one_down(&gui_data);
 
     // Quit the program when X in main window was clicked
     gui_data.window_main.connect_delete_event(|_, _| {

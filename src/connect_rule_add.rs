@@ -16,6 +16,8 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+
     let window_rules = gui_data.window_rules.clone();
 
     let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
@@ -109,9 +111,9 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 }
                 NotebookEnum::AddText => {
                     rule_type = RuleType::AddText;
-                    if radio_button_add_text_after_name.is_active() {
+                    if radio_button_add_text_before_name.is_active() {
                         rule_place = RulePlace::BeforeName;
-                    } else if radio_button_add_text_before_name.is_active() {
+                    } else if radio_button_add_text_after_name.is_active() {
                         rule_place = RulePlace::AfterName;
                     } else {
                         panic!("Invalid Button Clicked");
@@ -205,12 +207,19 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                     rule_description = format!("Starting with {} with step {}{}", rule_data.number_step, rule_data.number_start, zeros);
                 }
             }
-            rule.add_rule(rule_type, rule_place, rule_data, rule_description);
+            if let Some(edit_mode) = rule.edit_mode {
+                rule.rules[edit_mode].rule_type = rule_type;
+                rule.rules[edit_mode].rule_place = rule_place;
+                rule.rules[edit_mode].rule_description = rule_description;
+                rule.rules[edit_mode].rule_data = rule_data;
+            } else {
+                rule.add_rule(rule_type, rule_place, rule_data, rule_description);
+            }
         }
 
         // Reset TreeView and populate it again
 
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
         populate_rules_tree_view(&tree_view_window_rules, rules.clone());
     });
 }

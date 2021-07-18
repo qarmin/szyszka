@@ -9,14 +9,18 @@ pub fn connect_remove_files_button(gui_data: &GuiData) {
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
-    button_remove_selection.connect_clicked(move |_| {
-        let mut result_entries = shared_result_entries.borrow_mut();
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
-        for i in get_full_file_names_from_selection(&tree_view_results) {
-            result_entries.files.remove(&i);
+    button_remove_selection.connect_clicked(move |_| {
+        {
+            let mut result_entries = shared_result_entries.borrow_mut();
+
+            for i in get_full_file_names_from_selection(&tree_view_results) {
+                result_entries.files.remove(&i);
+            }
         }
 
         remove_selected_rows(&tree_view_results);
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileRemoved);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileRemoved, &label_files_folders);
     });
 }

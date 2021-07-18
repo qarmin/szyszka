@@ -3,50 +3,44 @@ use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
 use crate::rules::Rules;
 use glib::Value;
 use gtk::prelude::*;
-use gtk::TreeView;
+use gtk::{Label, TreeView};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
 
 #[allow(dead_code)]
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
 pub enum UpdateMode {
     FileAdded,
     FileRemoved,
-    // FileMoved - Not sure if it is possible
+    FileMoved,
     RuleAdded,
     RuleRemoved,
     RuleMoved,
+    UpdateRecords, // User clicked update names button
 }
 
 // TODO currently everything is counted from begginng
-pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode) {
+pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode, label_files_folders: &Label) {
     let list_store = get_list_store_from_tree_view(&files_tree_view);
-    // let mut shared_result_entries = shared_result_entries.borrow_mut();
     let mut rules = rules.borrow_mut();
-    // let shared_result_entries = shared_result_entries.deref_mut();
     let rules = rules.deref_mut();
+    let mut shared_result_entries = shared_result_entries.borrow_mut();
+    let shared_result_entries = shared_result_entries.deref_mut();
+
+    rules.edit_mode = None;
+
+    if shared_result_entries.files.len() * rules.rules.len() > 2000 && update_mode != UpdateMode::UpdateRecords {
+        label_files_folders.set_text(format!("Files/Folders({}) - ##### UPDATE REQUIRED ##### ", shared_result_entries.files.len()).as_str());
+        return; // Do not update records automatically when there is a big number of entries each time due possible freezes
+    }
+
+    label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
 
     match update_mode {
-        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords | UpdateMode::FileMoved => {
             if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
-
-                // We count how much
-                // let mut current_index = 1;
-                // let mut end_of_records = false;
-
-                // TODO Properly count number of added elements
-                // loop {
-                //     if current_index == shared_result_entries.entries.len() {
-                //         break;
-                //     }
-                //     if !list_store.iter_next(&iter) {
-                //         panic!("This should never happens, looks that elements was not added but even removed");
-                //         //break;
-                //     }
-                //     current_index += 1;
-                // }
-                // TODO get info about current row and change it
                 loop {
                     let value_to_change = list_store.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
                     let modification_date: u64 = list_store.value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
@@ -60,7 +54,24 @@ pub fn update_records(files_tree_view: &TreeView, _shared_result_entries: Rc<Ref
                     current_index += 1;
                 }
             }
-        } // UpdateMode::Re => {}
+        } //                 // TODO Add Optimized version this
+          //                 println!("{}", current_index);
+          //
+          //                 // We count how much
+          //                 // let mut current_index = 1;
+          //                 // let mut end_of_records = false;
+          //
+          //                 // loop {
+          //                 //     if current_index == shared_result_entries.entries.len() {
+          //                 //         break;
+          //                 //     }
+          //                 //     if !list_store.iter_next(&iter) {
+          //                 //         panic!("This should never happens, looks that elements was not added but even removed");
+          //                 //         //break;
+          //                 //     }
+          //                 //     current_index += 1;
+          //                 // }
+          // UpdateMode::Re => {}
           // _ => {
           //     panic!("Not implemented yet")
           // }
