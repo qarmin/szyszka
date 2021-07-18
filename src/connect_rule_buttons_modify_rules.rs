@@ -75,7 +75,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
             }
 
             let current_iter = first_iter.clone();
-            let mut previous_iter = first_iter.clone();
+            let mut previous_iter = first_iter;
 
             if list_store.iter_next(&current_iter) {
                 let mut current_index = 0;
@@ -148,7 +148,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             let first_iter = list_store.iter_first().unwrap();
 
             let current_iter;
-            let previous_iter = first_iter.clone();
+            let previous_iter = first_iter;
 
             let mut current_index = 0;
             loop {

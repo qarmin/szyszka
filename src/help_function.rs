@@ -181,14 +181,6 @@ pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &s
     chooser.close();
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
-    // if !expression.contains('*') {
-    //     #[cfg(debug_assertions)]
-    //     {
-    //         println!("Invalid expression Warning: Expression should have *,");
-    //     }
-    //     //return false;
-    // }
-
     let temp_splits: Vec<&str> = expression.split('*').collect();
     let mut splits: Vec<&str> = Vec::new();
     for i in temp_splits {

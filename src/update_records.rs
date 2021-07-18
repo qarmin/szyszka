@@ -13,7 +13,7 @@ use std::rc::Rc;
 pub enum UpdateMode {
     FileAdded,
     FileRemoved,
-    // FileMoved - Not sure if it is possible
+    FileMoved,
     RuleAdded,
     RuleRemoved,
     RuleMoved,
@@ -36,7 +36,7 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefC
     label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
 
     match update_mode {
-        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords | UpdateMode::FileMoved => {
             if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
                 loop {

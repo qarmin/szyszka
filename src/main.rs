@@ -18,6 +18,7 @@ mod connect_add_files_button;
 mod connect_add_folders_button;
 mod connect_button_update_names;
 mod connect_remove_files_button;
+mod connect_results_move;
 mod connect_rule_add;
 mod connect_rule_buttons_modify_rules;
 mod connect_rule_window_add_number_click;
@@ -51,6 +52,7 @@ use crate::connect_add_files_button::*;
 use crate::connect_add_folders_button::*;
 use crate::connect_button_update_names::*;
 use crate::connect_remove_files_button::*;
+use crate::connect_results_move::*;
 use crate::connect_rule_add::*;
 use crate::connect_rule_buttons_modify_rules::*;
 use crate::connect_rule_window_add_number_click::*;
@@ -115,6 +117,10 @@ fn main() {
     connect_select_reverse(&gui_data);
     connect_select_custom(&gui_data);
     connect_unselect_custom(&gui_data);
+
+    // Moving results
+    connect_results_modify_one_up(&gui_data);
+    connect_results_modify_one_down(&gui_data);
 
     // Quit the program when X in main window was clicked
     gui_data.window_main.connect_delete_event(|_, _| {
