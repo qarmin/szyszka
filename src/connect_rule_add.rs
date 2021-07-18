@@ -16,6 +16,8 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+
     let window_rules = gui_data.window_rules.clone();
 
     let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
@@ -210,7 +212,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
         // Reset TreeView and populate it again
 
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded, &label_files_folders);
         populate_rules_tree_view(&tree_view_window_rules, rules.clone());
     });
 }

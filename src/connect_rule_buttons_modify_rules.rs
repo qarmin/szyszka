@@ -23,6 +23,8 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
 
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+
     // Multiselection Ready
     button_remove_rule.connect_clicked(move |_e| {
         let vec_rule_to_delete = remove_selected_rows(&tree_view_window_rules);
@@ -37,7 +39,7 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
         }
 
         // Reset TreeView and populate it again
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
         populate_rules_tree_view(&tree_view_window_rules, rules.clone());
     });
 }
@@ -48,6 +50,8 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
     let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
+
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
     // TODO only works with single selection
     button_rule_one_up.connect_clicked(move |_e| {
@@ -115,7 +119,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 return;
             }
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
@@ -124,6 +128,8 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
     let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
     let shared_result_entries = gui_data.shared_result_entries.clone();
     let rules = gui_data.rules.clone();
+
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
     // TODO only works with single selection
     button_rule_one_down.connect_clicked(move |_e| {
@@ -187,6 +193,6 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             }
             selection.select_iter(&current_iter);
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved);
+        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
