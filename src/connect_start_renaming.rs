@@ -1,9 +1,10 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk::prelude::*;
-use gtk::{DialogFlags, ScrolledWindow, TextTagTable, TextView};
+use gtk::{DialogFlags, ResponseType, ScrolledWindow, TextTagTable, TextView};
 use std::collections::BTreeMap;
 use std::fs;
+use std::ops::DerefMut;
 use std::path::Path;
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
@@ -13,9 +14,14 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
     let tree_view_results = gui_data.results.tree_view_results.clone();
     let rules = gui_data.rules.clone();
 
+    let shared_result_entries = gui_data.shared_result_entries.clone();
+
     let list_store = get_list_store_from_tree_view(&tree_view_results);
 
     button_start_rename.connect_clicked(move |_e| {
+        let mut shared_result_entries = shared_result_entries.borrow_mut();
+        let shared_result_entries = shared_result_entries.deref_mut();
+
         let number_of_renamed_files = count_rows_in_tree_view(&tree_view_results);
         if number_of_renamed_files == 0 {
             create_message_window(&window_main, "Missing Files", "You need to use at least 1 file");
@@ -25,6 +31,27 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         if rules.rules.is_empty() {
             create_message_window(&window_main, "Missing Rules", "You need to use at least 1 rule");
             return;
+        }
+
+        if !rules.updated {
+            let chooser_update = gtk::Dialog::with_buttons(Some("Outdated results"), Some(&window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
+
+            let question_label = gtk::Label::new(Some(
+                "Some records are not updated, you can do it by clicking at the Update Names button.\nAre you sure that you want to proceed without updating names?",
+            ));
+
+            let chooser_box = chooser_update.children()[0].clone().downcast::<gtk::Box>().unwrap();
+            chooser_box.add(&question_label);
+            chooser_box.show_all();
+
+            let response_type = chooser_update.run();
+            if response_type != ResponseType::Ok {
+                chooser_update.close();
+                chooser_update.hide();
+                return;
+            }
+            chooser_update.close();
+            chooser_update.hide();
         }
 
         let chooser = gtk::Dialog::with_buttons(Some("Confirm renaming"), Some(&window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
@@ -44,7 +71,6 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         if response_type == gtk::ResponseType::Ok {
             let tree_iter = list_store.iter_first().unwrap();
             let mut file_renames: Vec<(String, String)> = Vec::new();
-            // let folder_renames: Vec<(String, String)> = Vec::new(); // Folder renames must be
             let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
 
             loop {
@@ -111,6 +137,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         create_results_dialog(&window_main, properly_renamed, ignored, failed_renames);
 
         list_store.clear();
+        shared_result_entries.files.clear();
     });
 }
 
