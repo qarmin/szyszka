@@ -34,12 +34,13 @@ impl SingleRule {
 
 pub struct Rules {
     pub rules: Vec<SingleRule>,
-    pub edit_mode: Option<usize>,
+    pub edit_mode: Option<usize>, // Used to store index of changed rule
+    pub updated: bool,            // Used to warn user if records needs to be updated
 }
 
 impl Rules {
     pub fn new() -> Self {
-        Rules { rules: vec![], edit_mode: None }
+        Rules { rules: vec![], edit_mode: None, updated: true }
     }
     pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
         self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));

@@ -29,12 +29,12 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefC
     let shared_result_entries = shared_result_entries.deref_mut();
 
     rules.edit_mode = None;
-
     if shared_result_entries.files.len() * rules.rules.len() > 2000 && update_mode != UpdateMode::UpdateRecords {
         label_files_folders.set_text(format!("Files/Folders({}) - ##### UPDATE REQUIRED ##### ", shared_result_entries.files.len()).as_str());
+        rules.updated = false;
         return; // Do not update records automatically when there is a big number of entries each time due possible freezes
     }
-
+    rules.updated = true;
     label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
 
     match update_mode {
