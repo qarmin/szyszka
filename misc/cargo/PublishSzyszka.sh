@@ -1,5 +1,5 @@
 #!/bin/bash
-NUMBER="1.0.0"
+NUMBER="2.0.0"
 SZYSZKA_PATH="/home/rafal"
 
 cd "$SZYSZKA_PATH"

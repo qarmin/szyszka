@@ -7,17 +7,17 @@
   <project_license>MIT</project_license>
   <description>
     <p>
-      Szyszka is simple file renamer, which with help of memory safe Rust
+      Szyszka is simple, fast and powerful file renamer, which with help of memory safe Rust
     </p>
   </description>
   <launchable type="desktop-id">com.github.qarmin.szyszka.desktop</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>https://user-images.githubusercontent.com/41945903/118101662-1e719480-b3d8-11eb-83d6-35e88fc919c5.png</image>
+      <image>https://user-images.githubusercontent.com/41945903/126200297-e0552164-2970-449f-9e68-bd47d231e041.png</image>
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.0.0" date="2021-05-13"/>
+    <release version="2.0.0" date="2021-07-19"/>
   </releases>
   <content_rating type="oars-1.0"/>
   <developer_name>Rafał Mikrut</developer_name>
