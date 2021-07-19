@@ -90,7 +90,7 @@ jobs:
           chmod +x linuxdeploy-x86_64.AppImage
           mkdir -p AppDir/usr/bin
           cp target/release/szyszka AppDir/usr/bin
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin gtk --output appimage --icon-file data/icons/com.github.qarmin.szyszka.png --desktop-file data/com.github.qarmin.szyszka.desktop
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin gtk --output appimage --icon-file data/icons/com.github.qarmin.szyszka.svg --desktop-file data/com.github.qarmin.szyszka.desktop
 
       - name: Store Linux Appimage
         uses: actions/upload-artifact@v2
