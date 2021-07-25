@@ -17,13 +17,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
             RulePlace::FromExtensionStart => {
                 if rule.rule_data.case_sensitive && extension.starts_with(&text_to_trim) {
                     if text_to_trim.len() == extension.len() {
-                        return_string = "".to_string();
+                        return_string = format!("{}.", name);
                     } else {
                         return_string = format!("{}.{}", name, extension[text_to_trim.len()..extension.len()].to_string());
                     }
                 } else if !rule.rule_data.case_sensitive && extension_lowercase.starts_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == extension_lowercase.len() {
-                        return_string = "".to_string();
+                        return_string = format!("{}.", name);
                     } else {
                         return_string = format!("{}.{}", name, extension[text_to_trim_lowercase.len()..extension_lowercase.len()].to_string());
                     }
@@ -171,5 +171,11 @@ mod test {
         assert_eq!(rule_trim("T", &rule), "T");
         rule.rule_data.case_sensitive = true;
         assert_eq!(rule_trim("t", &rule), "t");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.t", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.t", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.T", &rule), "Roman.T");
     }
 }

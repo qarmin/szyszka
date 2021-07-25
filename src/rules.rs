@@ -14,6 +14,7 @@ pub struct SingleRule {
     pub rule_description: String,
 }
 impl SingleRule {
+    #[allow(dead_code)] // Used in tests for now
     pub fn new() -> Self {
         SingleRule {
             rule_type: RuleType::Custom,
@@ -22,14 +23,14 @@ impl SingleRule {
             rule_description: "".to_string(),
         }
     }
-    pub fn create_rule(rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) -> Self {
-        SingleRule {
-            rule_type,
-            rule_place,
-            rule_data,
-            rule_description,
-        }
-    }
+    // pub fn create_rule(rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) -> Self {
+    //     SingleRule {
+    //         rule_type,
+    //         rule_place,
+    //         rule_data,
+    //         rule_description,
+    //     }
+    // }
 }
 
 pub struct Rules {
@@ -42,8 +43,11 @@ impl Rules {
     pub fn new() -> Self {
         Rules { rules: vec![], edit_mode: None, updated: true }
     }
-    pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
-        self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
+    // pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
+    //     self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
+    // }
+    pub fn add_single_rule(&mut self, single_rule: SingleRule) {
+        self.rules.push(single_rule);
     }
     pub fn remove_rule(&mut self, index: usize) {
         self.rules.remove(index);
