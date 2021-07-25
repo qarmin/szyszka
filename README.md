@@ -13,7 +13,7 @@ Szyszka is a simple but powerful and fast bulk file renamer.
   - Add text
   - Add numbers
   - Purge text
-  - Change letters to upper-/lowercase
+  - Change letters to upper/lowercase
   - Custom rules
 - Ability to edit, reorder rules and results
 - Handle even hundreds thousands of records
