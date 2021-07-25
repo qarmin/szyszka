@@ -20,7 +20,7 @@ pub enum UpdateMode {
     UpdateRecords, // User clicked update names button
 }
 
-// TODO currently everything is counted from begginng
+// TODO currently everything is counted from beginning
 pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode, label_files_folders: &Label) {
     let list_store = get_list_store_from_tree_view(&files_tree_view);
     let mut rules = rules.borrow_mut();
