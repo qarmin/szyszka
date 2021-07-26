@@ -273,6 +273,9 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
     let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
     let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros.clone();
 
+    let radio_button_normalize_everything = window_rules.normalize.radio_button_normalize_everything.clone();
+    let radio_button_normalize_partial = window_rules.normalize.radio_button_normalize_partial.clone();
+
     let rule_type: RuleType;
     let rule_place: RulePlace;
     let mut rule_data: RuleData = RuleData::new();
@@ -419,6 +422,24 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
                 "".to_string()
             };
             rule_description = format!("Starting with {} with step {}{}", rule_data.number_step, rule_data.number_start, zeros);
+        }
+        NotebookEnum::Normalize => {
+            rule_type = RuleType::Normalize;
+            rule_place = RulePlace::ExtensionAndName;
+
+            if radio_button_normalize_everything.is_active() {
+                rule_data.full_normalize = true;
+            } else if radio_button_normalize_partial.is_active() {
+                rule_data.full_normalize = false;
+            } else {
+                panic!();
+            }
+
+            if rule_data.full_normalize {
+                rule_description = "Full normalize".to_string();
+            } else {
+                rule_description = "Partial normalize".to_string();
+            }
         }
     }
     SingleRule {

@@ -2,6 +2,7 @@ use crate::rule_add_number::rule_add_number;
 use crate::rule_add_text::rule_add_text;
 use crate::rule_change_size_letters::rule_change_size_letters;
 use crate::rule_custom::rule_custom;
+use crate::rule_normalize::rule_normalize;
 use crate::rule_purge::rule_purge;
 use crate::rule_replace::rule_replace;
 use crate::rule_trim::rule_trim;
@@ -76,6 +77,9 @@ impl Rules {
                 RuleType::AddNumber => {
                     item = rule_add_number(item.as_str(), rule, current_index);
                 }
+                RuleType::Normalize => {
+                    item = rule_normalize(item.as_str(), rule);
+                }
             }
         }
         item
@@ -91,6 +95,7 @@ pub enum RuleType {
     AddText,
     Replace,
     Trim,
+    Normalize,
 }
 #[allow(dead_code)]
 #[derive(Clone, Ord, PartialOrd, Eq, PartialEq)]
@@ -117,6 +122,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
         RuleType::Trim => "Trim",
         RuleType::Replace => "Replace",
         RuleType::AddNumber => "Add Number",
+        RuleType::Normalize => "Normalize",
     }
     .to_string()
 }
@@ -152,6 +158,8 @@ pub struct RuleData {
 
     pub text_to_remove: String,
     pub text_to_replace: String,
+
+    pub full_normalize: bool,
 }
 impl RuleData {
     // A little wasteful, but rules will be max 10 most of time, so this is not necessary to optimize
@@ -167,6 +175,7 @@ impl RuleData {
             fill_with_zeros: 0,
             text_to_remove: "".to_string(),
             text_to_replace: "".to_string(),
+            full_normalize: false,
         }
     }
 }

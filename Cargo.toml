@@ -20,10 +20,10 @@ humansize = "1.1.1"
 chrono = "0.4.19"
 
 # For opening files
-open = "1.7.0"
+open = "2.0.0"
 
 # For slugs
-slugmin = "1.0.0"
+slugmin = "1.0.1"
 
 [dependencies.gtk]
 version = "0.14.0"
