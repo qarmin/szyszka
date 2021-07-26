@@ -95,7 +95,6 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
                                                     } else {
                                                         number = step_number * rule_number as i64;
                                                     }
-                                                    // TODO Better handle negative numbers
 
                                                     if number.checked_add(start_number).is_none() {
                                                         number = 0;
@@ -121,7 +120,9 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
                                         }
                                     }
                                 }
-                                _ => {}
+                                _ => {
+                                    // Just invalid thing
+                                }
                             }
 
                             if invalid_data {

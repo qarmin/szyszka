@@ -1,6 +1,6 @@
 // Needs to be updated when changed order of notebook tabs
 
-pub(crate) const EXAMPLE_NAME: &str = "Czkawka.Txt";
+pub(crate) const EXAMPLE_NAME: &str = "Gżegżółka.Txt";
 
 #[derive(Eq, PartialEq, Hash, Clone, Debug)]
 pub enum NotebookEnum {
@@ -11,6 +11,7 @@ pub enum NotebookEnum {
     AddText,
     Replace,
     Trim,
+    Normalize,
 }
 pub fn to_notebook_enum(notebook_number: u32) -> NotebookEnum {
     match notebook_number {
@@ -21,6 +22,7 @@ pub fn to_notebook_enum(notebook_number: u32) -> NotebookEnum {
         4 => NotebookEnum::AddText,
         5 => NotebookEnum::Replace,
         6 => NotebookEnum::Trim,
+        7 => NotebookEnum::Normalize,
         _ => panic!("Invalid Notebook Tab"),
     }
 }

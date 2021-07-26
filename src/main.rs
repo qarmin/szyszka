@@ -4,6 +4,7 @@
 mod class_dialog_rule_add_number;
 mod class_dialog_rule_add_text;
 mod class_dialog_rule_custom;
+mod class_dialog_rule_normalize;
 mod class_dialog_rule_purge;
 mod class_dialog_rule_replace;
 mod class_dialog_rule_size_letters;
@@ -25,6 +26,7 @@ mod connect_rule_window_add_number_click;
 mod connect_rule_window_add_text_click;
 mod connect_rule_window_close;
 mod connect_rule_window_custom_click;
+mod connect_rule_window_normalize_click;
 mod connect_rule_window_purge_click;
 mod connect_rule_window_replace_click;
 mod connect_rule_window_size_letters_click;
@@ -41,6 +43,7 @@ mod rule_add_number;
 mod rule_add_text;
 mod rule_change_size_letters;
 mod rule_custom;
+mod rule_normalize;
 mod rule_purge;
 mod rule_replace;
 mod rule_trim;
@@ -59,6 +62,7 @@ use crate::connect_rule_window_add_number_click::*;
 use crate::connect_rule_window_add_text_click::*;
 use crate::connect_rule_window_close::*;
 use crate::connect_rule_window_custom_click::*;
+use crate::connect_rule_window_normalize_click::*;
 use crate::connect_rule_window_purge_click::*;
 use crate::connect_rule_window_replace_click::*;
 use crate::connect_rule_window_size_letters_click::*;
@@ -95,6 +99,7 @@ fn main() {
     connect_rule_window_custom_click(&gui_data);
     connect_rule_window_replace_click(&gui_data);
     connect_rule_window_add_number_click(&gui_data);
+    connect_rule_window_normalize_click(&gui_data);
 
     // Connect update examples in Rule Dialog
     connect_update_examples(&gui_data);

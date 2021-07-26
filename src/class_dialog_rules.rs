@@ -1,6 +1,7 @@
 use crate::class_dialog_rule_add_number::GuiAddNumber;
 use crate::class_dialog_rule_add_text::GuiAddText;
 use crate::class_dialog_rule_custom::GuiCustom;
+use crate::class_dialog_rule_normalize::GuiNormalize;
 use crate::class_dialog_rule_purge::GuiPurge;
 use crate::class_dialog_rule_replace::GuiReplace;
 use crate::class_dialog_rule_size_letters::GuiSizeLetters;
@@ -22,6 +23,7 @@ pub struct GuiDialogRules {
     pub custom: GuiCustom,
     pub replace: GuiReplace,
     pub add_number: GuiAddNumber,
+    pub normalize: GuiNormalize,
 
     pub entry_example_before: Entry,
     pub label_example_after: Label,
@@ -43,6 +45,7 @@ impl GuiDialogRules {
         let custom: GuiCustom = GuiCustom::create_from_builder(&builder);
         let replace: GuiReplace = GuiReplace::create_from_builder(&builder);
         let add_number: GuiAddNumber = GuiAddNumber::create_from_builder(&builder);
+        let normalize: GuiNormalize = GuiNormalize::create_from_builder(&builder);
 
         let entry_example_before: gtk::Entry = builder.object("entry_example_before").unwrap();
         let label_example_after: gtk::Label = builder.object("label_example_after").unwrap();
@@ -59,6 +62,7 @@ impl GuiDialogRules {
             custom,
             replace,
             add_number,
+            normalize,
             entry_example_before,
             label_example_after,
             button_example_reset,

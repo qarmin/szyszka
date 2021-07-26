@@ -250,6 +250,9 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
     let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
     let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros;
 
+    let radio_button_normalize_everything = window_rules.normalize.radio_button_normalize_everything.clone();
+    let radio_button_normalize_partial = window_rules.normalize.radio_button_normalize_partial;
+
     button_edit_rule.connect_clicked(move |_e| {
         let mut rules = rules.borrow_mut();
         let rules = rules.deref_mut();
@@ -369,6 +372,13 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
                 entry_add_number_zeros.set_text(rule_data.fill_with_zeros.to_string().as_str());
                 entry_add_number_step.set_text(rule_data.number_step.to_string().as_str());
                 entry_add_number_start_number.set_text(rule_data.number_start.to_string().as_str());
+            }
+            RuleType::Normalize => {
+                if rule_data.full_normalize {
+                    radio_button_normalize_everything.set_active(true);
+                } else {
+                    radio_button_normalize_partial.set_active(true);
+                }
             }
         }
 
