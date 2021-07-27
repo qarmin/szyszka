@@ -123,6 +123,8 @@ fn main() {
     connect_select_reverse(&gui_data);
     connect_select_custom(&gui_data);
     connect_unselect_custom(&gui_data);
+    connect_select_changed(&gui_data);
+    connect_unselect_changed(&gui_data);
 
     // Moving results
     connect_results_modify_one_up(&gui_data);

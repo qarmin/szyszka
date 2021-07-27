@@ -1,5 +1,5 @@
 use crate::class_gui_data::GuiData;
-use crate::help_function::{regex_check, ColumnsResults};
+use crate::help_function::{get_list_store_from_tree_view, regex_check, ColumnsResults};
 use gtk::prelude::*;
 use gtk::{PositionType, TreeIter};
 
@@ -63,6 +63,60 @@ pub fn connect_select_reverse(gui_data: &GuiData) {
             }
         }
 
+        popover_select.popdown();
+    });
+}
+pub fn connect_select_changed(gui_data: &GuiData) {
+    let popover_select = gui_data.popover_select.popover_select.clone();
+    let button_select_changed = gui_data.popover_select.button_select_changed.clone();
+
+    let tree_view = gui_data.results.tree_view_results.clone();
+
+    button_select_changed.connect_clicked(move |_e| {
+        let selection = tree_view.selection();
+        let model = get_list_store_from_tree_view(&tree_view);
+
+        if let Some(iter) = model.iter_first() {
+            loop {
+                let old_name = model.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                let new_name = model.value(&iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
+
+                if new_name != old_name {
+                    selection.select_iter(&iter);
+                }
+
+                if !model.iter_next(&iter) {
+                    break;
+                }
+            }
+        }
+        popover_select.popdown();
+    });
+}
+pub fn connect_unselect_changed(gui_data: &GuiData) {
+    let popover_select = gui_data.popover_select.popover_select.clone();
+    let button_unselect_changed = gui_data.popover_select.button_unselect_changed.clone();
+
+    let tree_view = gui_data.results.tree_view_results.clone();
+
+    button_unselect_changed.connect_clicked(move |_e| {
+        let selection = tree_view.selection();
+        let model = get_list_store_from_tree_view(&tree_view);
+
+        if let Some(iter) = model.iter_first() {
+            loop {
+                let old_name = model.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                let new_name = model.value(&iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
+
+                if new_name != old_name {
+                    selection.unselect_iter(&iter);
+                }
+
+                if !model.iter_next(&iter) {
+                    break;
+                }
+            }
+        }
         popover_select.popdown();
     });
 }
