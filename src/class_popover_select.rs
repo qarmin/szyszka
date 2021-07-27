@@ -7,6 +7,8 @@ pub struct GuiPopoverSelect {
     pub button_select_reverse: gtk::Button,
     pub button_select_custom: gtk::Button,
     pub button_unselect_custom: gtk::Button,
+    pub button_select_changed: gtk::Button,
+    pub button_unselect_changed: gtk::Button,
 }
 
 impl GuiPopoverSelect {
@@ -16,12 +18,16 @@ impl GuiPopoverSelect {
         let button_select_reverse: gtk::Button = builder.object("button_select_reverse").unwrap();
         let button_select_custom: gtk::Button = builder.object("button_select_custom").unwrap();
         let button_unselect_custom: gtk::Button = builder.object("button_unselect_custom").unwrap();
+        let button_select_changed: gtk::Button = builder.object("button_select_changed").unwrap();
+        let button_unselect_changed: gtk::Button = builder.object("button_unselect_changed").unwrap();
         Self {
             popover_select,
             button_select_all,
             button_select_reverse,
             button_select_custom,
             button_unselect_custom,
+            button_select_changed,
+            button_unselect_changed,
         }
     }
 }
