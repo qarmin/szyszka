@@ -33,20 +33,7 @@ pub static CHARACTER: &str = "/";
 
 pub fn validate_name(before_name: String) -> String {
     // TODO when trying to print text in middle of text, then caret change position, fix it
-
-    let mut after_name = before_name;
-    after_name = after_name.replace("\\", "");
-    if cfg!(target_family = "windows") {
-        after_name = after_name.replace("/", "");
-        after_name = after_name.replace("<", "");
-        after_name = after_name.replace(">", "");
-        after_name = after_name.replace(":", "");
-        after_name = after_name.replace("", "");
-        after_name = after_name.replace("|", "");
-        after_name = after_name.replace("?", "");
-        after_name = after_name.replace("*", "");
-    }
-    after_name
+    before_name.chars().filter(|e| *e != '\\' && *e != '/').collect::<String>()
 }
 pub fn validate_number(before_name: String) -> String {
     before_name.chars().filter(|e| e.is_digit(10)).collect::<String>()
