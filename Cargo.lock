@@ -597,9 +597,9 @@ checksum = "f173ac3d1a7e3b28003f40de0b5ce7fe2710f9b9dc3fc38664cebee46b3b6527"
 
 [[package]]
 name = "slugmin"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8567454bd53120b4c55bb18374a6209fddb8d8ab8a1e6ee6dbb8a60d01992e06"
+checksum = "d8cfb7ea56e167d1c7c7331bce749d035131361a8f1386ab85ebea4e3ae85b6f"
 dependencies = [
  "deunicode",
 ]

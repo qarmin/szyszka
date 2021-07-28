@@ -23,7 +23,7 @@ chrono = "0.4.19"
 open = "2.0.0"
 
 # For slugs
-slugmin = "1.0.1"
+slugmin = "1.0.2"
 
 [dependencies.gtk]
 version = "0.14.0"
