@@ -38,14 +38,14 @@ impl GuiDialogRules {
         window_with_rules.set_position(WindowPosition::Center);
         let button_rule_window_add: gtk::Button = builder.object("button_rule_window_add").unwrap();
 
-        let size_letters: GuiSizeLetters = GuiSizeLetters::create_from_builder(&builder);
-        let purge: GuiPurge = GuiPurge::create_from_builder(&builder);
-        let add_text: GuiAddText = GuiAddText::create_from_builder(&builder);
-        let trim: GuiTrim = GuiTrim::create_from_builder(&builder);
-        let custom: GuiCustom = GuiCustom::create_from_builder(&builder);
-        let replace: GuiReplace = GuiReplace::create_from_builder(&builder);
-        let add_number: GuiAddNumber = GuiAddNumber::create_from_builder(&builder);
-        let normalize: GuiNormalize = GuiNormalize::create_from_builder(&builder);
+        let size_letters: GuiSizeLetters = GuiSizeLetters::create_from_builder(builder);
+        let purge: GuiPurge = GuiPurge::create_from_builder(builder);
+        let add_text: GuiAddText = GuiAddText::create_from_builder(builder);
+        let trim: GuiTrim = GuiTrim::create_from_builder(builder);
+        let custom: GuiCustom = GuiCustom::create_from_builder(builder);
+        let replace: GuiReplace = GuiReplace::create_from_builder(builder);
+        let add_number: GuiAddNumber = GuiAddNumber::create_from_builder(builder);
+        let normalize: GuiNormalize = GuiNormalize::create_from_builder(builder);
 
         let entry_example_before: gtk::Entry = builder.object("entry_example_before").unwrap();
         let label_example_after: gtk::Label = builder.object("label_example_after").unwrap();

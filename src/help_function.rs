@@ -62,7 +62,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
     let mut rules = rules.borrow_mut();
     let rules = rules.deref_mut();
 
-    let list_store = get_list_store_from_tree_view(&tree_view);
+    let list_store = get_list_store_from_tree_view(tree_view);
 
     list_store.clear();
 
@@ -86,7 +86,7 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
         return Vec::new();
     }
 
-    let list_store = get_list_store_from_tree_view(&tree_view);
+    let list_store = get_list_store_from_tree_view(tree_view);
 
     let mut vec_index_to_delete: Vec<_> = Vec::new();
     let mut current_iter: usize = 0;
@@ -125,7 +125,7 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<Stri
         return return_vec;
     }
 
-    let list_store = get_list_store_from_tree_view(&tree_view);
+    let list_store = get_list_store_from_tree_view(tree_view);
 
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
@@ -142,7 +142,7 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<Stri
 }
 
 pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
-    let list_store = get_list_store_from_tree_view(&tree_view);
+    let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
     if let Some(curr_iter) = list_store.iter_first() {
