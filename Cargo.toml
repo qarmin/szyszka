@@ -2,16 +2,16 @@
 name = "szyszka"
 version = "2.0.0"
 authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "Fast, powerful and easy to use file renamer"
 license = "MIT"
 homepage = "https://github.com/qarmin/szyszka"
 repository = "https://github.com/qarmin/szyszka"
 
 [dependencies]
-gdk = "0.14.0"
-gio = "0.14.0"
-glib = "0.14.2"
+gdk = "0.14.3"
+gio = "0.14.8"
+glib = "0.14.8"
 
 # For checking path
 walkdir = "2.3.2"
@@ -20,13 +20,13 @@ humansize = "1.1.1"
 chrono = "0.4.19"
 
 # For opening files
-open = "2.0.0"
+open = "2.0.1"
 
 # For slugs
 slugmin = "1.0.2"
 
 [dependencies.gtk]
-version = "0.14.0"
+version = "0.14.3"
 default-features = false # just in case
 features = ["v3_22"]
 

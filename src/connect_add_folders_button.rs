@@ -3,6 +3,7 @@ use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsRes
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 use gtk::{FileChooserAction, Orientation, PackType};
+use std::cmp::Ordering;
 use std::fs;
 use std::time::UNIX_EPOCH;
 use walkdir::WalkDir;
@@ -55,7 +56,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             let response_type = chooser.run();
             if response_type == gtk::ResponseType::Ok {
                 let folders_to_check = chooser.filenames();
-                let folders;
+                let mut folders;
 
                 let ignore_folders = switch_ignore_folders.is_active();
                 let check_folders_inside = switch_scan_inside.is_active();
@@ -85,6 +86,16 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     folders = folders_to_check;
                 }
 
+                folders.sort_by(|a, b| {
+                    let (path_a, name_a) = split_path(a);
+                    let (path_b, name_b) = split_path(b);
+                    let res = path_a.cmp(&path_b);
+                    if res == Ordering::Equal {
+                        return name_a.cmp(&name_b);
+                    }
+                    res
+                });
+
                 let mut result_entries = shared_result_entries.borrow_mut();
 
                 let list_store = get_list_store_from_tree_view(&tree_view_results);
@@ -102,7 +113,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     if result_entries.files.contains(full_name) {
                         // Remove this println
                         // println!("Already is used file name {}", full_name);
-                        continue; // There is already entry
+                        continue; //  There is already entry
                     }
 
                     //// Read Metadata
