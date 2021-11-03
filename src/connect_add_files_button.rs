@@ -2,6 +2,7 @@ use crate::class_gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
+use std::cmp::Ordering;
 use std::fs;
 use std::time::UNIX_EPOCH;
 
@@ -21,11 +22,21 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
         {
             let response_type = chooser.run();
             if response_type == gtk::ResponseType::Ok {
-                let folder = chooser.filenames();
+                let mut folder = chooser.filenames();
 
                 let mut result_entries = shared_result_entries.borrow_mut();
 
                 let list_store = get_list_store_from_tree_view(&tree_view_results);
+
+                folder.sort_by(|a, b| {
+                    let (path_a, name_a) = split_path(a);
+                    let (path_b, name_b) = split_path(b);
+                    let res = path_a.cmp(&path_b);
+                    if res == Ordering::Equal {
+                        return name_a.cmp(&name_b);
+                    }
+                    res
+                });
 
                 for file_entry in &folder {
                     let (path, name) = split_path(file_entry);
