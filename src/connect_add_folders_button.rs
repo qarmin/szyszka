@@ -1,9 +1,10 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
+use chrono::Local;
 use gtk::prelude::*;
 use gtk::{FileChooserAction, Orientation, PackType};
-use std::cmp::Ordering;
+use std::cmp::{max, Ordering};
 use std::fs;
 use std::time::UNIX_EPOCH;
 use walkdir::WalkDir;
@@ -55,6 +56,10 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             chooser.show_all();
             let response_type = chooser.run();
             if response_type == gtk::ResponseType::Ok {
+                let mut result_entries = shared_result_entries.borrow_mut();
+
+                let list_store = get_list_store_from_tree_view(&tree_view_results);
+
                 let folders_to_check = chooser.filenames();
                 let mut folders;
 
@@ -96,9 +101,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     res
                 });
 
-                let mut result_entries = shared_result_entries.borrow_mut();
-
-                let list_store = get_list_store_from_tree_view(&tree_view_results);
+                let timezone_offset = Local::now().offset().local_minus_utc();
 
                 for file_entry in &folders {
                     let (path, name) = split_path(file_entry);
@@ -127,7 +130,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     let size = file_metadata.len();
                     let modification_date = match file_metadata.modified() {
                         Ok(t) => match t.duration_since(UNIX_EPOCH) {
-                            Ok(d) => d.as_secs(),
+                            Ok(d) => max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64,
                             Err(_) => {
                                 eprintln!("File {} seems to be modified before Unix Epoch.", file_entry.display());
                                 0
@@ -135,12 +138,12 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         },
                         Err(_) => {
                             eprintln!("Unable to get modification date from file {}", file_entry.display());
-                            continue;
+                            0
                         }
                     };
                     let creation_date = match file_metadata.created() {
                         Ok(t) => match t.duration_since(UNIX_EPOCH) {
-                            Ok(d) => d.as_secs(),
+                            Ok(d) => max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64,
                             Err(_) => {
                                 eprintln!("File {} seems to be created before Unix Epoch.", file_entry.display());
                                 0
@@ -148,7 +151,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         },
                         Err(_) => {
                             eprintln!("Unable to get creation date from file {}", file_entry.display());
-                            continue;
+                            0
                         }
                     };
                     let is_dir = match file_metadata.is_dir() {
