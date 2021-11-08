@@ -1,7 +1,7 @@
 use crate::class_gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
-use chrono::{Local};
+use chrono::Local;
 use gtk::prelude::*;
 use std::cmp::{max, Ordering};
 use std::fs;
@@ -60,8 +60,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                     //// Read Metadata
                     let file_metadata = match fs::metadata(&file_entry) {
                         Ok(t) => t,
-                        Err(_) => {
-                            eprintln!("Failed to load metadata of file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
                             continue;
                         }
                     };
@@ -74,8 +74,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                                 0
                             }
                         },
-                        Err(_) => {
-                            eprintln!("Unable to get modification date from file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Unable to get modification date from file {}, reason - \"{}\"", file_entry.display(), err);
                             0
                         }
                     };
@@ -87,8 +87,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                                 0
                             }
                         },
-                        Err(_) => {
-                            eprintln!("Unable to get creation date from file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Unable to get creation date from file {}, reason - \"{}\"", file_entry.display(), err);
                             0
                         }
                     };
