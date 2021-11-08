@@ -122,8 +122,8 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     //// Read Metadata
                     let file_metadata = match fs::metadata(&file_entry) {
                         Ok(t) => t,
-                        Err(_) => {
-                            eprintln!("Failed to load metadata of file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
                             continue;
                         }
                     };
@@ -136,8 +136,8 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                                 0
                             }
                         },
-                        Err(_) => {
-                            eprintln!("Unable to get modification date from file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Unable to get modification date from file {}, reason - \"{}\"", file_entry.display(), err);
                             0
                         }
                     };
@@ -149,8 +149,8 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                                 0
                             }
                         },
-                        Err(_) => {
-                            eprintln!("Unable to get creation date from file {}", file_entry.display());
+                        Err(err) => {
+                            eprintln!("Unable to get creation date from file {}, reason - \"{}\"", file_entry.display(), err);
                             0
                         }
                     };
