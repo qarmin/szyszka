@@ -159,6 +159,8 @@ pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
 
 pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &str) {
     let chooser = gtk::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok)]);
+    chooser.set_modal(true);
+    chooser.set_transient_for(Some(window_main));
 
     let question_label = gtk::Label::new(Some(message));
 

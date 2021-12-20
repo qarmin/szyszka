@@ -14,10 +14,12 @@ mod class_gui_data;
 mod class_popover_select;
 mod class_results;
 mod class_rules_bottom_panel;
+mod class_settings;
 mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_add_folders_button;
 mod connect_button_update_names;
+mod connect_change_language;
 mod connect_remove_files_button;
 mod connect_results_move;
 mod connect_rule_add;
@@ -38,6 +40,8 @@ mod example_fields;
 mod file_entry;
 mod help_function;
 mod initialize_gui;
+mod language_functions;
+mod localizer;
 mod notebook_enum;
 mod rule_add_number;
 mod rule_add_text;
@@ -54,6 +58,7 @@ use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_add_folders_button::*;
 use crate::connect_button_update_names::*;
+use crate::connect_change_language::*;
 use crate::connect_remove_files_button::*;
 use crate::connect_results_move::*;
 use crate::connect_rule_add::*;
@@ -76,9 +81,11 @@ use gtk::prelude::*;
 fn main() {
     gtk::init().expect("Failed to initialize GTK.");
 
-    let mut gui_data: GuiData = GuiData::new();
+    let gui_data: GuiData = GuiData::new();
 
-    initialize_gui(&mut gui_data);
+    initialize_gui(&gui_data);
+
+    connect_change_language(&gui_data);
 
     // Connect upper buttons
     connect_add_files_button(&gui_data);
