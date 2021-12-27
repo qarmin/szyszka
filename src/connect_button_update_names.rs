@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;
 

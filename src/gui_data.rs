@@ -1,10 +1,10 @@
 use crate::class_dialog_rules::GuiDialogRules;
-use crate::class_popover_select::GuiPopoverSelect;
-use crate::class_results::GuiResults;
-use crate::class_rules_bottom_panel::GuiRulesBottomPanel;
-use crate::class_settings::GuiSettings;
-use crate::class_upper_buttons::*;
-use crate::file_entry::ResultEntries;
+use crate::gui_data_results::GuiResults;
+use crate::gui_data_rules_bottom_panel::GuiRulesBottomPanel;
+use crate::gui_data_settings::GuiSettings;
+use crate::gui_data_upper_buttons::*;
+use crate::gui_popover_select::GuiPopoverSelect;
+use crate::help_function::ResultEntries;
 use crate::rules::Rules;
 use gtk::prelude::*;
 use gtk::{Builder, WindowPosition};
@@ -60,7 +60,7 @@ impl GuiData {
         let results = GuiResults::create_from_builder(&builder_window_main);
         let rules_bottom_panel = GuiRulesBottomPanel::create_from_builder(&builder_window_main);
         let popover_select = GuiPopoverSelect::create_from_builder(&builder_popover);
-        let settings = GuiSettings::create_from_builder(&builder_settings);
+        let settings = GuiSettings::create_from_builder(&builder_settings, &window_main);
 
         let window_rules = GuiDialogRules::create_from_builder(&builder_rule_chooser);
 
@@ -79,5 +79,23 @@ impl GuiData {
             rules,
             shared_result_entries,
         }
+    }
+    pub fn update_language(&self) {
+        self.upper_buttons.update_language();
+        // self.results.update_language();
+        // self.rules_bottom_panel.update_language();
+        // self.popover_select.update_language();
+        // self.settings.update_language();
+        // self.window_rules.update_language();
+
+        // self.check_button_music_title.set_label(&fl!("music_title_checkbox"));
+        // self.check_button_music_artist.set_label(&fl!("music_artist_checkbox"));
+        // self.check_button_music_album_title.set_label(&fl!("music_album_title_checkbox"));
+        // self.check_button_music_album_artist.set_label(&fl!("music_album_artist_checkbox"));
+        // self.check_button_music_year.set_label(&fl!("music_year_checkbox"));
+        // self.check_button_music_approximate_comparison.set_label(&fl!("music_comparison_checkbox"));
+        //
+        // self.check_button_music_approximate_comparison
+        //     .set_tooltip_text(Some(&fl!("music_comparison_checkbox_tooltip")));
     }
 }

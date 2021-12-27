@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{get_full_file_names_from_selection, remove_selected_rows};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;

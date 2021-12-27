@@ -4,9 +4,14 @@ use crate::rules::*;
 use gtk::prelude::*;
 use gtk::*;
 use std::cell::RefCell;
+use std::collections::BTreeSet;
 use std::ops::DerefMut;
 use std::path::Path;
 use std::rc::Rc;
+
+pub struct ResultEntries {
+    pub files: BTreeSet<String>,
+}
 
 #[allow(dead_code)]
 pub enum ColumnsResults {

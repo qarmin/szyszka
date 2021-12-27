@@ -1,5 +1,4 @@
-use crate::file_entry::ResultEntries;
-use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
+use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
 use crate::rules::Rules;
 use glib::Value;
 use gtk::prelude::*;

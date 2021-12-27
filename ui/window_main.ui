@@ -513,11 +513,41 @@
         <property name="subtitle" translatable="yes">Fast and powerful file renamer</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="button_start_rename">
-            <property name="label" translatable="yes">Start Renaming</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkButton" id="button_start_rename">
+                <property name="label" translatable="yes">Start Renaming</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_setting">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">applications-engineering</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

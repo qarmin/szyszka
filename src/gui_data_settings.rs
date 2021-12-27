@@ -9,8 +9,11 @@ pub struct GuiSettings {
 }
 
 impl GuiSettings {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
+    pub fn create_from_builder(builder: &gtk::Builder, window_main: &gtk::Window) -> Self {
         let window_settings: gtk::Window = builder.object("window_settings").unwrap();
+        window_settings.set_modal(true);
+        window_settings.set_transient_for(Some(window_main));
+
         let label_settings_general_language: gtk::Label = builder.object("label_settings_general_language").unwrap();
         let combo_box_settings_language: gtk::ComboBoxText = builder.object("combo_box_settings_language").unwrap();
 

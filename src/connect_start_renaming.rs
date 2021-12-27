@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk::prelude::*;
 use gtk::{DialogFlags, ResponseType, ScrolledWindow, TextTagTable, TextView};

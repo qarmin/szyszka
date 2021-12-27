@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use gtk::prelude::WidgetExtManual;
 use gtk::prelude::*;
 use std::ops::DerefMut;

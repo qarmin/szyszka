@@ -1,5 +1,5 @@
-use crate::class_gui_data::GuiData;
 use crate::example_fields::update_examples;
+use crate::gui_data::GuiData;
 use crate::help_function::validate_number;
 use gtk::prelude::*;
 
