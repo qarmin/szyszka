@@ -4,7 +4,7 @@ use gtk::prelude::*;
 pub fn connect_button_settings(gui_data: &GuiData) {
     let button_setting = gui_data.upper_buttons.button_setting.clone();
     let window_settings = gui_data.settings.window_settings.clone();
-    button_setting.connect_clicked(move |e| {
+    button_setting.connect_clicked(move |_e| {
         window_settings.show();
     });
 

@@ -31,7 +31,7 @@ fn change_language(gui_data: &GuiData) {
     gui_data.update_language();
 }
 
-pub fn load_system_language(gui_data: &GuiData) {
+pub fn _load_system_language(gui_data: &GuiData) {
     let requested_languages = DesktopLanguageRequester::requested_languages();
 
     if let Some(language) = requested_languages.get(0) {

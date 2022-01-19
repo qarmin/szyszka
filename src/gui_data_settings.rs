@@ -1,5 +1,4 @@
 use gtk::prelude::*;
-use gtk::TreeView;
 
 #[derive(Clone)]
 pub struct GuiSettings {
@@ -24,7 +23,3 @@ impl GuiSettings {
         }
     }
 }
-
-// fn update_language(&gui_data : GuiData){
-//
-// }

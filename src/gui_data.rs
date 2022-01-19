@@ -82,8 +82,8 @@ impl GuiData {
     }
     pub fn update_language(&self) {
         self.upper_buttons.update_language();
-        // self.results.update_language();
-        // self.rules_bottom_panel.update_language();
+        self.results.update_language();
+        self.rules_bottom_panel.update_language();
         // self.popover_select.update_language();
         // self.settings.update_language();
         // self.window_rules.update_language();

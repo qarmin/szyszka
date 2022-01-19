@@ -14,4 +14,5 @@ impl GuiResults {
 
         Self { scrolled_window_results, tree_view_results }
     }
+    pub fn update_language(&self) {}
 }
