@@ -20,7 +20,7 @@ pub static LANGUAGE_LOADER: Lazy<FluentLanguageLoader> = Lazy::new(|| {
 });
 
 #[macro_export]
-macro_rules! fl {
+macro_rules! fls {
     ($message_id:literal) => {{
         i18n_embed_fl::fl!($crate::localizer::LANGUAGE_LOADER, $message_id)
     }};

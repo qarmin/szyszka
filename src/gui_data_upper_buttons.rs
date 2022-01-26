@@ -1,4 +1,4 @@
-use crate::fl;
+use crate::fls;
 use gtk::prelude::*;
 
 #[derive(Clone)]
@@ -42,7 +42,7 @@ impl GuiUpperButtons {
         }
     }
     pub fn update_language(&self) {
-        self.button_start_rename.set_label(&fl!("upper_start_renaming_button"));
+        self.button_start_rename.set_label(&fls!("upper_start_renaming_button"));
 
         // pub button_setting: gtk::Button,
         // pub button_start_rename: gtk::Button,
@@ -54,14 +54,14 @@ impl GuiUpperButtons {
         // pub label_files_folders: gtk::Label,
         // pub button_results_one_up: gtk::Button,
         // pub button_results_one_down: gtk::Button,
-        // self.check_button_music_title.set_label(&fl!("music_title_checkbox"));
-        // self.check_button_music_artist.set_label(&fl!("music_artist_checkbox"));
-        // self.check_button_music_album_title.set_label(&fl!("music_album_title_checkbox"));
-        // self.check_button_music_album_artist.set_label(&fl!("music_album_artist_checkbox"));
-        // self.check_button_music_year.set_label(&fl!("music_year_checkbox"));
-        // self.check_button_music_approximate_comparison.set_label(&fl!("music_comparison_checkbox"));
+        // self.check_button_music_title.set_label(&fls!("music_title_checkbox"));
+        // self.check_button_music_artist.set_label(&fls!("music_artist_checkbox"));
+        // self.check_button_music_album_title.set_label(&fls!("music_album_title_checkbox"));
+        // self.check_button_music_album_artist.set_label(&fls!("music_album_artist_checkbox"));
+        // self.check_button_music_year.set_label(&fls!("music_year_checkbox"));
+        // self.check_button_music_approximate_comparison.set_label(&fls!("music_comparison_checkbox"));
         //
         // self.check_button_music_approximate_comparison
-        //     .set_tooltip_text(Some(&fl!("music_comparison_checkbox_tooltip")));
+        //     .set_tooltip_text(Some(&fls!("music_comparison_checkbox_tooltip")));
     }
 }

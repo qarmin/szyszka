@@ -77,7 +77,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 return; // First thing is selected - this works only in single selection mode
             }
 
-            let current_iter = first_iter.clone();
+            let current_iter = first_iter;
             let mut previous_iter = first_iter;
 
             if list_store.iter_next(&current_iter) {
@@ -92,7 +92,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                         break;
                     }
 
-                    previous_iter = current_iter.clone();
+                    previous_iter = current_iter;
                     if !list_store.iter_next(&current_iter) {
                         // break;
                         panic!("");
@@ -168,7 +168,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
                 }
             }
 
-            current_iter = previous_iter.clone();
+            current_iter = previous_iter;
             if !list_store.iter_next(&current_iter) {
                 return;
                 // Latest element

@@ -88,14 +88,14 @@ impl GuiData {
         // self.settings.update_language();
         // self.window_rules.update_language();
 
-        // self.check_button_music_title.set_label(&fl!("music_title_checkbox"));
-        // self.check_button_music_artist.set_label(&fl!("music_artist_checkbox"));
-        // self.check_button_music_album_title.set_label(&fl!("music_album_title_checkbox"));
-        // self.check_button_music_album_artist.set_label(&fl!("music_album_artist_checkbox"));
-        // self.check_button_music_year.set_label(&fl!("music_year_checkbox"));
-        // self.check_button_music_approximate_comparison.set_label(&fl!("music_comparison_checkbox"));
+        // self.check_button_music_title.set_label(&fls!("music_title_checkbox"));
+        // self.check_button_music_artist.set_label(&fls!("music_artist_checkbox"));
+        // self.check_button_music_album_title.set_label(&fls!("music_album_title_checkbox"));
+        // self.check_button_music_album_artist.set_label(&fls!("music_album_artist_checkbox"));
+        // self.check_button_music_year.set_label(&fls!("music_year_checkbox"));
+        // self.check_button_music_approximate_comparison.set_label(&fls!("music_comparison_checkbox"));
         //
         // self.check_button_music_approximate_comparison
-        //     .set_tooltip_text(Some(&fl!("music_comparison_checkbox_tooltip")));
+        //     .set_tooltip_text(Some(&fls!("music_comparison_checkbox_tooltip")));
     }
 }

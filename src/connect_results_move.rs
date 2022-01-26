@@ -26,7 +26,7 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
 
             let mut selected_results = Vec::new();
             {
-                let temp_iter = first_iter.clone();
+                let temp_iter = first_iter;
                 let mut current_path_number = 0;
 
                 loop {
@@ -50,8 +50,8 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
 
             // Swap rules
             {
-                let current_iter = first_iter.clone();
-                let mut previous_iter = first_iter.clone();
+                let current_iter = first_iter;
+                let mut previous_iter = first_iter;
                 if !list_store.iter_next(&current_iter) {
                     return; // Only 1 record
                 };
@@ -103,7 +103,7 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
                     if selected_results[i] {
                         selection.select_iter(&current_iter);
                     }
-                    previous_iter = current_iter.clone();
+                    previous_iter = current_iter;
                     if !list_store.iter_next(&current_iter) {
                         break;
                     }
@@ -149,7 +149,7 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                         // Checking if there are any other selections -different implementation than
                         if current_path_number >= selected_rows.len() {
                             loop {
-                                end_iter = temp_iter.clone();
+                                end_iter = temp_iter;
                                 if !list_store.iter_next(&temp_iter) {
                                     break;
                                 }
@@ -170,8 +170,8 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
 
             // Swap rules
             {
-                let current_iter = end_iter.clone();
-                let mut previous_iter = end_iter.clone();
+                let current_iter = end_iter;
+                let mut previous_iter = end_iter;
                 if !list_store.iter_previous(&current_iter) {
                     return; // Only 1 record
                 };
@@ -223,7 +223,7 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                     if selected_results[i] {
                         selection.select_iter(&current_iter);
                     }
-                    previous_iter = current_iter.clone();
+                    previous_iter = current_iter;
                     if !list_store.iter_previous(&current_iter) {
                         break;
                     }

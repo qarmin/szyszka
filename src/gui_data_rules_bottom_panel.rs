@@ -1,4 +1,4 @@
-use crate::fl;
+use crate::fls;
 use gtk::prelude::*;
 use gtk::TreeView;
 
@@ -35,10 +35,10 @@ impl GuiRulesBottomPanel {
         }
     }
     pub fn update_language(&self) {
-        self.button_add_rule.set_label(&fl!("bottom_rule_add_button"));
-        self.button_edit_rule.set_label(&fl!("bottom_rule_edit_button"));
-        self.button_remove_rule.set_label(&fl!("bottom_rule_remove_button"));
-        self.button_rule_one_up.set_label(&fl!("bottom_rule_one_up_button"));
-        self.button_rule_one_down.set_label(&fl!("bottom_rule_one_down_button"));
+        self.button_add_rule.set_label(&fls!("bottom_rule_add_button"));
+        self.button_edit_rule.set_label(&fls!("bottom_rule_edit_button"));
+        self.button_remove_rule.set_label(&fls!("bottom_rule_remove_button"));
+        self.button_rule_one_up.set_label(&fls!("bottom_rule_one_up_button"));
+        self.button_rule_one_down.set_label(&fls!("bottom_rule_one_down_button"));
     }
 }
