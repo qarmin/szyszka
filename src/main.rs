@@ -1,5 +1,6 @@
 // Remove console window in Windows OS
 #![windows_subsystem = "windows"]
+#![allow(clippy::needless_late_init)]
 
 mod class_dialog_rule_add_number;
 mod class_dialog_rule_add_text;
@@ -10,14 +11,11 @@ mod class_dialog_rule_replace;
 mod class_dialog_rule_size_letters;
 mod class_dialog_rule_trim;
 mod class_dialog_rules;
-mod class_gui_data;
-mod class_popover_select;
-mod class_results;
-mod class_rules_bottom_panel;
-mod class_upper_buttons;
 mod connect_add_files_button;
 mod connect_add_folders_button;
+mod connect_button_settings;
 mod connect_button_update_names;
+mod connect_change_language;
 mod connect_remove_files_button;
 mod connect_results_move;
 mod connect_rule_add;
@@ -35,9 +33,16 @@ mod connect_select_records;
 mod connect_start_renaming;
 mod create_tree_view;
 mod example_fields;
-mod file_entry;
+mod gui_data;
+mod gui_data_results;
+mod gui_data_rules_bottom_panel;
+mod gui_data_settings;
+mod gui_data_upper_buttons;
+mod gui_popover_select;
 mod help_function;
 mod initialize_gui;
+mod language_functions;
+mod localizer;
 mod notebook_enum;
 mod rule_add_number;
 mod rule_add_text;
@@ -50,10 +55,11 @@ mod rule_trim;
 mod rules;
 mod update_records;
 
-use crate::class_gui_data::GuiData;
 use crate::connect_add_files_button::*;
 use crate::connect_add_folders_button::*;
+use crate::connect_button_settings::*;
 use crate::connect_button_update_names::*;
+use crate::connect_change_language::*;
 use crate::connect_remove_files_button::*;
 use crate::connect_results_move::*;
 use crate::connect_rule_add::*;
@@ -70,20 +76,24 @@ use crate::connect_rule_window_trim_click::*;
 use crate::connect_select_records::*;
 use crate::connect_start_renaming::*;
 use crate::example_fields::connect_update_examples;
+use crate::gui_data::GuiData;
 use crate::initialize_gui::*;
 use gtk::prelude::*;
 
 fn main() {
     gtk::init().expect("Failed to initialize GTK.");
 
-    let mut gui_data: GuiData = GuiData::new();
+    let gui_data: GuiData = GuiData::new();
 
-    initialize_gui(&mut gui_data);
+    initialize_gui(&gui_data);
+
+    connect_change_language(&gui_data);
 
     // Connect upper buttons
     connect_add_files_button(&gui_data);
     connect_add_folders_button(&gui_data);
     connect_remove_files_button(&gui_data);
+    connect_button_settings(&gui_data);
 
     // Connect buttons OK and Close in select dialog
     connect_rule_window_close(&gui_data);

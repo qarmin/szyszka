@@ -1,5 +1,5 @@
-use crate::class_gui_data::GuiData;
 use crate::example_fields::update_examples;
+use crate::gui_data::GuiData;
 use gtk::prelude::*;
 
 pub fn connect_rule_window_purge_click(gui_data: &GuiData) {

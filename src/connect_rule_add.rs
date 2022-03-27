@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{populate_rules_tree_view, read_rule_from_window};
 use crate::update_records::{update_records, UpdateMode};
 use gtk::prelude::*;

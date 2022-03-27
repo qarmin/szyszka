@@ -9,9 +9,9 @@ homepage = "https://github.com/qarmin/szyszka"
 repository = "https://github.com/qarmin/szyszka"
 
 [dependencies]
-gdk = "0.14.3"
-gio = "0.14.8"
-glib = "0.14.8"
+gdk = "0.15.4"
+gio = "0.15.10"
+glib = "0.15.10"
 
 # For checking path
 walkdir = "2.3.2"
@@ -20,13 +20,19 @@ humansize = "1.1.1"
 chrono = "0.4.19"
 
 # For opening files
-open = "2.0.1"
+open = "2.1.1"
 
 # For slugs
 slugmin = "1.0.2"
 
+# Language
+i18n-embed = { version = "0.13.4", features = ["fluent-system", "desktop-requester"] }
+i18n-embed-fl = "0.6.4"
+rust-embed = "6.3.0"
+once_cell = "1.10.0"
+
 [dependencies.gtk]
-version = "0.14.3"
+version = "0.15.4"
 default-features = false # just in case
-features = ["v3_22"]
+features = ["v3_24_9"]
 

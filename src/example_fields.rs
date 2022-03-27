@@ -1,5 +1,5 @@
 use crate::class_dialog_rules::GuiDialogRules;
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{read_rule_from_window, validate_name};
 use crate::notebook_enum::EXAMPLE_NAME;
 use crate::rules::Rules;

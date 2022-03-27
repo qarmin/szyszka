@@ -1,4 +1,4 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, regex_check, ColumnsResults};
 use gtk::prelude::*;
 use gtk::{PositionType, TreeIter};

@@ -21,8 +21,8 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
     // Random data to visualize typical usage in examples
     if let Some(f_data) = file_data {
-        modification_date = NaiveDateTime::from_timestamp(f_data.0 as i64, 0).to_string().replace(":", "_");
-        creation_date = NaiveDateTime::from_timestamp(f_data.1 as i64, 0).to_string().replace(":", "_");
+        modification_date = NaiveDateTime::from_timestamp(f_data.0 as i64, 0).to_string().replace(':', "_");
+        creation_date = NaiveDateTime::from_timestamp(f_data.1 as i64, 0).to_string().replace(':', "_");
         size = f_data.2.file_size(options::BINARY).unwrap();
     } else {
         creation_date = "2021-01-31 08_42_12".to_string();

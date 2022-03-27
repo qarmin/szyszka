@@ -1,7 +1,7 @@
-use crate::class_gui_data::GuiData;
+use crate::gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk::prelude::*;
-use gtk::{DialogFlags, ResponseType, ScrolledWindow, TextTagTable, TextView};
+use gtk::{DialogFlags, ResponseType, ScrolledWindow, TextView};
 use std::collections::BTreeMap;
 use std::fs;
 use std::ops::DerefMut;
@@ -160,10 +160,14 @@ fn create_results_dialog(window_main: &gtk::Window, properly_renamed: u32, ignor
         label_info_bad.set_margin_top(10);
         chooser_box.add(&label_info_bad);
 
-        let scrolled_window = ScrolledWindow::new::<gtk::Adjustment, gtk::Adjustment>(None, None);
+        let adj_op1: Option<&gtk::Adjustment> = None;
+        let adj_op2: Option<&gtk::Adjustment> = None;
+        let txt_op1: Option<&gtk::TextTagTable> = None;
+
+        let scrolled_window = ScrolledWindow::new(adj_op1, adj_op2);
         let text_view = TextView::new();
         text_view.set_expand(true);
-        let buffer = gtk::TextBuffer::new::<TextTagTable>(None);
+        let buffer = gtk::TextBuffer::new(txt_op1);
         text_view.set_buffer(Some(&buffer));
         let mut text = "".to_string();
 

@@ -1,13 +1,22 @@
-use crate::class_gui_data::GuiData;
 use crate::create_tree_view::{create_tree_view_results, create_tree_view_rules};
 use crate::example_fields::update_examples;
+use crate::gui_data::GuiData;
 use crate::help_function::{ColumnsResults, CHARACTER};
+use crate::language_functions::LANGUAGES_ALL;
 use crate::notebook_enum::EXAMPLE_NAME;
 use glib::Type;
 use gtk::prelude::*;
-use gtk::{ScrolledWindow, SelectionMode, TreeView};
+use gtk::{ScrolledWindow, SelectionMode};
 
-pub fn initialize_gui(gui_data: &mut GuiData) {
+pub fn initialize_gui(gui_data: &GuiData) {
+    // Setup Languages
+    {
+        let combo_box_settings_language = gui_data.settings.combo_box_settings_language.clone();
+        for lang in LANGUAGES_ALL {
+            combo_box_settings_language.append_text(lang.combo_box_text);
+        }
+        combo_box_settings_language.set_active(Some(0));
+    }
     // Create TreeView in Scrolled Window
     {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
@@ -24,7 +33,8 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 
-        let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
+        let tree_view: gtk::TreeView = gui_data.results.tree_view_results.clone();
+        tree_view.set_model(Some(&list_store));
 
         tree_view.selection().set_mode(SelectionMode::Multiple);
 
@@ -41,8 +51,6 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         scrolled_window_results.add(&tree_view);
         scrolled_window_results.show_all();
-
-        gui_data.results.tree_view_results = tree_view;
     }
     // Create TreeView in Rules
     {
@@ -52,7 +60,8 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
 
-        let tree_view: gtk::TreeView = TreeView::with_model(&list_store);
+        let tree_view: gtk::TreeView = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
+        tree_view.set_model(Some(&list_store));
 
         // tree_view.selection().set_mode(SelectionMode::Multiple);
 
@@ -60,8 +69,6 @@ pub fn initialize_gui(gui_data: &mut GuiData) {
 
         scrolled_window_rules.add(&tree_view);
         scrolled_window_rules.show_all();
-
-        gui_data.rules_bottom_panel.tree_view_window_rules = tree_view;
     }
     // Set Example name
     {
@@ -94,8 +101,9 @@ pub fn common_open_function(tree_view: &gtk::TreeView, opening_mode: OpenMode) {
             }
         }
 
-        if open::that(&end_path).is_err() {
-            println!("Failed to open {}", end_path);
-        }
+        open::that_in_background(&end_path);
+        // if open::that(&end_path).is_err() {
+        //     println!("Failed to open {}", end_path);
+        // }
     }
 }
