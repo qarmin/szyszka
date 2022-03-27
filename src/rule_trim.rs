@@ -19,13 +19,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
                     if text_to_trim.len() == extension.len() {
                         return_string = format!("{}.", name);
                     } else {
-                        return_string = format!("{}.{}", name, extension[text_to_trim.len()..extension.len()].to_string());
+                        return_string = format!("{}.{}", name, &extension[text_to_trim.len()..extension.len()]);
                     }
                 } else if !rule.rule_data.case_sensitive && extension_lowercase.starts_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == extension_lowercase.len() {
                         return_string = format!("{}.", name);
                     } else {
-                        return_string = format!("{}.{}", name, extension[text_to_trim_lowercase.len()..extension_lowercase.len()].to_string());
+                        return_string = format!("{}.{}", name, &extension[text_to_trim_lowercase.len()..extension_lowercase.len()]);
                     }
                 }
             }
@@ -49,13 +49,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
                     if text_to_trim.len() == name.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = format!("{}.{}", name[0..(name.len() - text_to_trim.len())].to_string(), extension);
+                        return_string = format!("{}.{}", &name[0..(name.len() - text_to_trim.len())], extension);
                     }
                 } else if !rule.rule_data.case_sensitive && name_lowercase.ends_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == name_lowercase.len() {
                         return_string = "".to_string();
                     } else {
-                        return_string = format!("{}.{}", name[0..(name_lowercase.len() - text_to_trim_lowercase.len())].to_string(), extension);
+                        return_string = format!("{}.{}", &name[0..(name_lowercase.len() - text_to_trim_lowercase.len())], extension);
                     }
                 }
             }

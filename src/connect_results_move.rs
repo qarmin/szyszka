@@ -161,7 +161,7 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                         selected_results.push(false);
                     }
 
-                    end_iter = temp_iter.clone();
+                    end_iter = temp_iter;
                     if !list_store.iter_next(&temp_iter) {
                         break;
                     }

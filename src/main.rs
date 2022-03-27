@@ -1,5 +1,6 @@
 // Remove console window in Windows OS
 #![windows_subsystem = "windows"]
+#![allow(clippy::needless_late_init)]
 
 mod class_dialog_rule_add_number;
 mod class_dialog_rule_add_text;
