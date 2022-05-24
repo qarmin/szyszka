@@ -131,7 +131,6 @@ pub fn connect_select_custom(gui_data: &GuiData) {
     button_select_custom.connect_clicked(move |_e| {
         popover_select.popdown();
 
-        let wildcard: String;
         enum WildcardType {
             Path,
             CurrentName,
@@ -140,7 +139,6 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             PathFutureName,
             IsDir,
         }
-        let wildcard_type: WildcardType;
 
         // Accept Dialog
         {
@@ -196,101 +194,102 @@ pub fn connect_select_custom(gui_data: &GuiData) {
 
             confirmation_dialog_delete.show_all();
 
-            let response_type = confirmation_dialog_delete.run();
-            if response_type == gtk::ResponseType::Ok {
-                if radio_path.is_active() {
-                    wildcard_type = WildcardType::Path;
-                    wildcard = entry_path.text().to_string();
-                } else if radio_current_name.is_active() {
-                    wildcard_type = WildcardType::CurrentName;
-                    wildcard = entry_current_name.text().to_string();
-                } else if radio_future_name.is_active() {
-                    wildcard_type = WildcardType::FutureName;
-                    wildcard = entry_future_name.text().to_string();
-                } else if radio_current_name_path.is_active() {
-                    wildcard_type = WildcardType::PathCurrentName;
-                    wildcard = entry_current_name_path.text().to_string();
-                } else if radio_future_name_path.is_active() {
-                    wildcard_type = WildcardType::PathFutureName;
-                    wildcard = entry_future_name_path.text().to_string();
-                } else if radio_is_dir.is_active() {
-                    wildcard_type = WildcardType::IsDir;
-                    wildcard = match check_button_is_dir.is_active() {
-                        true => "Dir".to_string(),
-                        false => "File".to_string(),
-                    };
-                } else {
-                    panic!("Non handled option in select wildcard");
-                }
-            } else {
-                confirmation_dialog_delete.close();
-                return;
-            }
-            confirmation_dialog_delete.close();
-        }
-        if !wildcard.is_empty() {
-            let wildcard = wildcard.trim();
+            let tree_view = tree_view.clone();
+            confirmation_dialog_delete.connect_response(move |_chooser, response_type| {
+                let wildcard_type: WildcardType;
+                let wildcard: String;
+                if response_type == gtk::ResponseType::Ok {
+                    if radio_path.is_active() {
+                        wildcard_type = WildcardType::Path;
+                        wildcard = entry_path.text().to_string();
+                    } else if radio_current_name.is_active() {
+                        wildcard_type = WildcardType::CurrentName;
+                        wildcard = entry_current_name.text().to_string();
+                    } else if radio_future_name.is_active() {
+                        wildcard_type = WildcardType::FutureName;
+                        wildcard = entry_future_name.text().to_string();
+                    } else if radio_current_name_path.is_active() {
+                        wildcard_type = WildcardType::PathCurrentName;
+                        wildcard = entry_current_name_path.text().to_string();
+                    } else if radio_future_name_path.is_active() {
+                        wildcard_type = WildcardType::PathFutureName;
+                        wildcard = entry_future_name_path.text().to_string();
+                    } else if radio_is_dir.is_active() {
+                        wildcard_type = WildcardType::IsDir;
+                        wildcard = match check_button_is_dir.is_active() {
+                            true => "Dir".to_string(),
+                            false => "File".to_string(),
+                        };
+                    } else {
+                        panic!("Non handled option in select wildcard");
+                    }
 
-            #[cfg(target_family = "windows")]
-            let wildcard = wildcard.replace("/", "\\");
-            #[cfg(target_family = "windows")]
-            let wildcard = wildcard.as_str();
+                    if !wildcard.is_empty() {
+                        let wildcard = wildcard.trim();
 
-            let selection = tree_view.selection();
-            let tree_model = tree_view.model().unwrap();
+                        #[cfg(target_family = "windows")]
+                        let wildcard = wildcard.replace("/", "\\");
+                        #[cfg(target_family = "windows")]
+                        let wildcard = wildcard.as_str();
 
-            let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+                        let selection = tree_view.selection();
+                        let tree_model = tree_view.model().unwrap();
 
-            loop {
-                let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                match wildcard_type {
-                    WildcardType::Path => {
-                        if regex_check(wildcard, path) {
-                            selection.select_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::CurrentName => {
-                        if regex_check(wildcard, current_name) {
-                            selection.select_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::FutureName => {
-                        if regex_check(wildcard, future_name) {
-                            selection.select_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::PathCurrentName => {
-                        if regex_check(wildcard, format!("{}/{}", path, current_name)) {
-                            selection.select_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::PathFutureName => {
-                        if regex_check(wildcard, format!("{}/{}", path, future_name)) {
-                            selection.select_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::IsDir => {
-                        if wildcard == "Dir" {
-                            if typ == "Dir" {
-                                selection.select_iter(&tree_iter);
+                        let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+
+                        loop {
+                            let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
+                            let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
+                            let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            match wildcard_type {
+                                WildcardType::Path => {
+                                    if regex_check(wildcard, path) {
+                                        selection.select_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::CurrentName => {
+                                    if regex_check(wildcard, current_name) {
+                                        selection.select_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::FutureName => {
+                                    if regex_check(wildcard, future_name) {
+                                        selection.select_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::PathCurrentName => {
+                                    if regex_check(wildcard, format!("{}/{}", path, current_name)) {
+                                        selection.select_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::PathFutureName => {
+                                    if regex_check(wildcard, format!("{}/{}", path, future_name)) {
+                                        selection.select_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::IsDir => {
+                                    if wildcard == "Dir" {
+                                        if typ == "Dir" {
+                                            selection.select_iter(&tree_iter);
+                                        }
+                                    } else if wildcard == "File" {
+                                        if typ == "File" {
+                                            selection.select_iter(&tree_iter);
+                                        }
+                                    } else {
+                                        panic!();
+                                    }
+                                }
                             }
-                        } else if wildcard == "File" {
-                            if typ == "File" {
-                                selection.select_iter(&tree_iter);
+
+                            if !tree_model.iter_next(&tree_iter) {
+                                break;
                             }
-                        } else {
-                            panic!();
                         }
                     }
                 }
-
-                if !tree_model.iter_next(&tree_iter) {
-                    break;
-                }
-            }
+            });
         }
     });
 }
@@ -305,7 +304,6 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
     button_unselect_custom.connect_clicked(move |_e| {
         popover_select.popdown();
 
-        let wildcard: String;
         enum WildcardType {
             Path,
             CurrentName,
@@ -314,7 +312,6 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             PathFutureName,
             IsDir,
         }
-        let wildcard_type: WildcardType;
 
         // Accept Dialog
         {
@@ -370,101 +367,103 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
 
             confirmation_dialog_delete.show_all();
 
-            let response_type = confirmation_dialog_delete.run();
-            if response_type == gtk::ResponseType::Ok {
-                if radio_path.is_active() {
-                    wildcard_type = WildcardType::Path;
-                    wildcard = entry_path.text().to_string();
-                } else if radio_current_name.is_active() {
-                    wildcard_type = WildcardType::CurrentName;
-                    wildcard = entry_current_name.text().to_string();
-                } else if radio_future_name.is_active() {
-                    wildcard_type = WildcardType::FutureName;
-                    wildcard = entry_future_name.text().to_string();
-                } else if radio_current_name_path.is_active() {
-                    wildcard_type = WildcardType::PathCurrentName;
-                    wildcard = entry_current_name_path.text().to_string();
-                } else if radio_future_name_path.is_active() {
-                    wildcard_type = WildcardType::PathFutureName;
-                    wildcard = entry_future_name_path.text().to_string();
-                } else if radio_is_dir.is_active() {
-                    wildcard_type = WildcardType::IsDir;
-                    wildcard = match check_button_is_dir.is_active() {
-                        true => "Dir".to_string(),
-                        false => "File".to_string(),
-                    };
-                } else {
-                    panic!("Non handled option in select wildcard");
-                }
-            } else {
-                confirmation_dialog_delete.close();
-                return;
-            }
-            confirmation_dialog_delete.close();
-        }
-        if !wildcard.is_empty() {
-            let wildcard = wildcard.trim();
+            let tree_view = tree_view.clone();
+            confirmation_dialog_delete.connect_response(move |_, response| {
+                if response == gtk::ResponseType::Ok {
+                    let wildcard: String;
+                    let wildcard_type: WildcardType;
 
-            #[cfg(target_family = "windows")]
-            let wildcard = wildcard.replace("/", "\\");
-            #[cfg(target_family = "windows")]
-            let wildcard = wildcard.as_str();
+                    if radio_path.is_active() {
+                        wildcard_type = WildcardType::Path;
+                        wildcard = entry_path.text().to_string();
+                    } else if radio_current_name.is_active() {
+                        wildcard_type = WildcardType::CurrentName;
+                        wildcard = entry_current_name.text().to_string();
+                    } else if radio_future_name.is_active() {
+                        wildcard_type = WildcardType::FutureName;
+                        wildcard = entry_future_name.text().to_string();
+                    } else if radio_current_name_path.is_active() {
+                        wildcard_type = WildcardType::PathCurrentName;
+                        wildcard = entry_current_name_path.text().to_string();
+                    } else if radio_future_name_path.is_active() {
+                        wildcard_type = WildcardType::PathFutureName;
+                        wildcard = entry_future_name_path.text().to_string();
+                    } else if radio_is_dir.is_active() {
+                        wildcard_type = WildcardType::IsDir;
+                        wildcard = match check_button_is_dir.is_active() {
+                            true => "Dir".to_string(),
+                            false => "File".to_string(),
+                        };
+                    } else {
+                        panic!("Non handled option in select wildcard");
+                    }
 
-            let selection = tree_view.selection();
-            let tree_model = tree_view.model().unwrap();
+                    if !wildcard.is_empty() {
+                        let wildcard = wildcard.trim();
 
-            let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+                        #[cfg(target_family = "windows")]
+                        let wildcard = wildcard.replace("/", "\\");
+                        #[cfg(target_family = "windows")]
+                        let wildcard = wildcard.as_str();
 
-            loop {
-                let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                match wildcard_type {
-                    WildcardType::Path => {
-                        if regex_check(wildcard, path) {
-                            selection.unselect_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::CurrentName => {
-                        if regex_check(wildcard, current_name) {
-                            selection.unselect_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::FutureName => {
-                        if regex_check(wildcard, future_name) {
-                            selection.unselect_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::PathCurrentName => {
-                        if regex_check(wildcard, format!("{}/{}", path, current_name)) {
-                            selection.unselect_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::PathFutureName => {
-                        if regex_check(wildcard, format!("{}/{}", path, future_name)) {
-                            selection.unselect_iter(&tree_iter);
-                        }
-                    }
-                    WildcardType::IsDir => {
-                        if wildcard == "Dir" {
-                            if typ == "Dir" {
-                                selection.unselect_iter(&tree_iter);
+                        let selection = tree_view.selection();
+                        let tree_model = tree_view.model().unwrap();
+
+                        let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+
+                        loop {
+                            let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
+                            let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
+                            let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            match wildcard_type {
+                                WildcardType::Path => {
+                                    if regex_check(wildcard, path) {
+                                        selection.unselect_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::CurrentName => {
+                                    if regex_check(wildcard, current_name) {
+                                        selection.unselect_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::FutureName => {
+                                    if regex_check(wildcard, future_name) {
+                                        selection.unselect_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::PathCurrentName => {
+                                    if regex_check(wildcard, format!("{}/{}", path, current_name)) {
+                                        selection.unselect_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::PathFutureName => {
+                                    if regex_check(wildcard, format!("{}/{}", path, future_name)) {
+                                        selection.unselect_iter(&tree_iter);
+                                    }
+                                }
+                                WildcardType::IsDir => {
+                                    if wildcard == "Dir" {
+                                        if typ == "Dir" {
+                                            selection.unselect_iter(&tree_iter);
+                                        }
+                                    } else if wildcard == "File" {
+                                        if typ == "File" {
+                                            selection.unselect_iter(&tree_iter);
+                                        }
+                                    } else {
+                                        panic!();
+                                    }
+                                }
                             }
-                        } else if wildcard == "File" {
-                            if typ == "File" {
-                                selection.unselect_iter(&tree_iter);
+
+                            if !tree_model.iter_next(&tree_iter) {
+                                break;
                             }
-                        } else {
-                            panic!();
                         }
                     }
                 }
-
-                if !tree_model.iter_next(&tree_iter) {
-                    break;
-                }
-            }
+            });
         }
     });
 }

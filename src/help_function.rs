@@ -172,9 +172,6 @@ pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &s
     let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
     chooser_box.add(&question_label);
     chooser_box.show_all();
-
-    chooser.run();
-    chooser.close();
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();
