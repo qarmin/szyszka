@@ -20,10 +20,15 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
         let chooser = gtk::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk::FileChooserAction::Open, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
         chooser.set_select_multiple(true);
         chooser.show_all();
-        {
-            let response_type = chooser.run();
+
+        let tree_view_results = tree_view_results.clone();
+        let label_files_folders = label_files_folders.clone();
+        let shared_result_entries = shared_result_entries.clone();
+        let rules = rules.clone();
+
+        chooser.connect_response(move |dialog, response_type| {
             if response_type == gtk::ResponseType::Ok {
-                let mut folder = chooser.filenames();
+                let mut folder = dialog.filenames();
 
                 let mut result_entries = shared_result_entries.borrow_mut();
 
@@ -114,8 +119,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 }
             }
             update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileAdded, &label_files_folders);
-        }
 
-        chooser.close();
+            dialog.close();
+        });
     });
 }
