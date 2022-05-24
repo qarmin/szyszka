@@ -1,123 +1,116 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.9.1 -->
 <!-- Generated with glade 3.39.0 -->
 <interface>
+  <!-- interface-name popover.ui -->
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPopover" id="popover_select">
     <property name="can-focus">False</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="visible">True</property>
         <child>
           <object class="GtkButton" id="button_select_all">
-            <property name="label" translatable="yes">Select All</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Select All</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_select_reverse">
-            <property name="label" translatable="yes">Reverse Selection</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Reverse Selection</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_select_custom">
-            <property name="label" translatable="yes">Select Custom</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Select Custom</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_unselect_custom">
-            <property name="label" translatable="yes">Unselect Custom</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Unselect Custom</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">6</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_select_changed">
-            <property name="label" translatable="yes">Select Changed</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Select Changed</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_unselect_changed">
-            <property name="label" translatable="yes">Unselect Changed</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="label" translatable="yes">Unselect Changed</property>
             <property name="receives-default">True</property>
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">8</property>
           </packing>
         </child>
       </object>

@@ -2,8 +2,8 @@ use gtk::prelude::*;
 
 #[derive(Clone)]
 pub struct GuiAddNumber {
-    pub radio_button_add_number_before_name: gtk::RadioButton,
-    pub radio_button_add_number_after_name: gtk::RadioButton,
+    pub radio_button_add_number_before_name: gtk::CheckButton,
+    pub radio_button_add_number_after_name: gtk::CheckButton,
 
     pub entry_add_number_start_number: gtk::Entry,
     pub entry_add_number_step: gtk::Entry,
@@ -12,8 +12,8 @@ pub struct GuiAddNumber {
 
 impl GuiAddNumber {
     pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_add_number_before_name: gtk::RadioButton = builder.object("radio_button_add_number_before_name").unwrap();
-        let radio_button_add_number_after_name: gtk::RadioButton = builder.object("radio_button_add_number_after_name").unwrap();
+        let radio_button_add_number_before_name: gtk::CheckButton = builder.object("radio_button_add_number_before_name").unwrap();
+        let radio_button_add_number_after_name: gtk::CheckButton = builder.object("radio_button_add_number_after_name").unwrap();
 
         let entry_add_number_start_number: gtk::Entry = builder.object("entry_add_number_start_number").unwrap();
         let entry_add_number_step: gtk::Entry = builder.object("entry_add_number_step").unwrap();

@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.9.1 -->
 <!-- Generated with glade 3.39.0 -->
 <interface>
+  <!-- interface-name settings.ui -->
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkDialog" id="window_settings">
     <property name="can-focus">False</property>
@@ -14,53 +16,43 @@
           <object class="GtkButtonBox">
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="visible">True</property>
             <child>
               <object class="GtkLabel" id="label_settings_general_language">
-                <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">5</property>
-                <property name="margin-end">10</property>
                 <property name="label" translatable="yes">Language</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">5</property>
+                <property name="visible">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="combo_box_settings_language">
-                <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="visible">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
           </packing>
         </child>
       </object>

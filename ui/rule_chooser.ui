@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.9.1 -->
 <!-- Generated with glade 3.39.0 -->
 <interface>
+  <!-- interface-name rule_chooser.ui -->
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">$(NAME) - prints file name
@@ -13,70 +15,68 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
   </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="can-focus">False</property>
-    <property name="default-width">600</property>
     <property name="default-height">400</property>
+    <property name="default-width">600</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <property name="visible">True</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-top">5</property>
             <property name="orientation">vertical</property>
+            <property name="visible">True</property>
             <child>
               <object class="GtkNotebook" id="notebook_choose_rule">
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="tab-pos">left</property>
+                <property name="visible">True</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkTextView">
-                        <property name="visible">True</property>
+                        <property name="buffer">textbuffer1</property>
                         <property name="can-focus">True</property>
                         <property name="justification">center</property>
-                        <property name="buffer">textbuffer1</property>
+                        <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="entry_custom_text_to_change">
-                        <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="max-length">150</property>
                         <property name="text" translatable="yes">$(CURR)</property>
+                        <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Custom</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
                     <property name="tab-fill">False</property>
@@ -84,381 +84,350 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Tool Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_type_uppercase">
-                                <property name="label" translatable="yes">Uppercase</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Uppercase</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_type_lowercase">
-                                <property name="label" translatable="yes">Lowercase</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_letters_type_uppercase</property>
+                                <property name="label" translatable="yes">Lowercase</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Usage Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_usage_name">
-                                <property name="label" translatable="yes">Only Name</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Only Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_usage_extension">
-                                <property name="label" translatable="yes">Only Extension</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_letters_usage_name</property>
+                                <property name="label" translatable="yes">Only Extension</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_letters_usage_both">
-                                <property name="label" translatable="yes">Both</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_letters_usage_name</property>
+                                <property name="label" translatable="yes">Both</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Upper/Lower cases</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">1</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Usage Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_purge_name">
-                                <property name="label" translatable="yes">Only Name</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Only Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_purge_extension">
-                                <property name="label" translatable="yes">Only Extension</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_purge_name</property>
+                                <property name="label" translatable="yes">Only Extension</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_purge_both">
-                                <property name="label" translatable="yes">Both</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_purge_name</property>
+                                <property name="label" translatable="yes">Both</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Purge</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">2</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Place to put number:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_add_number_before_name">
-                                <property name="label" translatable="yes">Before Name</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Before Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_add_number_after_name">
-                                <property name="label" translatable="yes">After Name</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_add_number_before_name</property>
+                                <property name="label" translatable="yes">After Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Number Settings:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <!-- n-columns=3 n-rows=3 -->
                           <object class="GtkGrid">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="column-homogeneous">True</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Start Number</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -467,9 +436,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Step</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -478,11 +447,11 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_add_number_start_number">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="input-purpose">digits</property>
                                 <property name="max-length">30</property>
                                 <property name="text" translatable="yes">1</property>
-                                <property name="input-purpose">digits</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
@@ -491,11 +460,11 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_add_number_step">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="input-purpose">digits</property>
                                 <property name="max-length">30</property>
                                 <property name="text" translatable="yes">1</property>
-                                <property name="input-purpose">digits</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
@@ -504,9 +473,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Fill with zeros</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -515,340 +484,303 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_add_number_zeros">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="input-purpose">digits</property>
                                 <property name="max-length">4</property>
                                 <property name="text" translatable="yes">0</property>
-                                <property name="input-purpose">digits</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">2</property>
                               </packing>
                             </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Add Number</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">3</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Usage Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_add_text_before_name">
-                                <property name="label" translatable="yes">Before Name</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Before Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_add_text_after_name">
-                                <property name="label" translatable="yes">After Name</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_add_text_before_name</property>
+                                <property name="label" translatable="yes">After Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Text to add:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry_add_text_text_to_add">
-                            <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="text" translatable="yes">Źdźbło</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">4</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Add Text</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">4</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Usage Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_replace_name">
-                                <property name="label" translatable="yes">Only Name</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Only Name</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_replace_extension">
-                                <property name="label" translatable="yes">Only Extension</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_replace_name</property>
+                                <property name="label" translatable="yes">Only Extension</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_replace_both">
-                                <property name="label" translatable="yes">Both</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_replace_name</property>
+                                <property name="label" translatable="yes">Both</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Case Sensitivity</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="visible">True</property>
                                 <child>
                                   <object class="GtkRadioButton" id="radio_button_replace_case_sensitive">
-                                    <property name="label" translatable="yes">Case Sensitive</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
                                     <property name="active">True</property>
+                                    <property name="can-focus">True</property>
                                     <property name="draw-indicator">True</property>
+                                    <property name="label" translatable="yes">Case Sensitive</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="visible">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">False</property>
-                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radio_button_replace_case_insensitive">
-                                    <property name="label" translatable="yes">Case Insensitive</property>
-                                    <property name="visible">True</property>
                                     <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
                                     <property name="draw-indicator">True</property>
                                     <property name="group">radio_button_replace_case_sensitive</property>
+                                    <property name="label" translatable="yes">Case Insensitive</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="visible">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">False</property>
-                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
                           <!-- n-columns=3 n-rows=3 -->
                           <object class="GtkGrid">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="column-homogeneous">True</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Replaced Text</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -857,10 +789,10 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_replace_text_to_change">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="max-length">100</property>
                                 <property name="text" translatable="yes">k</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
@@ -869,10 +801,10 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_replace_text_to_remove">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="max-length">100</property>
                                 <property name="text" translatable="yes">a</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
@@ -881,9 +813,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Text to replace</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -892,9 +824,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Replacing Strings:</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -902,290 +834,252 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">5</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Replace</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">5</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">5</property>
-                    <property name="margin-end">5</property>
                     <property name="margin-bottom">5</property>
+                    <property name="margin-end">5</property>
+                    <property name="margin-start">5</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Usage Type:</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_name_start">
-                                <property name="label" translatable="yes">Name Start</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Name Start</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_name_end">
-                                <property name="label" translatable="yes">Name End</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_trim_name_start</property>
+                                <property name="label" translatable="yes">Name End</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_extension_start">
-                                <property name="label" translatable="yes">Extension Start</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_trim_name_start</property>
+                                <property name="label" translatable="yes">Extension Start</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_extension_end">
-                                <property name="label" translatable="yes">Extension End</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_trim_name_start</property>
+                                <property name="label" translatable="yes">Extension End</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Case Sensitivity</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_case_sensitive">
-                                <property name="label" translatable="yes">Case Sensitive</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="active">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="label" translatable="yes">Case Sensitive</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="radio_button_trim_case_insensitive">
-                                <property name="label" translatable="yes">Case Insensitive</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">radio_button_trim_case_sensitive</property>
+                                <property name="label" translatable="yes">Case Insensitive</property>
+                                <property name="receives-default">False</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Trim text</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry_add_text_text_to_trim">
-                            <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">6</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Trim</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">6</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="margin-bottom">10</property>
                         <property name="label" translatable="yes">Normalize Name</property>
+                        <property name="margin-bottom">10</property>
+                        <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">5</property>
-                        <property name="margin-bottom">10</property>
                         <property name="label" translatable="yes">Everything - renames the name to one that containsonly the
                           characters `a-z`, `0-9`, `-`, ` `, `.`.
                           e.g. `żółć CZERona.Txt` -&gt; `zolc-czerwona.txt`
@@ -1193,70 +1087,65 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
 Partial - works exacly same as option above, but allows
                   to use spaces ` ` and big letters `A-Z`
                   e.g. ` Źrebię Krokietowe.Rar ` -&gt; `Zrebie Krokietowe.Rar`</property>
+                        <property name="margin-bottom">10</property>
+                        <property name="margin-start">5</property>
+                        <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkRadioButton" id="radio_button_normalize_everything">
-                            <property name="label" translatable="yes">Everything</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">center</property>
                             <property name="active">True</property>
+                            <property name="can-focus">True</property>
                             <property name="draw-indicator">True</property>
+                            <property name="halign">center</property>
+                            <property name="label" translatable="yes">Everything</property>
+                            <property name="receives-default">False</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="radio_button_normalize_partial">
-                            <property name="label" translatable="yes">Partial</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="halign">center</property>
                             <property name="active">True</property>
+                            <property name="can-focus">True</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">radio_button_normalize_everything</property>
+                            <property name="halign">center</property>
+                            <property name="label" translatable="yes">Partial</property>
+                            <property name="receives-default">False</property>
+                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">7</property>
-                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Normalize Name</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
-                    <property name="position">7</property>
                     <property name="tab-fill">False</property>
                   </packing>
                 </child>
@@ -1264,191 +1153,173 @@ Partial - works exacly same as option above, but allows
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="visible">True</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
                     <property name="label" translatable="yes">EXAMPLE</property>
+                    <property name="margin-bottom">5</property>
+                    <property name="margin-top">5</property>
+                    <property name="visible">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="visible">True</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="margin-start">10</property>
-                            <property name="margin-end">10</property>
-                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="orientation">vertical</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">Before:</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="label" translatable="yes">After:</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="visible">True</property>
                             <child>
                               <object class="GtkEntry" id="entry_example_before">
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="max-length">100</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label_example_after">
-                                <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin-start">3</property>
                                 <property name="label" translatable="yes">label</property>
+                                <property name="margin-start">3</property>
+                                <property name="visible">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="button_example_reset">
-                        <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
                         <property name="margin-start">5</property>
+                        <property name="receives-default">True</property>
+                        <property name="visible">True</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="icon-name">edit-delete</property>
+                            <property name="visible">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkButtonBox">
-            <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-bottom">5</property>
             <property name="layout-style">end</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-start">5</property>
+            <property name="visible">True</property>
             <child>
               <object class="GtkButton" id="button_rule_window_add">
-                <property name="label" translatable="yes">Add Rule</property>
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="label" translatable="yes">Add Rule</property>
                 <property name="receives-default">True</property>
+                <property name="visible">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
           </packing>
         </child>
       </object>
