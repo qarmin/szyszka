@@ -212,46 +212,46 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
     let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();
     let button_rule_window_add = gui_data.window_rules.button_rule_window_add.clone();
 
-    let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
-    let radio_button_letters_type_lowercase = window_rules.size_letters.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_usage_name = window_rules.size_letters.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = window_rules.size_letters.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_usage_both = window_rules.size_letters.radio_button_letters_usage_both.clone();
+    let check_button_letters_type_uppercase = window_rules.size_letters.check_button_letters_type_uppercase.clone();
+    let check_button_letters_type_lowercase = window_rules.size_letters.check_button_letters_type_lowercase.clone();
+    let check_button_letters_usage_name = window_rules.size_letters.check_button_letters_usage_name.clone();
+    let check_button_letters_usage_extension = window_rules.size_letters.check_button_letters_usage_extension.clone();
+    let check_button_letters_usage_both = window_rules.size_letters.check_button_letters_usage_both.clone();
 
-    let radio_button_purge_name = window_rules.purge.radio_button_purge_name.clone();
-    let radio_button_purge_extension = window_rules.purge.radio_button_purge_extension.clone();
-    let radio_button_purge_both = window_rules.purge.radio_button_purge_both.clone();
+    let check_button_purge_name = window_rules.purge.check_button_purge_name.clone();
+    let check_button_purge_extension = window_rules.purge.check_button_purge_extension.clone();
+    let check_button_purge_both = window_rules.purge.check_button_purge_both.clone();
 
-    let radio_button_add_text_after_name = window_rules.add_text.radio_button_add_text_after_name.clone();
-    let radio_button_add_text_before_name = window_rules.add_text.radio_button_add_text_before_name.clone();
+    let check_button_add_text_after_name = window_rules.add_text.check_button_add_text_after_name.clone();
+    let check_button_add_text_before_name = window_rules.add_text.check_button_add_text_before_name.clone();
     let entry_add_text_text_to_add = window_rules.add_text.entry_add_text_text_to_add.clone();
 
     let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
-    let radio_button_trim_name_start = window_rules.trim.radio_button_trim_name_start.clone();
-    let radio_button_trim_name_end = window_rules.trim.radio_button_trim_name_end.clone();
-    let radio_button_trim_extension_start = window_rules.trim.radio_button_trim_extension_start.clone();
-    let radio_button_trim_extension_end = window_rules.trim.radio_button_trim_extension_end.clone();
-    let radio_button_trim_case_insensitive = window_rules.trim.radio_button_trim_case_insensitive.clone();
-    let radio_button_trim_case_sensitive = window_rules.trim.radio_button_trim_case_sensitive;
+    let check_button_trim_name_start = window_rules.trim.check_button_trim_name_start.clone();
+    let check_button_trim_name_end = window_rules.trim.check_button_trim_name_end.clone();
+    let check_button_trim_extension_start = window_rules.trim.check_button_trim_extension_start.clone();
+    let check_button_trim_extension_end = window_rules.trim.check_button_trim_extension_end.clone();
+    let check_button_trim_case_insensitive = window_rules.trim.check_button_trim_case_insensitive.clone();
+    let check_button_trim_case_sensitive = window_rules.trim.check_button_trim_case_sensitive;
 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
-    let radio_button_replace_extension = window_rules.replace.radio_button_replace_extension.clone();
-    let radio_button_replace_name = window_rules.replace.radio_button_replace_name.clone();
-    let radio_button_replace_both = window_rules.replace.radio_button_replace_both.clone();
-    let radio_button_replace_case_insensitive = window_rules.replace.radio_button_replace_case_insensitive.clone();
-    let radio_button_replace_case_sensitive = window_rules.replace.radio_button_replace_case_sensitive.clone();
+    let check_button_replace_extension = window_rules.replace.check_button_replace_extension.clone();
+    let check_button_replace_name = window_rules.replace.check_button_replace_name.clone();
+    let check_button_replace_both = window_rules.replace.check_button_replace_both.clone();
+    let check_button_replace_case_insensitive = window_rules.replace.check_button_replace_case_insensitive.clone();
+    let check_button_replace_case_sensitive = window_rules.replace.check_button_replace_case_sensitive.clone();
     let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change;
 
-    let radio_button_add_number_before_name = window_rules.add_number.radio_button_add_number_before_name.clone();
-    let radio_button_add_number_after_name = window_rules.add_number.radio_button_add_number_after_name.clone();
+    let check_button_add_number_before_name = window_rules.add_number.check_button_add_number_before_name.clone();
+    let check_button_add_number_after_name = window_rules.add_number.check_button_add_number_after_name.clone();
     let entry_add_number_start_number = window_rules.add_number.entry_add_number_start_number.clone();
     let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
     let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros;
 
-    let radio_button_normalize_everything = window_rules.normalize.radio_button_normalize_everything.clone();
-    let radio_button_normalize_partial = window_rules.normalize.radio_button_normalize_partial;
+    let check_button_normalize_everything = window_rules.normalize.check_button_normalize_everything.clone();
+    let check_button_normalize_partial = window_rules.normalize.check_button_normalize_partial;
 
     button_edit_rule.connect_clicked(move |_e| {
         let mut rules = rules.borrow_mut();
@@ -291,52 +291,52 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
         match rule_type {
             RuleType::CaseSize => {
                 if rule_data.to_lowercase {
-                    radio_button_letters_type_lowercase.set_active(true);
+                    check_button_letters_type_lowercase.set_active(true);
                 } else {
-                    radio_button_letters_type_uppercase.set_active(true);
+                    check_button_letters_type_uppercase.set_active(true);
                 }
 
                 if rule_place == RulePlace::Extension {
-                    radio_button_letters_usage_extension.set_active(true);
+                    check_button_letters_usage_extension.set_active(true);
                 } else if rule_place == RulePlace::ExtensionAndName {
-                    radio_button_letters_usage_both.set_active(true);
+                    check_button_letters_usage_both.set_active(true);
                 } else if rule_place == RulePlace::Name {
-                    radio_button_letters_usage_name.set_active(true);
+                    check_button_letters_usage_name.set_active(true);
                 }
             }
             RuleType::Purge => {
                 if rule_place == RulePlace::Extension {
-                    radio_button_purge_extension.set_active(true);
+                    check_button_purge_extension.set_active(true);
                 } else if rule_place == RulePlace::ExtensionAndName {
-                    radio_button_purge_both.set_active(true);
+                    check_button_purge_both.set_active(true);
                 } else if rule_place == RulePlace::Name {
-                    radio_button_purge_name.set_active(true);
+                    check_button_purge_name.set_active(true);
                 }
             }
             RuleType::AddText => {
                 if rule_place == RulePlace::BeforeName {
-                    radio_button_add_text_before_name.set_active(true);
+                    check_button_add_text_before_name.set_active(true);
                 } else if rule_place == RulePlace::AfterName {
-                    radio_button_add_text_after_name.set_active(true);
+                    check_button_add_text_after_name.set_active(true);
                 }
 
                 entry_add_text_text_to_add.set_text(rule_data.add_text_text.as_str());
             }
             RuleType::Trim => {
                 if rule_place == RulePlace::FromNameStart {
-                    radio_button_trim_name_start.set_active(true);
+                    check_button_trim_name_start.set_active(true);
                 } else if rule_place == RulePlace::FromNameEndReverse {
-                    radio_button_trim_name_end.set_active(true);
+                    check_button_trim_name_end.set_active(true);
                 } else if rule_place == RulePlace::FromExtensionStart {
-                    radio_button_trim_extension_start.set_active(true);
+                    check_button_trim_extension_start.set_active(true);
                 } else if rule_place == RulePlace::FromExtensionEndReverse {
-                    radio_button_trim_extension_end.set_active(true);
+                    check_button_trim_extension_end.set_active(true);
                 }
 
                 if rule_data.case_sensitive {
-                    radio_button_trim_case_sensitive.set_active(true);
+                    check_button_trim_case_sensitive.set_active(true);
                 } else {
-                    radio_button_trim_case_insensitive.set_active(true);
+                    check_button_trim_case_insensitive.set_active(true);
                 }
 
                 entry_add_text_text_to_trim.set_text(rule_data.trim_text.as_str());
@@ -346,17 +346,17 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
             }
             RuleType::Replace => {
                 if rule_place == RulePlace::ExtensionAndName {
-                    radio_button_replace_both.set_active(true);
+                    check_button_replace_both.set_active(true);
                 } else if rule_place == RulePlace::Name {
-                    radio_button_replace_name.set_active(true);
+                    check_button_replace_name.set_active(true);
                 } else if rule_place == RulePlace::Extension {
-                    radio_button_replace_extension.set_active(true);
+                    check_button_replace_extension.set_active(true);
                 }
 
                 if rule_data.case_sensitive {
-                    radio_button_replace_case_sensitive.set_active(true);
+                    check_button_replace_case_sensitive.set_active(true);
                 } else {
-                    radio_button_replace_case_insensitive.set_active(true);
+                    check_button_replace_case_insensitive.set_active(true);
                 }
 
                 entry_replace_text_to_remove.set_text(rule_data.text_to_remove.as_str());
@@ -364,9 +364,9 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
             }
             RuleType::AddNumber => {
                 if rule_place == RulePlace::BeforeName {
-                    radio_button_add_number_before_name.set_active(true);
+                    check_button_add_number_before_name.set_active(true);
                 } else if rule_place == RulePlace::AfterName {
-                    radio_button_add_number_after_name.set_active(true);
+                    check_button_add_number_after_name.set_active(true);
                 }
 
                 entry_add_number_zeros.set_text(rule_data.fill_with_zeros.to_string().as_str());
@@ -375,9 +375,9 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
             }
             RuleType::Normalize => {
                 if rule_data.full_normalize {
-                    radio_button_normalize_everything.set_active(true);
+                    check_button_normalize_everything.set_active(true);
                 } else {
-                    radio_button_normalize_partial.set_active(true);
+                    check_button_normalize_partial.set_active(true);
                 }
             }
         }

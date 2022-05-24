@@ -112,7 +112,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_letters_type_uppercase">
+                              <object class="GtkCheckButton" id="check_button_letters_type_uppercase">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -126,10 +126,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_letters_type_lowercase">
+                              <object class="GtkCheckButton" id="check_button_letters_type_lowercase">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_letters_type_uppercase</property>
                                 <property name="label" translatable="yes">Lowercase</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -172,7 +171,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_letters_usage_name">
+                              <object class="GtkCheckButton" id="check_button_letters_usage_name">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -186,10 +185,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_letters_usage_extension">
+                              <object class="GtkCheckButton" id="check_button_letters_usage_extension">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_letters_usage_name</property>
                                 <property name="label" translatable="yes">Only Extension</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -200,10 +198,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_letters_usage_both">
+                              <object class="GtkCheckButton" id="check_button_letters_usage_both">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_letters_usage_name</property>
                                 <property name="label" translatable="yes">Both</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -267,7 +264,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_purge_name">
+                              <object class="GtkCheckButton" id="check_button_purge_name">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -281,10 +278,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_purge_extension">
+                              <object class="GtkCheckButton" id="check_button_purge_extension">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_purge_name</property>
                                 <property name="label" translatable="yes">Only Extension</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -295,10 +291,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_purge_both">
+                              <object class="GtkCheckButton" id="check_button_purge_both">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_purge_name</property>
                                 <property name="label" translatable="yes">Both</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -362,7 +357,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_add_number_before_name">
+                              <object class="GtkCheckButton" id="check_button_add_number_before_name">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -376,10 +371,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_add_number_after_name">
+                              <object class="GtkCheckButton" id="check_button_add_number_after_name">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_add_number_before_name</property>
                                 <property name="label" translatable="yes">After Name</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -549,7 +543,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_add_text_before_name">
+                              <object class="GtkCheckButton" id="check_button_add_text_before_name">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -563,10 +557,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_add_text_after_name">
+                              <object class="GtkCheckButton" id="check_button_add_text_after_name">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_add_text_before_name</property>
                                 <property name="label" translatable="yes">After Name</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -663,7 +656,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_replace_name">
+                              <object class="GtkCheckButton" id="check_button_replace_name">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -677,10 +670,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_replace_extension">
+                              <object class="GtkCheckButton" id="check_button_replace_extension">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_replace_name</property>
                                 <property name="label" translatable="yes">Only Extension</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -691,10 +683,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_replace_both">
+                              <object class="GtkCheckButton" id="check_button_replace_both">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_replace_name</property>
                                 <property name="label" translatable="yes">Both</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -731,7 +722,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                                 <property name="can-focus">False</property>
                                 <property name="visible">True</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="radio_button_replace_case_sensitive">
+                                  <object class="GtkCheckButton" id="check_button_replace_case_sensitive">
                                     <property name="active">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="draw-indicator">True</property>
@@ -745,10 +736,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radio_button_replace_case_insensitive">
+                                  <object class="GtkCheckButton" id="check_button_replace_case_insensitive">
                                     <property name="can-focus">True</property>
                                     <property name="draw-indicator">True</property>
-                                    <property name="group">radio_button_replace_case_sensitive</property>
                                     <property name="label" translatable="yes">Case Insensitive</property>
                                     <property name="receives-default">False</property>
                                     <property name="visible">True</property>
@@ -888,7 +878,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_name_start">
+                              <object class="GtkCheckButton" id="check_button_trim_name_start">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -902,10 +892,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_name_end">
+                              <object class="GtkCheckButton" id="check_button_trim_name_end">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_trim_name_start</property>
                                 <property name="label" translatable="yes">Name End</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -916,10 +905,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_extension_start">
+                              <object class="GtkCheckButton" id="check_button_trim_extension_start">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_trim_name_start</property>
                                 <property name="label" translatable="yes">Extension Start</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -930,10 +918,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_extension_end">
+                              <object class="GtkCheckButton" id="check_button_trim_extension_end">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_trim_name_start</property>
                                 <property name="label" translatable="yes">Extension End</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -976,7 +963,7 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                             <property name="can-focus">False</property>
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_case_sensitive">
+                              <object class="GtkCheckButton" id="check_button_trim_case_sensitive">
                                 <property name="active">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
@@ -990,10 +977,9 @@ starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="radio_button_trim_case_insensitive">
+                              <object class="GtkCheckButton" id="check_button_trim_case_insensitive">
                                 <property name="can-focus">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="group">radio_button_trim_case_sensitive</property>
                                 <property name="label" translatable="yes">Case Insensitive</property>
                                 <property name="receives-default">False</property>
                                 <property name="visible">True</property>
@@ -1101,7 +1087,7 @@ Partial - works exacly same as option above, but allows
                         <property name="can-focus">False</property>
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkRadioButton" id="radio_button_normalize_everything">
+                          <object class="GtkCheckButton" id="check_button_normalize_everything">
                             <property name="active">True</property>
                             <property name="can-focus">True</property>
                             <property name="draw-indicator">True</property>
@@ -1116,11 +1102,10 @@ Partial - works exacly same as option above, but allows
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="radio_button_normalize_partial">
+                          <object class="GtkCheckButton" id="check_button_normalize_partial">
                             <property name="active">True</property>
                             <property name="can-focus">True</property>
                             <property name="draw-indicator">True</property>
-                            <property name="group">radio_button_normalize_everything</property>
                             <property name="halign">center</property>
                             <property name="label" translatable="yes">Partial</property>
                             <property name="receives-default">False</property>

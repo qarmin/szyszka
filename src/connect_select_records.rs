@@ -147,11 +147,11 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             let label: gtk::Label = gtk::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
             let radio_path = gtk::CheckButton::with_label("Path");
-            let radio_current_name = gtk::CheckButton::with_label_from_widget(&radio_path, "Current Name");
-            let radio_future_name = gtk::CheckButton::with_label_from_widget(&radio_path, "Future Name");
-            let radio_current_name_path = gtk::CheckButton::with_label_from_widget(&radio_path, "Path + Current Name");
-            let radio_future_name_path = gtk::CheckButton::with_label_from_widget(&radio_path, "Path + Future Name");
-            let radio_is_dir = gtk::CheckButton::with_label_from_widget(&radio_path, "Directory/File");
+            let radio_current_name = gtk::CheckButton::with_label("Current Name");
+            let radio_future_name = gtk::CheckButton::with_label("Future Name");
+            let radio_current_name_path = gtk::CheckButton::with_label("Path + Current Name");
+            let radio_future_name_path = gtk::CheckButton::with_label("Path + Future Name");
+            let radio_is_dir = gtk::CheckButton::with_label("Directory/File");
 
             let entry_path = gtk::Entry::new();
             let entry_current_name = gtk::Entry::new();
@@ -320,11 +320,11 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             let label: gtk::Label = gtk::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
             let radio_path = gtk::CheckButton::with_label("Path");
-            let radio_current_name = gtk::CheckButton::with_label_from_widget(&radio_path, "Current Name");
-            let radio_future_name = gtk::CheckButton::with_label_from_widget(&radio_path, "Future Name");
-            let radio_current_name_path = gtk::CheckButton::with_label_from_widget(&radio_path, "Path + Current Name");
-            let radio_future_name_path = gtk::CheckButton::with_label_from_widget(&radio_path, "Path + Future Name");
-            let radio_is_dir = gtk::CheckButton::with_label_from_widget(&radio_path, "Directory/File");
+            let radio_current_name = gtk::CheckButton::with_label("Current Name");
+            let radio_future_name = gtk::CheckButton::with_label("Future Name");
+            let radio_current_name_path = gtk::CheckButton::with_label("Path + Current Name");
+            let radio_future_name_path = gtk::CheckButton::with_label("Path + Future Name");
+            let radio_is_dir = gtk::CheckButton::with_label("Directory/File");
 
             let entry_path = gtk::Entry::new();
             let entry_current_name = gtk::Entry::new();
