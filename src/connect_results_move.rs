@@ -1,7 +1,7 @@
 use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 pub fn connect_results_modify_one_up(gui_data: &GuiData) {
     let button_results_one_up = gui_data.upper_buttons.button_results_one_up.clone();
@@ -30,7 +30,7 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
                 let mut current_path_number = 0;
 
                 loop {
-                    let path = list_store.path(&temp_iter).unwrap();
+                    let path = list_store.path(&temp_iter);
                     if selected_rows[current_path_number] == path {
                         selected_results.push(true);
                         current_path_number += 1;
@@ -65,21 +65,21 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
                     if selected_results[i] && !selected_results[i - 1] {
                         selected_results.swap(i, i - 1);
 
-                        let previous_creation = list_store.value(&previous_iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
-                        let previous_modification = list_store.value(&previous_iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
-                        let previous_size = list_store.value(&previous_iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
-                        let previous_path = list_store.value(&previous_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                        let previous_future_name = list_store.value(&previous_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
-                        let previous_type = list_store.value(&previous_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                        let previous_current_name = list_store.value(&previous_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                        let previous_creation = list_store.get::<u64>(&previous_iter, ColumnsResults::CreationDate as i32);
+                        let previous_modification = list_store.get::<u64>(&previous_iter, ColumnsResults::ModificationDate as i32);
+                        let previous_size = list_store.get::<u64>(&previous_iter, ColumnsResults::Size as i32);
+                        let previous_path = list_store.get::<String>(&previous_iter, ColumnsResults::Path as i32);
+                        let previous_future_name = list_store.get::<String>(&previous_iter, ColumnsResults::FutureName as i32);
+                        let previous_type = list_store.get::<String>(&previous_iter, ColumnsResults::Type as i32);
+                        let previous_current_name = list_store.get::<String>(&previous_iter, ColumnsResults::CurrentName as i32);
 
-                        let current_creation = list_store.value(&current_iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
-                        let current_modification = list_store.value(&current_iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
-                        let current_size = list_store.value(&current_iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
-                        let current_path = list_store.value(&current_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                        let current_future_name = list_store.value(&current_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
-                        let current_type = list_store.value(&current_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                        let current_current_name = list_store.value(&current_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                        let current_creation = list_store.get::<u64>(&current_iter, ColumnsResults::CreationDate as i32);
+                        let current_modification = list_store.get::<u64>(&current_iter, ColumnsResults::ModificationDate as i32);
+                        let current_size = list_store.get::<u64>(&current_iter, ColumnsResults::Size as i32);
+                        let current_path = list_store.get::<String>(&current_iter, ColumnsResults::Path as i32);
+                        let current_future_name = list_store.get::<String>(&current_iter, ColumnsResults::FutureName as i32);
+                        let current_type = list_store.get::<String>(&current_iter, ColumnsResults::Type as i32);
+                        let current_current_name = list_store.get::<String>(&current_iter, ColumnsResults::CurrentName as i32);
 
                         list_store.set_value(&previous_iter, ColumnsResults::CreationDate as u32, &current_creation.to_value());
                         list_store.set_value(&previous_iter, ColumnsResults::ModificationDate as u32, &current_modification.to_value());
@@ -142,7 +142,7 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                 let mut current_path_number = 0;
 
                 loop {
-                    let path = list_store.path(&temp_iter).unwrap();
+                    let path = list_store.path(&temp_iter);
                     if selected_rows[current_path_number] == path {
                         selected_results.push(true);
                         current_path_number += 1;
@@ -185,21 +185,21 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                     if selected_results[i] && !selected_results[i + 1] {
                         selected_results.swap(i, i + 1);
 
-                        let previous_creation = list_store.value(&previous_iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
-                        let previous_modification = list_store.value(&previous_iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
-                        let previous_size = list_store.value(&previous_iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
-                        let previous_path = list_store.value(&previous_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                        let previous_future_name = list_store.value(&previous_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
-                        let previous_type = list_store.value(&previous_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                        let previous_current_name = list_store.value(&previous_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                        let previous_creation = list_store.get::<u64>(&previous_iter, ColumnsResults::CreationDate as i32);
+                        let previous_modification = list_store.get::<u64>(&previous_iter, ColumnsResults::ModificationDate as i32);
+                        let previous_size = list_store.get::<u64>(&previous_iter, ColumnsResults::Size as i32);
+                        let previous_path = list_store.get::<String>(&previous_iter, ColumnsResults::Path as i32);
+                        let previous_future_name = list_store.get::<String>(&previous_iter, ColumnsResults::FutureName as i32);
+                        let previous_type = list_store.get::<String>(&previous_iter, ColumnsResults::Type as i32);
+                        let previous_current_name = list_store.get::<String>(&previous_iter, ColumnsResults::CurrentName as i32);
 
-                        let current_creation = list_store.value(&current_iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
-                        let current_modification = list_store.value(&current_iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
-                        let current_size = list_store.value(&current_iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
-                        let current_path = list_store.value(&current_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                        let current_future_name = list_store.value(&current_iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
-                        let current_type = list_store.value(&current_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                        let current_current_name = list_store.value(&current_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                        let current_creation = list_store.get::<u64>(&current_iter, ColumnsResults::CreationDate as i32);
+                        let current_modification = list_store.get::<u64>(&current_iter, ColumnsResults::ModificationDate as i32);
+                        let current_size = list_store.get::<u64>(&current_iter, ColumnsResults::Size as i32);
+                        let current_path = list_store.get::<String>(&current_iter, ColumnsResults::Path as i32);
+                        let current_future_name = list_store.get::<String>(&current_iter, ColumnsResults::FutureName as i32);
+                        let current_type = list_store.get::<String>(&current_iter, ColumnsResults::Type as i32);
+                        let current_current_name = list_store.get::<String>(&current_iter, ColumnsResults::CurrentName as i32);
 
                         list_store.set_value(&previous_iter, ColumnsResults::CreationDate as u32, &current_creation.to_value());
                         list_store.set_value(&previous_iter, ColumnsResults::ModificationDate as u32, &current_modification.to_value());

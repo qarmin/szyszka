@@ -78,10 +78,10 @@ use crate::connect_start_renaming::*;
 use crate::example_fields::connect_update_examples;
 use crate::gui_data::GuiData;
 use crate::initialize_gui::*;
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 fn main() {
-    gtk::init().expect("Failed to initialize GTK.");
+    gtk4::init().expect("Failed to initialize GTK.");
 
     let gui_data: GuiData = GuiData::new();
 
@@ -140,12 +140,13 @@ fn main() {
     connect_results_modify_one_up(&gui_data);
     connect_results_modify_one_down(&gui_data);
 
+    // TODO GTK 4
     // Quit the program when X in main window was clicked
-    gui_data.window_main.connect_delete_event(|_, _| {
-        gtk::main_quit();
-        Inhibit(false)
-    });
+    // gui_data.window_main.connect_delete_event(|_, _| {
+    //     gtk4::main_quit();
+    //     Inhibit(false)
+    // });
 
     // We start the gtk main loop.
-    gtk::main();
+    gtk4::main();
 }

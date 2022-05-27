@@ -6,15 +6,14 @@ use crate::class_dialog_rule_purge::GuiPurge;
 use crate::class_dialog_rule_replace::GuiReplace;
 use crate::class_dialog_rule_size_letters::GuiSizeLetters;
 use crate::class_dialog_rule_trim::GuiTrim;
-use gtk::prelude::*;
-use gtk::{Button, Entry, Label, WindowPosition};
+use gtk4::{Button, Entry, Label};
 
 #[derive(Clone)]
 pub struct GuiDialogRules {
-    pub notebook_choose_rule: gtk::Notebook,
+    pub notebook_choose_rule: gtk4::Notebook,
 
-    pub window_with_rules: gtk::Window,
-    pub button_rule_window_add: gtk::Button,
+    pub window_with_rules: gtk4::Window,
+    pub button_rule_window_add: gtk4::Button,
 
     pub size_letters: GuiSizeLetters,
     pub purge: GuiPurge,
@@ -31,12 +30,11 @@ pub struct GuiDialogRules {
 }
 
 impl GuiDialogRules {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let notebook_choose_rule: gtk::Notebook = builder.object("notebook_choose_rule").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let notebook_choose_rule: gtk4::Notebook = builder.object("notebook_choose_rule").unwrap();
 
-        let window_with_rules: gtk::Window = builder.object("window_with_rules").unwrap();
-        window_with_rules.set_position(WindowPosition::Center);
-        let button_rule_window_add: gtk::Button = builder.object("button_rule_window_add").unwrap();
+        let window_with_rules: gtk4::Window = builder.object("window_with_rules").unwrap();
+        let button_rule_window_add: gtk4::Button = builder.object("button_rule_window_add").unwrap();
 
         let size_letters: GuiSizeLetters = GuiSizeLetters::create_from_builder(builder);
         let purge: GuiPurge = GuiPurge::create_from_builder(builder);
@@ -47,9 +45,9 @@ impl GuiDialogRules {
         let add_number: GuiAddNumber = GuiAddNumber::create_from_builder(builder);
         let normalize: GuiNormalize = GuiNormalize::create_from_builder(builder);
 
-        let entry_example_before: gtk::Entry = builder.object("entry_example_before").unwrap();
-        let label_example_after: gtk::Label = builder.object("label_example_after").unwrap();
-        let button_example_reset: gtk::Button = builder.object("button_example_reset").unwrap();
+        let entry_example_before: gtk4::Entry = builder.object("entry_example_before").unwrap();
+        let label_example_after: gtk4::Label = builder.object("label_example_after").unwrap();
+        let button_example_reset: gtk4::Button = builder.object("button_example_reset").unwrap();
 
         Self {
             notebook_choose_rule,

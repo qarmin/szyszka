@@ -6,8 +6,8 @@ use crate::gui_data_upper_buttons::*;
 use crate::gui_popover_select::GuiPopoverSelect;
 use crate::help_function::ResultEntries;
 use crate::rules::Rules;
-use gtk::prelude::*;
-use gtk::{Builder, WindowPosition};
+use gtk4::prelude::*;
+use gtk4::Builder;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -18,7 +18,7 @@ pub struct GuiData {
     // pub builder: Builder,
 
     // Window
-    pub window_main: gtk::Window,
+    pub window_main: gtk4::Window,
 
     // Subcategories
     pub upper_buttons: GuiUpperButtons,
@@ -51,10 +51,9 @@ impl GuiData {
         let builder_rule_chooser = Builder::from_string(rule_chooser_src.as_str());
 
         //// Windows
-        let window_main: gtk::Window = builder_window_main.object("window_main").unwrap();
-        window_main.set_position(WindowPosition::Center);
-        window_main.show_all();
-        window_main.set_title("Szyszka");
+        let window_main: gtk4::Window = builder_window_main.object("window_main").unwrap();
+        window_main.show();
+        window_main.set_title(Some("Szyszka"));
 
         let upper_buttons = GuiUpperButtons::create_from_builder(&builder_window_main);
         let results = GuiResults::create_from_builder(&builder_window_main);

@@ -1,29 +1,27 @@
-use gtk::prelude::*;
-
 #[derive(Clone)]
 pub struct GuiReplace {
-    pub check_button_replace_name: gtk::CheckButton,
-    pub check_button_replace_extension: gtk::CheckButton,
-    pub check_button_replace_both: gtk::CheckButton,
+    pub check_button_replace_name: gtk4::CheckButton,
+    pub check_button_replace_extension: gtk4::CheckButton,
+    pub check_button_replace_both: gtk4::CheckButton,
 
-    pub check_button_replace_case_insensitive: gtk::CheckButton,
-    pub check_button_replace_case_sensitive: gtk::CheckButton,
+    pub check_button_replace_case_insensitive: gtk4::CheckButton,
+    pub check_button_replace_case_sensitive: gtk4::CheckButton,
 
-    pub entry_replace_text_to_remove: gtk::Entry,
-    pub entry_replace_text_to_change: gtk::Entry,
+    pub entry_replace_text_to_remove: gtk4::Entry,
+    pub entry_replace_text_to_change: gtk4::Entry,
 }
 
 impl GuiReplace {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let check_button_replace_name: gtk::CheckButton = builder.object("check_button_replace_name").unwrap();
-        let check_button_replace_extension: gtk::CheckButton = builder.object("check_button_replace_extension").unwrap();
-        let check_button_replace_both: gtk::CheckButton = builder.object("check_button_replace_both").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_replace_name: gtk4::CheckButton = builder.object("check_button_replace_name").unwrap();
+        let check_button_replace_extension: gtk4::CheckButton = builder.object("check_button_replace_extension").unwrap();
+        let check_button_replace_both: gtk4::CheckButton = builder.object("check_button_replace_both").unwrap();
 
-        let entry_replace_text_to_remove: gtk::Entry = builder.object("entry_replace_text_to_remove").unwrap();
-        let entry_replace_text_to_change: gtk::Entry = builder.object("entry_replace_text_to_change").unwrap();
+        let entry_replace_text_to_remove: gtk4::Entry = builder.object("entry_replace_text_to_remove").unwrap();
+        let entry_replace_text_to_change: gtk4::Entry = builder.object("entry_replace_text_to_change").unwrap();
 
-        let check_button_replace_case_sensitive: gtk::CheckButton = builder.object("check_button_replace_case_sensitive").unwrap();
-        let check_button_replace_case_insensitive: gtk::CheckButton = builder.object("check_button_replace_case_insensitive").unwrap();
+        let check_button_replace_case_sensitive: gtk4::CheckButton = builder.object("check_button_replace_case_sensitive").unwrap();
+        let check_button_replace_case_insensitive: gtk4::CheckButton = builder.object("check_button_replace_case_insensitive").unwrap();
 
         Self {
             check_button_replace_name,

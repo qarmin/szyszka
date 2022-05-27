@@ -3,7 +3,7 @@ use crate::gui_data::GuiData;
 use crate::help_function::{read_rule_from_window, validate_name};
 use crate::notebook_enum::EXAMPLE_NAME;
 use crate::rules::Rules;
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 pub fn connect_update_examples(gui_data: &GuiData) {
     let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();

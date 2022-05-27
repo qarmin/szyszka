@@ -5,8 +5,8 @@ use crate::help_function::{ColumnsResults, CHARACTER};
 use crate::language_functions::LANGUAGES_ALL;
 use crate::notebook_enum::EXAMPLE_NAME;
 use glib::Type;
-use gtk::prelude::*;
-use gtk::{ScrolledWindow, SelectionMode};
+use gtk4::prelude::*;
+use gtk4::{ScrolledWindow, SelectionMode};
 
 pub fn initialize_gui(gui_data: &GuiData) {
     // Setup Languages
@@ -31,26 +31,27 @@ pub fn initialize_gui(gui_data: &GuiData) {
             glib::types::Type::U64,
         ];
 
-        let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
+        let list_store: gtk4::ListStore = gtk4::ListStore::new(&col_types);
 
-        let tree_view: gtk::TreeView = gui_data.results.tree_view_results.clone();
+        let tree_view: gtk4::TreeView = gui_data.results.tree_view_results.clone();
         tree_view.set_model(Some(&list_store));
 
         tree_view.selection().set_mode(SelectionMode::Multiple);
 
-        tree_view.connect_button_press_event(|tree_view, event| {
-            if event.event_type() == gdk::EventType::DoubleButtonPress && event.button() == 1 {
-                common_open_function(tree_view, OpenMode::PathAndName);
-            } else if event.event_type() == gdk::EventType::DoubleButtonPress && event.button() == 3 {
-                common_open_function(tree_view, OpenMode::OnlyPath);
-            }
-            gtk::Inhibit(false)
-        });
+        // TODO GTK 4
+        // tree_view.connect_button_press_event(|tree_view, event| {
+        //     if event.event_type() == gdk4::EventType::DoubleButtonPress && event.button() == 1 {
+        //         common_open_function(tree_view, OpenMode::PathAndName);
+        //     } else if event.event_type() == gdk4::EventType::DoubleButtonPress && event.button() == 3 {
+        //         common_open_function(tree_view, OpenMode::OnlyPath);
+        //     }
+        //     gtk4::Inhibit(false)
+        // });
 
         create_tree_view_results(&tree_view);
 
-        scrolled_window_results.add(&tree_view);
-        scrolled_window_results.show_all();
+        scrolled_window_results.some_child(Some(&tree_view));
+        scrolled_window_results.show();
     }
     // Create TreeView in Rules
     {
@@ -58,17 +59,17 @@ pub fn initialize_gui(gui_data: &GuiData) {
 
         let col_types: [Type; 3] = [glib::types::Type::STRING, glib::types::Type::STRING, glib::types::Type::STRING];
 
-        let list_store: gtk::ListStore = gtk::ListStore::new(&col_types);
+        let list_store: gtk4::ListStore = gtk4::ListStore::new(&col_types);
 
-        let tree_view: gtk::TreeView = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
+        let tree_view: gtk4::TreeView = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
         tree_view.set_model(Some(&list_store));
 
         // tree_view.selection().set_mode(SelectionMode::Multiple);
 
         create_tree_view_rules(&tree_view);
 
-        scrolled_window_rules.add(&tree_view);
-        scrolled_window_rules.show_all();
+        scrolled_window_rules.set_child(Some(&tree_view));
+        scrolled_window_rules.show();
     }
     // Set Example name
     {
@@ -83,14 +84,14 @@ pub enum OpenMode {
     PathAndName,
 }
 
-pub fn common_open_function(tree_view: &gtk::TreeView, opening_mode: OpenMode) {
+pub fn common_open_function(tree_view: &gtk4::TreeView, opening_mode: OpenMode) {
     let selection = tree_view.selection();
     let (selection_rows, tree_model) = selection.selected_rows();
 
     for tree_path in selection_rows.iter().rev() {
         let end_path;
-        let current_name = tree_model.value(&tree_model.iter(tree_path).unwrap(), ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-        let path = tree_model.value(&tree_model.iter(tree_path).unwrap(), ColumnsResults::Path as i32).get::<String>().unwrap();
+        let current_name = tree_model.get::<String>(&tree_model.iter(tree_path).unwrap(), ColumnsResults::CurrentName as i32);
+        let path = tree_model.get::<String>(&tree_model.iter(tree_path).unwrap(), ColumnsResults::Path as i32);
 
         match opening_mode {
             OpenMode::OnlyPath => {

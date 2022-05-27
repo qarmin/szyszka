@@ -1,7 +1,7 @@
 use crate::example_fields::update_examples;
 use crate::gui_data::GuiData;
 use crate::help_function::validate_number;
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
@@ -13,13 +13,14 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let entry_add_number_step = gui_data.window_rules.add_number.entry_add_number_step.clone();
     let entry_add_number_zeros = gui_data.window_rules.add_number.entry_add_number_zeros.clone();
 
-    check_button_add_number_before_name.connect_clicked(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_add_number_after_name.connect_clicked(move |_e| {
-        update_examples(&window_rules, None);
-    });
+    // TODO GTK 4
+    // check_button_add_number_before_name.connect_clicked(move |_e| {
+    //     update_examples(&window_rules, None);
+    // });
+    // let window_rules = gui_data.window_rules.clone();
+    // check_button_add_number_after_name.connect_clicked(move |_e| {
+    //     update_examples(&window_rules, None);
+    // });
 
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_start_number.connect_changed(move |e| {

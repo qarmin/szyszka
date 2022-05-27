@@ -1,7 +1,7 @@
 use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, regex_check, ColumnsResults};
-use gtk::prelude::*;
-use gtk::{PositionType, TreeIter};
+use gtk4::prelude::*;
+use gtk4::{PositionType, TreeIter};
 
 pub fn connect_select_records(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
@@ -9,7 +9,7 @@ pub fn connect_select_records(gui_data: &GuiData) {
     let button_select = gui_data.upper_buttons.button_select_popup.clone();
     button_select.connect_clicked(move |bs| {
         popover_select.set_position(PositionType::Left);
-        popover_select.set_relative_to(Some(bs));
+        // popover_select.set_relative_to(Some(bs)); // TODO GTK 4 - Change button to MenuButton
         popover_select.popup();
     });
 }
@@ -50,7 +50,7 @@ pub fn connect_select_reverse(gui_data: &GuiData) {
                     selection.select_iter(&tree_iter_all);
                 } else {
                     tree_iter_selected = tree_model.iter(vector_tree_path.get(current_path_index).unwrap()).unwrap();
-                    if tree_model.path(&tree_iter_all).unwrap() == tree_model.path(&tree_iter_selected).unwrap() {
+                    if tree_model.path(&tree_iter_all) == tree_model.path(&tree_iter_selected) {
                         selection.unselect_iter(&tree_iter_selected);
                         current_path_index += 1;
                     } else {
@@ -78,8 +78,8 @@ pub fn connect_select_changed(gui_data: &GuiData) {
 
         if let Some(iter) = model.iter_first() {
             loop {
-                let old_name = model.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                let new_name = model.value(&iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
+                let old_name = model.get::<String>(&iter, ColumnsResults::CurrentName as i32);
+                let new_name = model.get::<String>(&iter, ColumnsResults::FutureName as i32);
 
                 if new_name != old_name {
                     selection.select_iter(&iter);
@@ -105,8 +105,8 @@ pub fn connect_unselect_changed(gui_data: &GuiData) {
 
         if let Some(iter) = model.iter_first() {
             loop {
-                let old_name = model.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                let new_name = model.value(&iter, ColumnsResults::FutureName as i32).get::<String>().unwrap();
+                let old_name = model.get::<String>(&iter, ColumnsResults::CurrentName as i32);
+                let new_name = model.get::<String>(&iter, ColumnsResults::FutureName as i32);
 
                 if new_name != old_name {
                     selection.unselect_iter(&iter);
@@ -143,31 +143,31 @@ pub fn connect_select_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk::Dialog::with_buttons(Some("Select custom"), Some(&window_main), gtk::DialogFlags::MODAL, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
-            let label: gtk::Label = gtk::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
+            let confirmation_dialog_delete = gtk4::Dialog::with_buttons(Some("Select custom"), Some(&window_main), gtk4::DialogFlags::MODAL, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+            let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
-            let radio_path = gtk::CheckButton::with_label("Path");
-            let radio_current_name = gtk::CheckButton::with_label("Current Name");
-            let radio_future_name = gtk::CheckButton::with_label("Future Name");
-            let radio_current_name_path = gtk::CheckButton::with_label("Path + Current Name");
-            let radio_future_name_path = gtk::CheckButton::with_label("Path + Future Name");
-            let radio_is_dir = gtk::CheckButton::with_label("Directory/File");
+            let radio_path = gtk4::CheckButton::with_label("Path");
+            let radio_current_name = gtk4::CheckButton::with_label("Current Name");
+            let radio_future_name = gtk4::CheckButton::with_label("Future Name");
+            let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
+            let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
+            let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
 
-            let entry_path = gtk::Entry::new();
-            let entry_current_name = gtk::Entry::new();
-            let entry_future_name = gtk::Entry::new();
-            let entry_current_name_path = gtk::Entry::new();
-            let entry_future_name_path = gtk::Entry::new();
-            let check_button_is_dir = gtk::CheckButton::new();
+            let entry_path = gtk4::Entry::new();
+            let entry_current_name = gtk4::Entry::new();
+            let entry_future_name = gtk4::Entry::new();
+            let entry_current_name_path = gtk4::Entry::new();
+            let entry_future_name_path = gtk4::Entry::new();
+            let check_button_is_dir = gtk4::CheckButton::new();
 
-            check_button_is_dir.set_label("Select Directory");
+            check_button_is_dir.set_label(Some("Select Directory"));
 
             label.set_margin_bottom(5);
             label.set_margin_end(5);
             label.set_margin_start(5);
 
             // TODO Label should have const width, and rest should fill entry, but for now is 50%-50%
-            let grid = gtk::Grid::new();
+            let grid = gtk4::Grid::new();
             grid.set_row_homogeneous(true);
             grid.set_column_homogeneous(true);
 
@@ -189,16 +189,16 @@ pub fn connect_select_custom(gui_data: &GuiData) {
 
             for widgets in confirmation_dialog_delete.children() {
                 // By default GtkBox is child of dialog, so we can easily add other things to it
-                widgets.downcast::<gtk::Box>().unwrap().add(&grid);
+                widgets.downcast::<gtk4::Box>().unwrap().add(&grid);
             }
 
-            confirmation_dialog_delete.show_all();
+            confirmation_dialog_delete.show();
 
             let tree_view = tree_view.clone();
             confirmation_dialog_delete.connect_response(move |_chooser, response_type| {
                 let wildcard_type: WildcardType;
                 let wildcard: String;
-                if response_type == gtk::ResponseType::Ok {
+                if response_type == gtk4::ResponseType::Ok {
                     if radio_path.is_active() {
                         wildcard_type = WildcardType::Path;
                         wildcard = entry_path.text().to_string();
@@ -238,10 +238,10 @@ pub fn connect_select_custom(gui_data: &GuiData) {
                         let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
 
                         loop {
-                            let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                            let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                            let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                            let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+                            let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
+                            let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
+                            let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
                             match wildcard_type {
                                 WildcardType::Path => {
                                     if regex_check(wildcard, path) {
@@ -316,31 +316,31 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk::Dialog::with_buttons(Some("Unselect custom"), Some(&window_main), gtk::DialogFlags::MODAL, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
-            let label: gtk::Label = gtk::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
+            let confirmation_dialog_delete = gtk4::Dialog::with_buttons(Some("Unselect custom"), Some(&window_main), gtk4::DialogFlags::MODAL, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+            let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
-            let radio_path = gtk::CheckButton::with_label("Path");
-            let radio_current_name = gtk::CheckButton::with_label("Current Name");
-            let radio_future_name = gtk::CheckButton::with_label("Future Name");
-            let radio_current_name_path = gtk::CheckButton::with_label("Path + Current Name");
-            let radio_future_name_path = gtk::CheckButton::with_label("Path + Future Name");
-            let radio_is_dir = gtk::CheckButton::with_label("Directory/File");
+            let radio_path = gtk4::CheckButton::with_label("Path");
+            let radio_current_name = gtk4::CheckButton::with_label("Current Name");
+            let radio_future_name = gtk4::CheckButton::with_label("Future Name");
+            let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
+            let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
+            let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
 
-            let entry_path = gtk::Entry::new();
-            let entry_current_name = gtk::Entry::new();
-            let entry_future_name = gtk::Entry::new();
-            let entry_current_name_path = gtk::Entry::new();
-            let entry_future_name_path = gtk::Entry::new();
-            let check_button_is_dir = gtk::CheckButton::new();
+            let entry_path = gtk4::Entry::new();
+            let entry_current_name = gtk4::Entry::new();
+            let entry_future_name = gtk4::Entry::new();
+            let entry_current_name_path = gtk4::Entry::new();
+            let entry_future_name_path = gtk4::Entry::new();
+            let check_button_is_dir = gtk4::CheckButton::new();
 
-            check_button_is_dir.set_label("Unselect Directory");
+            check_button_is_dir.set_label(Some("Unselect Directory"));
 
             label.set_margin_bottom(5);
             label.set_margin_end(5);
             label.set_margin_start(5);
 
             // TODO Label should have const width, and rest should fill entry, but for now is 50%-50%
-            let grid = gtk::Grid::new();
+            let grid = gtk4::Grid::new();
             grid.set_row_homogeneous(true);
             grid.set_column_homogeneous(true);
 
@@ -362,14 +362,14 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
 
             for widgets in confirmation_dialog_delete.children() {
                 // By default GtkBox is child of dialog, so we can easily add other things to it
-                widgets.downcast::<gtk::Box>().unwrap().add(&grid);
+                widgets.downcast::<gtk4::Box>().unwrap().add(&grid);
             }
 
-            confirmation_dialog_delete.show_all();
+            confirmation_dialog_delete.show();
 
             let tree_view = tree_view.clone();
             confirmation_dialog_delete.connect_response(move |_, response| {
-                if response == gtk::ResponseType::Ok {
+                if response == gtk4::ResponseType::Ok {
                     let wildcard: String;
                     let wildcard_type: WildcardType;
 
@@ -412,10 +412,10 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
                         let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
 
                         loop {
-                            let typ = tree_model.value(&tree_iter, ColumnsResults::Type as i32).get::<String>().unwrap();
-                            let path = tree_model.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap();
-                            let current_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                            let future_name = tree_model.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
+                            let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+                            let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
+                            let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
+                            let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
                             match wildcard_type {
                                 WildcardType::Path => {
                                     if regex_check(wildcard, path) {

@@ -1,17 +1,15 @@
-use gtk::prelude::*;
-
 #[derive(Clone)]
 pub struct GuiPurge {
-    pub check_button_purge_name: gtk::CheckButton,
-    pub check_button_purge_extension: gtk::CheckButton,
-    pub check_button_purge_both: gtk::CheckButton,
+    pub check_button_purge_name: gtk4::CheckButton,
+    pub check_button_purge_extension: gtk4::CheckButton,
+    pub check_button_purge_both: gtk4::CheckButton,
 }
 
 impl GuiPurge {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let check_button_purge_name: gtk::CheckButton = builder.object("check_button_purge_name").unwrap();
-        let check_button_purge_extension: gtk::CheckButton = builder.object("check_button_purge_extension").unwrap();
-        let check_button_purge_both: gtk::CheckButton = builder.object("check_button_purge_both").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_purge_name: gtk4::CheckButton = builder.object("check_button_purge_name").unwrap();
+        let check_button_purge_extension: gtk4::CheckButton = builder.object("check_button_purge_extension").unwrap();
+        let check_button_purge_both: gtk4::CheckButton = builder.object("check_button_purge_both").unwrap();
 
         Self {
             check_button_purge_name,

@@ -2,7 +2,7 @@ use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows, ColumnsRules};
 use crate::rules::{RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};
-use gtk::prelude::*;
+use gtk4::prelude::*;
 use std::ops::DerefMut;
 
 pub fn connect_rule_modify_add(gui_data: &GuiData) {
@@ -71,7 +71,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
             let (selected_rows, _tree_model) = selection.selected_rows();
 
             let first_iter = list_store.iter_first().unwrap();
-            let first_path = list_store.path(&first_iter).unwrap();
+            let first_path = list_store.path(&first_iter);
 
             if selected_rows.iter().any(|selected_path| *selected_path == first_path) {
                 return; // First thing is selected - this works only in single selection mode
@@ -84,7 +84,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 let mut current_index = 0;
                 loop {
                     current_index += 1;
-                    let current_path = list_store.path(&current_iter).unwrap();
+                    let current_path = list_store.path(&current_iter);
 
                     let found = selected_rows.iter().any(|selected_path| *selected_path == current_path);
 
@@ -101,13 +101,13 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 // Swap rules
                 {
                     rules.rules.swap(current_index, current_index - 1);
-                    let previous_type = list_store.value(&previous_iter, ColumnsRules::RuleType as i32).get::<String>().unwrap();
-                    let previous_usage = list_store.value(&previous_iter, ColumnsRules::UsageType as i32).get::<String>().unwrap();
-                    let previous_description = list_store.value(&previous_iter, ColumnsRules::Description as i32).get::<String>().unwrap();
+                    let previous_type = list_store.get::<String>(&previous_iter, ColumnsRules::RuleType as i32);
+                    let previous_usage = list_store.get::<String>(&previous_iter, ColumnsRules::UsageType as i32);
+                    let previous_description = list_store.get::<String>(&previous_iter, ColumnsRules::Description as i32);
 
-                    let next_type = list_store.value(&current_iter, ColumnsRules::RuleType as i32).get::<String>().unwrap();
-                    let next_usage = list_store.value(&current_iter, ColumnsRules::UsageType as i32).get::<String>().unwrap();
-                    let next_description = list_store.value(&current_iter, ColumnsRules::Description as i32).get::<String>().unwrap();
+                    let next_type = list_store.get::<String>(&current_iter, ColumnsRules::RuleType as i32);
+                    let next_usage = list_store.get::<String>(&current_iter, ColumnsRules::UsageType as i32);
+                    let next_description = list_store.get::<String>(&current_iter, ColumnsRules::Description as i32);
 
                     list_store.set_value(&current_iter, ColumnsRules::RuleType as u32, &previous_type.to_value());
                     list_store.set_value(&current_iter, ColumnsRules::UsageType as u32, &previous_usage.to_value());
@@ -155,7 +155,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             let mut current_index = 0;
             loop {
                 current_index += 1;
-                let current_path = list_store.path(&previous_iter).unwrap();
+                let current_path = list_store.path(&previous_iter);
 
                 let found = selected_rows.iter().any(|selected_path| *selected_path == current_path);
 
@@ -177,13 +177,13 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             // Swap rules
             {
                 rules.rules.swap(current_index, current_index - 1);
-                let previous_type = list_store.value(&previous_iter, ColumnsRules::RuleType as i32).get::<String>().unwrap();
-                let previous_usage = list_store.value(&previous_iter, ColumnsRules::UsageType as i32).get::<String>().unwrap();
-                let previous_description = list_store.value(&previous_iter, ColumnsRules::Description as i32).get::<String>().unwrap();
+                let previous_type = list_store.get::<String>(&previous_iter, ColumnsRules::RuleType as i32);
+                let previous_usage = list_store.get::<String>(&previous_iter, ColumnsRules::UsageType as i32);
+                let previous_description = list_store.get::<String>(&previous_iter, ColumnsRules::Description as i32);
 
-                let next_type = list_store.value(&current_iter, ColumnsRules::RuleType as i32).get::<String>().unwrap();
-                let next_usage = list_store.value(&current_iter, ColumnsRules::UsageType as i32).get::<String>().unwrap();
-                let next_description = list_store.value(&current_iter, ColumnsRules::Description as i32).get::<String>().unwrap();
+                let next_type = list_store.get::<String>(&current_iter, ColumnsRules::RuleType as i32);
+                let next_usage = list_store.get::<String>(&current_iter, ColumnsRules::UsageType as i32);
+                let next_description = list_store.get::<String>(&current_iter, ColumnsRules::Description as i32);
 
                 list_store.set_value(&current_iter, ColumnsRules::RuleType as u32, &previous_type.to_value());
                 list_store.set_value(&current_iter, ColumnsRules::UsageType as u32, &previous_usage.to_value());
@@ -270,7 +270,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
         let iter = model.iter_first().unwrap();
 
         loop {
-            if model.path(&iter).unwrap() == selected_item {
+            if model.path(&iter) == selected_item {
                 break;
             }
 

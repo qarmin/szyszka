@@ -2,8 +2,8 @@ use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use chrono::Local;
-use gtk::prelude::*;
-use gtk::{FileChooserAction, Orientation, PackType};
+use gtk4::prelude::*;
+use gtk4::{FileChooserAction, Orientation, PackType};
 use std::cmp::{max, Ordering};
 use std::fs;
 use std::time::UNIX_EPOCH;
@@ -20,40 +20,40 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
     let window_main = gui_data.window_main.clone();
 
     button_add_folders.connect_clicked(move |_| {
-        let chooser = gtk::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk::FileChooserAction::Open, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
+        let chooser = gtk4::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk4::FileChooserAction::Open, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
         chooser.set_select_multiple(true);
         chooser.set_action(FileChooserAction::SelectFolder);
         {
             // Adds recursive button to FileDialog
-            let box_pack = gtk::Box::new(Orientation::Horizontal, 0);
+            let box_pack = gtk4::Box::new(Orientation::Horizontal, 0);
 
-            let switch_scan_inside = gtk::Switch::new();
-            box_pack.add(&switch_scan_inside);
-            box_pack.set_child_packing(&switch_scan_inside, false, true, 5, PackType::End);
+            let switch_scan_inside = gtk4::Switch::new();
+            box_pack.append(&switch_scan_inside);
+            // box_pack.set_child_packing(&switch_scan_inside, false, true, 5, PackType::End); // TODO GTK 4
 
-            let label_scan_inside = gtk::Label::new(Some("Scan inside "));
-            box_pack.add(&label_scan_inside);
-            box_pack.set_child_packing(&label_scan_inside, false, true, 0, PackType::End);
+            let label_scan_inside = gtk4::Label::new(Some("Scan inside "));
+            box_pack.append(&label_scan_inside);
+            // box_pack.set_child_packing(&label_scan_inside, false, true, 0, PackType::End);
 
-            let switch_ignore_folders = gtk::Switch::new();
-            box_pack.add(&switch_ignore_folders);
-            box_pack.set_child_packing(&switch_ignore_folders, false, true, 5, PackType::End);
+            let switch_ignore_folders = gtk4::Switch::new();
+            box_pack.append(&switch_ignore_folders);
+            // box_pack.set_child_packing(&switch_ignore_folders, false, true, 5, PackType::End);
 
-            let label_ignore_folders = gtk::Label::new(Some("Ignore folders "));
-            box_pack.add(&label_ignore_folders);
-            box_pack.set_child_packing(&label_ignore_folders, false, true, 0, PackType::End);
+            let label_ignore_folders = gtk4::Label::new(Some("Ignore folders "));
+            box_pack.append(&label_ignore_folders);
+            // box_pack.set_child_packing(&label_ignore_folders, false, true, 0, PackType::End);
 
-            let internal_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
+            let internal_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
             internal_box.add(&box_pack);
 
             switch_ignore_folders.set_sensitive(false);
-            let sif = switch_ignore_folders.clone();
-            switch_scan_inside.connect_changed_active(move |e| {
-                sif.set_sensitive(e.is_active());
-            });
+            // let sif = switch_ignore_folders.clone(); //  TODO GTK 4
+            // switch_scan_inside.connect_changed_active(move |e| {
+            //     sif.set_sensitive(e.is_active());
+            // });
 
             chooser.set_title("Folders to include");
-            chooser.show_all();
+            chooser.show();
 
             let shared_result_entries = shared_result_entries.clone();
             let label_files_folders = label_files_folders.clone();
@@ -61,7 +61,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             let rules = rules.clone();
 
             chooser.connect_response(move |chooser, response| {
-                if response == gtk::ResponseType::Ok {
+                if response == gtk4::ResponseType::Ok {
                     let mut result_entries = shared_result_entries.borrow_mut();
 
                     let list_store = get_list_store_from_tree_view(&tree_view_results);

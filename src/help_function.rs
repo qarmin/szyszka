@@ -1,8 +1,8 @@
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rules::*;
-use gtk::prelude::*;
-use gtk::*;
+use gtk4::prelude::*;
+use gtk4::*;
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::ops::DerefMut;
@@ -60,10 +60,10 @@ pub fn split_file_name(path: &Path) -> (String, String) {
 }
 
 pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
-    tree_view.model().unwrap().downcast::<gtk::ListStore>().unwrap()
+    tree_view.model().unwrap().downcast::<gtk4::ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rules>>) {
+pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Rules>>) {
     let mut rules = rules.borrow_mut();
     let rules = rules.deref_mut();
 
@@ -81,7 +81,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
     }
 }
 
-pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
+pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -101,7 +101,7 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
         loop {
-            if list_store.path(&tree_iter).unwrap() == *selected_tree_path {
+            if list_store.path(&tree_iter) == *selected_tree_path {
                 vec_index_to_delete.push(current_iter);
                 list_store.iter_next(&tree_iter);
                 current_iter += 1;
@@ -118,7 +118,7 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
     }
     vec_index_to_delete
 }
-pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<String> {
+pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<String> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -137,16 +137,16 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<Stri
         let tree_iter = list_store.iter(selected_tree_path).unwrap();
         return_vec.push(format!(
             "{}{}{}",
-            list_store.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap(),
+            list_store.get::<String>(&tree_iter, ColumnsResults::Path as i32),
             CHARACTER,
-            list_store.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap()
+            list_store.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32)
         ));
     }
 
     return_vec
 }
 
-pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
+pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
@@ -162,16 +162,16 @@ pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
     number
 }
 
-pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &str) {
-    let chooser = gtk::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok)]);
+pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &str) {
+    let chooser = gtk4::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
     chooser.set_modal(true);
     chooser.set_transient_for(Some(window_main));
 
-    let question_label = gtk::Label::new(Some(message));
+    let question_label = gtk4::Label::new(Some(message));
 
-    let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
+    let chooser_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
     chooser_box.add(&question_label);
-    chooser_box.show_all();
+    chooser_box.show();
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();
