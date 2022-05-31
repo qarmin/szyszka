@@ -36,7 +36,7 @@ pub struct GuiData {
 }
 
 impl GuiData {
-    pub fn new() -> Self {
+    pub fn new_with_application(application: &gtk4::Application) -> Self {
         //// Loading glade file content and build with it help UI
         let window_main_src = include_str!("../ui/window_main.ui").to_string();
         let builder_window_main = Builder::from_string(window_main_src.as_str());
@@ -52,6 +52,8 @@ impl GuiData {
 
         //// Windows
         let window_main: gtk4::Window = builder_window_main.object("window_main").unwrap();
+        window_main.set_application(Some(application));
+
         window_main.show();
         window_main.set_title(Some("Szyszka"));
 

@@ -95,7 +95,7 @@ fn main() {
 }
 
 fn build_ui(application: &Application, arguments: Vec<OsString>) {
-    let gui_data: GuiData = GuiData::new();
+    let gui_data: GuiData = GuiData::new_with_application(application);
 
     initialize_gui(&gui_data);
 
