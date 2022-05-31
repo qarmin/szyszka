@@ -50,7 +50,7 @@ pub fn initialize_gui(gui_data: &GuiData) {
 
         create_tree_view_results(&tree_view);
 
-        scrolled_window_results.some_child(Some(&tree_view));
+        scrolled_window_results.set_child(Some(&tree_view));
         scrolled_window_results.show();
     }
     // Create TreeView in Rules

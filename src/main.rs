@@ -78,11 +78,23 @@ use crate::connect_start_renaming::*;
 use crate::example_fields::connect_update_examples;
 use crate::gui_data::GuiData;
 use crate::initialize_gui::*;
+use gio::ApplicationFlags;
+use glib::signal::Inhibit;
 use gtk4::prelude::*;
+use gtk4::Application;
+use std::env;
+use std::ffi::OsString;
 
 fn main() {
-    gtk4::init().expect("Failed to initialize GTK.");
+    let application = Application::new(None, ApplicationFlags::HANDLES_OPEN | ApplicationFlags::HANDLES_COMMAND_LINE);
+    application.connect_command_line(move |app, cmdline| {
+        build_ui(app, cmdline.arguments());
+        0
+    });
+    application.run_with_args(&env::args().collect::<Vec<_>>());
+}
 
+fn build_ui(application: &Application, arguments: Vec<OsString>) {
     let gui_data: GuiData = GuiData::new();
 
     initialize_gui(&gui_data);
@@ -140,13 +152,6 @@ fn main() {
     connect_results_modify_one_up(&gui_data);
     connect_results_modify_one_down(&gui_data);
 
-    // TODO GTK 4
-    // Quit the program when X in main window was clicked
-    // gui_data.window_main.connect_delete_event(|_, _| {
-    //     gtk4::main_quit();
-    //     Inhibit(false)
-    // });
-
-    // We start the gtk main loop.
-    gtk4::main();
+    let window_main = gui_data.window_main.clone();
+    window_main.connect_close_request(move |_| Inhibit(false));
 }

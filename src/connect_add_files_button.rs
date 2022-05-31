@@ -3,8 +3,10 @@ use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsRes
 use crate::update_records::{update_records, UpdateMode};
 use chrono::Local;
 use gtk4::prelude::*;
+use gtk4::ResponseType;
 use std::cmp::{max, Ordering};
 use std::fs;
+use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 
 pub fn connect_add_files_button(gui_data: &GuiData) {
@@ -17,7 +19,10 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
     let window_main = gui_data.window_main.clone();
     button_add_files.connect_clicked(move |_| {
-        let chooser = gtk4::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk4::FileChooserAction::Open, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+        let chooser = gtk4::FileChooserDialog::builder().title("Files to include").action(gtk4::FileChooserAction::Open).transient_for(&window_main).modal(true).build();
+        chooser.add_button("OK", ResponseType::Ok);
+        chooser.add_button("Cancel", ResponseType::Cancel);
+
         chooser.set_select_multiple(true);
         chooser.show();
 
@@ -28,7 +33,17 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
         chooser.connect_response(move |dialog, response_type| {
             if response_type == gtk4::ResponseType::Ok {
-                let mut folder = dialog.filenames();
+                let mut folder: Vec<PathBuf> = Vec::new();
+                let g_files = dialog.files();
+                for index in 0..g_files.n_items() {
+                    let file = &g_files.item(index);
+                    if let Some(file) = file {
+                        let ss = file.clone().downcast::<gtk4::gio::File>().unwrap();
+                        if let Some(path_buf) = ss.path() {
+                            folder.push(path_buf);
+                        }
+                    }
+                }
 
                 let mut result_entries = shared_result_entries.borrow_mut();
 

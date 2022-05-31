@@ -1,5 +1,5 @@
 use crate::gui_data::GuiData;
-use crate::help_function::{count_rows_in_tree_view, create_message_window, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
+use crate::help_function::{count_rows_in_tree_view, create_message_window, get_all_boxes_from_widget, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 use gtk4::prelude::*;
 use gtk4::{DialogFlags, ScrolledWindow, TextView};
 use std::collections::BTreeMap;
@@ -42,8 +42,8 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                 "Some records are not updated, you can do it by clicking at the Update Names button.\nAre you sure that you want to proceed without updating names?",
             ));
 
-            let chooser_box = chooser_update.children()[0].clone().downcast::<gtk4::Box>().unwrap();
-            chooser_box.add(&question_label);
+            let chooser_box = get_all_boxes_from_widget(&chooser_update)[0].clone();
+            chooser_box.append(&question_label);
             chooser_box.show();
 
             chooser_update.connect_response(move |dialog, _| {
@@ -61,8 +61,8 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {} files", number_of_renamed_files).as_str()));
 
-        let chooser_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
-        chooser_box.add(&question_label);
+        let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
+        chooser_box.append(&question_label);
         chooser_box.show();
 
         let shared_result_entries = shared_result_entries.clone();
@@ -153,18 +153,18 @@ fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, igno
     let label_good = gtk4::Label::new(Some(format!("Properly renamed {} files", properly_renamed).as_str()));
     let label_ignored = gtk4::Label::new(Some(format!("Ignored {} files, because the name before and after the change are the same.", ignored).as_str()));
 
-    let chooser_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
-    chooser_box.add(&label_good);
-    chooser_box.add(&label_ignored);
+    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
+    chooser_box.append(&label_good);
+    chooser_box.append(&label_ignored);
 
     let label_bad = gtk4::Label::new(Some(format!("Failed to rename {} files", failed_vector.len()).as_str()));
-    chooser_box.add(&label_bad);
+    chooser_box.append(&label_bad);
 
     if !failed_vector.is_empty() {
         chooser.set_default_size(800, 200);
         let label_info_bad = gtk4::Label::new(Some("List of all failing renames"));
         label_info_bad.set_margin_top(10);
-        chooser_box.add(&label_info_bad);
+        chooser_box.append(&label_info_bad);
 
         let txt_op1: Option<&gtk4::TextTagTable> = None;
 
@@ -188,7 +188,7 @@ fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, igno
 
         scrolled_window.set_child(Some(&text_view));
         // TODO Created Scrolled Window with explanation about each failed example of renaming
-        chooser_box.add(&scrolled_window);
+        chooser_box.append(&scrolled_window);
     }
 
     chooser_box.show();

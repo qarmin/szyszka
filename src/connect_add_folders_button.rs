@@ -1,11 +1,13 @@
+use crate::fls;
 use crate::gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
+use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use chrono::Local;
 use gtk4::prelude::*;
-use gtk4::{FileChooserAction, Orientation, PackType};
+use gtk4::{FileChooserAction, Orientation, PackType, ResponseType};
 use std::cmp::{max, Ordering};
 use std::fs;
+use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 use walkdir::WalkDir;
 
@@ -20,9 +22,16 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
     let window_main = gui_data.window_main.clone();
 
     button_add_folders.connect_clicked(move |_| {
-        let chooser = gtk4::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk4::FileChooserAction::Open, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+        let chooser = gtk4::FileChooserDialog::builder()
+            .title("Files to include")
+            .action(gtk4::FileChooserAction::SelectFolder)
+            .transient_for(&window_main)
+            .modal(true)
+            .build();
+        chooser.add_button("OK", ResponseType::Ok);
+        chooser.add_button("Cancel", ResponseType::Cancel);
+
         chooser.set_select_multiple(true);
-        chooser.set_action(FileChooserAction::SelectFolder);
         {
             // Adds recursive button to FileDialog
             let box_pack = gtk4::Box::new(Orientation::Horizontal, 0);
@@ -43,8 +52,8 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             box_pack.append(&label_ignore_folders);
             // box_pack.set_child_packing(&label_ignore_folders, false, true, 0, PackType::End);
 
-            let internal_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
-            internal_box.add(&box_pack);
+            let internal_box = get_all_boxes_from_widget(&chooser)[0].clone();
+            internal_box.append(&box_pack);
 
             switch_ignore_folders.set_sensitive(false);
             // let sif = switch_ignore_folders.clone(); //  TODO GTK 4
@@ -52,7 +61,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             //     sif.set_sensitive(e.is_active());
             // });
 
-            chooser.set_title("Folders to include");
+            chooser.set_title(Some("Folders to include"));
             chooser.show();
 
             let shared_result_entries = shared_result_entries.clone();
@@ -66,7 +75,18 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
                     let list_store = get_list_store_from_tree_view(&tree_view_results);
 
-                    let folders_to_check = chooser.filenames();
+                    let mut folders_to_check: Vec<PathBuf> = Vec::new();
+                    let g_files = chooser.files();
+                    for index in 0..g_files.n_items() {
+                        let file = &g_files.item(index);
+                        if let Some(file) = file {
+                            let ss = file.clone().downcast::<gtk4::gio::File>().unwrap();
+                            if let Some(path_buf) = ss.path() {
+                                folders_to_check.push(path_buf);
+                            }
+                        }
+                    }
+
                     let mut folders;
 
                     let ignore_folders = switch_ignore_folders.is_active();

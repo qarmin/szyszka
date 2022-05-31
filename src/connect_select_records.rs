@@ -1,5 +1,5 @@
 use crate::gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, regex_check, ColumnsResults};
+use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
 use gtk4::prelude::*;
 use gtk4::{PositionType, TreeIter};
 
@@ -187,10 +187,7 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             grid.attach(&entry_future_name_path, 1, 5, 1, 1);
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
-            for widgets in confirmation_dialog_delete.children() {
-                // By default GtkBox is child of dialog, so we can easily add other things to it
-                widgets.downcast::<gtk4::Box>().unwrap().add(&grid);
-            }
+            get_all_boxes_from_widget(&confirmation_dialog_delete)[0].clone().append(&grid);
 
             confirmation_dialog_delete.show();
 
@@ -360,10 +357,7 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             grid.attach(&entry_future_name_path, 1, 5, 1, 1);
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
-            for widgets in confirmation_dialog_delete.children() {
-                // By default GtkBox is child of dialog, so we can easily add other things to it
-                widgets.downcast::<gtk4::Box>().unwrap().add(&grid);
-            }
+            get_all_boxes_from_widget(&confirmation_dialog_delete)[0].clone().append(&grid);
 
             confirmation_dialog_delete.show();
 

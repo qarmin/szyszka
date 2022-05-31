@@ -169,8 +169,8 @@ pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &
 
     let question_label = gtk4::Label::new(Some(message));
 
-    let chooser_box = chooser.children()[0].clone().downcast::<gtk4::Box>().unwrap();
-    chooser_box.add(&question_label);
+    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
+    chooser_box.append(&question_label);
     chooser_box.show();
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
@@ -439,4 +439,33 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         rule_data,
         rule_description,
     }
+}
+
+pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<gtk4::Box> {
+    let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
+    let mut boxes = Vec::new();
+
+    while let Some(widget) = widgets_to_check.pop() {
+        widgets_to_check.extend(get_all_children(&widget));
+        if let Ok(bbox) = widget.clone().downcast::<gtk4::Box>() {
+            boxes.push(bbox);
+        }
+    }
+    boxes
+}
+
+pub fn get_all_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
+    let mut vector = vec![];
+    if let Some(mut child) = wid.first_child() {
+        vector.push(child.clone());
+        loop {
+            child = match child.next_sibling() {
+                Some(t) => t,
+                None => break,
+            };
+            vector.push(child.clone());
+        }
+    }
+
+    vector
 }
