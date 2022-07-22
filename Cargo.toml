@@ -20,7 +20,7 @@ humansize = "1.1.1"
 chrono = "0.4.19"
 
 # For opening files
-open = "2.1.2"
+open = "3.0.2"
 
 # For slugs
 slugmin = "1.0.2"
