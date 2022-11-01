@@ -6,12 +6,8 @@ use gtk4::{PositionType, TreeIter};
 pub fn connect_select_records(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
 
-    let button_select = gui_data.upper_buttons.button_select_popup.clone();
-    button_select.connect_clicked(move |bs| {
-        popover_select.set_position(PositionType::Left);
-        // popover_select.set_relative_to(Some(bs)); // TODO GTK 4 - Change button to MenuButton
-        popover_select.popup();
-    });
+    let button_select = gui_data.upper_buttons.menu_button_select_popup.clone();
+    button_select.set_popover(Some(&popover_select));
 }
 pub fn connect_select_all(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();

@@ -102,9 +102,8 @@ pub fn common_open_function(tree_view: &gtk4::TreeView, opening_mode: OpenMode) 
             }
         }
 
-        open::that_in_background(&end_path);
-        // if open::that(&end_path).is_err() {
-        //     println!("Failed to open {}", end_path);
-        // }
+        if open::that(&end_path).is_err() {
+            println!("Failed to open {}", end_path);
+        }
     }
 }

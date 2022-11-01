@@ -163,13 +163,12 @@
 	(5,55,"GtkButton","button_add_files",54,None,None,None,None),
 	(5,56,"GtkButton","button_add_folders",54,None,None,None,1),
 	(5,57,"GtkButton","button_remove_selection",54,None,None,None,2),
-	(5,58,"GtkButton","button_select_popup",54,None,None,None,3),
-	(5,59,"GtkButton","button_update_names",54,None,None,None,4),
-	(5,60,"GtkButton","button_results_one_up",54,None,None,None,5),
+	(5,59,"GtkButton","button_update_names",54,None,None,None,5),
+	(5,60,"GtkButton","button_results_one_up",54,None,None,None,6),
 	(5,61,"GtkBox",None,60,None,None,None,None),
 	(5,62,"GtkImage",None,61,None,None,None,None),
 	(5,63,"GtkLabel",None,61,None,None,None,1),
-	(5,64,"GtkButton","button_results_one_down",54,None,None,None,6),
+	(5,64,"GtkButton","button_results_one_down",54,None,None,None,7),
 	(5,65,"GtkBox",None,64,None,None,None,None),
 	(5,66,"GtkImage",None,65,None,None,None,None),
 	(5,67,"GtkLabel",None,65,None,None,None,1),
@@ -196,7 +195,8 @@
 	(5,88,"GtkBox",None,87,None,None,None,None),
 	(5,89,"GtkImage",None,88,None,None,None,None),
 	(5,90,"GtkLabel",None,88,None,None,None,1),
-	(5,91,"GtkScrolledWindow","scrolled_window_rules",69,None,None,None,1)
+	(5,91,"GtkScrolledWindow","scrolled_window_rules",69,None,None,None,1),
+	(5,92,"GtkMenuButton","menu_button_select_popup",54,None,None,None,4)
   </object>
   <object_property>
 	(2,1,"GtkPopover","child",None,None,None,None,None,2),
@@ -522,9 +522,6 @@
 	(5,57,"GtkButton","label","Remove Selection","yes",None,None,None,None),
 	(5,57,"GtkWidget","focusable","1",None,None,None,None,None),
 	(5,57,"GtkWidget","receives-default","1",None,None,None,None,None),
-	(5,58,"GtkButton","label","Select","yes",None,None,None,None),
-	(5,58,"GtkWidget","focusable","1",None,None,None,None,None),
-	(5,58,"GtkWidget","receives-default","1",None,None,None,None,None),
 	(5,59,"GtkButton","label","Update Names","yes",None,None,None,None),
 	(5,59,"GtkWidget","focusable","1",None,None,None,None,None),
 	(5,59,"GtkWidget","receives-default","1",None,None,None,None,None),
@@ -578,7 +575,9 @@
 	(5,89,"GtkImage","icon-name","go-down",None,None,None,None,None),
 	(5,90,"GtkLabel","label","One Down","yes",None,None,None,None),
 	(5,91,"GtkWidget","focusable","1",None,None,None,None,None),
-	(5,91,"GtkWidget","hexpand","1",None,None,None,None,None)
+	(5,91,"GtkWidget","hexpand","1",None,None,None,None,None),
+	(5,92,"GtkMenuButton","direction","none",None,None,None,None,None),
+	(5,92,"GtkMenuButton","label","Select",None,None,None,None,None)
   </object_property>
   <object_layout_property>
 	(3,43,44,"GtkGridLayoutChild","column","0",None,None,None,None),

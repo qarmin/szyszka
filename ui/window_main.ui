@@ -74,10 +74,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_select_popup">
-                    <property name="focusable">1</property>
-                    <property name="label" translatable="yes">Select</property>
-                    <property name="receives-default">1</property>
+                  <object class="GtkMenuButton" id="menu_button_select_popup">
+                    <property name="direction">none</property>
+                    <property name="label">Select</property>
                   </object>
                 </child>
                 <child>

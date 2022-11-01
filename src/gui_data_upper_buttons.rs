@@ -8,7 +8,7 @@ pub struct GuiUpperButtons {
     pub button_remove_selection: gtk4::Button,
     pub button_add_files: gtk4::Button,
     pub button_add_folders: gtk4::Button,
-    pub button_select_popup: gtk4::Button,
+    pub menu_button_select_popup: gtk4::MenuButton,
     pub button_update_names: gtk4::Button,
     pub label_files_folders: gtk4::Label,
     pub button_results_one_up: gtk4::Button,
@@ -22,7 +22,7 @@ impl GuiUpperButtons {
         let button_remove_selection: gtk4::Button = builder.object("button_remove_selection").unwrap();
         let button_add_files: gtk4::Button = builder.object("button_add_files").unwrap();
         let button_add_folders: gtk4::Button = builder.object("button_add_folders").unwrap();
-        let button_select_popup: gtk4::Button = builder.object("button_select_popup").unwrap();
+        let menu_button_select_popup: gtk4::MenuButton = builder.object("menu_button_select_popup").unwrap();
         let button_update_names: gtk4::Button = builder.object("button_update_names").unwrap();
         let label_files_folders: gtk4::Label = builder.object("label_files_folders").unwrap();
         let button_results_one_up: gtk4::Button = builder.object("button_results_one_up").unwrap();
@@ -34,7 +34,7 @@ impl GuiUpperButtons {
             button_remove_selection,
             button_add_files,
             button_add_folders,
-            button_select_popup,
+            menu_button_select_popup,
             button_update_names,
             label_files_folders,
             button_results_one_up,
@@ -49,7 +49,7 @@ impl GuiUpperButtons {
         // pub button_remove_selection: gtk4::Button,
         // pub button_add_files: gtk4::Button,
         // pub button_add_folders: gtk4::Button,
-        // pub button_select_popup: gtk4::Button,
+        // pub menu_button_select_popup: gtk4::Button,
         // pub button_update_names: gtk4::Button,
         // pub label_files_folders: gtk4::Label,
         // pub button_results_one_up: gtk4::Button,
