@@ -1,5 +1,9 @@
 name: 🍎 MacOS
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 2'
 
 env:
   CARGO_TERM_COLOR: always
@@ -19,30 +23,24 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
           override: true
 
+      - uses: actions/cache@v2
+        with:
+          path: |
+            target
+          key: mac-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            mac-${{github.ref}}-${{github.sha}}
+
       - name: Install Homebrew
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-      - name: Override link[WORKAROUND] # Looks that this is a bug with current homebrew or Github CI
+      - name: Override link[WORKAROUND] # Looks that this is a bug with current homebrew or GitHub CI
         run: rm '/usr/local/bin/2to3'
 
-      - name: Install GTK3
-        run: brew install rust gtk+3
+      - name: Install GTK4
+        run: brew install rust gtk4 libheif
 
-      - name: Build Debug
-        run: cargo build
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-C debuginfo=0 -D warnings"
-        if: ${{ matrix.type == 'debug'}}
-
-      - name: Build Release
-        run: cargo build --release
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-C debuginfo=0 -D warnings"
-        if: ${{ matrix.type == 'release'}}
-
-      - name: Store MacOS
+      - name: Store MacOS GUI
         uses: actions/upload-artifact@v2
         with:
           name: szyszka-${{ runner.os }}-${{ matrix.toolchain }}
