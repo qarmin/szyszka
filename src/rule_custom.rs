@@ -1,7 +1,8 @@
 use crate::help_function::split_file_name;
 use crate::rules::*;
 use chrono::NaiveDateTime;
-use humansize::{file_size_opts as options, FileSize};
+use humansize::format_size;
+use humansize::BINARY;
 use std::cmp::min;
 use std::path::Path;
 
@@ -23,7 +24,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
     if let Some(f_data) = file_data {
         modification_date = NaiveDateTime::from_timestamp(f_data.0 as i64, 0).to_string().replace(':', "_");
         creation_date = NaiveDateTime::from_timestamp(f_data.1 as i64, 0).to_string().replace(':', "_");
-        size = f_data.2.file_size(options::BINARY).unwrap();
+        size = format_size(f_data.2, BINARY);
     } else {
         creation_date = "2021-01-31 08_42_12".to_string();
         modification_date = "2015-11-15 14_24_55".to_string();
