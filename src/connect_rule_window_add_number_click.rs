@@ -24,17 +24,29 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
 
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_start_number.connect_changed(move |e| {
-        e.set_text(validate_number(e.text().to_string()).as_str());
+        let old_name = e.text().to_string();
+        let validate_number = validate_number(old_name.clone());
+        if validate_number != old_name {
+            e.set_text(&validate_number);
+        }
         update_examples(&window_rules, None);
     });
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_step.connect_changed(move |e| {
-        e.set_text(validate_number(e.text().to_string()).as_str());
+        let old_name = e.text().to_string();
+        let validate_number = validate_number(old_name.clone());
+        if validate_number != old_name {
+            e.set_text(&validate_number);
+        }
         update_examples(&window_rules, None);
     });
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_zeros.connect_changed(move |e| {
-        e.set_text(validate_number(e.text().to_string()).as_str());
+        let old_name = e.text().to_string();
+        let validate_number = validate_number(old_name.clone());
+        if validate_number != old_name {
+            e.set_text(&validate_number);
+        }
         update_examples(&window_rules, None);
     });
 }

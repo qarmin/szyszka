@@ -40,12 +40,20 @@ pub fn connect_rule_window_replace_click(gui_data: &GuiData) {
     //
     // let window_rules = gui_data.window_rules.clone();
     // entry_replace_text_to_remove.connect_changed(move |e| {
-    //     e.set_text(validate_name(e.text().to_string()).as_str());
+    // let old_name = e.text().to_string();
+    // let validate_name = validate_name(old_name.clone());
+    // if validate_name != old_name {
+    //     e.set_text(&validate_name);
+    // }
     //     update_examples(&window_rules, None);
     // });
     // let window_rules = gui_data.window_rules.clone();
     // entry_replace_text_to_change.connect_changed(move |e| {
-    //     e.set_text(validate_name(e.text().to_string()).as_str());
+    // let old_name = e.text().to_string();
+    // let validate_name = validate_name(old_name.clone());
+    // if validate_name != old_name {
+    //     e.set_text(&validate_name);
+    // }
     //     update_examples(&window_rules, None);
     // });
 }

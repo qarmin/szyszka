@@ -21,7 +21,11 @@ pub fn connect_rule_window_add_text_click(gui_data: &GuiData) {
     // });
     // let window_rules = gui_data.window_rules.clone();
     // entry_add_text_text_to_add.connect_changed(move |e| {
-    //     e.set_text(validate_name(e.text().to_string()).as_str());
+    // let old_name = e.text().to_string();
+    // let validate_name = validate_name(old_name.clone());
+    // if validate_name != old_name {
+    //     e.set_text(&validate_name);
+    // }
     //     update_examples(&window_rules, None);
     // });
 }

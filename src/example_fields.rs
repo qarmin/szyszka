@@ -23,7 +23,11 @@ pub fn connect_update_examples(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
     let entry_example_before = gui_data.window_rules.entry_example_before.clone();
     entry_example_before.connect_changed(move |e| {
-        e.set_text(validate_name(e.text().to_string()).as_str());
+        let old_name = e.text().to_string();
+        let validate_name = validate_name(old_name.clone());
+        if validate_name != old_name {
+            e.set_text(&validate_name);
+        }
         update_examples(&window_rules, None);
     });
 }
