@@ -1,257 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.9.1 -->
+<!-- Created with Cambalache 0.10.3 -->
 <interface>
   <!-- interface-name window_main.ui -->
   <requires lib="gtk" version="4.0"/>
   <object class="GtkWindow" id="window_main">
-    <property name="child">
-      <object class="GtkPaned">
-        <property name="focusable">1</property>
-        <property name="orientation">vertical</property>
-        <property name="position">2000</property>
-        <property name="shrink-end-child">0</property>
-        <property name="shrink-start-child">0</property>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel" id="label_files_folders">
-                <property name="label" translatable="yes">Files/Folders</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="vexpand">1</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolled_window_results">
-                    <property name="focusable">1</property>
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkButton" id="button_add_files">
-                        <property name="focusable">1</property>
-                        <property name="label" translatable="yes">Add Files</property>
-                        <property name="receives-default">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_add_folders">
-                        <property name="focusable">1</property>
-                        <property name="label" translatable="yes">Add Folders</property>
-                        <property name="receives-default">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_remove_selection">
-                        <property name="focusable">1</property>
-                        <property name="label" translatable="yes">Remove Selection</property>
-                        <property name="receives-default">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_select_popup">
-                        <property name="focusable">1</property>
-                        <property name="label" translatable="yes">Select</property>
-                        <property name="receives-default">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_update_names">
-                        <property name="focusable">1</property>
-                        <property name="label" translatable="yes">Update Names</property>
-                        <property name="receives-default">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_results_one_up">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">go-up</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">One Up</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_results_one_down">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">go-down</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">One Down</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="vexpand">1</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkButton" id="button_add_rule">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">list-add-symbolic</property>
-                                <property name="visible">0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Add Rule</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_edit_rule">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">applications-engineering</property>
-                                <property name="visible">0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Edit Rule</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_remove_rule">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">list-remove</property>
-                                <property name="visible">0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Remove Rule</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_rule_one_up">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">go-up</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">One Up</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_rule_one_down">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="spacing">7</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">go-down</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">One Down</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolled_window_rules">
-                    <property name="focusable">1</property>
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="label">Rules</property>
-          </object>
-        </child>
-      </object>
-    </property>
     <property name="default-height">600</property>
     <property name="default-width">800</property>
     <child type="titlebar">
@@ -274,6 +26,246 @@
                     <property name="icon-name">applications-engineering</property>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label_files_folders">
+            <property name="label" translatable="yes">Files/Folders</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolled_window_results">
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton" id="button_add_files">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Add Files</property>
+                    <property name="receives-default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_add_folders">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Add Folders</property>
+                    <property name="receives-default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_remove_selection">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Remove Selection</property>
+                    <property name="receives-default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_select_popup">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Select</property>
+                    <property name="receives-default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_update_names">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Update Names</property>
+                    <property name="receives-default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_results_one_up">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-up</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">One Up</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_results_one_down">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-down</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">One Down</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Rules</property>
+            <property name="valign">end</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton" id="button_add_rule">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">list-add-symbolic</property>
+                            <property name="visible">0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Add Rule</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_edit_rule">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">applications-engineering</property>
+                            <property name="visible">0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Edit Rule</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_remove_rule">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">list-remove</property>
+                            <property name="visible">0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Remove Rule</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_rule_one_up">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-up</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">One Up</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_rule_one_down">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-down</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">One Down</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolled_window_rules">
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
               </object>
             </child>
           </object>
