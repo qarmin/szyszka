@@ -1,10 +1,10 @@
-use crate::fls;
 use crate::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use chrono::Local;
+use glib::signal::Inhibit;
 use gtk4::prelude::*;
-use gtk4::{FileChooserAction, Orientation, PackType, ResponseType};
+use gtk4::{Orientation, ResponseType};
 use std::cmp::{max, Ordering};
 use std::fs;
 use std::path::PathBuf;
@@ -45,6 +45,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             // box_pack.set_child_packing(&label_scan_inside, false, true, 0, PackType::End);
 
             let switch_ignore_folders = gtk4::Switch::new();
+            switch_ignore_folders.set_active(true);
             box_pack.append(&switch_ignore_folders);
             // box_pack.set_child_packing(&switch_ignore_folders, false, true, 5, PackType::End);
 
@@ -56,10 +57,11 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             internal_box.append(&box_pack);
 
             switch_ignore_folders.set_sensitive(false);
-            // let sif = switch_ignore_folders.clone(); //  TODO GTK 4
-            // switch_scan_inside.connect_changed_active(move |e| {
-            //     sif.set_sensitive(e.is_active());
-            // });
+            let sif = switch_ignore_folders.clone(); //  TODO GTK 4
+            switch_scan_inside.connect_state_set(move |_, b| {
+                sif.set_sensitive(b);
+                Inhibit(false)
+            });
 
             chooser.set_title(Some("Folders to include"));
             chooser.show();

@@ -41,7 +41,7 @@ pub fn validate_name(before_name: String) -> String {
     before_name.chars().filter(|e| *e != '\\' && *e != '/').collect::<String>()
 }
 pub fn validate_number(before_name: String) -> String {
-    before_name.chars().filter(|e| e.is_digit(10)).collect::<String>()
+    before_name.chars().filter(|e| e.is_ascii_digit()).collect::<String>()
 }
 
 pub fn split_path(path: &Path) -> (String, String) {
@@ -198,7 +198,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let mut position_of_splits: Vec<usize> = Vec::new();
 
     // `git*` shouldn't be true for `/gitsfafasfs`
-    if !expression.starts_with('*') && directory.find(&splits[0]).unwrap() > 0 {
+    if !expression.starts_with('*') && directory.find(splits[0]).unwrap() > 0 {
         return false;
     }
     // `*home` shouldn't be true for `/homeowner`
@@ -207,7 +207,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     }
 
     // At the end we check if parts between * are correctly positioned
-    position_of_splits.push(directory.find(&splits[0]).unwrap());
+    position_of_splits.push(directory.find(splits[0]).unwrap());
     let mut current_index: usize;
     let mut found_index: usize;
     for i in splits[1..].iter().enumerate() {

@@ -94,7 +94,7 @@ fn main() {
     application.run_with_args(&env::args().collect::<Vec<_>>());
 }
 
-fn build_ui(application: &Application, arguments: Vec<OsString>) {
+fn build_ui(application: &Application, _arguments: Vec<OsString>) {
     let gui_data: GuiData = GuiData::new_with_application(application);
 
     initialize_gui(&gui_data);

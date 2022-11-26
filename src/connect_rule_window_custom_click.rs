@@ -2,7 +2,6 @@ use crate::example_fields::update_examples;
 use crate::gui_data::GuiData;
 use crate::help_function::validate_name;
 use gtk4::prelude::*;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 pub fn connect_rule_window_custom_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();

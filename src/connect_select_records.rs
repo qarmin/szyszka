@@ -1,7 +1,7 @@
 use crate::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
 use gtk4::prelude::*;
-use gtk4::{PositionType, TreeIter};
+use gtk4::TreeIter;
 
 pub fn connect_select_records(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();

@@ -1,4 +1,5 @@
 use crate::GuiData;
+use glib::signal::Inhibit;
 use gtk4::prelude::*;
 
 pub fn connect_button_settings(gui_data: &GuiData) {
@@ -8,10 +9,9 @@ pub fn connect_button_settings(gui_data: &GuiData) {
         window_settings.show();
     });
 
-    // TODO GTK 4
-    // let window_settings = gui_data.settings.window_settings.clone();
-    // window_settings.connect_delete_event(|window_settings, _| {
-    //     window_settings.hide();
-    //     Inhibit(true)
-    // });
+    let window_settings = gui_data.settings.window_settings.clone();
+    window_settings.connect_close_request(|window_settings| {
+        window_settings.hide();
+        Inhibit(true)
+    });
 }

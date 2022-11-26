@@ -79,11 +79,15 @@ pub fn initialize_gui(gui_data: &GuiData) {
         update_examples(&gui_data.window_rules, None);
     }
 }
+// TODO GTK 4
+#[allow(dead_code)]
 pub enum OpenMode {
     OnlyPath,
     PathAndName,
 }
 
+// TODO GTK 4
+#[allow(dead_code)]
 pub fn common_open_function(tree_view: &gtk4::TreeView, opening_mode: OpenMode) {
     let selection = tree_view.selection();
     let (selection_rows, tree_model) = selection.selected_rows();
