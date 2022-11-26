@@ -152,6 +152,6 @@ fn build_ui(application: &Application, _arguments: Vec<OsString>) {
     connect_results_modify_one_up(&gui_data);
     connect_results_modify_one_down(&gui_data);
 
-    let window_main = gui_data.window_main.clone();
+    let window_main = gui_data.window_main;
     window_main.connect_close_request(move |_| Inhibit(false));
 }

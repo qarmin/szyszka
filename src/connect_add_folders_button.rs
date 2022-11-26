@@ -148,7 +148,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         }
 
                         //// Read Metadata
-                        let file_metadata = match fs::metadata(&file_entry) {
+                        let file_metadata = match fs::metadata(file_entry) {
                             Ok(t) => t,
                             Err(err) => {
                                 eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
