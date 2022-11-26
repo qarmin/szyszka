@@ -1,30 +1,28 @@
-use gtk::prelude::*;
-
 #[derive(Clone)]
 pub struct GuiSizeLetters {
-    pub radio_button_letters_type_uppercase: gtk::RadioButton,
-    pub radio_button_letters_type_lowercase: gtk::RadioButton,
+    pub check_button_letters_type_uppercase: gtk4::CheckButton,
+    pub check_button_letters_type_lowercase: gtk4::CheckButton,
 
-    pub radio_button_letters_usage_name: gtk::RadioButton,
-    pub radio_button_letters_usage_extension: gtk::RadioButton,
-    pub radio_button_letters_usage_both: gtk::RadioButton,
+    pub check_button_letters_usage_name: gtk4::CheckButton,
+    pub check_button_letters_usage_extension: gtk4::CheckButton,
+    pub check_button_letters_usage_both: gtk4::CheckButton,
 }
 
 impl GuiSizeLetters {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_letters_type_uppercase: gtk::RadioButton = builder.object("radio_button_letters_type_uppercase").unwrap();
-        let radio_button_letters_type_lowercase: gtk::RadioButton = builder.object("radio_button_letters_type_lowercase").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_letters_type_uppercase: gtk4::CheckButton = builder.object("check_button_letters_type_uppercase").unwrap();
+        let check_button_letters_type_lowercase: gtk4::CheckButton = builder.object("check_button_letters_type_lowercase").unwrap();
 
-        let radio_button_letters_usage_name: gtk::RadioButton = builder.object("radio_button_letters_usage_name").unwrap();
-        let radio_button_letters_usage_extension: gtk::RadioButton = builder.object("radio_button_letters_usage_extension").unwrap();
-        let radio_button_letters_usage_both: gtk::RadioButton = builder.object("radio_button_letters_usage_both").unwrap();
+        let check_button_letters_usage_name: gtk4::CheckButton = builder.object("check_button_letters_usage_name").unwrap();
+        let check_button_letters_usage_extension: gtk4::CheckButton = builder.object("check_button_letters_usage_extension").unwrap();
+        let check_button_letters_usage_both: gtk4::CheckButton = builder.object("check_button_letters_usage_both").unwrap();
 
         Self {
-            radio_button_letters_type_uppercase,
-            radio_button_letters_type_lowercase,
-            radio_button_letters_usage_name,
-            radio_button_letters_usage_extension,
-            radio_button_letters_usage_both,
+            check_button_letters_type_uppercase,
+            check_button_letters_type_lowercase,
+            check_button_letters_usage_name,
+            check_button_letters_usage_extension,
+            check_button_letters_usage_both,
         }
     }
 }

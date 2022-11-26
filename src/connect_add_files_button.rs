@@ -2,9 +2,11 @@ use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 use chrono::Local;
-use gtk::prelude::*;
+use gtk4::prelude::*;
+use gtk4::ResponseType;
 use std::cmp::{max, Ordering};
 use std::fs;
+use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 
 pub fn connect_add_files_button(gui_data: &GuiData) {
@@ -17,13 +19,31 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
     let window_main = gui_data.window_main.clone();
     button_add_files.connect_clicked(move |_| {
-        let chooser = gtk::FileChooserDialog::with_buttons(Some("Files to include"), Some(&window_main), gtk::FileChooserAction::Open, &[("Ok", gtk::ResponseType::Ok), ("Close", gtk::ResponseType::Cancel)]);
+        let chooser = gtk4::FileChooserDialog::builder().title("Files to include").action(gtk4::FileChooserAction::Open).transient_for(&window_main).modal(true).build();
+        chooser.add_button("OK", ResponseType::Ok);
+        chooser.add_button("Cancel", ResponseType::Cancel);
+
         chooser.set_select_multiple(true);
-        chooser.show_all();
-        {
-            let response_type = chooser.run();
-            if response_type == gtk::ResponseType::Ok {
-                let mut folder = chooser.filenames();
+        chooser.show();
+
+        let tree_view_results = tree_view_results.clone();
+        let label_files_folders = label_files_folders.clone();
+        let shared_result_entries = shared_result_entries.clone();
+        let rules = rules.clone();
+
+        chooser.connect_response(move |dialog, response_type| {
+            if response_type == gtk4::ResponseType::Ok {
+                let mut folder: Vec<PathBuf> = Vec::new();
+                let g_files = dialog.files();
+                for index in 0..g_files.n_items() {
+                    let file = &g_files.item(index);
+                    if let Some(file) = file {
+                        let ss = file.clone().downcast::<gtk4::gio::File>().unwrap();
+                        if let Some(path_buf) = ss.path() {
+                            folder.push(path_buf);
+                        }
+                    }
+                }
 
                 let mut result_entries = shared_result_entries.borrow_mut();
 
@@ -58,7 +78,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                     }
 
                     //// Read Metadata
-                    let file_metadata = match fs::metadata(&file_entry) {
+                    let file_metadata = match fs::metadata(file_entry) {
                         Ok(t) => t,
                         Err(err) => {
                             eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
@@ -114,8 +134,8 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 }
             }
             update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileAdded, &label_files_folders);
-        }
 
-        chooser.close();
+            dialog.close();
+        });
     });
 }

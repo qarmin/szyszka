@@ -1,0 +1,11 @@
+app: Szyszka
+
+ingredients:
+  script:
+    - mkdir -p szyszka
+
+script:
+  - pwd
+  - cp ../../szyszka ./usr/bin/szyszka
+  - cp ../../data/com.github.qarmin.szyszka.desktop .
+  - cp ../../data/icons/com.github.qarmin.szyszka.svg .

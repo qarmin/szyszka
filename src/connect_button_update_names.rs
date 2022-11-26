@@ -1,6 +1,6 @@
 use crate::gui_data::GuiData;
 use crate::update_records::{update_records, UpdateMode};
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 pub fn connect_button_update_names(gui_data: &GuiData) {
     let button_update_names = gui_data.upper_buttons.button_update_names.clone();

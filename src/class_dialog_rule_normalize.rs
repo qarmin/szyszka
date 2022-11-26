@@ -1,19 +1,21 @@
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 #[derive(Clone)]
 pub struct GuiNormalize {
-    pub radio_button_normalize_everything: gtk::RadioButton,
-    pub radio_button_normalize_partial: gtk::RadioButton,
+    pub check_button_normalize_everything: gtk4::CheckButton,
+    pub check_button_normalize_partial: gtk4::CheckButton,
 }
 
 impl GuiNormalize {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_normalize_everything: gtk::RadioButton = builder.object("radio_button_normalize_everything").unwrap();
-        let radio_button_normalize_partial: gtk::RadioButton = builder.object("radio_button_normalize_partial").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_normalize_everything: gtk4::CheckButton = builder.object("check_button_normalize_everything").unwrap();
+        let check_button_normalize_partial: gtk4::CheckButton = builder.object("check_button_normalize_partial").unwrap();
+
+        check_button_normalize_partial.set_group(Some(&check_button_normalize_everything));
 
         Self {
-            radio_button_normalize_everything,
-            radio_button_normalize_partial,
+            check_button_normalize_everything,
+            check_button_normalize_partial,
         }
     }
 }

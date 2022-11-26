@@ -1,8 +1,8 @@
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
 use crate::rules::Rules;
 use glib::Value;
-use gtk::prelude::*;
-use gtk::{Label, TreeView};
+use gtk4::prelude::*;
+use gtk4::{Label, TreeView};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
@@ -41,10 +41,10 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefC
             if let Some(iter) = list_store.iter_first() {
                 let mut current_index = 0;
                 loop {
-                    let value_to_change = list_store.value(&iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap();
-                    let modification_date: u64 = list_store.value(&iter, ColumnsResults::ModificationDate as i32).get::<u64>().unwrap();
-                    let creation_date: u64 = list_store.value(&iter, ColumnsResults::CreationDate as i32).get::<u64>().unwrap();
-                    let file_size: u64 = list_store.value(&iter, ColumnsResults::Size as i32).get::<u64>().unwrap();
+                    let value_to_change = list_store.get::<String>(&iter, ColumnsResults::CurrentName as i32);
+                    let modification_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::ModificationDate as i32);
+                    let creation_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::CreationDate as i32);
+                    let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
                     let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, (modification_date, creation_date, file_size));
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {

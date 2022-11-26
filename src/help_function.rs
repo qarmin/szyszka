@@ -1,8 +1,8 @@
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rules::*;
-use gtk::prelude::*;
-use gtk::*;
+use gtk4::prelude::*;
+use gtk4::*;
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::ops::DerefMut;
@@ -41,7 +41,7 @@ pub fn validate_name(before_name: String) -> String {
     before_name.chars().filter(|e| *e != '\\' && *e != '/').collect::<String>()
 }
 pub fn validate_number(before_name: String) -> String {
-    before_name.chars().filter(|e| e.is_digit(10)).collect::<String>()
+    before_name.chars().filter(|e| e.is_ascii_digit()).collect::<String>()
 }
 
 pub fn split_path(path: &Path) -> (String, String) {
@@ -60,10 +60,10 @@ pub fn split_file_name(path: &Path) -> (String, String) {
 }
 
 pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
-    tree_view.model().unwrap().downcast::<gtk::ListStore>().unwrap()
+    tree_view.model().unwrap().downcast::<gtk4::ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rules>>) {
+pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Rules>>) {
     let mut rules = rules.borrow_mut();
     let rules = rules.deref_mut();
 
@@ -81,7 +81,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk::TreeView, rules: Rc<RefCell<Rul
     }
 }
 
-pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
+pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -101,7 +101,7 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
         loop {
-            if list_store.path(&tree_iter).unwrap() == *selected_tree_path {
+            if list_store.path(&tree_iter) == *selected_tree_path {
                 vec_index_to_delete.push(current_iter);
                 list_store.iter_next(&tree_iter);
                 current_iter += 1;
@@ -118,7 +118,7 @@ pub fn remove_selected_rows(tree_view: &gtk::TreeView) -> Vec<usize> {
     }
     vec_index_to_delete
 }
-pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<String> {
+pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<String> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -137,16 +137,16 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk::TreeView) -> Vec<Stri
         let tree_iter = list_store.iter(selected_tree_path).unwrap();
         return_vec.push(format!(
             "{}{}{}",
-            list_store.value(&tree_iter, ColumnsResults::Path as i32).get::<String>().unwrap(),
+            list_store.get::<String>(&tree_iter, ColumnsResults::Path as i32),
             CHARACTER,
-            list_store.value(&tree_iter, ColumnsResults::CurrentName as i32).get::<String>().unwrap()
+            list_store.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32)
         ));
     }
 
     return_vec
 }
 
-pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
+pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
@@ -162,19 +162,16 @@ pub fn count_rows_in_tree_view(tree_view: &gtk::TreeView) -> u32 {
     number
 }
 
-pub fn create_message_window(window_main: &gtk::Window, title: &str, message: &str) {
-    let chooser = gtk::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk::ResponseType::Ok)]);
+pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &str) {
+    let chooser = gtk4::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
     chooser.set_modal(true);
     chooser.set_transient_for(Some(window_main));
 
-    let question_label = gtk::Label::new(Some(message));
+    let question_label = gtk4::Label::new(Some(message));
 
-    let chooser_box = chooser.children()[0].clone().downcast::<gtk::Box>().unwrap();
-    chooser_box.add(&question_label);
-    chooser_box.show_all();
-
-    chooser.run();
-    chooser.close();
+    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
+    chooser_box.append(&question_label);
+    chooser_box.show();
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();
@@ -201,7 +198,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let mut position_of_splits: Vec<usize> = Vec::new();
 
     // `git*` shouldn't be true for `/gitsfafasfs`
-    if !expression.starts_with('*') && directory.find(&splits[0]).unwrap() > 0 {
+    if !expression.starts_with('*') && directory.find(splits[0]).unwrap() > 0 {
         return false;
     }
     // `*home` shouldn't be true for `/homeowner`
@@ -210,7 +207,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     }
 
     // At the end we check if parts between * are correctly positioned
-    position_of_splits.push(directory.find(&splits[0]).unwrap());
+    position_of_splits.push(directory.find(splits[0]).unwrap());
     let mut current_index: usize;
     let mut found_index: usize;
     for i in splits[1..].iter().enumerate() {
@@ -229,46 +226,46 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
 pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Option<u32>) -> SingleRule {
     let notebook_choose_rule = window_rules.notebook_choose_rule.clone();
 
-    let radio_button_letters_type_uppercase = window_rules.size_letters.radio_button_letters_type_uppercase.clone();
-    let radio_button_letters_type_lowercase = window_rules.size_letters.radio_button_letters_type_lowercase.clone();
-    let radio_button_letters_usage_name = window_rules.size_letters.radio_button_letters_usage_name.clone();
-    let radio_button_letters_usage_extension = window_rules.size_letters.radio_button_letters_usage_extension.clone();
-    let radio_button_letters_usage_both = window_rules.size_letters.radio_button_letters_usage_both.clone();
+    let check_button_letters_type_uppercase = window_rules.size_letters.check_button_letters_type_uppercase.clone();
+    let check_button_letters_type_lowercase = window_rules.size_letters.check_button_letters_type_lowercase.clone();
+    let check_button_letters_usage_name = window_rules.size_letters.check_button_letters_usage_name.clone();
+    let check_button_letters_usage_extension = window_rules.size_letters.check_button_letters_usage_extension.clone();
+    let check_button_letters_usage_both = window_rules.size_letters.check_button_letters_usage_both.clone();
 
-    let radio_button_purge_name = window_rules.purge.radio_button_purge_name.clone();
-    let radio_button_purge_extension = window_rules.purge.radio_button_purge_extension.clone();
-    let radio_button_purge_both = window_rules.purge.radio_button_purge_both.clone();
+    let check_button_purge_name = window_rules.purge.check_button_purge_name.clone();
+    let check_button_purge_extension = window_rules.purge.check_button_purge_extension.clone();
+    let check_button_purge_both = window_rules.purge.check_button_purge_both.clone();
 
-    let radio_button_add_text_after_name = window_rules.add_text.radio_button_add_text_after_name.clone();
-    let radio_button_add_text_before_name = window_rules.add_text.radio_button_add_text_before_name.clone();
+    let check_button_add_text_after_name = window_rules.add_text.check_button_add_text_after_name.clone();
+    let check_button_add_text_before_name = window_rules.add_text.check_button_add_text_before_name.clone();
     let entry_add_text_text_to_add = window_rules.add_text.entry_add_text_text_to_add.clone();
 
     let entry_add_text_text_to_trim = window_rules.trim.entry_add_text_text_to_trim.clone();
-    let radio_button_trim_name_start = window_rules.trim.radio_button_trim_name_start.clone();
-    let radio_button_trim_name_end = window_rules.trim.radio_button_trim_name_end.clone();
-    let radio_button_trim_extension_start = window_rules.trim.radio_button_trim_extension_start.clone();
-    let radio_button_trim_extension_end = window_rules.trim.radio_button_trim_extension_end.clone();
-    let radio_button_trim_case_insensitive = window_rules.trim.radio_button_trim_case_insensitive.clone();
-    let radio_button_trim_case_sensitive = window_rules.trim.radio_button_trim_case_sensitive.clone();
+    let check_button_trim_name_start = window_rules.trim.check_button_trim_name_start.clone();
+    let check_button_trim_name_end = window_rules.trim.check_button_trim_name_end.clone();
+    let check_button_trim_extension_start = window_rules.trim.check_button_trim_extension_start.clone();
+    let check_button_trim_extension_end = window_rules.trim.check_button_trim_extension_end.clone();
+    let check_button_trim_case_insensitive = window_rules.trim.check_button_trim_case_insensitive.clone();
+    let check_button_trim_case_sensitive = window_rules.trim.check_button_trim_case_sensitive.clone();
 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
-    let radio_button_replace_extension = window_rules.replace.radio_button_replace_extension.clone();
-    let radio_button_replace_name = window_rules.replace.radio_button_replace_name.clone();
-    let radio_button_replace_both = window_rules.replace.radio_button_replace_both.clone();
-    let radio_button_replace_case_insensitive = window_rules.replace.radio_button_replace_case_insensitive.clone();
-    let radio_button_replace_case_sensitive = window_rules.replace.radio_button_replace_case_sensitive.clone();
+    let check_button_replace_extension = window_rules.replace.check_button_replace_extension.clone();
+    let check_button_replace_name = window_rules.replace.check_button_replace_name.clone();
+    let check_button_replace_both = window_rules.replace.check_button_replace_both.clone();
+    let check_button_replace_case_insensitive = window_rules.replace.check_button_replace_case_insensitive.clone();
+    let check_button_replace_case_sensitive = window_rules.replace.check_button_replace_case_sensitive.clone();
     let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change.clone();
 
-    let radio_button_add_number_before_name = window_rules.add_number.radio_button_add_number_before_name.clone();
-    let radio_button_add_number_after_name = window_rules.add_number.radio_button_add_number_after_name.clone();
+    let check_button_add_number_before_name = window_rules.add_number.check_button_add_number_before_name.clone();
+    let check_button_add_number_after_name = window_rules.add_number.check_button_add_number_after_name.clone();
     let entry_add_number_start_number = window_rules.add_number.entry_add_number_start_number.clone();
     let entry_add_number_step = window_rules.add_number.entry_add_number_step.clone();
     let entry_add_number_zeros = window_rules.add_number.entry_add_number_zeros.clone();
 
-    let radio_button_normalize_everything = window_rules.normalize.radio_button_normalize_everything.clone();
-    let radio_button_normalize_partial = window_rules.normalize.radio_button_normalize_partial.clone();
+    let check_button_normalize_everything = window_rules.normalize.check_button_normalize_everything.clone();
+    let check_button_normalize_partial = window_rules.normalize.check_button_normalize_partial.clone();
 
     let rule_type: RuleType;
     let rule_place: RulePlace;
@@ -286,18 +283,18 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             rule_type = RuleType::CaseSize;
 
             rule_data.to_lowercase = true;
-            if radio_button_letters_type_uppercase.is_active() {
+            if check_button_letters_type_uppercase.is_active() {
                 rule_data.to_lowercase = false;
-            } else if radio_button_letters_type_lowercase.is_active() {
+            } else if check_button_letters_type_lowercase.is_active() {
                 rule_data.to_lowercase = true;
             } else {
                 panic!("Button not available");
             }
-            if radio_button_letters_usage_extension.is_active() {
+            if check_button_letters_usage_extension.is_active() {
                 rule_place = RulePlace::Extension;
-            } else if radio_button_letters_usage_both.is_active() {
+            } else if check_button_letters_usage_both.is_active() {
                 rule_place = RulePlace::ExtensionAndName;
-            } else if radio_button_letters_usage_name.is_active() {
+            } else if check_button_letters_usage_name.is_active() {
                 rule_place = RulePlace::Name;
             } else {
                 panic!("Invalid Button Clicked");
@@ -309,11 +306,11 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         }
         NotebookEnum::Purge => {
             rule_type = RuleType::Purge;
-            if radio_button_purge_extension.is_active() {
+            if check_button_purge_extension.is_active() {
                 rule_place = RulePlace::Extension;
-            } else if radio_button_purge_both.is_active() {
+            } else if check_button_purge_both.is_active() {
                 rule_place = RulePlace::ExtensionAndName;
-            } else if radio_button_purge_name.is_active() {
+            } else if check_button_purge_name.is_active() {
                 rule_place = RulePlace::Name;
             } else {
                 panic!("Invalid Button Clicked");
@@ -322,9 +319,9 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         }
         NotebookEnum::AddText => {
             rule_type = RuleType::AddText;
-            if radio_button_add_text_before_name.is_active() {
+            if check_button_add_text_before_name.is_active() {
                 rule_place = RulePlace::BeforeName;
-            } else if radio_button_add_text_after_name.is_active() {
+            } else if check_button_add_text_after_name.is_active() {
                 rule_place = RulePlace::AfterName;
             } else {
                 panic!("Invalid Button Clicked");
@@ -335,9 +332,9 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         NotebookEnum::Trim => {
             rule_type = RuleType::Trim;
 
-            if radio_button_trim_case_sensitive.is_active() {
+            if check_button_trim_case_sensitive.is_active() {
                 rule_data.case_sensitive = true;
-            } else if radio_button_trim_case_insensitive.is_active() {
+            } else if check_button_trim_case_insensitive.is_active() {
                 rule_data.case_sensitive = false;
             } else {
                 panic!("Invalid Button Clicked");
@@ -345,16 +342,16 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
 
             let where_remove;
 
-            if radio_button_trim_name_start.is_active() {
+            if check_button_trim_name_start.is_active() {
                 rule_place = RulePlace::FromNameStart;
                 where_remove = "start";
-            } else if radio_button_trim_name_end.is_active() {
+            } else if check_button_trim_name_end.is_active() {
                 rule_place = RulePlace::FromNameEndReverse;
                 where_remove = "end of name";
-            } else if radio_button_trim_extension_start.is_active() {
+            } else if check_button_trim_extension_start.is_active() {
                 rule_place = RulePlace::FromExtensionStart;
                 where_remove = "extension";
-            } else if radio_button_trim_extension_end.is_active() {
+            } else if check_button_trim_extension_end.is_active() {
                 rule_place = RulePlace::FromExtensionEndReverse;
                 where_remove = "end of extension";
             } else {
@@ -373,19 +370,19 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         NotebookEnum::Replace => {
             rule_type = RuleType::Replace;
 
-            if radio_button_replace_both.is_active() {
+            if check_button_replace_both.is_active() {
                 rule_place = RulePlace::ExtensionAndName;
-            } else if radio_button_replace_name.is_active() {
+            } else if check_button_replace_name.is_active() {
                 rule_place = RulePlace::Name;
-            } else if radio_button_replace_extension.is_active() {
+            } else if check_button_replace_extension.is_active() {
                 rule_place = RulePlace::Extension;
             } else {
                 panic!("Invalid Rule Type for purge rule");
             }
 
-            if radio_button_replace_case_sensitive.is_active() {
+            if check_button_replace_case_sensitive.is_active() {
                 rule_data.case_sensitive = true;
-            } else if radio_button_replace_case_insensitive.is_active() {
+            } else if check_button_replace_case_insensitive.is_active() {
                 rule_data.case_sensitive = false;
             } else {
                 panic!("Invalid Button Clicked");
@@ -398,9 +395,9 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         NotebookEnum::AddNumber => {
             rule_type = RuleType::AddNumber;
 
-            if radio_button_add_number_before_name.is_active() {
+            if check_button_add_number_before_name.is_active() {
                 rule_place = RulePlace::BeforeName;
-            } else if radio_button_add_number_after_name.is_active() {
+            } else if check_button_add_number_after_name.is_active() {
                 rule_place = RulePlace::AfterName;
             } else {
                 panic!("Invalid Rule Type for purge rule");
@@ -421,9 +418,9 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             rule_type = RuleType::Normalize;
             rule_place = RulePlace::ExtensionAndName;
 
-            if radio_button_normalize_everything.is_active() {
+            if check_button_normalize_everything.is_active() {
                 rule_data.full_normalize = true;
-            } else if radio_button_normalize_partial.is_active() {
+            } else if check_button_normalize_partial.is_active() {
                 rule_data.full_normalize = false;
             } else {
                 panic!();
@@ -442,4 +439,33 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         rule_data,
         rule_description,
     }
+}
+
+pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<gtk4::Box> {
+    let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
+    let mut boxes = Vec::new();
+
+    while let Some(widget) = widgets_to_check.pop() {
+        widgets_to_check.extend(get_all_children(&widget));
+        if let Ok(bbox) = widget.clone().downcast::<gtk4::Box>() {
+            boxes.push(bbox);
+        }
+    }
+    boxes
+}
+
+pub fn get_all_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
+    let mut vector = vec![];
+    if let Some(mut child) = wid.first_child() {
+        vector.push(child.clone());
+        loop {
+            child = match child.next_sibling() {
+                Some(t) => t,
+                None => break,
+            };
+            vector.push(child.clone());
+        }
+    }
+
+    vector
 }

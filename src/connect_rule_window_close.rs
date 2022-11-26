@@ -1,6 +1,5 @@
 use crate::gui_data::GuiData;
-use gtk::prelude::WidgetExtManual;
-use gtk::prelude::*;
+use gtk4::prelude::*;
 use std::ops::DerefMut;
 
 pub fn connect_rule_window_close(gui_data: &GuiData) {
@@ -9,8 +8,7 @@ pub fn connect_rule_window_close(gui_data: &GuiData) {
 
     let rules = gui_data.rules.clone();
 
-    window_with_rules.hide_on_delete();
-    window_with_rules.connect_delete_event(move |e, _y| {
+    window_with_rules.connect_close_request(move |e| {
         let mut rules = rules.borrow_mut();
         let rules = rules.deref_mut();
 
@@ -18,6 +16,6 @@ pub fn connect_rule_window_close(gui_data: &GuiData) {
 
         window_main.set_sensitive(true);
         e.hide();
-        gtk::Inhibit(true)
+        gtk4::Inhibit(true)
     });
 }

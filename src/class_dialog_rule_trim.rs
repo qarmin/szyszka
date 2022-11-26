@@ -1,37 +1,43 @@
-use gtk::prelude::*;
+use gtk4::prelude::*;
 
 #[derive(Clone)]
 pub struct GuiTrim {
-    pub radio_button_trim_name_start: gtk::RadioButton,
-    pub radio_button_trim_name_end: gtk::RadioButton,
-    pub radio_button_trim_extension_start: gtk::RadioButton,
-    pub radio_button_trim_extension_end: gtk::RadioButton,
+    pub check_button_trim_name_start: gtk4::CheckButton,
+    pub check_button_trim_name_end: gtk4::CheckButton,
+    pub check_button_trim_extension_start: gtk4::CheckButton,
+    pub check_button_trim_extension_end: gtk4::CheckButton,
 
-    pub radio_button_trim_case_sensitive: gtk::RadioButton,
-    pub radio_button_trim_case_insensitive: gtk::RadioButton,
+    pub check_button_trim_case_sensitive: gtk4::CheckButton,
+    pub check_button_trim_case_insensitive: gtk4::CheckButton,
 
-    pub entry_add_text_text_to_trim: gtk::Entry,
+    pub entry_add_text_text_to_trim: gtk4::Entry,
 }
 
 impl GuiTrim {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_trim_name_start: gtk::RadioButton = builder.object("radio_button_trim_name_start").unwrap();
-        let radio_button_trim_name_end: gtk::RadioButton = builder.object("radio_button_trim_name_end").unwrap();
-        let radio_button_trim_extension_start: gtk::RadioButton = builder.object("radio_button_trim_extension_start").unwrap();
-        let radio_button_trim_extension_end: gtk::RadioButton = builder.object("radio_button_trim_extension_end").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_trim_name_start: gtk4::CheckButton = builder.object("check_button_trim_name_start").unwrap();
+        let check_button_trim_name_end: gtk4::CheckButton = builder.object("check_button_trim_name_end").unwrap();
+        let check_button_trim_extension_start: gtk4::CheckButton = builder.object("check_button_trim_extension_start").unwrap();
+        let check_button_trim_extension_end: gtk4::CheckButton = builder.object("check_button_trim_extension_end").unwrap();
 
-        let radio_button_trim_case_sensitive: gtk::RadioButton = builder.object("radio_button_trim_case_sensitive").unwrap();
-        let radio_button_trim_case_insensitive: gtk::RadioButton = builder.object("radio_button_trim_case_insensitive").unwrap();
+        check_button_trim_name_end.set_group(Some(&check_button_trim_name_start));
+        check_button_trim_extension_start.set_group(Some(&check_button_trim_name_start));
+        check_button_trim_extension_end.set_group(Some(&check_button_trim_name_start));
 
-        let entry_add_text_text_to_trim: gtk::Entry = builder.object("entry_add_text_text_to_trim").unwrap();
+        let check_button_trim_case_sensitive: gtk4::CheckButton = builder.object("check_button_trim_case_sensitive").unwrap();
+        let check_button_trim_case_insensitive: gtk4::CheckButton = builder.object("check_button_trim_case_insensitive").unwrap();
+
+        check_button_trim_case_insensitive.set_group(Some(&check_button_trim_case_sensitive));
+
+        let entry_add_text_text_to_trim: gtk4::Entry = builder.object("entry_add_text_text_to_trim").unwrap();
 
         Self {
-            radio_button_trim_name_start,
-            radio_button_trim_name_end,
-            radio_button_trim_extension_start,
-            radio_button_trim_extension_end,
-            radio_button_trim_case_sensitive,
-            radio_button_trim_case_insensitive,
+            check_button_trim_name_start,
+            check_button_trim_name_end,
+            check_button_trim_extension_start,
+            check_button_trim_extension_end,
+            check_button_trim_case_sensitive,
+            check_button_trim_case_insensitive,
             entry_add_text_text_to_trim,
         }
     }

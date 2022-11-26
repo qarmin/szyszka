@@ -1,22 +1,20 @@
-use gtk::prelude::*;
-
 #[derive(Clone)]
 pub struct GuiPurge {
-    pub radio_button_purge_name: gtk::RadioButton,
-    pub radio_button_purge_extension: gtk::RadioButton,
-    pub radio_button_purge_both: gtk::RadioButton,
+    pub check_button_purge_name: gtk4::CheckButton,
+    pub check_button_purge_extension: gtk4::CheckButton,
+    pub check_button_purge_both: gtk4::CheckButton,
 }
 
 impl GuiPurge {
-    pub fn create_from_builder(builder: &gtk::Builder) -> Self {
-        let radio_button_purge_name: gtk::RadioButton = builder.object("radio_button_purge_name").unwrap();
-        let radio_button_purge_extension: gtk::RadioButton = builder.object("radio_button_purge_extension").unwrap();
-        let radio_button_purge_both: gtk::RadioButton = builder.object("radio_button_purge_both").unwrap();
+    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+        let check_button_purge_name: gtk4::CheckButton = builder.object("check_button_purge_name").unwrap();
+        let check_button_purge_extension: gtk4::CheckButton = builder.object("check_button_purge_extension").unwrap();
+        let check_button_purge_both: gtk4::CheckButton = builder.object("check_button_purge_both").unwrap();
 
         Self {
-            radio_button_purge_name,
-            radio_button_purge_extension,
-            radio_button_purge_both,
+            check_button_purge_name,
+            check_button_purge_extension,
+            check_button_purge_both,
         }
     }
 }

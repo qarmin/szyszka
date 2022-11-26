@@ -1,7 +1,7 @@
 use crate::gui_data::GuiData;
 use crate::help_function::{populate_rules_tree_view, read_rule_from_window};
 use crate::update_records::{update_records, UpdateMode};
-use gtk::prelude::*;
+use gtk4::prelude::*;
 use std::ops::DerefMut;
 
 pub fn connect_rule_add(gui_data: &GuiData) {
