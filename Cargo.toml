@@ -12,7 +12,7 @@ rust-version = "1.63.0"
 [dependencies]
 gdk4 = "0.5.2"
 gio = "0.16.3"
-glib = "0.16.3"
+glib = "0.16.4"
 
 # For checking path
 walkdir = "2.3.2"

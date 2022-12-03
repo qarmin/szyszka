@@ -10,7 +10,7 @@ pub struct GuiRulesBottomPanel {
     pub button_rule_one_up: gtk4::Button,
     pub button_rule_one_down: gtk4::Button,
     pub scrolled_window_rules: gtk4::ScrolledWindow,
-    pub tree_view_window_rules: gtk4::TreeView,
+    pub tree_view_window_rules: TreeView,
 }
 
 impl GuiRulesBottomPanel {
@@ -22,7 +22,7 @@ impl GuiRulesBottomPanel {
         let button_rule_one_down: gtk4::Button = builder.object("button_rule_one_down").unwrap();
         let scrolled_window_rules: gtk4::ScrolledWindow = builder.object("scrolled_window_rules").unwrap();
 
-        let tree_view_window_rules: gtk4::TreeView = TreeView::new();
+        let tree_view_window_rules: TreeView = TreeView::new();
 
         Self {
             button_add_rule,

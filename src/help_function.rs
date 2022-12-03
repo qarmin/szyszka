@@ -1,6 +1,6 @@
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
-use crate::rules::*;
+use crate::rule::rules::*;
 use gtk4::prelude::*;
 use gtk4::*;
 use std::cell::RefCell;
@@ -30,11 +30,10 @@ pub enum ColumnsRules {
     Description,
 }
 
-#[cfg(target_family = "windows")]
-pub static CHARACTER: &str = "\\";
-
 #[cfg(not(target_family = "windows"))]
-pub static CHARACTER: &str = "/";
+pub const CHARACTER: char = '/';
+#[cfg(target_family = "windows")]
+pub const CHARACTER: char = '\\';
 
 pub fn validate_name(before_name: String) -> String {
     // TODO when trying to print text in middle of text, then caret change position, fix it
@@ -60,10 +59,10 @@ pub fn split_file_name(path: &Path) -> (String, String) {
 }
 
 pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
-    tree_view.model().unwrap().downcast::<gtk4::ListStore>().unwrap()
+    tree_view.model().unwrap().downcast::<ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Rules>>) {
+pub fn populate_rules_tree_view(tree_view: &TreeView, rules: Rc<RefCell<Rules>>) {
     let mut rules = rules.borrow_mut();
     let rules = rules.deref_mut();
 
@@ -81,7 +80,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Ru
     }
 }
 
-pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
+pub fn remove_selected_rows(tree_view: &TreeView) -> Vec<usize> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -118,7 +117,7 @@ pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
     }
     vec_index_to_delete
 }
-pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<String> {
+pub fn get_full_file_names_from_selection(tree_view: &TreeView) -> Vec<String> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -146,7 +145,7 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<Str
     return_vec
 }
 
-pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
+pub fn count_rows_in_tree_view(tree_view: &TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
@@ -162,16 +161,25 @@ pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
     number
 }
 
-pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &str) {
-    let chooser = gtk4::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
-    chooser.set_modal(true);
-    chooser.set_transient_for(Some(window_main));
+pub fn get_dialog_box_child(dialog: &Dialog) -> Box {
+    dialog.child().unwrap().downcast::<Box>().unwrap()
+}
 
-    let question_label = gtk4::Label::new(Some(message));
+pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
+    let dialog = Dialog::builder().title(title).transient_for(window_main).modal(true).build();
+    dialog.connect_response(|e, _r| e.close());
+    dialog.add_button("Ok", ResponseType::Ok);
 
-    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
-    chooser_box.append(&question_label);
-    chooser_box.show();
+    let question_label = Label::new(Some(message));
+
+    let chooser_box = get_dialog_box_child(&dialog);
+    chooser_box.insert_child_after(&question_label, None::<&Widget>);
+    chooser_box.set_margin_top(5);
+    chooser_box.set_margin_bottom(5);
+    chooser_box.set_margin_start(5);
+    chooser_box.set_margin_end(5);
+
+    dialog.show()
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();
@@ -441,13 +449,13 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
     }
 }
 
-pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<gtk4::Box> {
+pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<Box> {
     let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
     let mut boxes = Vec::new();
 
     while let Some(widget) = widgets_to_check.pop() {
         widgets_to_check.extend(get_all_children(&widget));
-        if let Ok(bbox) = widget.clone().downcast::<gtk4::Box>() {
+        if let Ok(bbox) = widget.clone().downcast::<Box>() {
             boxes.push(bbox);
         }
     }

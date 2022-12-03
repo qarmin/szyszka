@@ -5,7 +5,7 @@ use crate::gui_data_settings::GuiSettings;
 use crate::gui_data_upper_buttons::*;
 use crate::gui_popover_select::GuiPopoverSelect;
 use crate::help_function::ResultEntries;
-use crate::rules::Rules;
+use crate::rule::rules::Rules;
 use gtk4::prelude::*;
 use gtk4::Builder;
 use std::cell::RefCell;

@@ -1,5 +1,5 @@
 use crate::help_function::split_file_name;
-use crate::rules::*;
+use crate::rule::rules::*;
 use std::cmp::min;
 use std::path::Path;
 
@@ -64,8 +64,8 @@ pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64
 
 #[cfg(test)]
 mod test {
-    use crate::rule_add_number::rule_add_number;
-    use crate::rules::{RulePlace, RuleType, SingleRule};
+    use crate::rule::rule_add_number::rule_add_number;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_add_number() {
