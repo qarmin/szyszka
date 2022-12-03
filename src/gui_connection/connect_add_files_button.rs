@@ -32,13 +32,13 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
         let rules = rules.clone();
 
         chooser.connect_response(move |dialog, response_type| {
-            if response_type == gtk4::ResponseType::Ok {
+            if response_type == ResponseType::Ok {
                 let mut folder: Vec<PathBuf> = Vec::new();
                 let g_files = dialog.files();
                 for index in 0..g_files.n_items() {
                     let file = &g_files.item(index);
                     if let Some(file) = file {
-                        let ss = file.clone().downcast::<gtk4::gio::File>().unwrap();
+                        let ss = file.clone().downcast::<gio::File>().unwrap();
                         if let Some(path_buf) = ss.path() {
                             folder.push(path_buf);
                         }

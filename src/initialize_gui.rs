@@ -22,20 +22,12 @@ pub fn initialize_gui(gui_data: &GuiData) {
     {
         let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
 
-        let col_types: [Type; 7] = [
-            glib::types::Type::STRING,
-            glib::types::Type::STRING,
-            glib::types::Type::STRING,
-            glib::types::Type::STRING,
-            glib::types::Type::U64,
-            glib::types::Type::U64,
-            glib::types::Type::U64,
-        ];
+        let col_types: [Type; 7] = [Type::STRING, Type::STRING, Type::STRING, Type::STRING, Type::U64, Type::U64, Type::U64];
 
         let list_store: gtk4::ListStore = gtk4::ListStore::new(&col_types);
 
         let tree_view: gtk4::TreeView = gui_data.results.tree_view_results.clone();
-        let gc_tree_view: gtk4::GestureClick = gui_data.results.gc_tree_view_results.clone();
+        let gc_tree_view: GestureClick = gui_data.results.gc_tree_view_results.clone();
         tree_view.set_model(Some(&list_store));
 
         tree_view.selection().set_mode(SelectionMode::Multiple);
@@ -62,7 +54,7 @@ pub fn initialize_gui(gui_data: &GuiData) {
     {
         let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 
-        let col_types: [Type; 3] = [glib::types::Type::STRING, glib::types::Type::STRING, glib::types::Type::STRING];
+        let col_types: [Type; 3] = [Type::STRING, Type::STRING, Type::STRING];
 
         let list_store: gtk4::ListStore = gtk4::ListStore::new(&col_types);
 

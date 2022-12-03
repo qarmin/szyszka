@@ -72,7 +72,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
             let rules = rules.clone();
 
             chooser.connect_response(move |chooser, response| {
-                if response == gtk4::ResponseType::Ok {
+                if response == ResponseType::Ok {
                     let mut result_entries = shared_result_entries.borrow_mut();
 
                     let list_store = get_list_store_from_tree_view(&tree_view_results);
@@ -82,7 +82,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     for index in 0..g_files.n_items() {
                         let file = &g_files.item(index);
                         if let Some(file) = file {
-                            let ss = file.clone().downcast::<gtk4::gio::File>().unwrap();
+                            let ss = file.clone().downcast::<gio::File>().unwrap();
                             if let Some(path_buf) = ss.path() {
                                 folders_to_check.push(path_buf);
                             }

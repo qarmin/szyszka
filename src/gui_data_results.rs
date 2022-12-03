@@ -5,7 +5,7 @@ use gtk4::TreeView;
 #[derive(Clone)]
 pub struct GuiResults {
     pub scrolled_window_results: gtk4::ScrolledWindow,
-    pub tree_view_results: gtk4::TreeView,
+    pub tree_view_results: TreeView,
     pub gc_tree_view_results: GestureClick,
 }
 

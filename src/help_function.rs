@@ -59,10 +59,10 @@ pub fn split_file_name(path: &Path) -> (String, String) {
 }
 
 pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
-    tree_view.model().unwrap().downcast::<gtk4::ListStore>().unwrap()
+    tree_view.model().unwrap().downcast::<ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Rules>>) {
+pub fn populate_rules_tree_view(tree_view: &TreeView, rules: Rc<RefCell<Rules>>) {
     let mut rules = rules.borrow_mut();
     let rules = rules.deref_mut();
 
@@ -80,7 +80,7 @@ pub fn populate_rules_tree_view(tree_view: &gtk4::TreeView, rules: Rc<RefCell<Ru
     }
 }
 
-pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
+pub fn remove_selected_rows(tree_view: &TreeView) -> Vec<usize> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -117,7 +117,7 @@ pub fn remove_selected_rows(tree_view: &gtk4::TreeView) -> Vec<usize> {
     }
     vec_index_to_delete
 }
-pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<String> {
+pub fn get_full_file_names_from_selection(tree_view: &TreeView) -> Vec<String> {
     let selection = tree_view.selection();
 
     let (selected_rows, _tree_model) = selection.selected_rows();
@@ -145,7 +145,7 @@ pub fn get_full_file_names_from_selection(tree_view: &gtk4::TreeView) -> Vec<Str
     return_vec
 }
 
-pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
+pub fn count_rows_in_tree_view(tree_view: &TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
@@ -161,16 +161,16 @@ pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
     number
 }
 
-pub fn get_dialog_box_child(dialog: &Dialog) -> gtk4::Box {
-    dialog.child().unwrap().downcast::<gtk4::Box>().unwrap()
+pub fn get_dialog_box_child(dialog: &Dialog) -> Box {
+    dialog.child().unwrap().downcast::<Box>().unwrap()
 }
 
-pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &str) {
-    let dialog = gtk4::Dialog::builder().title(title).transient_for(window_main).modal(true).build();
+pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
+    let dialog = Dialog::builder().title(title).transient_for(window_main).modal(true).build();
     dialog.connect_response(|e, _r| e.close());
     dialog.add_button("Ok", ResponseType::Ok);
 
-    let question_label = gtk4::Label::new(Some(message));
+    let question_label = Label::new(Some(message));
 
     let chooser_box = get_dialog_box_child(&dialog);
     chooser_box.insert_child_after(&question_label, None::<&Widget>);
@@ -449,13 +449,13 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
     }
 }
 
-pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<gtk4::Box> {
+pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<Box> {
     let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
     let mut boxes = Vec::new();
 
     while let Some(widget) = widgets_to_check.pop() {
         widgets_to_check.extend(get_all_children(&widget));
-        if let Ok(bbox) = widget.clone().downcast::<gtk4::Box>() {
+        if let Ok(bbox) = widget.clone().downcast::<Box>() {
             boxes.push(bbox);
         }
     }

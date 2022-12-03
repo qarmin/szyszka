@@ -4,7 +4,7 @@ use gtk4::TreeViewColumn;
 
 pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Type");
     column.set_resizable(false);
@@ -14,7 +14,7 @@ pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
     tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Current Name");
     column.set_resizable(true);
@@ -24,7 +24,7 @@ pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
     tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Future Name");
     column.set_resizable(true);
@@ -34,7 +34,7 @@ pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
     tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Path");
     column.set_resizable(true);
@@ -56,7 +56,7 @@ pub fn create_tree_view_rules(tree_view: &gtk4::TreeView) {
     // tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Tool Type");
     column.set_resizable(true);
@@ -65,7 +65,7 @@ pub fn create_tree_view_rules(tree_view: &gtk4::TreeView) {
     tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Usage Name");
     column.set_resizable(true);
@@ -74,7 +74,7 @@ pub fn create_tree_view_rules(tree_view: &gtk4::TreeView) {
     tree_view.append_column(&column);
 
     let renderer = gtk4::CellRendererText::new();
-    let column: gtk4::TreeViewColumn = TreeViewColumn::new();
+    let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
     column.set_title("Description");
     column.set_resizable(true);
