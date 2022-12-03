@@ -4,19 +4,21 @@ use chrono::NaiveDateTime;
 use humansize::format_size;
 use humansize::BINARY;
 use std::cmp::min;
+use std::path::Component::Normal;
 use std::path::Path;
 
 // enum CustomTypes {
 //     Creation,
 // }
 
-pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, file_data: Option<(u64, u64, u64)>) -> String {
+pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, file_data: Option<(u64, u64, u64, &str)>) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
     let string_to_parse = rule.rule_data.custom_text.clone();
 
     let creation_date: String;
     let modification_date: String;
     let size: String;
+    let parent_folder;
 
     let mut new_string = "".to_string();
 
@@ -25,10 +27,21 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
         modification_date = NaiveDateTime::from_timestamp_opt(f_data.0 as i64, 0).unwrap().to_string().replace(':', "_");
         creation_date = NaiveDateTime::from_timestamp_opt(f_data.1 as i64, 0).unwrap().to_string().replace(':', "_");
         size = format_size(f_data.2, BINARY);
+        if let Some(last_component) = Path::new(&f_data.3).components().last() {
+            if let Normal(path) = last_component {
+                parent_folder = path.to_str().unwrap_or("").to_string();
+            } else {
+                parent_folder = "".to_string();
+                eprintln!("Failed to read latest component from {:?}", last_component);
+            }
+        } else {
+            parent_folder = "".to_string();
+        }
     } else {
         creation_date = "2021-01-31 08_42_12".to_string();
         modification_date = "2015-11-15 14_24_55".to_string();
         size = "2 KB".to_string();
+        parent_folder = "Parent Folder".to_string();
     }
 
     match rule.rule_type {
@@ -78,6 +91,12 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
                                 "MODIF" => {
                                     if typ.len() == 1 {
                                         new_string.push_str(&modification_date);
+                                        invalid_data = false;
+                                    }
+                                }
+                                "PARENT" => {
+                                    if typ.len() == 1 {
+                                        new_string.push_str(&parent_folder.to_string());
                                         invalid_data = false;
                                     }
                                 }
@@ -226,6 +245,10 @@ mod test {
         rule.rule_data.custom_text = "$(CREAT)".to_string();
         let text = rule_custom("wombat.txt", &rule, 0, None);
         assert!(text.contains('-') && text.contains("20"));
+
+        rule.rule_data.custom_text = "$(PARENT)".to_string();
+        let text = rule_custom("Absymal.txt", &rule, 0, None);
+        assert_eq!(text, "Parent Folder");
 
         fs::remove_file("wombat.txt").unwrap();
     }

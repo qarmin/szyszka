@@ -9,6 +9,7 @@ $(EXT) - prints extension
 $(MODIF) - prints file modification date
 $(CREAT) - prints file creation
 $(CURR) - prints current file name with extension
+$(PARENT) - prints parent folder name
 $(N:6:3:2) - prints numbers with step 3, 
 starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
   </object>

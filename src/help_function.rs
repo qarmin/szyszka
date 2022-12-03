@@ -30,11 +30,10 @@ pub enum ColumnsRules {
     Description,
 }
 
-#[cfg(target_family = "windows")]
-pub static CHARACTER: &str = "\\";
-
 #[cfg(not(target_family = "windows"))]
-pub static CHARACTER: &str = "/";
+pub const CHARACTER: char = '/';
+#[cfg(target_family = "windows")]
+pub const CHARACTER: char = '\\';
 
 pub fn validate_name(before_name: String) -> String {
     // TODO when trying to print text in middle of text, then caret change position, fix it

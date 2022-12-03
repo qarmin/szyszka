@@ -45,7 +45,8 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefC
                     let modification_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::ModificationDate as i32);
                     let creation_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::CreationDate as i32);
                     let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
-                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, (modification_date, creation_date, file_size));
+                    let path: String = list_store.get::<String>(&iter, ColumnsResults::Path as i32);
+                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, (modification_date, creation_date, file_size, &path));
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {
                         break; // This is the end
