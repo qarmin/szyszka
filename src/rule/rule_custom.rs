@@ -1,5 +1,5 @@
 use crate::help_function::split_file_name;
-use crate::rules::*;
+use crate::rule::rules::*;
 use chrono::NaiveDateTime;
 use humansize::format_size;
 use humansize::BINARY;
@@ -152,8 +152,8 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
 #[cfg(test)]
 mod test {
-    use crate::rule_custom::rule_custom;
-    use crate::rules::{RulePlace, RuleType, SingleRule};
+    use crate::rule::rule_custom::rule_custom;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
     use std::fs;
     use std::fs::OpenOptions;
     use std::io::Write;

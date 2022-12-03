@@ -1,5 +1,5 @@
 use crate::help_function::split_file_name;
-use crate::rules::*;
+use crate::rule::rules::*;
 use std::path::Path;
 
 pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> String {
@@ -56,8 +56,8 @@ pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> Stri
 
 #[cfg(test)]
 mod test {
-    use crate::rule_change_size_letters::rule_change_size_letters;
-    use crate::rules::{RulePlace, RuleType, SingleRule};
+    use crate::rule::rule_change_size_letters::rule_change_size_letters;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_size_letters() {

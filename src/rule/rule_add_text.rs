@@ -1,5 +1,5 @@
 use crate::help_function::split_file_name;
-use crate::rules::*;
+use crate::rule::rules::*;
 use std::path::Path;
 
 pub fn rule_add_text(data_to_change: &str, rule: &SingleRule) -> String {
@@ -33,8 +33,8 @@ pub fn rule_add_text(data_to_change: &str, rule: &SingleRule) -> String {
 
 #[cfg(test)]
 mod test {
-    use crate::rule_add_text::rule_add_text;
-    use crate::rules::{RulePlace, RuleType, SingleRule};
+    use crate::rule::rule_add_text::rule_add_text;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_add_text() {

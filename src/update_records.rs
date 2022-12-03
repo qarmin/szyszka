@@ -1,5 +1,5 @@
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
-use crate::rules::Rules;
+use crate::rule::rules::Rules;
 use glib::Value;
 use gtk4::prelude::*;
 use gtk4::{Label, TreeView};

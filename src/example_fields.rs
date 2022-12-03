@@ -2,7 +2,7 @@ use crate::class_dialog_rules::GuiDialogRules;
 use crate::gui_data::GuiData;
 use crate::help_function::{read_rule_from_window, validate_name};
 use crate::notebook_enum::EXAMPLE_NAME;
-use crate::rules::Rules;
+use crate::rule::rules::Rules;
 use gtk4::prelude::*;
 
 pub fn connect_update_examples(gui_data: &GuiData) {

@@ -1,4 +1,4 @@
-use crate::rules::*;
+use crate::rule::rules::*;
 
 pub fn rule_normalize(data_to_change: &str, rule: &SingleRule) -> String {
     let return_string;
@@ -18,8 +18,8 @@ pub fn rule_normalize(data_to_change: &str, rule: &SingleRule) -> String {
 
 #[cfg(test)]
 mod test {
-    use crate::rule_normalize::rule_normalize;
-    use crate::rules::{RulePlace, RuleType, SingleRule};
+    use crate::rule::rule_normalize::rule_normalize;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_normalize() {

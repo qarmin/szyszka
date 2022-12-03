@@ -1,6 +1,6 @@
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
-use crate::rules::*;
+use crate::rule::rules::*;
 use gtk4::prelude::*;
 use gtk4::*;
 use std::cell::RefCell;

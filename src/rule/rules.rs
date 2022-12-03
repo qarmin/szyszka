@@ -1,11 +1,11 @@
-use crate::rule_add_number::rule_add_number;
-use crate::rule_add_text::rule_add_text;
-use crate::rule_change_size_letters::rule_change_size_letters;
-use crate::rule_custom::rule_custom;
-use crate::rule_normalize::rule_normalize;
-use crate::rule_purge::rule_purge;
-use crate::rule_replace::rule_replace;
-use crate::rule_trim::rule_trim;
+use crate::rule::rule_add_number::rule_add_number;
+use crate::rule::rule_add_text::rule_add_text;
+use crate::rule::rule_change_size_letters::rule_change_size_letters;
+use crate::rule::rule_custom::rule_custom;
+use crate::rule::rule_normalize::rule_normalize;
+use crate::rule::rule_purge::rule_purge;
+use crate::rule::rule_replace::rule_replace;
+use crate::rule::rule_trim::rule_trim;
 
 #[derive(Clone)]
 pub struct SingleRule {
