@@ -161,16 +161,25 @@ pub fn count_rows_in_tree_view(tree_view: &gtk4::TreeView) -> u32 {
     number
 }
 
+pub fn get_dialog_box_child(dialog: &Dialog) -> gtk4::Box {
+    dialog.child().unwrap().downcast::<gtk4::Box>().unwrap()
+}
+
 pub fn create_message_window(window_main: &gtk4::Window, title: &str, message: &str) {
-    let chooser = gtk4::Dialog::with_buttons(Some(title), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
-    chooser.set_modal(true);
-    chooser.set_transient_for(Some(window_main));
+    let dialog = gtk4::Dialog::builder().title(title).transient_for(window_main).modal(true).build();
+    dialog.connect_response(|e, _r| e.close());
+    dialog.add_button("Ok", ResponseType::Ok);
 
     let question_label = gtk4::Label::new(Some(message));
 
-    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
-    chooser_box.append(&question_label);
-    chooser_box.show();
+    let chooser_box = get_dialog_box_child(&dialog);
+    chooser_box.insert_child_after(&question_label, None::<&Widget>);
+    chooser_box.set_margin_top(5);
+    chooser_box.set_margin_bottom(5);
+    chooser_box.set_margin_start(5);
+    chooser_box.set_margin_end(5);
+
+    dialog.show()
 }
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();

@@ -1,11 +1,13 @@
-use crate::gui_data::GuiData;
-use crate::help_function::{count_rows_in_tree_view, create_message_window, get_all_boxes_from_widget, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
-use gtk4::prelude::*;
-use gtk4::{DialogFlags, ScrolledWindow, TextView};
 use std::collections::BTreeMap;
 use std::fs;
 use std::ops::DerefMut;
 use std::path::Path;
+
+use gtk4::prelude::*;
+use gtk4::{DialogFlags, ScrolledWindow, TextView, Widget};
+
+use crate::gui_data::GuiData;
+use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
     let button_start_rename = gui_data.upper_buttons.button_start_rename.clone();
@@ -42,9 +44,12 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                 "Some records are not updated, you can do it by clicking at the Update Names button.\nAre you sure that you want to proceed without updating names?",
             ));
 
-            let chooser_box = get_all_boxes_from_widget(&chooser_update)[0].clone();
-            chooser_box.append(&question_label);
-            chooser_box.show();
+            let chooser_box = get_dialog_box_child(&chooser_update);
+            chooser_box.insert_child_after(&question_label, None::<&Widget>);
+            chooser_box.set_margin_top(5);
+            chooser_box.set_margin_bottom(5);
+            chooser_box.set_margin_start(5);
+            chooser_box.set_margin_end(5);
 
             chooser_update.connect_response(move |dialog, _| {
                 dialog.close();
@@ -61,23 +66,29 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {} files", number_of_renamed_files).as_str()));
 
-        let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
-        chooser_box.append(&question_label);
+        let chooser_box = get_dialog_box_child(&chooser);
+        chooser_box.insert_child_after(&question_label, None::<&Widget>);
+        chooser_box.set_margin_top(5);
+        chooser_box.set_margin_bottom(5);
+        chooser_box.set_margin_start(5);
+        chooser_box.set_margin_end(5);
+
         chooser_box.show();
 
         let shared_result_entries = shared_result_entries.clone();
         let list_store = list_store.clone();
         let window_main = window_main.clone();
 
-        chooser.connect_response(move |_chooser, response_type| {
-            let mut shared_result_entries = shared_result_entries.borrow_mut();
-            let shared_result_entries = shared_result_entries.deref_mut();
-            // Before renaming, After possible renaming, Cause
-            let mut failed_renames: Vec<(String, String, String)> = Vec::new();
-            let mut properly_renamed = 0;
-            let mut ignored = 0;
-
+        chooser.show();
+        chooser.connect_response(move |chooser, response_type| {
             if response_type == gtk4::ResponseType::Ok {
+                let mut shared_result_entries = shared_result_entries.borrow_mut();
+                let shared_result_entries = shared_result_entries.deref_mut();
+                // Before renaming, After possible renaming, Cause
+                let mut failed_renames: Vec<(String, String, String)> = Vec::new();
+                let mut properly_renamed = 0;
+                let mut ignored = 0;
+
                 let tree_iter = list_store.iter_first().unwrap();
                 let mut file_renames: Vec<(String, String)> = Vec::new();
                 let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
@@ -137,12 +148,13 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                         }
                     }
                 }
-            }
-            // Print results
-            create_results_dialog(&window_main, properly_renamed, ignored, failed_renames);
+                // Print results
+                create_results_dialog(&window_main, properly_renamed, ignored, failed_renames);
 
-            list_store.clear();
-            shared_result_entries.files.clear();
+                list_store.clear();
+                shared_result_entries.files.clear();
+            }
+            chooser.close();
         });
     });
 }
@@ -153,18 +165,23 @@ fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, igno
     let label_good = gtk4::Label::new(Some(format!("Properly renamed {} files", properly_renamed).as_str()));
     let label_ignored = gtk4::Label::new(Some(format!("Ignored {} files, because the name before and after the change are the same.", ignored).as_str()));
 
-    let chooser_box = get_all_boxes_from_widget(&chooser)[0].clone();
-    chooser_box.append(&label_good);
-    chooser_box.append(&label_ignored);
+    let chooser_box = get_dialog_box_child(&chooser);
+    chooser_box.set_margin_top(5);
+    chooser_box.set_margin_bottom(5);
+    chooser_box.set_margin_start(5);
+    chooser_box.set_margin_end(5);
 
     let label_bad = gtk4::Label::new(Some(format!("Failed to rename {} files", failed_vector.len()).as_str()));
-    chooser_box.append(&label_bad);
+
+    chooser_box.insert_child_after(&label_good, None::<&Widget>);
+    chooser_box.insert_child_after(&label_ignored, Some(&label_good));
+    chooser_box.insert_child_after(&label_bad, Some(&label_ignored));
 
     if !failed_vector.is_empty() {
         chooser.set_default_size(800, 200);
         let label_info_bad = gtk4::Label::new(Some("List of all failing renames"));
         label_info_bad.set_margin_top(10);
-        chooser_box.append(&label_info_bad);
+        chooser_box.insert_child_after(&label_info_bad, Some(&label_bad));
 
         let txt_op1: Option<&gtk4::TextTagTable> = None;
 
@@ -188,10 +205,11 @@ fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, igno
 
         scrolled_window.set_child(Some(&text_view));
         // TODO Created Scrolled Window with explanation about each failed example of renaming
-        chooser_box.append(&scrolled_window);
+        chooser_box.insert_child_after(&scrolled_window, Some(&label_info_bad));
     }
 
     chooser_box.show();
 
-    chooser.connect_response(|_, _| {});
+    chooser.connect_response(|chooser, _| chooser.close());
+    chooser.show();
 }
