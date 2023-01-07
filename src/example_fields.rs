@@ -41,6 +41,6 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
     let mut all_rules = Rules::new();
     all_rules.rules.push(single_rule);
 
-    let text = all_rules.apply_all_rules_to_item(text_to_change, 0, (0, 0, 0, "Parent folder"));
+    let text = all_rules.apply_all_rules_to_item(text_to_change, 1, 1, (0, 0, 0, "Parent folder"));
     label_example_after.set_text(text.as_str());
 }
