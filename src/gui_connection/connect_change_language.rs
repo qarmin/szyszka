@@ -25,7 +25,7 @@ fn change_language(gui_data: &GuiData) {
     let lang_identifier = vec![LanguageIdentifier::from_bytes(lang_short.as_bytes()).unwrap()];
     for (lib, localizer) in localizers {
         if let Err(error) = localizer.select(&lang_identifier) {
-            eprintln!("Error while loadings languages for {} {:?}", lib, error);
+            eprintln!("Error while loadings languages for {lib} {error:?}");
         }
     }
     gui_data.update_language();
@@ -54,9 +54,9 @@ pub fn _load_system_language(gui_data: &GuiData) {
             }
         }
         if found {
-            println!("INFO: Default system language {} is available, so choosing them", short_lang);
+            println!("INFO: Default system language {short_lang} is available, so choosing them");
         } else {
-            println!("INFO: Default system language {} is not available, using English(en) instead", short_lang);
+            println!("INFO: Default system language {short_lang} is not available, using English(en) instead");
         }
     }
 }

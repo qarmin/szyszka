@@ -96,7 +96,7 @@ fn common_open_function(tree_view: &gtk4::TreeView, column_name: i32, column_pat
         };
 
         if let Err(e) = open::that(&end_path) {
-            println!("Failed to open file {}, reason {}", end_path, e);
+            println!("Failed to open file {end_path}, reason {e}");
         };
     }
 }

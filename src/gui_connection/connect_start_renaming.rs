@@ -64,7 +64,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
             &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)],
         );
 
-        let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {} files", number_of_renamed_files).as_str()));
+        let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {number_of_renamed_files} files").as_str()));
 
         let chooser_box = get_dialog_box_child(&chooser);
         chooser_box.insert_child_after(&question_label, None::<&Widget>);
@@ -162,8 +162,8 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
     let chooser = gtk4::Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
 
-    let label_good = gtk4::Label::new(Some(format!("Properly renamed {} files", properly_renamed).as_str()));
-    let label_ignored = gtk4::Label::new(Some(format!("Ignored {} files, because the name before and after the change are the same.", ignored).as_str()));
+    let label_good = gtk4::Label::new(Some(format!("Properly renamed {properly_renamed} files").as_str()));
+    let label_ignored = gtk4::Label::new(Some(format!("Ignored {ignored} files, because the name before and after the change are the same.").as_str()));
 
     let chooser_box = get_dialog_box_child(&chooser);
     chooser_box.set_margin_top(5);

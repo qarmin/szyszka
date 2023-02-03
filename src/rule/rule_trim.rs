@@ -17,13 +17,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
             RulePlace::FromExtensionStart => {
                 if rule.rule_data.case_sensitive && extension.starts_with(&text_to_trim) {
                     if text_to_trim.len() == extension.len() {
-                        return_string = format!("{}.", name);
+                        return_string = format!("{name}.");
                     } else {
                         return_string = format!("{}.{}", name, &extension[text_to_trim.len()..extension.len()]);
                     }
                 } else if !rule.rule_data.case_sensitive && extension_lowercase.starts_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == extension_lowercase.len() {
-                        return_string = format!("{}.", name);
+                        return_string = format!("{name}.");
                     } else {
                         return_string = format!("{}.{}", name, &extension[text_to_trim_lowercase.len()..extension_lowercase.len()]);
                     }

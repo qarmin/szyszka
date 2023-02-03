@@ -32,7 +32,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
                 parent_folder = path.to_str().unwrap_or("").to_string();
             } else {
                 parent_folder = "".to_string();
-                eprintln!("Failed to read latest component from {:?}", last_component);
+                eprintln!("Failed to read latest component from {last_component:?}");
             }
         } else {
             parent_folder = "".to_string();
@@ -56,7 +56,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
                             let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2].split(':').collect::<Vec<&str>>();
 
-                            let invalid_data = parse_string_rules(typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, &data_to_change, &extension);
+                            let invalid_data = parse_string_rules(typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, data_to_change, &extension);
 
                             if invalid_data {
                                 new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
@@ -94,37 +94,37 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
             }
             "NAME" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&name);
+                    new_string.push_str(name);
                     invalid_data = false;
                 }
             }
             "EXT" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&extension);
+                    new_string.push_str(extension);
                     invalid_data = false;
                 }
             }
             "SIZE" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&size);
+                    new_string.push_str(size);
                     invalid_data = false;
                 }
             }
             "CREAT" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&creation_date);
+                    new_string.push_str(creation_date);
                     invalid_data = false;
                 }
             }
             "MODIF" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&modification_date);
+                    new_string.push_str(modification_date);
                     invalid_data = false;
                 }
             }
             "PARENT" => {
                 if typ.len() == 1 {
-                    new_string.push_str(&parent_folder.to_string());
+                    new_string.push_str(parent_folder);
                     invalid_data = false;
                 }
             }
@@ -192,7 +192,7 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
             }
         }
     }
-    return invalid_data;
+    invalid_data
 }
 
 #[cfg(test)]

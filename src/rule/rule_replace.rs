@@ -52,7 +52,7 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule) -> String {
                         extension = format!("{}{}{}", &extension[..start_index], text_to_replace, &extension[start_index + text_to_remove_lowercase.len()..]);
                         start_index = (text_to_replace.len() as isize + start_index as isize) as usize;
                     }
-                    return_string = format!("{}.{}", name, extension);
+                    return_string = format!("{name}.{extension}");
                 }
             }
             RulePlace::ExtensionAndName => {

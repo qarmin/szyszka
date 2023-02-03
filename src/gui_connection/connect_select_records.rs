@@ -252,12 +252,12 @@ pub fn connect_select_custom(gui_data: &GuiData) {
                                     }
                                 }
                                 WildcardType::PathCurrentName => {
-                                    if regex_check(wildcard, format!("{}/{}", path, current_name)) {
+                                    if regex_check(wildcard, format!("{path}/{current_name}")) {
                                         selection.select_iter(&tree_iter);
                                     }
                                 }
                                 WildcardType::PathFutureName => {
-                                    if regex_check(wildcard, format!("{}/{}", path, future_name)) {
+                                    if regex_check(wildcard, format!("{path}/{future_name}")) {
                                         selection.select_iter(&tree_iter);
                                     }
                                 }
@@ -423,12 +423,12 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
                                     }
                                 }
                                 WildcardType::PathCurrentName => {
-                                    if regex_check(wildcard, format!("{}/{}", path, current_name)) {
+                                    if regex_check(wildcard, format!("{path}/{current_name}")) {
                                         selection.unselect_iter(&tree_iter);
                                     }
                                 }
                                 WildcardType::PathFutureName => {
-                                    if regex_check(wildcard, format!("{}/{}", path, future_name)) {
+                                    if regex_check(wildcard, format!("{path}/{future_name}")) {
                                         selection.unselect_iter(&tree_iter);
                                     }
                                 }
