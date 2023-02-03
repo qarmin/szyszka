@@ -56,94 +56,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
                             let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2].split(':').collect::<Vec<&str>>();
 
-                            let mut invalid_data = true;
-                            match typ[0] {
-                                "CURR" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(data_to_change);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "NAME" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&name);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "EXT" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&extension);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "SIZE" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&size);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "CREAT" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&creation_date);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "MODIF" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&modification_date);
-                                        invalid_data = false;
-                                    }
-                                }
-                                "PARENT" => {
-                                    if typ.len() == 1 {
-                                        new_string.push_str(&parent_folder.to_string());
-                                        invalid_data = false;
-                                    }
-                                }
-                                "N" => {
-                                    invalid_data = true;
-                                    if typ.len() == 4 {
-                                        if let Ok(start_number) = typ[1].parse::<i64>() {
-                                            if let Ok(step_number) = typ[2].parse::<i64>() {
-                                                if let Ok(fill_zeros) = typ[3].parse::<u64>() {
-                                                    // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
-                                                    let fill_zeros = min(fill_zeros, 50);
-
-                                                    let mut number;
-                                                    if step_number.checked_mul(rule_number as i64).is_none() {
-                                                        number = 0;
-                                                    } else {
-                                                        number = step_number * rule_number as i64;
-                                                    }
-
-                                                    if number.checked_add(start_number).is_none() {
-                                                        number = 0;
-                                                    } else {
-                                                        number += start_number;
-                                                    }
-
-                                                    let mut text_to_replace = number.to_string();
-
-                                                    let mut zeros: String = "".to_string();
-                                                    if text_to_replace.len() < fill_zeros as usize {
-                                                        for _i in 0..(fill_zeros - text_to_replace.len() as u64) {
-                                                            zeros.push('0');
-                                                        }
-                                                        text_to_replace = zeros + text_to_replace.as_str();
-                                                    }
-
-                                                    new_string.push_str(&text_to_replace);
-
-                                                    invalid_data = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                _ => {
-                                    // Just invalid thing
-                                }
-                            }
+                            let invalid_data = parse_string_rules(typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, &data_to_change, &extension);
 
                             if invalid_data {
                                 new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
@@ -167,6 +80,119 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
     }
 
     new_string
+}
+#[allow(clippy::too_many_arguments)]
+pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: &u64, name: &str, creation_date: &str, modification_date: &str, size: &str, parent_folder: &str, data_to_change: &str, extension: &str) -> bool {
+    let mut invalid_data = true;
+    'mat: {
+        match typ[0] {
+            "CURR" => {
+                if typ.len() == 1 {
+                    new_string.push_str(data_to_change);
+                    invalid_data = false;
+                }
+            }
+            "NAME" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&name);
+                    invalid_data = false;
+                }
+            }
+            "EXT" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&extension);
+                    invalid_data = false;
+                }
+            }
+            "SIZE" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&size);
+                    invalid_data = false;
+                }
+            }
+            "CREAT" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&creation_date);
+                    invalid_data = false;
+                }
+            }
+            "MODIF" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&modification_date);
+                    invalid_data = false;
+                }
+            }
+            "PARENT" => {
+                if typ.len() == 1 {
+                    new_string.push_str(&parent_folder.to_string());
+                    invalid_data = false;
+                }
+            }
+            "N" => {
+                invalid_data = true;
+                if (2..=4).contains(&typ.len()) {
+                    let start_number = match typ[1].parse::<i64>() {
+                        Ok(t) => t,
+                        Err(_) => break 'mat,
+                    };
+
+                    let step_str = typ.get(2);
+                    let step_number = if let Some(step) = step_str {
+                        match step.parse::<i64>() {
+                            Ok(t) => t,
+                            Err(_) => break 'mat,
+                        }
+                    } else {
+                        1
+                    };
+
+                    let fill_str = typ.get(3);
+                    let fill_zeros = if let Some(zero) = fill_str {
+                        match zero.parse::<i64>() {
+                            Ok(t) => t,
+                            Err(_) => break 'mat,
+                        }
+                    } else {
+                        1
+                    };
+
+                    // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
+                    let fill_zeros = min(fill_zeros, 50);
+
+                    let mut number;
+                    if step_number.checked_mul(*rule_number as i64).is_none() {
+                        number = 0;
+                    } else {
+                        number = step_number * *rule_number as i64;
+                    }
+
+                    if number.checked_add(start_number).is_none() {
+                        number = 0;
+                    } else {
+                        number += start_number;
+                    }
+
+                    let mut text_to_replace = number.to_string();
+
+                    let mut zeros: String = "".to_string();
+                    if text_to_replace.len() < fill_zeros as usize {
+                        for _i in 0..(fill_zeros - text_to_replace.len() as i64) {
+                            zeros.push('0');
+                        }
+                        text_to_replace = zeros + text_to_replace.as_str();
+                    }
+
+                    new_string.push_str(&text_to_replace);
+
+                    invalid_data = false;
+                }
+            }
+            _ => {
+                // Just invalid rule
+            }
+        }
+    }
+    return invalid_data;
 }
 
 #[cfg(test)]
@@ -217,6 +243,11 @@ mod test {
         assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:::22)");
         rule.rule_data.custom_text = "$(:::)".to_string();
         assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(:::)");
+        rule.rule_data.custom_text = "$(N:20)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "20");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "21");
+        rule.rule_data.custom_text = "$(N:20:2)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "22");
         rule.rule_data.custom_text = "$(N:20:22:4)".to_string();
         assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "0020");
         assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "0042");
