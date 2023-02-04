@@ -11,16 +11,16 @@ pub fn rule_add_text(data_to_change: &str, rule: &SingleRule) -> String {
         RuleType::AddText => match rule.rule_place {
             RulePlace::BeforeName => {
                 if extension.is_empty() {
-                    return_string = format!("{}{}", add_text_text, name);
+                    return_string = format!("{add_text_text}{name}");
                 } else {
-                    return_string = format!("{}{}.{}", add_text_text, name, extension);
+                    return_string = format!("{add_text_text}{name}.{extension}");
                 }
             }
             RulePlace::AfterName => {
                 if extension.is_empty() {
-                    return_string = format!("{}{}", name, add_text_text);
+                    return_string = format!("{name}{add_text_text}");
                 } else {
-                    return_string = format!("{}{}.{}", name, add_text_text, extension);
+                    return_string = format!("{name}{add_text_text}.{extension}");
                 }
             }
             _ => panic!("Invalid Rule Place for AddText"),

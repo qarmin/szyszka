@@ -48,7 +48,7 @@ pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> Stri
 
     // Handle also situation when e.g. file is "file." where there is not extension, but
     if !extension.is_empty() || data_to_change.contains('.') {
-        format!("{}.{}", name, extension)
+        format!("{name}.{extension}")
     } else {
         name
     }

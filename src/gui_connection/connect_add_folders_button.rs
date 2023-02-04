@@ -136,7 +136,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         let full_name = match file_entry.to_str() {
                             Some(t) => t,
                             None => {
-                                println!("Failed to read name of {:?} (some characters may be missing in this name)", file_entry);
+                                println!("Failed to read name of {file_entry:?} (some characters may be missing in this name)");
                                 continue;
                             }
                         };
