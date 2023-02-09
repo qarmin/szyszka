@@ -14,7 +14,7 @@ impl GuiResults {
         let scrolled_window_results: gtk4::ScrolledWindow = builder.object("scrolled_window_results").unwrap();
         let tree_view_results = TreeView::new();
         let gc_tree_view_results: GestureClick = GestureClick::new();
-        tree_view_results.add_controller(&gc_tree_view_results);
+        tree_view_results.add_controller(gc_tree_view_results.clone());
 
         Self {
             scrolled_window_results,
