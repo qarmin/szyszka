@@ -2,6 +2,39 @@
 #![windows_subsystem = "windows"]
 #![allow(clippy::needless_late_init)]
 
+use std::env;
+use std::ffi::OsString;
+
+use gio::ApplicationFlags;
+use glib::signal::Inhibit;
+use gtk4::prelude::*;
+use gtk4::Application;
+
+use gui_connection::connect_add_files_button::*;
+use gui_connection::connect_add_folders_button::*;
+use gui_connection::connect_button_settings::*;
+use gui_connection::connect_button_update_names::*;
+use gui_connection::connect_change_language::*;
+use gui_connection::connect_remove_files_button::*;
+use gui_connection::connect_results_move::*;
+use gui_connection::connect_rule_add::*;
+use gui_connection::connect_rule_buttons_modify_rules::*;
+use gui_connection::connect_rule_window_add_number_click::*;
+use gui_connection::connect_rule_window_add_text_click::*;
+use gui_connection::connect_rule_window_close::*;
+use gui_connection::connect_rule_window_custom_click::*;
+use gui_connection::connect_rule_window_normalize_click::*;
+use gui_connection::connect_rule_window_purge_click::*;
+use gui_connection::connect_rule_window_replace_click::*;
+use gui_connection::connect_rule_window_size_letters_click::*;
+use gui_connection::connect_rule_window_trim_click::*;
+use gui_connection::connect_select_records::*;
+use gui_connection::connect_start_renaming::*;
+
+use crate::example_fields::connect_update_examples;
+use crate::gui_data::GuiData;
+use crate::initialize_gui::*;
+
 mod class_dialog_rule_add_number;
 mod class_dialog_rule_add_text;
 mod class_dialog_rule_custom;
@@ -28,46 +61,16 @@ mod notebook_enum;
 mod rule;
 mod update_records;
 
-use crate::example_fields::connect_update_examples;
-use crate::gui_data::GuiData;
-use crate::initialize_gui::*;
-use gio::ApplicationFlags;
-use glib::signal::Inhibit;
-use gtk4::prelude::*;
-use gtk4::Application;
-use gui_connection::connect_add_files_button::*;
-use gui_connection::connect_add_folders_button::*;
-use gui_connection::connect_button_settings::*;
-use gui_connection::connect_button_update_names::*;
-use gui_connection::connect_change_language::*;
-use gui_connection::connect_remove_files_button::*;
-use gui_connection::connect_results_move::*;
-use gui_connection::connect_rule_add::*;
-use gui_connection::connect_rule_buttons_modify_rules::*;
-use gui_connection::connect_rule_window_add_number_click::*;
-use gui_connection::connect_rule_window_add_text_click::*;
-use gui_connection::connect_rule_window_close::*;
-use gui_connection::connect_rule_window_custom_click::*;
-use gui_connection::connect_rule_window_normalize_click::*;
-use gui_connection::connect_rule_window_purge_click::*;
-use gui_connection::connect_rule_window_replace_click::*;
-use gui_connection::connect_rule_window_size_letters_click::*;
-use gui_connection::connect_rule_window_trim_click::*;
-use gui_connection::connect_select_records::*;
-use gui_connection::connect_start_renaming::*;
-use std::env;
-use std::ffi::OsString;
-
 fn main() {
     let application = Application::new(None::<String>, ApplicationFlags::HANDLES_OPEN | ApplicationFlags::HANDLES_COMMAND_LINE);
     application.connect_command_line(move |app, cmdline| {
-        build_ui(app, cmdline.arguments());
+        build_ui(app, &cmdline.arguments());
         0
     });
     application.run_with_args(&env::args().collect::<Vec<_>>());
 }
 
-fn build_ui(application: &Application, _arguments: Vec<OsString>) {
+fn build_ui(application: &Application, _arguments: &[OsString]) {
     let gui_data: GuiData = GuiData::new_with_application(application);
 
     initialize_gui(&gui_data);

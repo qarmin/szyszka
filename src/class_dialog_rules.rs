@@ -1,3 +1,5 @@
+use gtk4::{Button, Entry, Label};
+
 use crate::class_dialog_rule_add_number::GuiAddNumber;
 use crate::class_dialog_rule_add_text::GuiAddText;
 use crate::class_dialog_rule_custom::GuiCustom;
@@ -6,7 +8,6 @@ use crate::class_dialog_rule_purge::GuiPurge;
 use crate::class_dialog_rule_replace::GuiReplace;
 use crate::class_dialog_rule_size_letters::GuiSizeLetters;
 use crate::class_dialog_rule_trim::GuiTrim;
-use gtk4::{Button, Entry, Label};
 
 #[derive(Clone)]
 pub struct GuiDialogRules {

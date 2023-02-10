@@ -1,6 +1,7 @@
+use std::path::Path;
+
 use crate::help_function::split_file_name;
 use crate::rule::rules::*;
-use std::path::Path;
 
 pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
@@ -32,13 +33,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
             RulePlace::FromNameStart => {
                 if rule.rule_data.case_sensitive && data_to_change.starts_with(&text_to_trim) {
                     if text_to_trim.len() == data_to_change.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = data_to_change[text_to_trim.len()..data_to_change.len()].to_string();
                     }
                 } else if !rule.rule_data.case_sensitive && data_to_change_lowercase.starts_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == data_to_change_lowercase.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = data_to_change[text_to_trim_lowercase.len()..data_to_change_lowercase.len()].to_string();
                     }
@@ -47,13 +48,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
             RulePlace::FromNameEndReverse => {
                 if rule.rule_data.case_sensitive && name.ends_with(&text_to_trim) {
                     if text_to_trim.len() == name.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = format!("{}.{}", &name[0..(name.len() - text_to_trim.len())], extension);
                     }
                 } else if !rule.rule_data.case_sensitive && name_lowercase.ends_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == name_lowercase.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = format!("{}.{}", &name[0..(name_lowercase.len() - text_to_trim_lowercase.len())], extension);
                     }
@@ -62,13 +63,13 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
             RulePlace::FromExtensionEndReverse => {
                 if rule.rule_data.case_sensitive && data_to_change.ends_with(&text_to_trim) {
                     if text_to_trim.len() == data_to_change.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = data_to_change[0..(data_to_change.len() - text_to_trim.len())].to_string();
                     }
                 } else if !rule.rule_data.case_sensitive && data_to_change_lowercase.ends_with(&text_to_trim_lowercase) {
                     if text_to_trim_lowercase.len() == data_to_change_lowercase.len() {
-                        return_string = "".to_string();
+                        return_string = String::new();
                     } else {
                         return_string = data_to_change[0..(data_to_change_lowercase.len() - text_to_trim_lowercase.len())].to_string();
                     }

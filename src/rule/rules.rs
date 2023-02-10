@@ -14,6 +14,7 @@ pub struct SingleRule {
     pub rule_data: RuleData,
     pub rule_description: String,
 }
+
 impl SingleRule {
     #[allow(dead_code)] // Used in tests for now
     pub fn new() -> Self {
@@ -21,7 +22,7 @@ impl SingleRule {
             rule_type: RuleType::Custom,
             rule_place: RulePlace::None,
             rule_data: RuleData::new(),
-            rule_description: "".to_string(),
+            rule_description: String::new(),
         }
     }
     // pub fn create_rule(rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) -> Self {
@@ -36,8 +37,9 @@ impl SingleRule {
 
 pub struct Rules {
     pub rules: Vec<SingleRule>,
-    pub edit_mode: Option<usize>, // Used to store index of changed rule
-    pub updated: bool,            // Used to warn user if records needs to be updated
+    pub edit_mode: Option<usize>,
+    // Used to store index of changed rule
+    pub updated: bool, // Used to warn user if records needs to be updated
 }
 
 impl Rules {
@@ -97,6 +99,7 @@ pub enum RuleType {
     Trim,
     Normalize,
 }
+
 #[allow(dead_code)]
 #[derive(Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum RulePlace {
@@ -113,6 +116,7 @@ pub enum RulePlace {
     FromExtensionStart,
     FromExtensionEndReverse,
 }
+
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
         RuleType::Custom => "Custom",
@@ -126,6 +130,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     }
     .to_string()
 }
+
 pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     match rule_type {
         RulePlace::None => "N/A",
@@ -161,20 +166,21 @@ pub struct RuleData {
 
     pub full_normalize: bool,
 }
+
 impl RuleData {
     // A little wasteful, but rules will be max 10 most of time, so this is not necessary to optimize
     pub fn new() -> Self {
         RuleData {
-            add_text_text: "".to_string(),
-            trim_text: "".to_string(),
+            add_text_text: String::new(),
+            trim_text: String::new(),
             to_lowercase: false,
             case_sensitive: false,
-            custom_text: "".to_string(),
+            custom_text: String::new(),
             number_start: 0,
             number_step: 0,
             fill_with_zeros: 0,
-            text_to_remove: "".to_string(),
-            text_to_replace: "".to_string(),
+            text_to_remove: String::new(),
+            text_to_replace: String::new(),
             full_normalize: false,
         }
     }

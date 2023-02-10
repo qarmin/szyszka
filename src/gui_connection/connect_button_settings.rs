@@ -1,6 +1,7 @@
-use crate::GuiData;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
+
+use crate::GuiData;
 
 pub fn connect_button_settings(gui_data: &GuiData) {
     let button_setting = gui_data.upper_buttons.button_setting.clone();

@@ -1,7 +1,8 @@
+use gtk4::prelude::*;
+
 use crate::gui_data::GuiData;
 use crate::help_function::{get_full_file_names_from_selection, remove_selected_rows};
 use crate::update_records::{update_records, UpdateMode};
-use gtk4::prelude::*;
 
 pub fn connect_remove_files_button(gui_data: &GuiData) {
     let button_remove_selection = gui_data.upper_buttons.button_remove_selection.clone();
@@ -21,6 +22,6 @@ pub fn connect_remove_files_button(gui_data: &GuiData) {
         }
 
         remove_selected_rows(&tree_view_results);
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileRemoved, &label_files_folders);
     });
 }

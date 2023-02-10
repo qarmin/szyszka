@@ -13,6 +13,7 @@ pub enum NotebookEnum {
     Trim,
     Normalize,
 }
+
 pub fn to_notebook_enum(notebook_number: u32) -> NotebookEnum {
     match notebook_number {
         0 => NotebookEnum::Custom,

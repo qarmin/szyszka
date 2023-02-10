@@ -1,6 +1,7 @@
-use crate::fls;
 use gtk4::prelude::*;
 use gtk4::TreeView;
+
+use crate::fls;
 
 #[derive(Clone)]
 pub struct GuiRulesBottomPanel {

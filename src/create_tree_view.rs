@@ -1,6 +1,7 @@
-use crate::help_function::{ColumnsResults, ColumnsRules};
 use gtk4::prelude::*;
 use gtk4::TreeViewColumn;
+
+use crate::help_function::{ColumnsResults, ColumnsRules};
 
 pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
     let renderer = gtk4::CellRendererText::new();
@@ -45,6 +46,7 @@ pub fn create_tree_view_results(tree_view: &gtk4::TreeView) {
 
     tree_view.set_vexpand(true);
 }
+
 pub fn create_tree_view_rules(tree_view: &gtk4::TreeView) {
     // let renderer = gtk4::CellRendererText::new();
     // let column: gtk4::TreeViewColumn = TreeViewColumn::new();

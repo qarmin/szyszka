@@ -38,9 +38,9 @@ pub fn initialize_gui(gui_data: &GuiData) {
 
             if number_of_clicks == 2 {
                 if gesture_click.current_button() == 1 {
-                    common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, OpenMode::PathAndName);
+                    common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, &OpenMode::PathAndName);
                 } else if gesture_click.current_button() == 3 {
-                    common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, OpenMode::OnlyPath);
+                    common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, &OpenMode::OnlyPath);
                 }
             }
         });
@@ -82,7 +82,7 @@ pub enum OpenMode {
     PathAndName,
 }
 
-fn common_open_function(tree_view: &gtk4::TreeView, column_name: i32, column_path: i32, opening_mode: OpenMode) {
+fn common_open_function(tree_view: &gtk4::TreeView, column_name: i32, column_path: i32, opening_mode: &OpenMode) {
     let selection = tree_view.selection();
     let (selected_rows, tree_model) = selection.selected_rows();
 
@@ -100,6 +100,7 @@ fn common_open_function(tree_view: &gtk4::TreeView, column_name: i32, column_pat
         };
     }
 }
+
 pub fn get_full_name_from_path_name(path: &str, name: &str) -> String {
     let mut string = String::with_capacity(path.len() + name.len() + 1);
     string.push_str(path);

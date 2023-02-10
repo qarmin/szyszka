@@ -1,9 +1,9 @@
+use gtk4::prelude::*;
+
 use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows, ColumnsRules};
 use crate::rule::rules::{RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};
-use gtk4::prelude::*;
-use std::ops::DerefMut;
 
 pub fn connect_rule_modify_add(gui_data: &GuiData) {
     let button_add_rule = gui_data.rules_bottom_panel.button_add_rule.clone();
@@ -36,14 +36,14 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
 
         {
             let mut rules = rules.borrow_mut();
-            let rules = rules.deref_mut();
+            let rules = &mut *rules;
 
             for rule_to_delete in vec_rule_to_delete.iter().rev() {
                 rules.remove_rule(*rule_to_delete);
             }
         }
 
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
@@ -65,7 +65,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
 
         {
             let mut rules = rules.borrow_mut();
-            let rules = rules.deref_mut();
+            let rules = &mut *rules;
             let list_store = get_list_store_from_tree_view(&tree_view_window_rules);
 
             let (selected_rows, _tree_model) = selection.selected_rows();
@@ -93,10 +93,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                     }
 
                     previous_iter = current_iter;
-                    if !list_store.iter_next(&current_iter) {
-                        // break;
-                        panic!("");
-                    }
+                    assert!(list_store.iter_next(&current_iter), "");
                 }
                 // Swap rules
                 {
@@ -122,9 +119,10 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 return;
             }
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
+
 pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
     let button_rule_one_down = gui_data.rules_bottom_panel.button_rule_one_down.clone();
     let tree_view_results = gui_data.results.tree_view_results.clone();
@@ -142,7 +140,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
 
         {
             let mut rules = rules.borrow_mut();
-            let rules = rules.deref_mut();
+            let rules = &mut *rules;
             let list_store = get_list_store_from_tree_view(&tree_view_window_rules);
 
             let (selected_rows, _tree_model) = selection.selected_rows();
@@ -195,7 +193,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             }
             selection.select_iter(&current_iter);
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
@@ -255,7 +253,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
 
     button_edit_rule.connect_clicked(move |_e| {
         let mut rules = rules.borrow_mut();
-        let rules = rules.deref_mut();
+        let rules = &mut *rules;
 
         let selection = tree_view.selection();
 

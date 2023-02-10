@@ -1,8 +1,8 @@
+use gtk4::prelude::*;
+
 use crate::gui_data::GuiData;
 use crate::help_function::{populate_rules_tree_view, read_rule_from_window};
 use crate::update_records::{update_records, UpdateMode};
-use gtk4::prelude::*;
-use std::ops::DerefMut;
 
 pub fn connect_rule_add(gui_data: &GuiData) {
     let button_rule_window_add = gui_data.window_rules.button_rule_window_add.clone();
@@ -22,7 +22,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
         window_main.set_sensitive(true);
         {
             let mut rule = rules.borrow_mut();
-            let rule = rule.deref_mut();
+            let rule = &mut *rule;
 
             let single_rule = read_rule_from_window(&window_rules, None);
 
@@ -38,7 +38,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
         // Reset TreeView and populate it again
 
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
-        populate_rules_tree_view(&tree_view_window_rules, rules.clone());
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
+        populate_rules_tree_view(&tree_view_window_rules, &rules);
     });
 }

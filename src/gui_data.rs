@@ -1,3 +1,9 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
+use gtk4::prelude::*;
+use gtk4::Builder;
+
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::gui_data_results::GuiResults;
 use crate::gui_data_rules_bottom_panel::GuiRulesBottomPanel;
@@ -6,10 +12,6 @@ use crate::gui_data_upper_buttons::*;
 use crate::gui_popover_select::GuiPopoverSelect;
 use crate::help_function::ResultEntries;
 use crate::rule::rules::Rules;
-use gtk4::prelude::*;
-use gtk4::Builder;
-use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct GuiData {

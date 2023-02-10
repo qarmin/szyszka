@@ -1,12 +1,13 @@
-use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
-use crate::rule::rules::Rules;
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::rc::Rc;
+
 use glib::Value;
 use gtk4::prelude::*;
 use gtk4::{Label, TreeView};
-use std::cell::RefCell;
-use std::collections::HashMap;
-use std::ops::DerefMut;
-use std::rc::Rc;
+
+use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
+use crate::rule::rules::Rules;
 
 #[allow(dead_code)]
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
@@ -21,15 +22,15 @@ pub enum UpdateMode {
 }
 
 // TODO currently everything is counted from beginning
-pub fn update_records(files_tree_view: &TreeView, shared_result_entries: Rc<RefCell<ResultEntries>>, rules: Rc<RefCell<Rules>>, update_mode: UpdateMode, label_files_folders: &Label) {
+pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<RefCell<ResultEntries>>, rules: &Rc<RefCell<Rules>>, update_mode: &UpdateMode, label_files_folders: &Label) {
     let list_store = get_list_store_from_tree_view(files_tree_view);
     let mut rules = rules.borrow_mut();
-    let rules = rules.deref_mut();
+    let rules = &mut *rules;
     let mut shared_result_entries = shared_result_entries.borrow_mut();
-    let shared_result_entries = shared_result_entries.deref_mut();
+    let shared_result_entries = &mut *shared_result_entries;
 
     rules.edit_mode = None;
-    if shared_result_entries.files.len() * rules.rules.len() > 2000 && update_mode != UpdateMode::UpdateRecords {
+    if shared_result_entries.files.len() * rules.rules.len() > 2000 && update_mode != &UpdateMode::UpdateRecords {
         label_files_folders.set_text(format!("Files/Folders({}) - ##### UPDATE REQUIRED ##### ", shared_result_entries.files.len()).as_str());
         rules.updated = false;
         return; // Do not update records automatically when there is a big number of entries each time due possible freezes

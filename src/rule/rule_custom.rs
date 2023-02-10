@@ -1,11 +1,13 @@
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
-use chrono::NaiveDateTime;
-use humansize::format_size;
-use humansize::BINARY;
 use std::cmp::min;
 use std::path::Component::Normal;
 use std::path::Path;
+
+use chrono::NaiveDateTime;
+use humansize::format_size;
+use humansize::BINARY;
+
+use crate::help_function::split_file_name;
+use crate::rule::rules::*;
 
 // enum CustomTypes {
 //     Creation,
@@ -20,7 +22,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
     let size: String;
     let parent_folder;
 
-    let mut new_string = "".to_string();
+    let mut new_string = String::new();
 
     // Random data to visualize typical usage in examples
     if let Some(f_data) = file_data {
@@ -31,11 +33,11 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
             if let Normal(path) = last_component {
                 parent_folder = path.to_str().unwrap_or("").to_string();
             } else {
-                parent_folder = "".to_string();
+                parent_folder = String::new();
                 eprintln!("Failed to read latest component from {last_component:?}");
             }
         } else {
-            parent_folder = "".to_string();
+            parent_folder = String::new();
         }
     } else {
         creation_date = "2021-01-31 08_42_12".to_string();
@@ -56,13 +58,15 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
                             let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2].split(':').collect::<Vec<&str>>();
 
-                            let invalid_data = parse_string_rules(typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, data_to_change, &extension);
+                            if !typ.is_empty() {
+                                let invalid_data = parse_string_rules(&typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, data_to_change, &extension);
 
-                            if invalid_data {
-                                new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
-                                latest_end_index = start + latest_end_index + 2;
-                            } else {
-                                latest_end_index = start + end + 1 + latest_end_index + 2;
+                                if invalid_data {
+                                    new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
+                                    latest_end_index = start + latest_end_index + 2;
+                                } else {
+                                    latest_end_index = start + end + 1 + latest_end_index + 2;
+                                }
                             }
                         } else {
                             new_string.push_str(&string_to_parse[latest_end_index + start..]);
@@ -81,8 +85,9 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
     new_string
 }
+
 #[allow(clippy::too_many_arguments)]
-pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: &u64, name: &str, creation_date: &str, modification_date: &str, size: &str, parent_folder: &str, data_to_change: &str, extension: &str) -> bool {
+pub fn parse_string_rules(typ: &[&str], new_string: &mut String, rule_number: &u64, name: &str, creation_date: &str, modification_date: &str, size: &str, parent_folder: &str, data_to_change: &str, extension: &str) -> bool {
     let mut invalid_data = true;
     'mat: {
         match typ[0] {
@@ -174,7 +179,7 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
 
                     let mut text_to_replace = number.to_string();
 
-                    let mut zeros: String = "".to_string();
+                    let mut zeros: String = String::new();
                     if text_to_replace.len() < fill_zeros as usize {
                         for _i in 0..(fill_zeros - text_to_replace.len() as i64) {
                             zeros.push('0');
@@ -197,12 +202,13 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
 
 #[cfg(test)]
 mod test {
-    use crate::rule::rule_custom::rule_custom;
-    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
     use std::fs;
     use std::fs::OpenOptions;
     use std::io::Write;
     use std::path::Path;
+
+    use crate::rule::rule_custom::rule_custom;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_custom() {
