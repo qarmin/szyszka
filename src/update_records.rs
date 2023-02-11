@@ -9,6 +9,9 @@ use gtk4::{Label, TreeView};
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
 use crate::rule::rules::Rules;
 
+// Do not update records automatically when there is a big number of entries each time due possible freezes, when rule_number * files_number > RULES_UPDATE_LIMIT, show info about needing to update results
+const RULES_UPDATE_LIMIT: usize = 20000;
+
 #[allow(dead_code)]
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
 pub enum UpdateMode {
@@ -30,10 +33,10 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
     let shared_result_entries = &mut *shared_result_entries;
 
     rules.edit_mode = None;
-    if shared_result_entries.files.len() * rules.rules.len() > 2000 && update_mode != &UpdateMode::UpdateRecords {
+    if shared_result_entries.files.len() * rules.rules.len() > RULES_UPDATE_LIMIT && update_mode != &UpdateMode::UpdateRecords {
         label_files_folders.set_text(format!("Files/Folders({}) - ##### UPDATE REQUIRED ##### ", shared_result_entries.files.len()).as_str());
         rules.updated = false;
-        return; // Do not update records automatically when there is a big number of entries each time due possible freezes
+        return;
     }
     rules.updated = true;
     label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
@@ -50,8 +53,7 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
                     let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
                     let path: String = list_store.get::<String>(&iter, ColumnsResults::Path as i32);
                     let curr_folder_file_index = folder_name_counter.entry(path.clone()).or_insert(0);
-                    // TODO here should be choosen which exactly method to increase counter use, per folder or global
-                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index, *curr_folder_file_index, (modification_date, creation_date, file_size, &path));
+                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index + 1, *curr_folder_file_index + 1, (modification_date, creation_date, file_size, &path));
                     *curr_folder_file_index += 1;
                     list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
                     if !list_store.iter_next(&iter) {
@@ -60,26 +62,6 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
                     current_index += 1;
                 }
             }
-        } //                 // TODO Add Optimized version this
-          //                 println!("{}", current_index);
-          //
-          //                 // We count how much
-          //                 // let mut current_index = 1;
-          //                 // let mut end_of_records = false;
-          //
-          //                 // loop {
-          //                 //     if current_index == shared_result_entries.entries.len() {
-          //                 //         break;
-          //                 //     }
-          //                 //     if !list_store.iter_next(&iter) {
-          //                 //         panic!("This should never happens, looks that elements was not added but even removed");
-          //                 //         //break;
-          //                 //     }
-          //                 //     current_index += 1;
-          //                 // }
-          // UpdateMode::Re => {}
-          // _ => {
-          //     panic!("Not implemented yet")
-          // }
+        } // TODO Add Optimized version, that not calculate rules not changed files, rules etc.(e.g. when adding files, old files not needs to be calculated)
     }
 }

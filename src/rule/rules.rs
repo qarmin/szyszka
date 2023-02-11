@@ -71,7 +71,7 @@ impl Rules {
                     item = rule_trim(item.as_str(), rule);
                 }
                 RuleType::Custom => {
-                    item = rule_custom(item.as_str(), rule, current_index_in_folder as u64, Some(file_data));
+                    item = rule_custom(item.as_str(), rule, current_index, current_index_in_folder as u64, Some(file_data));
                 }
                 RuleType::Replace => {
                     item = rule_replace(item.as_str(), rule);
