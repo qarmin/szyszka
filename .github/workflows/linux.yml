@@ -12,7 +12,7 @@ jobs:
   linux-default:
     strategy:
       matrix:
-        toolchain: [ stable, 1.63.0 ]
+        toolchain: [ stable, 1.64.0 ]
         type: [ release ]
     runs-on: ubuntu-22.04
     steps:
@@ -39,7 +39,7 @@ jobs:
         env:
           CARGO_INCREMENTAL: 0
           RUSTFLAGS: "-C debuginfo=0"
-        if: ${{ (matrix.type == 'release') && (matrix.toolchain == 'stable') }}
+        if: ${{ matrix.type == 'release' }}
 
       - name: Store Linux GUI
         uses: actions/upload-artifact@v3
