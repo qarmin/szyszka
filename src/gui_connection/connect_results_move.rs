@@ -1,7 +1,8 @@
+use gtk4::prelude::*;
+
 use crate::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
-use gtk4::prelude::*;
 
 pub fn connect_results_modify_one_up(gui_data: &GuiData) {
     let button_results_one_up = gui_data.upper_buttons.button_results_one_up.clone();
@@ -110,7 +111,7 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
                 }
             }
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileMoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileMoved, &label_files_folders);
     });
 }
 
@@ -230,6 +231,6 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                 }
             }
         }
-        update_records(&tree_view_results, shared_result_entries.clone(), rules.clone(), UpdateMode::FileMoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileMoved, &label_files_folders);
     });
 }

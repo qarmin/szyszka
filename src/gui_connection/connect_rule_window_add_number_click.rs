@@ -1,7 +1,8 @@
+use gtk4::prelude::*;
+
 use crate::example_fields::update_examples;
 use crate::gui_data::GuiData;
 use crate::help_function::validate_number;
-use gtk4::prelude::*;
 
 pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
@@ -24,7 +25,7 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_start_number.connect_changed(move |e| {
         let old_name = e.text().to_string();
-        let validate_number = validate_number(old_name.clone());
+        let validate_number = validate_number(&old_name);
         if validate_number != old_name {
             e.set_text(&validate_number);
         }
@@ -33,7 +34,7 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_step.connect_changed(move |e| {
         let old_name = e.text().to_string();
-        let validate_number = validate_number(old_name.clone());
+        let validate_number = validate_number(&old_name);
         if validate_number != old_name {
             e.set_text(&validate_number);
         }
@@ -42,7 +43,7 @@ pub fn connect_rule_window_add_number_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
     entry_add_number_zeros.connect_changed(move |e| {
         let old_name = e.text().to_string();
-        let validate_number = validate_number(old_name.clone());
+        let validate_number = validate_number(&old_name);
         if validate_number != old_name {
             e.set_text(&validate_number);
         }

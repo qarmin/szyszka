@@ -1,6 +1,7 @@
+use std::path::Path;
+
 use crate::help_function::split_file_name;
 use crate::rule::rules::*;
-use std::path::Path;
 
 pub fn rule_add_text(data_to_change: &str, rule: &SingleRule) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));

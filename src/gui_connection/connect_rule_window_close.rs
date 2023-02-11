@@ -1,6 +1,6 @@
-use crate::gui_data::GuiData;
 use gtk4::prelude::*;
-use std::ops::DerefMut;
+
+use crate::gui_data::GuiData;
 
 pub fn connect_rule_window_close(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();
@@ -10,7 +10,7 @@ pub fn connect_rule_window_close(gui_data: &GuiData) {
 
     window_with_rules.connect_close_request(move |e| {
         let mut rules = rules.borrow_mut();
-        let rules = rules.deref_mut();
+        let rules = &mut *rules;
 
         rules.edit_mode = None; // Reset in case of cancelling editing of rules
 

@@ -10,8 +10,9 @@ $(MODIF) - prints file modification date
 $(CREAT) - prints file creation
 $(CURR) - prints current file name with extension
 $(PARENT) - prints parent folder name
-$(N:6:3:2) - prints numbers with step 3, 
-starts with 6 and fill with zeros to 2 numbers -&gt; 06,09,12 etc. </property>
+$(N)/$(K) - prints numbers(arguments are optional) -
+      $(N:3:4:5) prints numbers from 3, with step 4 and fills them with zeros to 5 elements.
+      K instead only position in list, also uses position item in folder.</property>
   </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="child">

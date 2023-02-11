@@ -1,6 +1,7 @@
+use gtk4::prelude::*;
+
 use crate::example_fields::update_examples;
 use crate::gui_data::GuiData;
-use gtk4::prelude::*;
 
 pub fn connect_rule_window_size_letters_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();

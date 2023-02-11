@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 use std::fs;
-use std::ops::DerefMut;
 use std::path::Path;
 
 use gtk4::prelude::*;
@@ -83,7 +82,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         chooser.connect_response(move |chooser, response_type| {
             if response_type == gtk4::ResponseType::Ok {
                 let mut shared_result_entries = shared_result_entries.borrow_mut();
-                let shared_result_entries = shared_result_entries.deref_mut();
+                let shared_result_entries = &mut *shared_result_entries;
                 // Before renaming, After possible renaming, Cause
                 let mut failed_renames: Vec<(String, String, String)> = Vec::new();
                 let mut properly_renamed = 0;
@@ -118,7 +117,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                     // TODO Find method to not overwrite new function
                     #[allow(clippy::collapsible_else_if)]
                     if new_name == old_name {
-                        ignored += 1
+                        ignored += 1;
                     } else if Path::new(&new_name).exists() {
                         failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
                     } else {
@@ -136,7 +135,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                         // TODO Find method to not overwrite new function
                         #[allow(clippy::collapsible_else_if)]
                         if new_name == old_name {
-                            ignored += 1
+                            ignored += 1;
                         } else if Path::new(&new_name).exists() {
                             failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
                         } else {
@@ -191,7 +190,7 @@ fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, igno
         text_view.set_vexpand(true);
         let buffer = gtk4::TextBuffer::new(txt_op1);
         text_view.set_buffer(Some(&buffer));
-        let mut text = "".to_string();
+        let mut text = String::new();
 
         for i in failed_vector {
             text.push_str(i.0.as_str());

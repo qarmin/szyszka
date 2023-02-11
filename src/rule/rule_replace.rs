@@ -1,6 +1,7 @@
+use std::path::Path;
+
 use crate::help_function::split_file_name;
 use crate::rule::rules::*;
-use std::path::Path;
 
 pub fn rule_replace(data_to_change: &str, rule: &SingleRule) -> String {
     // No data to change

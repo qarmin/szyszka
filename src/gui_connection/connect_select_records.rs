@@ -1,7 +1,17 @@
-use crate::gui_data::GuiData;
-use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
 use gtk4::prelude::*;
 use gtk4::TreeIter;
+
+use crate::gui_data::GuiData;
+use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
+
+enum WildcardType {
+    Path,
+    CurrentName,
+    FutureName,
+    PathCurrentName,
+    PathFutureName,
+    IsDir,
+}
 
 pub fn connect_select_records(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
@@ -9,6 +19,7 @@ pub fn connect_select_records(gui_data: &GuiData) {
     let button_select = gui_data.upper_buttons.menu_button_select_popup.clone();
     button_select.set_popover(Some(&popover_select));
 }
+
 pub fn connect_select_all(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
     let button_select_all = gui_data.popover_select.button_select_all.clone();
@@ -62,6 +73,7 @@ pub fn connect_select_reverse(gui_data: &GuiData) {
         popover_select.popdown();
     });
 }
+
 pub fn connect_select_changed(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
     let button_select_changed = gui_data.popover_select.button_select_changed.clone();
@@ -89,6 +101,7 @@ pub fn connect_select_changed(gui_data: &GuiData) {
         popover_select.popdown();
     });
 }
+
 pub fn connect_unselect_changed(gui_data: &GuiData) {
     let popover_select = gui_data.popover_select.popover_select.clone();
     let button_unselect_changed = gui_data.popover_select.button_unselect_changed.clone();
@@ -126,15 +139,6 @@ pub fn connect_select_custom(gui_data: &GuiData) {
 
     button_select_custom.connect_clicked(move |_e| {
         popover_select.popdown();
-
-        enum WildcardType {
-            Path,
-            CurrentName,
-            FutureName,
-            PathCurrentName,
-            PathFutureName,
-            IsDir,
-        }
 
         // Accept Dialog
         {
@@ -209,10 +213,7 @@ pub fn connect_select_custom(gui_data: &GuiData) {
                         wildcard = entry_future_name_path.text().to_string();
                     } else if radio_is_dir.is_active() {
                         wildcard_type = WildcardType::IsDir;
-                        wildcard = match check_button_is_dir.is_active() {
-                            true => "Dir".to_string(),
-                            false => "File".to_string(),
-                        };
+                        wildcard = if check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
                     } else {
                         panic!("Non handled option in select wildcard");
                     }
@@ -297,15 +298,6 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
     button_unselect_custom.connect_clicked(move |_e| {
         popover_select.popdown();
 
-        enum WildcardType {
-            Path,
-            CurrentName,
-            FutureName,
-            PathCurrentName,
-            PathFutureName,
-            IsDir,
-        }
-
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
@@ -380,10 +372,7 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
                         wildcard = entry_future_name_path.text().to_string();
                     } else if radio_is_dir.is_active() {
                         wildcard_type = WildcardType::IsDir;
-                        wildcard = match check_button_is_dir.is_active() {
-                            true => "Dir".to_string(),
-                            false => "File".to_string(),
-                        };
+                        wildcard = if check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
                     } else {
                         panic!("Non handled option in select wildcard");
                     }

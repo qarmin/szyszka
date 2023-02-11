@@ -1,7 +1,8 @@
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
 use std::cmp::min;
 use std::path::Path;
+
+use crate::help_function::split_file_name;
+use crate::rule::rules::*;
 
 pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
@@ -28,7 +29,7 @@ pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64
 
             let mut text_to_add = number.to_string();
 
-            let mut zeros: String = "".to_string();
+            let mut zeros: String = String::new();
             if text_to_add.len() < fill_with_zeros as usize {
                 for _i in 0..(fill_with_zeros - text_to_add.len() as i64) {
                     zeros.push('0');

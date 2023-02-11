@@ -1,13 +1,14 @@
+use std::cell::RefCell;
+use std::collections::BTreeSet;
+use std::path::Path;
+use std::rc::Rc;
+
+use gtk4::prelude::*;
+use gtk4::*;
+
 use crate::class_dialog_rules::GuiDialogRules;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rule::rules::*;
-use gtk4::prelude::*;
-use gtk4::*;
-use std::cell::RefCell;
-use std::collections::BTreeSet;
-use std::ops::DerefMut;
-use std::path::Path;
-use std::rc::Rc;
 
 pub struct ResultEntries {
     pub files: BTreeSet<String>,
@@ -23,6 +24,7 @@ pub enum ColumnsResults {
     ModificationDate,
     CreationDate,
 }
+
 pub enum ColumnsRules {
     //RuleNumber = 0,
     RuleType = 0,
@@ -35,12 +37,13 @@ pub const CHARACTER: char = '/';
 #[cfg(target_family = "windows")]
 pub const CHARACTER: char = '\\';
 
-pub fn validate_name(before_name: String) -> String {
+pub fn validate_name(before_name: &str) -> String {
     // TODO when trying to print text in middle of text, then caret change position, fix it
     before_name.chars().filter(|e| *e != '\\' && *e != '/').collect::<String>()
 }
-pub fn validate_number(before_name: String) -> String {
-    before_name.chars().filter(|e| e.is_ascii_digit()).collect::<String>()
+
+pub fn validate_number(before_name: &str) -> String {
+    before_name.chars().filter(char::is_ascii_digit).collect::<String>()
 }
 
 pub fn split_path(path: &Path) -> (String, String) {
@@ -50,6 +53,7 @@ pub fn split_path(path: &Path) -> (String, String) {
         (None, _) => (String::new(), String::new()),
     }
 }
+
 pub fn split_file_name(path: &Path) -> (String, String) {
     match (path.file_stem(), path.extension()) {
         (Some(name), Some(extension)) => (name.to_string_lossy().to_string(), extension.to_string_lossy().to_string()),
@@ -62,9 +66,9 @@ pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
     tree_view.model().unwrap().downcast::<ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &TreeView, rules: Rc<RefCell<Rules>>) {
+pub fn populate_rules_tree_view(tree_view: &TreeView, rules: &Rc<RefCell<Rules>>) {
     let mut rules = rules.borrow_mut();
-    let rules = rules.deref_mut();
+    let rules = &mut *rules;
 
     let list_store = get_list_store_from_tree_view(tree_view);
 
@@ -117,6 +121,7 @@ pub fn remove_selected_rows(tree_view: &TreeView) -> Vec<usize> {
     }
     vec_index_to_delete
 }
+
 pub fn get_full_file_names_from_selection(tree_view: &TreeView) -> Vec<String> {
     let selection = tree_view.selection();
 
@@ -179,8 +184,9 @@ pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
     chooser_box.set_margin_start(5);
     chooser_box.set_margin_end(5);
 
-    dialog.show()
+    dialog.show();
 }
+
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     let temp_splits: Vec<&str> = expression.split('*').collect();
     let mut splits: Vec<&str> = Vec::new();
@@ -228,6 +234,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
     }
     true
 }
+
 // Notebook number point to current notebook tab
 // In normal use this isn't problem, but notebook_choose_rule.current_page() points to invalid
 // notebook when changing pages
@@ -323,7 +330,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else {
                 panic!("Invalid Button Clicked");
             }
-            rule_description = "".to_string();
+            rule_description = String::new();
         }
         NotebookEnum::AddText => {
             rule_type = RuleType::AddText;
@@ -415,11 +422,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             rule_data.number_step = entry_add_number_step.text().to_string().parse::<i64>().unwrap_or(1);
             rule_data.number_start = entry_add_number_start_number.text().to_string().parse::<i64>().unwrap_or(1);
 
-            let zeros = if rule_data.fill_with_zeros > 0 {
-                format!(" and filling with {} zeros,", rule_data.fill_with_zeros)
-            } else {
-                "".to_string()
-            };
+            let zeros = if rule_data.fill_with_zeros > 0 { format!(" and filling with {} zeros,", rule_data.fill_with_zeros) } else { String::new() };
             rule_description = format!("Starting with {} with step {}{}", rule_data.number_step, rule_data.number_start, zeros);
         }
         NotebookEnum::Normalize => {

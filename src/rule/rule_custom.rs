@@ -1,17 +1,15 @@
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
-use chrono::NaiveDateTime;
-use humansize::format_size;
-use humansize::BINARY;
 use std::cmp::min;
 use std::path::Component::Normal;
 use std::path::Path;
 
-// enum CustomTypes {
-//     Creation,
-// }
+use chrono::NaiveDateTime;
+use humansize::format_size;
+use humansize::BINARY;
 
-pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, file_data: Option<(u64, u64, u64, &str)>) -> String {
+use crate::help_function::split_file_name;
+use crate::rule::rules::*;
+
+pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number: u64, rule_number_in_folder: u64, file_data: Option<(u64, u64, u64, &str)>) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
     let string_to_parse = rule.rule_data.custom_text.clone();
 
@@ -20,7 +18,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
     let size: String;
     let parent_folder;
 
-    let mut new_string = "".to_string();
+    let mut new_string = String::new();
 
     // Random data to visualize typical usage in examples
     if let Some(f_data) = file_data {
@@ -31,11 +29,11 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
             if let Normal(path) = last_component {
                 parent_folder = path.to_str().unwrap_or("").to_string();
             } else {
-                parent_folder = "".to_string();
+                parent_folder = String::new();
                 eprintln!("Failed to read latest component from {last_component:?}");
             }
         } else {
-            parent_folder = "".to_string();
+            parent_folder = String::new();
         }
     } else {
         creation_date = "2021-01-31 08_42_12".to_string();
@@ -56,13 +54,27 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
                             let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2].split(':').collect::<Vec<&str>>();
 
-                            let invalid_data = parse_string_rules(typ, &mut new_string, &rule_number, &name, &creation_date, &modification_date, &size, &parent_folder, data_to_change, &extension);
+                            if !typ.is_empty() {
+                                let invalid_data = parse_string_rules(
+                                    &typ,
+                                    &mut new_string,
+                                    &general_rule_number,
+                                    &rule_number_in_folder,
+                                    &name,
+                                    &creation_date,
+                                    &modification_date,
+                                    &size,
+                                    &parent_folder,
+                                    data_to_change,
+                                    &extension,
+                                );
 
-                            if invalid_data {
-                                new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
-                                latest_end_index = start + latest_end_index + 2;
-                            } else {
-                                latest_end_index = start + end + 1 + latest_end_index + 2;
+                                if invalid_data {
+                                    new_string.push_str(&string_to_parse[latest_end_index + start..latest_end_index + 2 + start]);
+                                    latest_end_index = start + latest_end_index + 2;
+                                } else {
+                                    latest_end_index = start + end + 1 + latest_end_index + 2;
+                                }
                             }
                         } else {
                             new_string.push_str(&string_to_parse[latest_end_index + start..]);
@@ -81,8 +93,21 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, rule_number: u64, fi
 
     new_string
 }
+
 #[allow(clippy::too_many_arguments)]
-pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: &u64, name: &str, creation_date: &str, modification_date: &str, size: &str, parent_folder: &str, data_to_change: &str, extension: &str) -> bool {
+pub fn parse_string_rules(
+    typ: &[&str],
+    new_string: &mut String,
+    general_rule_number: &u64,
+    rule_number_in_folder: &u64,
+    name: &str,
+    creation_date: &str,
+    modification_date: &str,
+    size: &str,
+    parent_folder: &str,
+    data_to_change: &str,
+    extension: &str,
+) -> bool {
     let mut invalid_data = true;
     'mat: {
         match typ[0] {
@@ -128,12 +153,17 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
                     invalid_data = false;
                 }
             }
-            "N" => {
+            "N" | "K" => {
                 invalid_data = true;
-                if (2..=4).contains(&typ.len()) {
-                    let start_number = match typ[1].parse::<i64>() {
-                        Ok(t) => t,
-                        Err(_) => break 'mat,
+                if (1..=4).contains(&typ.len()) {
+                    let start_str = typ.get(1);
+                    let start_number = if let Some(start) = start_str {
+                        match start.parse::<i64>() {
+                            Ok(t) => t,
+                            Err(_) => break 'mat,
+                        }
+                    } else {
+                        0
                     };
 
                     let step_str = typ.get(2);
@@ -159,11 +189,13 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
                     // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
                     let fill_zeros = min(fill_zeros, 50);
 
+                    let used_number = (if typ[0] == "N" { *general_rule_number } else { *rule_number_in_folder }) as i64;
+
                     let mut number;
-                    if step_number.checked_mul(*rule_number as i64).is_none() {
+                    if step_number.checked_mul(used_number).is_none() {
                         number = 0;
                     } else {
-                        number = step_number * *rule_number as i64;
+                        number = step_number * used_number;
                     }
 
                     if number.checked_add(start_number).is_none() {
@@ -174,7 +206,7 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
 
                     let mut text_to_replace = number.to_string();
 
-                    let mut zeros: String = "".to_string();
+                    let mut zeros: String = String::new();
                     if text_to_replace.len() < fill_zeros as usize {
                         for _i in 0..(fill_zeros - text_to_replace.len() as i64) {
                             zeros.push('0');
@@ -197,12 +229,13 @@ pub fn parse_string_rules(typ: Vec<&str>, new_string: &mut String, rule_number: 
 
 #[cfg(test)]
 mod test {
-    use crate::rule::rule_custom::rule_custom;
-    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
     use std::fs;
     use std::fs::OpenOptions;
     use std::io::Write;
     use std::path::Path;
+
+    use crate::rule::rule_custom::rule_custom;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
     #[test]
     fn test_custom() {
@@ -215,70 +248,83 @@ mod test {
         file_handler.flush().unwrap();
 
         rule.rule_data.custom_text = "  )  $(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "  )  wombat.txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "  )  wombat.txt");
         rule.rule_data.custom_text = "$($(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(wombat.txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(wombat.txt");
         rule.rule_data.custom_text = "$(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "wombat.txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "wombat.txt");
         rule.rule_data.custom_text = "$(CURR )".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(CURR )");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(CURR )");
         rule.rule_data.custom_text = "$(CURR)$(CURR)$(CURR)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "wombat.txtwombat.txtwombat.txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "wombat.txtwombat.txtwombat.txt");
         rule.rule_data.custom_text = "Roman $(CURR) Roman".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "Roman wombat.txt Roman");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "Roman wombat.txt Roman");
 
         rule.rule_data.custom_text = "$(NAME)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "wombat");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "wombat");
 
         rule.rule_data.custom_text = "$(EXT)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "txt");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "txt");
 
+        rule.rule_data.custom_text = "$(K:)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 1000, None), "$(K:)");
+        rule.rule_data.custom_text = "$(K:0)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 1000, None), "1000");
+        rule.rule_data.custom_text = "$(K)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 1, None), "1");
+        rule.rule_data.custom_text = "$(K)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 1111111110, 0, None), "0");
+
+        rule.rule_data.custom_text = "$(N)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 111110, None), "0");
+        rule.rule_data.custom_text = "$(N)".to_string();
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "1");
         rule.rule_data.custom_text = "$(N:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(N:)");
         rule.rule_data.custom_text = "$(N:20:22:)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:20:22:)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(N:20:22:)");
         rule.rule_data.custom_text = "$(20::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(20::22)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(20::22)");
         rule.rule_data.custom_text = "$(N:::22)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(N:::22)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(N:::22)");
         rule.rule_data.custom_text = "$(:::)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "$(:::)");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "$(:::)");
         rule.rule_data.custom_text = "$(N:20)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "20");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "21");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "20");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "21");
         rule.rule_data.custom_text = "$(N:20:2)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "22");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "22");
         rule.rule_data.custom_text = "$(N:20:22:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "0020");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "0042");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "0064");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "0020");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "0042");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, 0, None), "0064");
         rule.rule_data.custom_text = "$(N:1:10:3)$(N:2:10:4)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "0010002");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "0110012");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "0010002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "0110012");
         rule.rule_data.custom_text = "$(N:0:2:5)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "00000");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "00002");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "00004");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "00000");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "00002");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, 0, None), "00004");
         rule.rule_data.custom_text = "$(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "10");
-        assert_eq!(rule_custom("wombat.txt", &rule, 1, None), "15");
-        assert_eq!(rule_custom("wombat.txt", &rule, 2, None), "20");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "10");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "15");
+        assert_eq!(rule_custom("wombat.txt", &rule, 2, 0, None), "20");
         rule.rule_data.custom_text = "$(EXT)$(())$(($(N:10:5:1)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "txt$(())$((10");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "txt$(())$((10");
 
         rule.rule_data.custom_text = "$(SIZE)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, None), "2 KB");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 0, None), "2 KB");
 
         rule.rule_data.custom_text = "$(MODIF)".to_string();
-        let text = rule_custom("wombat.txt", &rule, 0, None);
+        let text = rule_custom("wombat.txt", &rule, 0, 0, None);
         assert!(text.contains('-') && text.contains("20"));
 
         rule.rule_data.custom_text = "$(CREAT)".to_string();
-        let text = rule_custom("wombat.txt", &rule, 0, None);
+        let text = rule_custom("wombat.txt", &rule, 0, 0, None);
         assert!(text.contains('-') && text.contains("20"));
 
         rule.rule_data.custom_text = "$(PARENT)".to_string();
-        let text = rule_custom("Absymal.txt", &rule, 0, None);
+        let text = rule_custom("Absymal.txt", &rule, 0, 0, None);
         assert_eq!(text, "Parent Folder");
 
         fs::remove_file("wombat.txt").unwrap();
