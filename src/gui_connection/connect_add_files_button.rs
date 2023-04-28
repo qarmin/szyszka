@@ -65,9 +65,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
                 for file_entry in &folder {
                     let (path, name) = split_path(file_entry);
-                    let full_name = if let Some(t) = file_entry.to_str() {
-                        t
-                    } else {
+                    let Some(full_name) = file_entry.to_str() else {
                         println!("Failed to read name of {file_entry:?} (some characters may be missing in this name)");
                         continue;
                     };

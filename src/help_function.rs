@@ -238,7 +238,7 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
 // Notebook number point to current notebook tab
 // In normal use this isn't problem, but notebook_choose_rule.current_page() points to invalid
 // notebook when changing pages
-pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Option<u32>) -> SingleRule {
+pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Option<u32>) -> Option<SingleRule> {
     let notebook_choose_rule = window_rules.notebook_choose_rule.clone();
 
     let check_button_letters_type_uppercase = window_rules.size_letters.check_button_letters_type_uppercase.clone();
@@ -303,7 +303,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_letters_type_lowercase.is_active() {
                 rule_data.to_lowercase = true;
             } else {
-                panic!("Button not available");
+                return None;
             }
             if check_button_letters_usage_extension.is_active() {
                 rule_place = RulePlace::Extension;
@@ -312,7 +312,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_letters_usage_name.is_active() {
                 rule_place = RulePlace::Name;
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
 
             let mut text = if rule_data.to_lowercase { "Lowercase".to_string() } else { "Uppercase".to_string() };
@@ -328,7 +328,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_purge_name.is_active() {
                 rule_place = RulePlace::Name;
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
             rule_description = String::new();
         }
@@ -339,7 +339,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_add_text_after_name.is_active() {
                 rule_place = RulePlace::AfterName;
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
             rule_data.add_text_text = entry_add_text_text_to_add.text().to_string();
             rule_description = format!("Added text: {}", rule_data.add_text_text);
@@ -352,7 +352,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_trim_case_insensitive.is_active() {
                 rule_data.case_sensitive = false;
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
 
             let where_remove;
@@ -370,7 +370,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
                 rule_place = RulePlace::FromExtensionEndReverse;
                 where_remove = "end of extension";
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
             rule_data.trim_text = entry_add_text_text_to_trim.text().to_string();
             rule_description = format!("Trimming \"{}\" from {}", rule_data.trim_text, where_remove);
@@ -392,7 +392,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_replace_extension.is_active() {
                 rule_place = RulePlace::Extension;
             } else {
-                panic!("Invalid Rule Type for purge rule");
+                return None;
             }
 
             if check_button_replace_case_sensitive.is_active() {
@@ -400,7 +400,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_replace_case_insensitive.is_active() {
                 rule_data.case_sensitive = false;
             } else {
-                panic!("Invalid Button Clicked");
+                return None;
             }
 
             rule_data.text_to_remove = entry_replace_text_to_remove.text().to_string();
@@ -409,13 +409,12 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         }
         NotebookEnum::AddNumber => {
             rule_type = RuleType::AddNumber;
-
             if check_button_add_number_before_name.is_active() {
                 rule_place = RulePlace::BeforeName;
             } else if check_button_add_number_after_name.is_active() {
                 rule_place = RulePlace::AfterName;
             } else {
-                panic!("Invalid Rule Type for purge rule");
+                return None;
             }
 
             rule_data.fill_with_zeros = entry_add_number_zeros.text().to_string().parse::<i64>().unwrap_or(0);
@@ -434,7 +433,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             } else if check_button_normalize_partial.is_active() {
                 rule_data.full_normalize = false;
             } else {
-                panic!();
+                return None;
             }
 
             if rule_data.full_normalize {
@@ -444,12 +443,12 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
             }
         }
     }
-    SingleRule {
+    Some(SingleRule {
         rule_type,
         rule_place,
         rule_data,
         rule_description,
-    }
+    })
 }
 
 pub fn get_all_boxes_from_widget<P: IsA<Widget>>(item: &P) -> Vec<Box> {

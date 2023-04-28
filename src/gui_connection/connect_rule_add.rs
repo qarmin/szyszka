@@ -24,7 +24,9 @@ pub fn connect_rule_add(gui_data: &GuiData) {
             let mut rule = rules.borrow_mut();
             let rule = &mut *rule;
 
-            let single_rule = read_rule_from_window(&window_rules, None);
+            let Some(single_rule) = read_rule_from_window(&window_rules, None) else {
+                return;
+            };
 
             if let Some(edit_mode) = rule.edit_mode {
                 rule.rules[edit_mode].rule_type = single_rule.rule_type;

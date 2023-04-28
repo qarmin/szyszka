@@ -37,7 +37,9 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
     let text_to_change: String = window_rules.entry_example_before.text().to_string();
     let label_example_after = window_rules.label_example_after.clone();
 
-    let single_rule = read_rule_from_window(window_rules, notebook_number);
+    let Some(single_rule) = read_rule_from_window(window_rules, notebook_number) else {
+        return;
+    };
 
     let mut all_rules = Rules::new();
     all_rules.rules.push(single_rule);

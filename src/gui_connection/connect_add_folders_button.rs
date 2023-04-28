@@ -101,7 +101,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                     if check_folders_inside {
                         if ignore_folders {
                             for folder in folders_to_check {
-                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(std::result::Result::ok) {
+                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
                                     if let Ok(metadata) = entry.metadata() {
                                         if metadata.is_file() {
                                             new_entries.push(entry.path().to_path_buf());
@@ -111,7 +111,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                             }
                         } else {
                             for folder in folders_to_check {
-                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(std::result::Result::ok) {
+                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
                                     new_entries.push(entry.path().to_path_buf());
                                 }
                             }
@@ -135,9 +135,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
                     for file_entry in &folders {
                         let (path, name) = split_path(file_entry);
-                        let full_name = if let Some(t) = file_entry.to_str() {
-                            t
-                        } else {
+                        let Some(full_name) = file_entry.to_str() else {
                             println!("Failed to read name of {file_entry:?} (some characters may be missing in this name)");
                             continue;
                         };

@@ -10,9 +10,9 @@ $(MODIF) - prints file modification date
 $(CREAT) - prints file creation
 $(CURR) - prints current file name with extension
 $(PARENT) - prints parent folder name
-$(N)/$(K) - prints numbers(arguments are optional) -
-      $(N:3:4:5) prints numbers from 3, with step 4 and fills them with zeros to 5 elements.
-      K instead only position in list, also uses position item in folder.</property>
+$(N)/$(K) - prints numbers(arguments are optional)
+	$(N:3:4:5) prints numbers from 3, with step 4 and fills them with zeros to 5 positions.
+	K instead only position in list, also uses position item in folder.</property>
   </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="child">
@@ -693,7 +693,6 @@ Partial - works exacly same as option above, but allows
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="check_button_normalize_partial">
-                                <property name="active">1</property>
                                 <property name="focusable">1</property>
                                 <property name="halign">center</property>
                                 <property name="hexpand">1</property>

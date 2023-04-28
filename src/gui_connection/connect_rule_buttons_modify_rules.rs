@@ -161,9 +161,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
                     break;
                 }
 
-                if !list_store.iter_next(&previous_iter) {
-                    panic!();
-                }
+                assert!(list_store.iter_next(&previous_iter));
             }
 
             current_iter = previous_iter;
@@ -272,9 +270,8 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
                 break;
             }
 
-            if !model.iter_next(&iter) {
-                panic!();
-            }
+            assert!(model.iter_next(&iter));
+
             item_number += 1;
         }
 

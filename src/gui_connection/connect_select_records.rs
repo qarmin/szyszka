@@ -1,5 +1,5 @@
 use gtk4::prelude::*;
-use gtk4::TreeIter;
+use gtk4::{ResponseType, TreeIter};
 
 use crate::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
@@ -143,7 +143,10 @@ pub fn connect_select_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk4::Dialog::with_buttons(Some("Select custom"), Some(&window_main), gtk4::DialogFlags::MODAL, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+            let confirmation_dialog_delete = gtk4::Dialog::builder().title("Select custom").modal(true).transient_for(&window_main).build();
+            confirmation_dialog_delete.add_button("Ok", ResponseType::Ok);
+            confirmation_dialog_delete.add_button("Close", ResponseType::Cancel);
+
             let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
             let radio_path = gtk4::CheckButton::with_label("Path");
@@ -152,6 +155,14 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
             let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
             let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
+
+            radio_current_name.set_group(Some(&radio_path));
+            radio_future_name.set_group(Some(&radio_path));
+            radio_current_name_path.set_group(Some(&radio_path));
+            radio_future_name_path.set_group(Some(&radio_path));
+            radio_is_dir.set_group(Some(&radio_path));
+
+            radio_path.set_active(true);
 
             let entry_path = gtk4::Entry::new();
             let entry_current_name = gtk4::Entry::new();
@@ -187,15 +198,16 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             grid.attach(&entry_future_name_path, 1, 5, 1, 1);
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
-            get_all_boxes_from_widget(&confirmation_dialog_delete)[0].clone().append(&grid);
+            // TODO Why 3? This may brake newer versions
+            get_all_boxes_from_widget(&confirmation_dialog_delete)[3].clone().append(&grid);
 
             confirmation_dialog_delete.show();
 
             let tree_view = tree_view.clone();
-            confirmation_dialog_delete.connect_response(move |_chooser, response_type| {
+            confirmation_dialog_delete.connect_response(move |chooser, response_type| {
                 let wildcard_type: WildcardType;
                 let wildcard: String;
-                if response_type == gtk4::ResponseType::Ok {
+                if response_type == ResponseType::Ok {
                     if radio_path.is_active() {
                         wildcard_type = WildcardType::Path;
                         wildcard = entry_path.text().to_string();
@@ -283,6 +295,8 @@ pub fn connect_select_custom(gui_data: &GuiData) {
                         }
                     }
                 }
+
+                chooser.hide();
             });
         }
     });
@@ -301,7 +315,9 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk4::Dialog::with_buttons(Some("Unselect custom"), Some(&window_main), gtk4::DialogFlags::MODAL, &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)]);
+            let confirmation_dialog_delete = gtk4::Dialog::builder().title("Unselect custom").modal(true).transient_for(&window_main).build();
+            confirmation_dialog_delete.add_button("Ok", ResponseType::Ok);
+            confirmation_dialog_delete.add_button("Close", ResponseType::Cancel);
             let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
             let radio_path = gtk4::CheckButton::with_label("Path");
@@ -310,6 +326,14 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
             let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
             let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
+
+            radio_current_name.set_group(Some(&radio_path));
+            radio_future_name.set_group(Some(&radio_path));
+            radio_current_name_path.set_group(Some(&radio_path));
+            radio_future_name_path.set_group(Some(&radio_path));
+            radio_is_dir.set_group(Some(&radio_path));
+
+            radio_path.set_active(true);
 
             let entry_path = gtk4::Entry::new();
             let entry_current_name = gtk4::Entry::new();
@@ -345,13 +369,13 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             grid.attach(&entry_future_name_path, 1, 5, 1, 1);
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
-            get_all_boxes_from_widget(&confirmation_dialog_delete)[0].clone().append(&grid);
+            get_all_boxes_from_widget(&confirmation_dialog_delete)[3].clone().append(&grid); // TODO may broke
 
             confirmation_dialog_delete.show();
 
             let tree_view = tree_view.clone();
-            confirmation_dialog_delete.connect_response(move |_, response| {
-                if response == gtk4::ResponseType::Ok {
+            confirmation_dialog_delete.connect_response(move |dialog, response| {
+                if response == ResponseType::Ok {
                     let wildcard: String;
                     let wildcard_type: WildcardType;
 
@@ -442,6 +466,7 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
                         }
                     }
                 }
+                dialog.hide();
             });
         }
     });
