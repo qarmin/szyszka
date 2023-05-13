@@ -4,12 +4,12 @@ use std::rc::Rc;
 use gtk4::prelude::*;
 use gtk4::Builder;
 
-use crate::class_dialog_rules::GuiDialogRules;
-use crate::gui_data_results::GuiResults;
-use crate::gui_data_rules_bottom_panel::GuiRulesBottomPanel;
-use crate::gui_data_settings::GuiSettings;
-use crate::gui_data_upper_buttons::*;
-use crate::gui_popover_select::GuiPopoverSelect;
+use crate::gui_data_things::class_dialog_rules::GuiDialogRules;
+use crate::gui_data_things::gui_data_results::GuiResults;
+use crate::gui_data_things::gui_data_rules_bottom_panel::GuiRulesBottomPanel;
+use crate::gui_data_things::gui_data_settings::GuiSettings;
+use crate::gui_data_things::gui_data_upper_buttons::GuiUpperButtons;
+use crate::gui_data_things::gui_popover_select::GuiPopoverSelect;
 use crate::help_function::ResultEntries;
 use crate::rule::rules::Rules;
 
@@ -40,16 +40,16 @@ pub struct GuiData {
 impl GuiData {
     pub fn new_with_application(application: &gtk4::Application) -> Self {
         //// Loading glade file content and build with it help UI
-        let window_main_src = include_str!("../ui/window_main.ui").to_string();
+        let window_main_src = include_str!("../../ui/window_main.ui").to_string();
         let builder_window_main = Builder::from_string(window_main_src.as_str());
 
-        let settings_src = include_str!("../ui/settings.ui").to_string();
+        let settings_src = include_str!("../../ui/settings.ui").to_string();
         let builder_settings = Builder::from_string(settings_src.as_str());
 
-        let popover_src = include_str!("../ui/popover.ui").to_string();
+        let popover_src = include_str!("../../ui/popover.ui").to_string();
         let builder_popover = Builder::from_string(popover_src.as_str());
 
-        let rule_chooser_src = include_str!("../ui/rule_chooser.ui").to_string();
+        let rule_chooser_src = include_str!("../../ui/rule_chooser.ui").to_string();
         let builder_rule_chooser = Builder::from_string(rule_chooser_src.as_str());
 
         //// Windows

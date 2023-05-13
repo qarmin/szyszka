@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_button_update_names(gui_data: &GuiData) {

@@ -43,25 +43,29 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
 
     match update_mode {
         UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords | UpdateMode::FileMoved => {
-            if let Some(iter) = list_store.iter_first() {
-                let mut current_index = 0;
-                let mut folder_name_counter: HashMap<String, u32> = Default::default();
-                loop {
-                    let value_to_change = list_store.get::<String>(&iter, ColumnsResults::CurrentName as i32);
-                    let modification_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::ModificationDate as i32);
-                    let creation_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::CreationDate as i32);
-                    let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
-                    let path: String = list_store.get::<String>(&iter, ColumnsResults::Path as i32);
-                    let curr_folder_file_index = folder_name_counter.entry(path.clone()).or_insert(0);
-                    let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index + 1, *curr_folder_file_index + 1, (modification_date, creation_date, file_size, &path));
-                    *curr_folder_file_index += 1;
-                    list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
-                    if !list_store.iter_next(&iter) {
-                        break; // This is the end
-                    }
-                    current_index += 1;
-                }
-            }
+            update_records_general(&list_store, rules);
         } // TODO Add Optimized version, that not calculate rules not changed files, rules etc.(e.g. when adding files, old files not needs to be calculated)
+    }
+}
+
+fn update_records_general(list_store: &gtk4::ListStore, rules: &mut Rules) {
+    if let Some(iter) = list_store.iter_first() {
+        let mut current_index = 0;
+        let mut folder_name_counter: HashMap<String, u32> = Default::default();
+        loop {
+            let value_to_change = list_store.get::<String>(&iter, ColumnsResults::CurrentName as i32);
+            let modification_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::ModificationDate as i32);
+            let creation_date: u64 = list_store.get::<u64>(&iter, ColumnsResults::CreationDate as i32);
+            let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
+            let path: String = list_store.get::<String>(&iter, ColumnsResults::Path as i32);
+            let curr_folder_file_index = folder_name_counter.entry(path.clone()).or_insert(0);
+            let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index + 1, *curr_folder_file_index + 1, (modification_date, creation_date, file_size, &path));
+            *curr_folder_file_index += 1;
+            list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
+            if !list_store.iter_next(&iter) {
+                break; // This is the end
+            }
+            current_index += 1;
+        }
     }
 }

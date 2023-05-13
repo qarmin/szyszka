@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 use gtk4::{ResponseType, TreeIter};
 
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
 
 enum WildcardType {

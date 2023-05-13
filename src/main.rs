@@ -32,33 +32,20 @@ use gui_connection::connect_select_records::*;
 use gui_connection::connect_start_renaming::*;
 
 use crate::example_fields::connect_update_examples;
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::initialize_gui::*;
 
-mod class_dialog_rule_add_number;
-mod class_dialog_rule_add_text;
-mod class_dialog_rule_custom;
-mod class_dialog_rule_normalize;
-mod class_dialog_rule_purge;
-mod class_dialog_rule_replace;
-mod class_dialog_rule_size_letters;
-mod class_dialog_rule_trim;
-mod class_dialog_rules;
 mod create_tree_view;
 mod example_fields;
 mod gui_connection;
-mod gui_data;
-mod gui_data_results;
-mod gui_data_rules_bottom_panel;
-mod gui_data_settings;
-mod gui_data_upper_buttons;
-mod gui_popover_select;
+mod gui_data_things;
 mod help_function;
 mod initialize_gui;
 mod language_functions;
 mod localizer;
 mod notebook_enum;
 mod rule;
+mod rule_read;
 mod update_records;
 
 fn main() {

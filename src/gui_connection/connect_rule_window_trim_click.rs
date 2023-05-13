@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 
 use crate::example_fields::update_examples;
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::validate_name;
 
 pub fn connect_rule_window_trim_click(gui_data: &GuiData) {

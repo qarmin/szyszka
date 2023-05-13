@@ -1,10 +1,11 @@
 use gtk4::prelude::*;
 
-use crate::class_dialog_rules::GuiDialogRules;
-use crate::gui_data::GuiData;
-use crate::help_function::{read_rule_from_window, validate_name};
+use crate::gui_data_things::class_dialog_rules::GuiDialogRules;
+use crate::gui_data_things::gui_data::GuiData;
+use crate::help_function::validate_name;
 use crate::notebook_enum::EXAMPLE_NAME;
 use crate::rule::rules::Rules;
+use crate::rule_read::read_rule_from_window;
 
 pub fn connect_update_examples(gui_data: &GuiData) {
     let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();

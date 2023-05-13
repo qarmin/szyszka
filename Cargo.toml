@@ -10,30 +10,30 @@ repository = "https://github.com/qarmin/szyszka"
 rust-version = "1.65.0"
 
 [dependencies]
-gdk4 = "0.6.3"
-gio = "0.17.9"
-glib = "0.17.9"
+gdk4 = "0.6"
+gio = "0.17"
+glib = "0.17"
 
 # For checking path
-walkdir = "2.3.3"
+walkdir = "2.3"
 
-humansize = "2.1.3"
+humansize = "2.1"
 chrono = "0.4.24"
 
 # For opening files
-open = "4.1.0"
+open = "4.1"
 
 # For slugs
-slugmin = "1.0.2"
+slugmin = "1.0"
 
 # Language
-i18n-embed = { version = "0.13.8", features = ["fluent-system", "desktop-requester"] }
-i18n-embed-fl = "0.6.6"
-rust-embed = "6.6.1"
-once_cell = "1.17.1"
+i18n-embed = { version = "0.13", features = ["fluent-system", "desktop-requester"] }
+i18n-embed-fl = "0.6"
+rust-embed = "6.6"
+once_cell = "1.17"
 
 [dependencies.gtk4]
-version = "0.6.6"
+version = "0.6"
 default-features = false # just in case
 features = ["v4_6"]
 

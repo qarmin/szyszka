@@ -206,11 +206,8 @@ pub fn parse_string_rules(
 
                     let mut text_to_replace = number.to_string();
 
-                    let mut zeros: String = String::new();
                     if text_to_replace.len() < fill_zeros as usize {
-                        for _i in 0..(fill_zeros - text_to_replace.len() as i64) {
-                            zeros.push('0');
-                        }
+                        let zeros: String = "0".repeat((fill_zeros - text_to_replace.len() as i64) as usize);
                         text_to_replace = zeros + text_to_replace.as_str();
                     }
 

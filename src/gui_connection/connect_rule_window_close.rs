@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 
 pub fn connect_rule_window_close(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();

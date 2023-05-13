@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows, ColumnsRules};
 use crate::rule::rules::{RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};

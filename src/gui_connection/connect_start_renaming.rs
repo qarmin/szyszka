@@ -1,12 +1,14 @@
+use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
+use std::rc::Rc;
 
 use gtk4::prelude::*;
-use gtk4::{DialogFlags, ScrolledWindow, TextView, Widget};
+use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
 
-use crate::gui_data::GuiData;
-use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, ColumnsResults, CHARACTER};
+use crate::gui_data_things::gui_data::GuiData;
+use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, ColumnsResults, ResultEntries, CHARACTER};
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
     let button_start_rename = gui_data.upper_buttons.button_start_rename.clone();
@@ -32,7 +34,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         }
 
         if !rules.updated {
-            let chooser_update = gtk4::Dialog::with_buttons(
+            let chooser_update = Dialog::with_buttons(
                 Some("Outdated results"),
                 Some(&window_main),
                 DialogFlags::DESTROY_WITH_PARENT,
@@ -56,7 +58,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
             });
         }
 
-        let chooser = gtk4::Dialog::with_buttons(
+        let chooser = Dialog::with_buttons(
             Some("Confirm renaming"),
             Some(&window_main),
             DialogFlags::DESTROY_WITH_PARENT,
@@ -74,92 +76,83 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         chooser_box.show();
 
-        let shared_result_entries = shared_result_entries.clone();
-        let list_store = list_store.clone();
-        let window_main = window_main.clone();
-
         chooser.show();
-        chooser.connect_response(move |chooser, response_type| {
-            if response_type == gtk4::ResponseType::Ok {
-                let mut shared_result_entries = shared_result_entries.borrow_mut();
-                let shared_result_entries = &mut *shared_result_entries;
-                // Before renaming, After possible renaming, Cause
-                let mut failed_renames: Vec<(String, String, String)> = Vec::new();
-                let mut properly_renamed = 0;
-                let mut ignored = 0;
-
-                let tree_iter = list_store.iter_first().unwrap();
-                let mut file_renames: Vec<(String, String)> = Vec::new();
-                let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
-
-                loop {
-                    let path = list_store.get::<String>(&tree_iter, ColumnsResults::Path as i32);
-                    let old_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32));
-                    let new_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::FutureName as i32));
-                    let typ = list_store.get::<String>(&tree_iter, ColumnsResults::Type as i32);
-
-                    if typ == "Dir" {
-                        let how_much = old_name.matches(CHARACTER).count();
-                        folder_renames.entry(how_much).or_insert_with(Vec::new);
-                        folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
-                    } else if typ == "File" {
-                        file_renames.push((old_name, new_name));
-                    } else {
-                        panic!();
-                    }
-
-                    if !list_store.iter_next(&tree_iter) {
-                        break;
-                    }
-                }
-
-                for (old_name, new_name) in file_renames {
-                    // TODO Find method to not overwrite new function
-                    #[allow(clippy::collapsible_else_if)]
-                    if new_name == old_name {
-                        ignored += 1;
-                    } else if Path::new(&new_name).exists() {
-                        failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
-                    } else {
-                        if let Err(e) = fs::rename(&old_name, &new_name) {
-                            failed_renames.push((old_name, new_name, e.to_string()));
-                        } else {
-                            properly_renamed += 1;
-                        }
-                    }
-                }
-                for (_size, vec) in folder_renames.iter().rev() {
-                    for (old_name, new_name) in vec {
-                        let old_name = old_name.clone();
-                        let new_name = new_name.clone();
-                        // TODO Find method to not overwrite new function
-                        #[allow(clippy::collapsible_else_if)]
-                        if new_name == old_name {
-                            ignored += 1;
-                        } else if Path::new(&new_name).exists() {
-                            failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
-                        } else {
-                            if let Err(e) = fs::rename(&old_name, &new_name) {
-                                failed_renames.push((old_name, new_name, e.to_string()));
-                            } else {
-                                properly_renamed += 1;
-                            }
-                        }
-                    }
-                }
-                // Print results
-                create_results_dialog(&window_main, properly_renamed, ignored, failed_renames);
-
-                list_store.clear();
-                shared_result_entries.files.clear();
-            }
-            chooser.close();
-        });
+        connect_renaming_response(&chooser, &shared_result_entries, &list_store, &window_main);
     });
 }
 
-fn create_results_dialog(window_main: &gtk4::Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
-    let chooser = gtk4::Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
+fn connect_renaming_response(chooser: &Dialog, shared_result_entries: &Rc<RefCell<ResultEntries>>, list_store: &ListStore, window_main: &Window) {
+    let shared_result_entries = shared_result_entries.clone();
+    let list_store = list_store.clone();
+    let window_main = window_main.clone();
+
+    chooser.connect_response(move |chooser, response_type| {
+        if response_type == gtk4::ResponseType::Ok {
+            let mut shared_result_entries = shared_result_entries.borrow_mut();
+            let shared_result_entries = &mut *shared_result_entries;
+            // Before renaming, After possible renaming, Cause
+            let mut failed_renames: Vec<(String, String, String)> = Vec::new();
+            let mut properly_renamed = 0;
+            let mut ignored = 0;
+
+            let tree_iter = list_store.iter_first().unwrap();
+            let mut file_renames: Vec<(String, String)> = Vec::new();
+            let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
+
+            loop {
+                let path = list_store.get::<String>(&tree_iter, ColumnsResults::Path as i32);
+                let old_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32));
+                let new_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::FutureName as i32));
+                let typ = list_store.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+
+                if typ == "Dir" {
+                    let how_much = old_name.matches(CHARACTER).count();
+                    folder_renames.entry(how_much).or_insert_with(Vec::new);
+                    folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
+                } else if typ == "File" {
+                    file_renames.push((old_name, new_name));
+                } else {
+                    panic!();
+                }
+
+                if !list_store.iter_next(&tree_iter) {
+                    break;
+                }
+            }
+
+            for (old_name, new_name) in file_renames {
+                rename_items(old_name, new_name, &mut ignored, &mut properly_renamed, &mut failed_renames);
+            }
+            for (_size, vec) in folder_renames.iter().rev() {
+                for (old_name, new_name) in vec {
+                    rename_items(old_name.clone(), new_name.clone(), &mut ignored, &mut properly_renamed, &mut failed_renames);
+                }
+            }
+            // Print results
+            create_results_dialog(&window_main, properly_renamed, ignored, failed_renames);
+
+            // TODO not properly converted items should not be cleared
+            list_store.clear();
+            shared_result_entries.files.clear();
+        }
+        chooser.close();
+    });
+}
+
+fn rename_items(old_name: String, new_name: String, ignored: &mut u32, properly_renamed: &mut u32, failed_renames: &mut Vec<(String, String, String)>) {
+    if new_name == old_name {
+        *ignored += 1;
+    } else if Path::new(&new_name).exists() {
+        failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
+    } else if let Err(e) = fs::rename(&old_name, &new_name) {
+        failed_renames.push((old_name, new_name, e.to_string()));
+    } else {
+        *properly_renamed += 1;
+    }
+}
+
+fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
+    let chooser = Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
 
     let label_good = gtk4::Label::new(Some(format!("Properly renamed {properly_renamed} files").as_str()));
     let label_ignored = gtk4::Label::new(Some(format!("Ignored {ignored} files, because the name before and after the change are the same.").as_str()));

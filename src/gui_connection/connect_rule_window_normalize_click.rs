@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 
 use crate::example_fields::update_examples;
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 
 pub fn connect_rule_window_normalize_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();

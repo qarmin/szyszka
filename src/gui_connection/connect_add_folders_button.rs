@@ -3,13 +3,13 @@ use std::fs;
 use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 
+use crate::gui_data_things::gui_data::GuiData;
 use chrono::Local;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType};
 use walkdir::WalkDir;
 
-use crate::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, split_path, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
 
