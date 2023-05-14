@@ -11,7 +11,8 @@ $(CREAT) - prints file creation
 $(CURR) - prints current file name with extension
 $(PARENT) - prints parent folder name
 $(N)/$(K) - prints numbers(arguments are optional)
-	$(N:3:4:5) prints numbers from 3, with step 4 and fills them with zeros to 5 positions.
+	$(N:3:4:5) prints numbers from 3, with step 4
+ and fills them with zeros to 5 positions.
 	K instead only position in list, also uses position item in folder.</property>
   </object>
   <object class="GtkWindow" id="window_with_rules">
@@ -36,11 +37,11 @@ $(N)/$(K) - prints numbers(arguments are optional)
                   <object class="GtkNotebookPage">
                     <property name="child">
                       <object class="GtkBox">
-                        <property name="margin-bottom">5</property>
                         <property name="margin-end">5</property>
-                        <property name="margin-start">5</property>
+                        <property name="margin-start">4</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
+                        <property name="vexpand">True</property>
                         <child>
                           <object class="GtkTextView">
                             <property name="buffer">textbuffer1</property>
@@ -53,6 +54,24 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <property name="focusable">1</property>
                             <property name="max-length">150</property>
                             <property name="text" translatable="yes">$(CURR)</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuButton" id="menu_button_load_custom_rule">
+                            <property name="accessible-role">meter</property>
+                            <property name="halign">center</property>
+                            <property name="label">Custom rule chooser</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="valign">end</property>
+                            <property name="vexpand">True</property>
+                            <property name="vexpand-set">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_save_custom_rule">
+                            <property name="halign">center</property>
+                            <property name="label">Save custom rule</property>
+                            <property name="margin-bottom">5</property>
                           </object>
                         </child>
                       </object>
@@ -668,7 +687,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                         </child>
                         <child>
                           <object class="GtkLabel">
-                            <property name="halign">start</property>
+                            <property name="justify">center</property>
                             <property name="label" translatable="yes">Everything - renames the name to one that containsonly the
                           characters `a-z`, `0-9`, `-`, ` `, `.`.
                           e.g. `żółć CZERona.Txt` -&gt; `zolc-czerwona.txt`
