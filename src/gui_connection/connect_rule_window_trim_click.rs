@@ -1,8 +1,5 @@
-use gtk4::prelude::*;
-
-use crate::example_fields::update_examples;
+use crate::gui_connection::common::{connect_examples_check_button, connect_examples_entry_name};
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::validate_name;
 
 pub fn connect_rule_window_trim_click(gui_data: &GuiData) {
     let window_rules = gui_data.window_rules.clone();
@@ -16,36 +13,11 @@ pub fn connect_rule_window_trim_click(gui_data: &GuiData) {
 
     let entry_add_text_text_to_trim = gui_data.window_rules.trim.entry_add_text_text_to_trim.clone();
 
-    check_button_trim_name_start.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_trim_name_end.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_trim_extension_start.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_trim_extension_end.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_trim_case_insensitive.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    check_button_trim_case_sensitive.connect_toggled(move |_e| {
-        update_examples(&window_rules, None);
-    });
-    let window_rules = gui_data.window_rules.clone();
-    entry_add_text_text_to_trim.connect_changed(move |e| {
-        let old_name = e.text().to_string();
-        let validate_name = validate_name(&old_name);
-        if validate_name != old_name {
-            e.set_text(&validate_name);
-        }
-        update_examples(&window_rules, None);
-    });
+    connect_examples_check_button(&check_button_trim_name_start, &window_rules);
+    connect_examples_check_button(&check_button_trim_name_end, &window_rules);
+    connect_examples_check_button(&check_button_trim_extension_start, &window_rules);
+    connect_examples_check_button(&check_button_trim_extension_end, &window_rules);
+    connect_examples_check_button(&check_button_trim_case_insensitive, &window_rules);
+    connect_examples_check_button(&check_button_trim_case_sensitive, &window_rules);
+    connect_examples_entry_name(&entry_add_text_text_to_trim, &window_rules);
 }

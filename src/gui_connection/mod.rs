@@ -1,3 +1,4 @@
+pub mod common;
 pub mod connect_add_files_button;
 pub mod connect_add_folders_button;
 pub mod connect_button_settings;

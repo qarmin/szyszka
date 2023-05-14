@@ -1,5 +1,5 @@
 use gtk4::prelude::*;
-use gtk4::{ResponseType, TreeIter};
+use gtk4::{Dialog, ResponseType, TreeIter, TreeSelection, TreeView};
 
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
@@ -143,9 +143,9 @@ pub fn connect_select_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk4::Dialog::builder().title("Select custom").modal(true).transient_for(&window_main).build();
-            confirmation_dialog_delete.add_button("Ok", ResponseType::Ok);
-            confirmation_dialog_delete.add_button("Close", ResponseType::Cancel);
+            let custom_dialog = gtk4::Dialog::builder().title("Select custom").modal(true).transient_for(&window_main).build();
+            custom_dialog.add_button("Ok", ResponseType::Ok);
+            custom_dialog.add_button("Close", ResponseType::Cancel);
 
             let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
@@ -199,105 +199,26 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
             // TODO Why 3? This may brake newer versions
-            get_all_boxes_from_widget(&confirmation_dialog_delete)[3].clone().append(&grid);
+            get_all_boxes_from_widget(&custom_dialog)[3].clone().append(&grid);
 
-            confirmation_dialog_delete.show();
+            custom_dialog.show();
 
-            let tree_view = tree_view.clone();
-            confirmation_dialog_delete.connect_response(move |chooser, response_type| {
-                let wildcard_type: WildcardType;
-                let wildcard: String;
-                if response_type == ResponseType::Ok {
-                    if radio_path.is_active() {
-                        wildcard_type = WildcardType::Path;
-                        wildcard = entry_path.text().to_string();
-                    } else if radio_current_name.is_active() {
-                        wildcard_type = WildcardType::CurrentName;
-                        wildcard = entry_current_name.text().to_string();
-                    } else if radio_future_name.is_active() {
-                        wildcard_type = WildcardType::FutureName;
-                        wildcard = entry_future_name.text().to_string();
-                    } else if radio_current_name_path.is_active() {
-                        wildcard_type = WildcardType::PathCurrentName;
-                        wildcard = entry_current_name_path.text().to_string();
-                    } else if radio_future_name_path.is_active() {
-                        wildcard_type = WildcardType::PathFutureName;
-                        wildcard = entry_future_name_path.text().to_string();
-                    } else if radio_is_dir.is_active() {
-                        wildcard_type = WildcardType::IsDir;
-                        wildcard = if check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
-                    } else {
-                        panic!("Non handled option in select wildcard");
-                    }
+            let hs = HelpRadioStruct {
+                radio_path,
+                radio_current_name,
+                radio_future_name,
+                radio_current_name_path,
+                radio_future_name_path,
+                entry_path,
+                entry_current_name,
+                entry_future_name,
+                entry_current_name_path,
+                entry_future_name_path,
+                check_button_is_dir,
+                radio_is_dir,
+            };
 
-                    if !wildcard.is_empty() {
-                        let wildcard = wildcard.trim();
-
-                        #[cfg(target_family = "windows")]
-                        let wildcard = wildcard.replace("/", "\\");
-                        #[cfg(target_family = "windows")]
-                        let wildcard = wildcard.as_str();
-
-                        let selection = tree_view.selection();
-                        let tree_model = tree_view.model().unwrap();
-
-                        let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
-
-                        loop {
-                            let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
-                            let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
-                            let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
-                            let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
-                            match wildcard_type {
-                                WildcardType::Path => {
-                                    if regex_check(wildcard, path) {
-                                        selection.select_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::CurrentName => {
-                                    if regex_check(wildcard, current_name) {
-                                        selection.select_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::FutureName => {
-                                    if regex_check(wildcard, future_name) {
-                                        selection.select_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::PathCurrentName => {
-                                    if regex_check(wildcard, format!("{path}/{current_name}")) {
-                                        selection.select_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::PathFutureName => {
-                                    if regex_check(wildcard, format!("{path}/{future_name}")) {
-                                        selection.select_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::IsDir => {
-                                    if wildcard == "Dir" {
-                                        if typ == "Dir" {
-                                            selection.select_iter(&tree_iter);
-                                        }
-                                    } else if wildcard == "File" {
-                                        if typ == "File" {
-                                            selection.select_iter(&tree_iter);
-                                        }
-                                    } else {
-                                        panic!();
-                                    }
-                                }
-                            }
-
-                            if !tree_model.iter_next(&tree_iter) {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                chooser.hide();
-            });
+            connect_dialog_selection_unselection(&custom_dialog, &tree_view, true, hs);
         }
     });
 }
@@ -315,9 +236,9 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let confirmation_dialog_delete = gtk4::Dialog::builder().title("Unselect custom").modal(true).transient_for(&window_main).build();
-            confirmation_dialog_delete.add_button("Ok", ResponseType::Ok);
-            confirmation_dialog_delete.add_button("Close", ResponseType::Cancel);
+            let custom_dialog = gtk4::Dialog::builder().title("Unselect custom").modal(true).transient_for(&window_main).build();
+            custom_dialog.add_button("Ok", ResponseType::Ok);
+            custom_dialog.add_button("Close", ResponseType::Cancel);
             let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
 
             let radio_path = gtk4::CheckButton::with_label("Path");
@@ -369,105 +290,141 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             grid.attach(&entry_future_name_path, 1, 5, 1, 1);
             grid.attach(&check_button_is_dir, 1, 6, 1, 1);
 
-            get_all_boxes_from_widget(&confirmation_dialog_delete)[3].clone().append(&grid); // TODO may broke
+            get_all_boxes_from_widget(&custom_dialog)[3].clone().append(&grid); // TODO may broke
 
-            confirmation_dialog_delete.show();
+            custom_dialog.show();
 
-            let tree_view = tree_view.clone();
-            confirmation_dialog_delete.connect_response(move |dialog, response| {
-                if response == ResponseType::Ok {
-                    let wildcard: String;
-                    let wildcard_type: WildcardType;
+            let hs = HelpRadioStruct {
+                radio_path,
+                radio_current_name,
+                radio_future_name,
+                radio_current_name_path,
+                radio_future_name_path,
+                entry_path,
+                entry_current_name,
+                entry_future_name,
+                entry_current_name_path,
+                entry_future_name_path,
+                check_button_is_dir,
+                radio_is_dir,
+            };
 
-                    if radio_path.is_active() {
-                        wildcard_type = WildcardType::Path;
-                        wildcard = entry_path.text().to_string();
-                    } else if radio_current_name.is_active() {
-                        wildcard_type = WildcardType::CurrentName;
-                        wildcard = entry_current_name.text().to_string();
-                    } else if radio_future_name.is_active() {
-                        wildcard_type = WildcardType::FutureName;
-                        wildcard = entry_future_name.text().to_string();
-                    } else if radio_current_name_path.is_active() {
-                        wildcard_type = WildcardType::PathCurrentName;
-                        wildcard = entry_current_name_path.text().to_string();
-                    } else if radio_future_name_path.is_active() {
-                        wildcard_type = WildcardType::PathFutureName;
-                        wildcard = entry_future_name_path.text().to_string();
-                    } else if radio_is_dir.is_active() {
-                        wildcard_type = WildcardType::IsDir;
-                        wildcard = if check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
-                    } else {
-                        panic!("Non handled option in select wildcard");
-                    }
+            connect_dialog_selection_unselection(&custom_dialog, &tree_view, false, hs);
+        }
+    });
+}
 
-                    if !wildcard.is_empty() {
-                        let wildcard = wildcard.trim();
+struct HelpRadioStruct {
+    radio_path: gtk4::CheckButton,
+    radio_current_name: gtk4::CheckButton,
+    radio_future_name: gtk4::CheckButton,
+    radio_current_name_path: gtk4::CheckButton,
+    radio_future_name_path: gtk4::CheckButton,
+    entry_path: gtk4::Entry,
+    entry_current_name: gtk4::Entry,
+    entry_future_name: gtk4::Entry,
+    entry_current_name_path: gtk4::Entry,
+    entry_future_name_path: gtk4::Entry,
+    check_button_is_dir: gtk4::CheckButton,
+    radio_is_dir: gtk4::CheckButton,
+}
 
-                        #[cfg(target_family = "windows")]
-                        let wildcard = wildcard.replace("/", "\\");
-                        #[cfg(target_family = "windows")]
-                        let wildcard = wildcard.as_str();
+fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &TreeView, select: bool, hs: HelpRadioStruct) {
+    let tree_view = tree_view.clone();
+    custom_dialog.connect_response(move |dialog, response| {
+        let choose_func = if select { TreeSelection::select_iter } else { TreeSelection::unselect_iter };
 
-                        let selection = tree_view.selection();
-                        let tree_model = tree_view.model().unwrap();
+        if response == ResponseType::Ok {
+            let wildcard: String;
+            let wildcard_type: WildcardType;
 
-                        let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+            if hs.radio_path.is_active() {
+                wildcard_type = WildcardType::Path;
+                wildcard = hs.entry_path.text().to_string();
+            } else if hs.radio_current_name.is_active() {
+                wildcard_type = WildcardType::CurrentName;
+                wildcard = hs.entry_current_name.text().to_string();
+            } else if hs.radio_future_name.is_active() {
+                wildcard_type = WildcardType::FutureName;
+                wildcard = hs.entry_future_name.text().to_string();
+            } else if hs.radio_current_name_path.is_active() {
+                wildcard_type = WildcardType::PathCurrentName;
+                wildcard = hs.entry_current_name_path.text().to_string();
+            } else if hs.radio_future_name_path.is_active() {
+                wildcard_type = WildcardType::PathFutureName;
+                wildcard = hs.entry_future_name_path.text().to_string();
+            } else if hs.radio_is_dir.is_active() {
+                wildcard_type = WildcardType::IsDir;
+                wildcard = if hs.check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
+            } else {
+                panic!("Non handled option in select wildcard");
+            }
 
-                        loop {
-                            let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
-                            let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
-                            let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
-                            let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
-                            match wildcard_type {
-                                WildcardType::Path => {
-                                    if regex_check(wildcard, path) {
-                                        selection.unselect_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::CurrentName => {
-                                    if regex_check(wildcard, current_name) {
-                                        selection.unselect_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::FutureName => {
-                                    if regex_check(wildcard, future_name) {
-                                        selection.unselect_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::PathCurrentName => {
-                                    if regex_check(wildcard, format!("{path}/{current_name}")) {
-                                        selection.unselect_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::PathFutureName => {
-                                    if regex_check(wildcard, format!("{path}/{future_name}")) {
-                                        selection.unselect_iter(&tree_iter);
-                                    }
-                                }
-                                WildcardType::IsDir => {
-                                    if wildcard == "Dir" {
-                                        if typ == "Dir" {
-                                            selection.unselect_iter(&tree_iter);
-                                        }
-                                    } else if wildcard == "File" {
-                                        if typ == "File" {
-                                            selection.unselect_iter(&tree_iter);
-                                        }
-                                    } else {
-                                        panic!();
-                                    }
-                                }
+            if !wildcard.is_empty() {
+                let wildcard = wildcard.trim();
+
+                #[cfg(target_family = "windows")]
+                let wildcard = wildcard.replace("/", "\\");
+                #[cfg(target_family = "windows")]
+                let wildcard = wildcard.as_str();
+
+                let selection = tree_view.selection();
+                let tree_model = tree_view.model().unwrap();
+
+                let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+
+                loop {
+                    let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+                    let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
+                    let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
+                    let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
+                    match wildcard_type {
+                        WildcardType::Path => {
+                            if regex_check(wildcard, path) {
+                                choose_func(&selection, &tree_iter);
                             }
-
-                            if !tree_model.iter_next(&tree_iter) {
-                                break;
+                        }
+                        WildcardType::CurrentName => {
+                            if regex_check(wildcard, current_name) {
+                                choose_func(&selection, &tree_iter);
+                            }
+                        }
+                        WildcardType::FutureName => {
+                            if regex_check(wildcard, future_name) {
+                                choose_func(&selection, &tree_iter);
+                            }
+                        }
+                        WildcardType::PathCurrentName => {
+                            if regex_check(wildcard, format!("{path}/{current_name}")) {
+                                choose_func(&selection, &tree_iter);
+                            }
+                        }
+                        WildcardType::PathFutureName => {
+                            if regex_check(wildcard, format!("{path}/{future_name}")) {
+                                choose_func(&selection, &tree_iter);
+                            }
+                        }
+                        WildcardType::IsDir => {
+                            if wildcard == "Dir" {
+                                if typ == "Dir" {
+                                    choose_func(&selection, &tree_iter);
+                                }
+                            } else if wildcard == "File" {
+                                if typ == "File" {
+                                    choose_func(&selection, &tree_iter);
+                                }
+                            } else {
+                                panic!();
                             }
                         }
                     }
+
+                    if !tree_model.iter_next(&tree_iter) {
+                        break;
+                    }
                 }
-                dialog.hide();
-            });
+            }
         }
+        dialog.hide();
     });
 }
