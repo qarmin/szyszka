@@ -13,7 +13,6 @@ pub fn connect_rule_modify_add(gui_data: &GuiData) {
     let button_rule_window_add = gui_data.window_rules.button_rule_window_add.clone();
 
     button_add_rule.connect_clicked(move |_e| {
-        // window_rules.set_position(WindowPosition::Center);
         button_rule_window_add.set_label("Add Rule");
 
         window_with_rules.show();
@@ -86,9 +85,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                     current_index += 1;
                     let current_path = list_store.path(&current_iter);
 
-                    let found = selected_rows.iter().any(|selected_path| *selected_path == current_path);
-
-                    if found {
+                    if selected_rows.iter().any(|selected_path| *selected_path == current_path) {
                         break;
                     }
 
@@ -141,9 +138,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
                 current_index += 1;
                 let current_path = list_store.path(&previous_iter);
 
-                let found = selected_rows.iter().any(|selected_path| *selected_path == current_path);
-
-                if found {
+                if selected_rows.iter().any(|selected_path| *selected_path == current_path) {
                     break;
                 }
 

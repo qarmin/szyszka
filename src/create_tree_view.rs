@@ -5,10 +5,10 @@ use crate::help_function::{ColumnsResults, ColumnsRules};
 
 pub fn create_tree_view_results(tree_view: &TreeView) {
     // TODO maybe enable sorting, but for now GTK crashes when using it
-    create_default_column(tree_view, ColumnsResults::TypeString as i32, None, "Type");
-    create_default_column(tree_view, ColumnsResults::CurrentName as i32, None, "Current Name");
-    create_default_column(tree_view, ColumnsResults::FutureName as i32, None, "Future Name");
-    create_default_column(tree_view, ColumnsResults::Path as i32, None, "Path");
+    create_default_column(tree_view, ColumnsResults::TypeString as i32, Some(None), "Type");
+    create_default_column(tree_view, ColumnsResults::CurrentName as i32, Some(None), "Current Name");
+    create_default_column(tree_view, ColumnsResults::FutureName as i32, Some(None), "Future Name");
+    create_default_column(tree_view, ColumnsResults::Path as i32, Some(None), "Path");
 
     tree_view.set_vexpand(true);
 }
