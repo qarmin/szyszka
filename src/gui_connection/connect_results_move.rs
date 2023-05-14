@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, ColumnsResults};
+use crate::help_function::get_list_store_from_tree_view;
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_results_modify_one_up(gui_data: &GuiData) {
@@ -66,13 +66,13 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
                     if selected_results[i] && !selected_results[i - 1] {
                         selected_results.swap(i, i - 1);
 
-                        list_store_items(&list_store, &previous_iter, &current_iter);
+                        list_store.swap(&previous_iter, &current_iter);
                     }
                     if selected_results[i - 1] {
-                        selection.select_iter(&previous_iter);
+                        selection.select_iter(&current_iter);
                     }
                     if selected_results[i] {
-                        selection.select_iter(&current_iter);
+                        selection.select_iter(&previous_iter);
                     }
                     previous_iter = current_iter;
                     if !list_store.iter_next(&current_iter) {
@@ -156,13 +156,13 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
                     if selected_results[i] && !selected_results[i + 1] {
                         selected_results.swap(i, i + 1);
 
-                        list_store_items(&list_store, &previous_iter, &current_iter);
+                        list_store.swap(&previous_iter, &current_iter);
                     }
                     if selected_results[i + 1] {
-                        selection.select_iter(&previous_iter);
+                        selection.select_iter(&current_iter);
                     }
                     if selected_results[i] {
-                        selection.select_iter(&current_iter);
+                        selection.select_iter(&previous_iter);
                     }
                     previous_iter = current_iter;
                     if !list_store.iter_previous(&current_iter) {
@@ -173,38 +173,4 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileMoved, &label_files_folders);
     });
-}
-
-fn list_store_items(list_store: &gtk4::ListStore, previous_iter: &gtk4::TreeIter, current_iter: &gtk4::TreeIter) {
-    let previous_creation = list_store.get::<u64>(previous_iter, ColumnsResults::CreationDate as i32);
-    let previous_modification = list_store.get::<u64>(previous_iter, ColumnsResults::ModificationDate as i32);
-    let previous_size = list_store.get::<u64>(previous_iter, ColumnsResults::Size as i32);
-    let previous_path = list_store.get::<String>(previous_iter, ColumnsResults::Path as i32);
-    let previous_future_name = list_store.get::<String>(previous_iter, ColumnsResults::FutureName as i32);
-    let previous_type = list_store.get::<String>(previous_iter, ColumnsResults::Type as i32);
-    let previous_current_name = list_store.get::<String>(previous_iter, ColumnsResults::CurrentName as i32);
-
-    let current_creation = list_store.get::<u64>(current_iter, ColumnsResults::CreationDate as i32);
-    let current_modification = list_store.get::<u64>(current_iter, ColumnsResults::ModificationDate as i32);
-    let current_size = list_store.get::<u64>(current_iter, ColumnsResults::Size as i32);
-    let current_path = list_store.get::<String>(current_iter, ColumnsResults::Path as i32);
-    let current_future_name = list_store.get::<String>(current_iter, ColumnsResults::FutureName as i32);
-    let current_type = list_store.get::<String>(current_iter, ColumnsResults::Type as i32);
-    let current_current_name = list_store.get::<String>(current_iter, ColumnsResults::CurrentName as i32);
-
-    list_store.set_value(previous_iter, ColumnsResults::CreationDate as u32, &current_creation.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::ModificationDate as u32, &current_modification.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::Size as u32, &current_size.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::Path as u32, &current_path.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::FutureName as u32, &current_future_name.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::Type as u32, &current_type.to_value());
-    list_store.set_value(previous_iter, ColumnsResults::CurrentName as u32, &current_current_name.to_value());
-
-    list_store.set_value(current_iter, ColumnsResults::CreationDate as u32, &previous_creation.to_value());
-    list_store.set_value(current_iter, ColumnsResults::ModificationDate as u32, &previous_modification.to_value());
-    list_store.set_value(current_iter, ColumnsResults::Size as u32, &previous_size.to_value());
-    list_store.set_value(current_iter, ColumnsResults::Path as u32, &previous_path.to_value());
-    list_store.set_value(current_iter, ColumnsResults::FutureName as u32, &previous_future_name.to_value());
-    list_store.set_value(current_iter, ColumnsResults::Type as u32, &previous_type.to_value());
-    list_store.set_value(current_iter, ColumnsResults::CurrentName as u32, &previous_current_name.to_value());
 }

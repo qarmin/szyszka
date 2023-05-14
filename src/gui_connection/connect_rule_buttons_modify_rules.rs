@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows, ColumnsRules};
+use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows};
 use crate::rule::rules::{RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};
 
@@ -98,23 +98,9 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
                 // Swap rules
                 {
                     rules.rules.swap(current_index, current_index - 1);
-                    let previous_type = list_store.get::<String>(&previous_iter, ColumnsRules::RuleType as i32);
-                    let previous_usage = list_store.get::<String>(&previous_iter, ColumnsRules::UsageType as i32);
-                    let previous_description = list_store.get::<String>(&previous_iter, ColumnsRules::Description as i32);
-
-                    let next_type = list_store.get::<String>(&current_iter, ColumnsRules::RuleType as i32);
-                    let next_usage = list_store.get::<String>(&current_iter, ColumnsRules::UsageType as i32);
-                    let next_description = list_store.get::<String>(&current_iter, ColumnsRules::Description as i32);
-
-                    list_store.set_value(&current_iter, ColumnsRules::RuleType as u32, &previous_type.to_value());
-                    list_store.set_value(&current_iter, ColumnsRules::UsageType as u32, &previous_usage.to_value());
-                    list_store.set_value(&current_iter, ColumnsRules::Description as u32, &previous_description.to_value());
-
-                    list_store.set_value(&previous_iter, ColumnsRules::RuleType as u32, &next_type.to_value());
-                    list_store.set_value(&previous_iter, ColumnsRules::UsageType as u32, &next_usage.to_value());
-                    list_store.set_value(&previous_iter, ColumnsRules::Description as u32, &next_description.to_value());
+                    list_store.swap(&current_iter, &previous_iter);
                 }
-                selection.select_iter(&previous_iter);
+                selection.select_iter(&current_iter);
             } else {
                 return;
             }
@@ -173,23 +159,9 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
             // Swap rules
             {
                 rules.rules.swap(current_index, current_index - 1);
-                let previous_type = list_store.get::<String>(&previous_iter, ColumnsRules::RuleType as i32);
-                let previous_usage = list_store.get::<String>(&previous_iter, ColumnsRules::UsageType as i32);
-                let previous_description = list_store.get::<String>(&previous_iter, ColumnsRules::Description as i32);
-
-                let next_type = list_store.get::<String>(&current_iter, ColumnsRules::RuleType as i32);
-                let next_usage = list_store.get::<String>(&current_iter, ColumnsRules::UsageType as i32);
-                let next_description = list_store.get::<String>(&current_iter, ColumnsRules::Description as i32);
-
-                list_store.set_value(&current_iter, ColumnsRules::RuleType as u32, &previous_type.to_value());
-                list_store.set_value(&current_iter, ColumnsRules::UsageType as u32, &previous_usage.to_value());
-                list_store.set_value(&current_iter, ColumnsRules::Description as u32, &previous_description.to_value());
-
-                list_store.set_value(&previous_iter, ColumnsRules::RuleType as u32, &next_type.to_value());
-                list_store.set_value(&previous_iter, ColumnsRules::UsageType as u32, &next_usage.to_value());
-                list_store.set_value(&previous_iter, ColumnsRules::Description as u32, &next_description.to_value());
+                list_store.swap(&current_iter, &previous_iter);
             }
-            selection.select_iter(&current_iter);
+            selection.select_iter(&previous_iter);
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });

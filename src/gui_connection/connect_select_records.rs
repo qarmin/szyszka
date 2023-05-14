@@ -2,7 +2,7 @@ use gtk4::prelude::*;
 use gtk4::{Dialog, ResponseType, TreeIter, TreeSelection, TreeView};
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, ColumnsResults};
+use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, regex_check, to_dir_file_from_u8, to_dir_file_name, ColumnsResults, DirFileType};
 
 enum WildcardType {
     Path,
@@ -337,6 +337,7 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
         if response == ResponseType::Ok {
             let wildcard: String;
             let wildcard_type: WildcardType;
+            let is_dir = hs.check_button_is_dir.is_active();
 
             if hs.radio_path.is_active() {
                 wildcard_type = WildcardType::Path;
@@ -355,14 +356,13 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
                 wildcard = hs.entry_future_name_path.text().to_string();
             } else if hs.radio_is_dir.is_active() {
                 wildcard_type = WildcardType::IsDir;
-                wildcard = if hs.check_button_is_dir.is_active() { "Dir".to_string() } else { "File".to_string() };
+                wildcard = to_dir_file_name(is_dir).to_string();
             } else {
                 panic!("Non handled option in select wildcard");
             }
+            let wildcard = wildcard.trim();
 
             if !wildcard.is_empty() {
-                let wildcard = wildcard.trim();
-
                 #[cfg(target_family = "windows")]
                 let wildcard = wildcard.replace("/", "\\");
                 #[cfg(target_family = "windows")]
@@ -374,7 +374,7 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
                 let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
 
                 loop {
-                    let typ = tree_model.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+                    let typ = to_dir_file_from_u8(tree_model.get::<u8>(&tree_iter, ColumnsResults::Type as i32));
                     let path = tree_model.get::<String>(&tree_iter, ColumnsResults::Path as i32);
                     let current_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
                     let future_name = tree_model.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32);
@@ -405,16 +405,8 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
                             }
                         }
                         WildcardType::IsDir => {
-                            if wildcard == "Dir" {
-                                if typ == "Dir" {
-                                    choose_func(&selection, &tree_iter);
-                                }
-                            } else if wildcard == "File" {
-                                if typ == "File" {
-                                    choose_func(&selection, &tree_iter);
-                                }
-                            } else {
-                                panic!();
+                            if (is_dir && typ == DirFileType::Directory) || (!is_dir && typ == DirFileType::File) {
+                                choose_func(&selection, &tree_iter);
                             }
                         }
                     }

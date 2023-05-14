@@ -1,8 +1,12 @@
 use std::cell::RefCell;
+use std::cmp::max;
 use std::collections::BTreeSet;
-use std::path::Path;
+use std::fs;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
+use std::time::UNIX_EPOCH;
 
+use chrono::{Local, NaiveDateTime};
 use gtk4::prelude::*;
 use gtk4::*;
 
@@ -12,9 +16,9 @@ pub struct ResultEntries {
     pub files: BTreeSet<String>,
 }
 
-#[allow(dead_code)]
 pub enum ColumnsResults {
-    Type = 0,
+    TypeString = 0,
+    Type,
     CurrentName,
     FutureName,
     Path,
@@ -28,6 +32,36 @@ pub enum ColumnsRules {
     RuleType = 0,
     UsageType,
     Description,
+}
+
+#[derive(PartialEq, Eq)]
+pub enum DirFileType {
+    File = 0,
+    Directory,
+}
+
+pub fn to_dir_file_from_u8(dir_file_type: u8) -> DirFileType {
+    match dir_file_type {
+        0 => DirFileType::File,
+        1 => DirFileType::Directory,
+        _ => panic!("Unknown DirFileType"),
+    }
+}
+
+pub fn to_dir_file_type(is_dir: bool) -> DirFileType {
+    if is_dir {
+        DirFileType::Directory
+    } else {
+        DirFileType::File
+    }
+}
+
+pub fn to_dir_file_name(is_dir: bool) -> &'static str {
+    if is_dir {
+        "Dir"
+    } else {
+        "File"
+    }
 }
 
 #[cfg(not(target_family = "windows"))]
@@ -260,4 +294,101 @@ pub fn get_all_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
     }
 
     vector
+}
+
+pub struct ItemStruct {
+    pub name: String,
+    pub path: String,
+    pub size: u64,
+    pub modification_date: u64,
+    pub creation_date: u64,
+    pub date: String,
+    pub is_dir: bool,
+}
+
+pub fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries) -> Vec<ItemStruct> {
+    let mut collected_items = Vec::new();
+    let timezone_offset = Local::now().offset().local_minus_utc();
+
+    for file_entry in items_to_check {
+        let (path, name) = split_path(file_entry);
+        let Some(full_name) = file_entry.to_str() else {
+            println!("Failed to read name of {file_entry:?} (some characters may be missing in this name)");
+            continue;
+        };
+
+        if result_entries.files.contains(full_name) {
+            // Remove this println
+            // println!("Already is used file name {}", full_name);
+            continue; // There is already entry
+        }
+
+        //// Read Metadata
+        let file_metadata = match fs::metadata(file_entry) {
+            Ok(t) => t,
+            Err(err) => {
+                eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
+                continue;
+            }
+        };
+        let size = file_metadata.len();
+        let modification_date = match file_metadata.modified() {
+            Ok(t) => {
+                if let Ok(d) = t.duration_since(UNIX_EPOCH) {
+                    max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64
+                } else {
+                    eprintln!("File {} seems to be modified before Unix Epoch.", file_entry.display());
+                    0
+                }
+            }
+            Err(err) => {
+                eprintln!("Unable to get modification date from file {}, reason - \"{}\"", file_entry.display(), err);
+                0
+            }
+        };
+        let creation_date = match file_metadata.created() {
+            Ok(t) => {
+                if let Ok(d) = t.duration_since(UNIX_EPOCH) {
+                    max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64
+                } else {
+                    eprintln!("File {} seems to be created before Unix Epoch.", file_entry.display());
+                    0
+                }
+            }
+            Err(err) => {
+                eprintln!("Unable to get creation date from file {}, reason - \"{}\"", file_entry.display(), err);
+                0
+            }
+        };
+
+        collected_items.push(ItemStruct {
+            name: name.to_string(),
+            path: path.to_string(),
+            size,
+            modification_date,
+            creation_date,
+            date: NaiveDateTime::from_timestamp_opt(creation_date as i64, 0).unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
+            is_dir: file_metadata.is_dir(),
+        });
+
+        // Used to check if already in treeview is this values
+        result_entries.files.insert(full_name.to_string());
+    }
+
+    collected_items
+}
+
+pub fn get_selected_folders_files_in_dialog(dialog: &FileChooserDialog) -> Vec<PathBuf> {
+    let mut files: Vec<PathBuf> = Vec::new();
+    let g_files = dialog.files();
+    for index in 0..g_files.n_items() {
+        let file = &g_files.item(index);
+        if let Some(file) = file {
+            let ss = file.clone().downcast::<gio::File>().unwrap();
+            if let Some(path_buf) = ss.path() {
+                files.push(path_buf);
+            }
+        }
+    }
+    files
 }

@@ -32,7 +32,7 @@ fn setup_languages(gui_data: &GuiData) {
 fn create_tree_view_in_scrolled_window(gui_data: &GuiData) {
     let scrolled_window_results: ScrolledWindow = gui_data.results.scrolled_window_results.clone();
 
-    let col_types: [Type; 7] = [Type::STRING, Type::STRING, Type::STRING, Type::STRING, Type::U64, Type::U64, Type::U64];
+    let col_types: [Type; 8] = [Type::STRING, Type::U8, Type::STRING, Type::STRING, Type::STRING, Type::U64, Type::U64, Type::U64];
 
     let list_store: ListStore = ListStore::new(&col_types);
 
@@ -60,6 +60,7 @@ fn create_tree_view_in_scrolled_window(gui_data: &GuiData) {
     scrolled_window_results.set_child(Some(&tree_view));
     scrolled_window_results.show();
 }
+
 fn create_tree_view_in_rules_window(gui_data: &GuiData) {
     let scrolled_window_rules: ScrolledWindow = gui_data.rules_bottom_panel.scrolled_window_rules.clone();
 

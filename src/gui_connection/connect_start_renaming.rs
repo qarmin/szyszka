@@ -8,7 +8,7 @@ use gtk4::prelude::*;
 use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, ColumnsResults, ResultEntries, CHARACTER};
+use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, to_dir_file_from_u8, ColumnsResults, DirFileType, ResultEntries, CHARACTER};
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
     let button_start_rename = gui_data.upper_buttons.button_start_rename.clone();
@@ -103,16 +103,17 @@ fn connect_renaming_response(chooser: &Dialog, shared_result_entries: &Rc<RefCel
                 let path = list_store.get::<String>(&tree_iter, ColumnsResults::Path as i32);
                 let old_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::CurrentName as i32));
                 let new_name = format!("{}{}{}", path, CHARACTER, list_store.get::<String>(&tree_iter, ColumnsResults::FutureName as i32));
-                let typ = list_store.get::<String>(&tree_iter, ColumnsResults::Type as i32);
+                let typ = to_dir_file_from_u8(list_store.get::<u8>(&tree_iter, ColumnsResults::Type as i32));
 
-                if typ == "Dir" {
-                    let how_much = old_name.matches(CHARACTER).count();
-                    folder_renames.entry(how_much).or_insert_with(Vec::new);
-                    folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
-                } else if typ == "File" {
-                    file_renames.push((old_name, new_name));
-                } else {
-                    panic!();
+                match typ {
+                    DirFileType::Directory => {
+                        let how_much = old_name.matches(CHARACTER).count();
+                        folder_renames.entry(how_much).or_insert_with(Vec::new);
+                        folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
+                    }
+                    DirFileType::File => {
+                        file_renames.push((old_name, new_name));
+                    }
                 }
 
                 if !list_store.iter_next(&tree_iter) {
