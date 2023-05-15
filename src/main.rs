@@ -32,9 +32,12 @@ use gui_connection::connect_select_records::*;
 use gui_connection::connect_start_renaming::*;
 
 use crate::example_fields::connect_update_examples;
+use crate::gui_connection::connect_settings::connect_settings_buttons;
+use crate::gui_connection::connect_window_rules_open::connect_window_rules_open;
 use crate::gui_data_things::gui_data::GuiData;
 use crate::initialize_gui::*;
 
+mod config;
 mod create_tree_view;
 mod example_fields;
 mod gui_connection;
@@ -72,6 +75,8 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
 
     // Connect buttons OK and Close in select dialog
     connect_rule_window_close(&gui_data);
+    connect_window_rules_open(&gui_data);
+    connect_settings_buttons(&gui_data);
 
     // Connect buttons about rules at the bottom
     connect_rule_add(&gui_data);

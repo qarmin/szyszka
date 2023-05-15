@@ -33,7 +33,6 @@ pub struct GuiData {
 
     pub rules: Rc<RefCell<Rules>>,
 
-    //
     pub shared_result_entries: Rc<RefCell<ResultEntries>>,
 }
 

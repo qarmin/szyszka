@@ -71,7 +71,6 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkButton" id="button_save_custom_rule">
                             <property name="halign">center</property>
                             <property name="label">Save custom rule</property>
-                            <property name="margin-bottom">5</property>
                           </object>
                         </child>
                       </object>

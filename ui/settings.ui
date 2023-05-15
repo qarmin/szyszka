@@ -6,16 +6,37 @@
   <object class="GtkDialog" id="window_settings">
     <child>
       <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkLabel" id="label_settings_general_language">
-            <property name="label" translatable="yes">Language</property>
-            <property name="margin-end">10</property>
-            <property name="margin-start">5</property>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkLabel" id="label_settings_general_language">
+                <property name="label" translatable="yes">Language</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">5</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="combo_box_settings_language">
+                <property name="hexpand">1</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="combo_box_settings_language">
-            <property name="hexpand">1</property>
+          <object class="GtkButton" id="button_open_config_dir">
+            <property name="label">Open config dir</property>
+            <property name="margin-top">10</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_open_cache_custom_texts">
+            <property name="label">Open custom cache file</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_open_rules_settings">
+            <property name="label">Open rules settings file</property>
           </object>
         </child>
       </object>
