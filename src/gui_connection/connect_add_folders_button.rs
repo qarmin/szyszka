@@ -7,7 +7,7 @@ use crate::gui_data_things::gui_data::GuiData;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType};
-use walkdir::WalkDir;
+use jwalk::WalkDir;
 
 use crate::help_function::{collect_files, get_all_boxes_from_widget, get_list_store_from_tree_view, get_selected_folders_files_in_dialog, split_path, to_dir_file_name, to_dir_file_type, ColumnsResults};
 use crate::update_records::{update_records, UpdateMode};
@@ -93,7 +93,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                                 for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
                                     if let Ok(metadata) = entry.metadata() {
                                         if metadata.is_file() {
-                                            new_entries.push(entry.path().to_path_buf());
+                                            new_entries.push(entry.path());
                                         }
                                     }
                                 }
@@ -101,7 +101,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                         } else {
                             for folder in folders_to_check {
                                 for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
-                                    new_entries.push(entry.path().to_path_buf());
+                                    new_entries.push(entry.path());
                                 }
                             }
                         }

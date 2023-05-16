@@ -16,8 +16,10 @@ glib = "0.17"
 
 directories-next = "2.0.0"
 
+rayon = "1.7.0"
+
 # For checking path
-walkdir = "2.3"
+jwalk = "0.8.1"
 
 humansize = "2.1"
 chrono = "0.4.24"
