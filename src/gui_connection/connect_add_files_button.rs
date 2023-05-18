@@ -1,12 +1,11 @@
-use std::cmp::Ordering;
-
 use std::path::PathBuf;
 
+use crate::add_files_folders::add_files_to_check;
 use gtk4::prelude::*;
 use gtk4::ResponseType;
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{collect_files, get_list_store_from_tree_view, get_selected_folders_files_in_dialog, split_path, to_dir_file_name, to_dir_file_type, ColumnsResults};
+use crate::help_function::{get_list_store_from_tree_view, get_selected_folders_files_in_dialog};
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_add_files_button(gui_data: &GuiData) {
@@ -33,39 +32,15 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
         chooser.connect_response(move |dialog, response_type| {
             if response_type == ResponseType::Ok {
-                let mut files: Vec<PathBuf> = get_selected_folders_files_in_dialog(dialog);
+                let files: Vec<PathBuf> = get_selected_folders_files_in_dialog(dialog);
 
                 let mut result_entries = shared_result_entries.borrow_mut();
 
                 let list_store = get_list_store_from_tree_view(&tree_view_results);
 
-                files.sort_by(|a, b| {
-                    let (path_a, name_a) = split_path(a);
-                    let (path_b, name_b) = split_path(b);
-                    let res = path_a.cmp(&path_b);
-                    if res == Ordering::Equal {
-                        return name_a.cmp(&name_b);
-                    }
-                    res
-                });
-
-                let results = collect_files(&files, &mut result_entries);
-
-                for result in results {
-                    let values: [(u32, &dyn ToValue); 8] = [
-                        (ColumnsResults::Type as u32, &(to_dir_file_type(result.is_dir) as u8)),
-                        (ColumnsResults::TypeString as u32, &to_dir_file_name(result.is_dir)),
-                        (ColumnsResults::CurrentName as u32, &result.name),
-                        (ColumnsResults::FutureName as u32, &result.name),
-                        (ColumnsResults::Path as u32, &result.path),
-                        (ColumnsResults::Size as u32, &result.size),
-                        (ColumnsResults::ModificationDate as u32, &result.modification_date),
-                        (ColumnsResults::CreationDate as u32, &result.creation_date),
-                    ];
-                    list_store.set(&list_store.append(), &values);
-                }
+                add_files_to_check(files, &list_store, &mut result_entries);
+                update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
             }
-            update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
 
             dialog.close();
         });

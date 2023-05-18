@@ -19,7 +19,9 @@ directories-next = "2.0.0"
 rayon = "1.7.0"
 
 # For checking path
+# Looks that jwalk find different files than walkdir
 jwalk = "0.8.1"
+#walkdir = "2.3.3"
 
 humansize = "2.1"
 chrono = "0.4.24"

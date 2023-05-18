@@ -88,7 +88,7 @@ impl Rules {
     }
 }
 
-#[derive(Clone)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum RuleType {
     Custom = 0,
     CaseSize,
@@ -101,7 +101,7 @@ pub enum RuleType {
 }
 
 #[allow(dead_code)]
-#[derive(Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum RulePlace {
     None = 0,
     Extension,

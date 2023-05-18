@@ -37,6 +37,7 @@ use crate::gui_connection::connect_window_rules_open::connect_window_rules_open;
 use crate::gui_data_things::gui_data::GuiData;
 use crate::initialize_gui::*;
 
+mod add_files_folders;
 mod config;
 mod create_tree_view;
 mod example_fields;

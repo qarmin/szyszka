@@ -1,15 +1,9 @@
-use std::cell::RefCell;
-use std::cmp::max;
-use std::collections::BTreeSet;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::rc::Rc;
-use std::time::UNIX_EPOCH;
-
-use chrono::{Local, NaiveDateTime};
 use gtk4::prelude::*;
 use gtk4::*;
-use rayon::prelude::*;
+use std::cell::RefCell;
+use std::collections::BTreeSet;
+use std::path::{Path, PathBuf};
+use std::rc::Rc;
 
 use crate::rule::rules::*;
 
@@ -17,6 +11,7 @@ pub struct ResultEntries {
     pub files: BTreeSet<String>,
 }
 
+#[derive(Copy, Clone)]
 pub enum ColumnsResults {
     TypeString = 0,
     Type,
@@ -28,6 +23,7 @@ pub enum ColumnsResults {
     CreationDate,
 }
 
+#[derive(Copy, Clone)]
 pub enum ColumnsRules {
     //RuleNumber = 0,
     RuleType = 0,
@@ -35,7 +31,7 @@ pub enum ColumnsRules {
     Description,
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub enum DirFileType {
     File = 0,
     Directory,
@@ -295,90 +291,6 @@ pub fn get_all_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
     }
 
     vector
-}
-
-pub struct ItemStruct {
-    pub name: String,
-    pub path: String,
-    pub size: u64,
-    pub modification_date: u64,
-    pub creation_date: u64,
-    pub date: String,
-    pub is_dir: bool,
-}
-
-pub fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries) -> Vec<ItemStruct> {
-    let timezone_offset = Local::now().offset().local_minus_utc();
-
-    let collected_items: Vec<_> = items_to_check
-        .into_par_iter()
-        .map(|file_entry| {
-            let (path, name) = split_path(file_entry);
-            let Some(full_name) = file_entry.to_str() else {
-                println!("Failed to read name of {file_entry:?} (some characters may be missing in this name)");
-                return None;
-            };
-
-            if result_entries.files.contains(full_name) {
-                // Remove this println
-                // println!("Already is used file name {}", full_name);
-                return None; // There is already entry
-            }
-
-            //// Read Metadata
-            let file_metadata = match fs::metadata(file_entry) {
-                Ok(t) => t,
-                Err(err) => {
-                    eprintln!("Failed to load metadata of file {}, reason - \"{}\"", file_entry.display(), err);
-                    return None;
-                }
-            };
-            let size = file_metadata.len();
-            let modification_date = match file_metadata.modified() {
-                Ok(t) => {
-                    if let Ok(d) = t.duration_since(UNIX_EPOCH) {
-                        max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64
-                    } else {
-                        eprintln!("File {} seems to be modified before Unix Epoch.", file_entry.display());
-                        0
-                    }
-                }
-                Err(err) => {
-                    eprintln!("Unable to get modification date from file {}, reason - \"{}\"", file_entry.display(), err);
-                    0
-                }
-            };
-            let creation_date = match file_metadata.created() {
-                Ok(t) => {
-                    if let Ok(d) = t.duration_since(UNIX_EPOCH) {
-                        max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64
-                    } else {
-                        eprintln!("File {} seems to be created before Unix Epoch.", file_entry.display());
-                        0
-                    }
-                }
-                Err(err) => {
-                    eprintln!("Unable to get creation date from file {}, reason - \"{}\"", file_entry.display(), err);
-                    0
-                }
-            };
-
-            Some(ItemStruct {
-                name,
-                path,
-                size,
-                modification_date,
-                creation_date,
-                date: NaiveDateTime::from_timestamp_opt(creation_date as i64, 0).unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
-                is_dir: file_metadata.is_dir(),
-            })
-        })
-        .filter_map(|t| t)
-        .collect();
-
-    result_entries.files.extend(collected_items.iter().map(|t| t.name.clone()));
-
-    collected_items
 }
 
 pub fn get_selected_folders_files_in_dialog(dialog: &FileChooserDialog) -> Vec<PathBuf> {

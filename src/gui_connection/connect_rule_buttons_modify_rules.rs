@@ -246,8 +246,8 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
 
         let rule = rules.rules[item_number].clone();
         let rule_data = rule.rule_data.clone();
-        let rule_place = rule.rule_place.clone();
-        let rule_type = rule.rule_type.clone();
+        let rule_place = rule.rule_place;
+        let rule_type = rule.rule_type;
 
         notebook_choose_rule.set_current_page(Some(rule.rule_type as u32));
         match rule_type {

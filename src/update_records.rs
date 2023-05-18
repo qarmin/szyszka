@@ -7,13 +7,13 @@ use gtk4::prelude::*;
 use gtk4::{Label, TreeView};
 
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
-use crate::rule::rules::Rules;
+use crate::rule::rules::{RuleType, Rules};
 
 // Do not update records automatically when there is a big number of entries each time due possible freezes, when rule_number * files_number > RULES_UPDATE_LIMIT, show info about needing to update results
 const RULES_UPDATE_LIMIT: usize = 20000;
 
 #[allow(dead_code)]
-#[derive(Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub enum UpdateMode {
     FileAdded,
     FileRemoved,
@@ -42,9 +42,15 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
     label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
 
     match update_mode {
-        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::FileRemoved | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords | UpdateMode::FileMoved => {
+        UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords => {
             update_records_general(&list_store, rules);
         } // TODO Add Optimized version, that not calculate rules not changed files, rules etc.(e.g. when adding files, old files not needs to be calculated)
+        UpdateMode::FileRemoved | UpdateMode::FileMoved => {
+            // When using custom rules that are not related to its index in list store, update all records
+            if rules.rules.iter().any(|e| (e.rule_type == RuleType::Custom) && (e.rule_data.custom_text.contains("(K") || e.rule_data.custom_text.contains("(N"))) {
+                update_records_general(&list_store, rules);
+            }
+        }
     }
 }
 

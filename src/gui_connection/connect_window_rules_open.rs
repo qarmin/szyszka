@@ -1,10 +1,8 @@
 use gtk4::{Entry, MenuButton, Orientation};
 
-
-
 use gtk4::prelude::*;
 
-use crate::config::{load_custom_rules};
+use crate::config::load_custom_rules;
 use crate::gui_data_things::gui_data::GuiData;
 
 pub fn connect_window_rules_open(gui_data: &GuiData) {

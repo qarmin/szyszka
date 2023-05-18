@@ -1,15 +1,13 @@
-use std::cmp::Ordering;
-
 use std::path::PathBuf;
 
 use crate::gui_data_things::gui_data::GuiData;
 
+use crate::add_files_folders::add_folders_to_check;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType};
-use jwalk::WalkDir;
 
-use crate::help_function::{collect_files, get_all_boxes_from_widget, get_list_store_from_tree_view, get_selected_folders_files_in_dialog, split_path, to_dir_file_name, to_dir_file_type, ColumnsResults};
+use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, get_selected_folders_files_in_dialog};
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_add_folders_button(gui_data: &GuiData) {
@@ -80,63 +78,12 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
                     let folders_to_check: Vec<PathBuf> = get_selected_folders_files_in_dialog(chooser);
 
-                    let mut folders;
-
                     let ignore_folders = switch_ignore_folders.is_active();
                     let check_folders_inside = switch_scan_inside.is_active();
 
-                    let mut new_entries = Vec::new();
-
-                    if check_folders_inside {
-                        if ignore_folders {
-                            for folder in folders_to_check {
-                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
-                                    if let Ok(metadata) = entry.metadata() {
-                                        if metadata.is_file() {
-                                            new_entries.push(entry.path());
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            for folder in folders_to_check {
-                                for entry in WalkDir::new(folder).max_depth(9999).into_iter().filter_map(Result::ok) {
-                                    new_entries.push(entry.path());
-                                }
-                            }
-                        }
-                        folders = new_entries;
-                    } else {
-                        folders = folders_to_check;
-                    }
-
-                    folders.sort_by(|a, b| {
-                        let (path_a, name_a) = split_path(a);
-                        let (path_b, name_b) = split_path(b);
-                        let res = path_a.cmp(&path_b);
-                        if res == Ordering::Equal {
-                            return name_a.cmp(&name_b);
-                        }
-                        res
-                    });
-
-                    let results = collect_files(&folders, &mut result_entries);
-
-                    for result in results {
-                        let values: [(u32, &dyn ToValue); 8] = [
-                            (ColumnsResults::Type as u32, &(to_dir_file_type(result.is_dir) as u8)),
-                            (ColumnsResults::TypeString as u32, &to_dir_file_name(result.is_dir)),
-                            (ColumnsResults::CurrentName as u32, &result.name),
-                            (ColumnsResults::FutureName as u32, &result.name),
-                            (ColumnsResults::Path as u32, &result.path),
-                            (ColumnsResults::Size as u32, &result.size),
-                            (ColumnsResults::ModificationDate as u32, &result.modification_date),
-                            (ColumnsResults::CreationDate as u32, &result.creation_date),
-                        ];
-                        list_store.set(&list_store.append(), &values);
-                    }
+                    add_folders_to_check(folders_to_check, &list_store, &mut result_entries, check_folders_inside, ignore_folders);
+                    update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
                 }
-                update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
 
                 chooser.close();
             });

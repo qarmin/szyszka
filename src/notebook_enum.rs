@@ -2,7 +2,7 @@
 
 pub(crate) const EXAMPLE_NAME: &str = "Gżegżółka.Txt";
 
-#[derive(Eq, PartialEq, Hash, Clone, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum NotebookEnum {
     Custom = 0,
     CaseSize,

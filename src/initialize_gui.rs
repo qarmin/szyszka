@@ -16,6 +16,7 @@ pub fn initialize_gui(gui_data: &GuiData) {
     set_example_name(gui_data);
 }
 
+#[derive(Copy, Clone)]
 pub enum OpenMode {
     OnlyPath,
     PathAndName,
