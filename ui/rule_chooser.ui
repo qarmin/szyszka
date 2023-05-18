@@ -47,11 +47,13 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <property name="buffer">textbuffer1</property>
                             <property name="focusable">1</property>
                             <property name="justification">center</property>
+                            <property name="margin-top">10</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry_custom_text_to_change">
                             <property name="focusable">1</property>
+                            <property name="margin-top">5</property>
                             <property name="max-length">150</property>
                             <property name="text" translatable="yes">$(CURR)</property>
                           </object>
@@ -71,6 +73,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkButton" id="button_save_custom_rule">
                             <property name="halign">center</property>
                             <property name="label">Save custom rule</property>
+                            <property name="margin-bottom">5</property>
                           </object>
                         </child>
                       </object>
@@ -97,6 +100,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Tool Type:</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -132,6 +136,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             </child>
                             <child>
                               <object class="GtkBox">
+                                <property name="margin-top">5</property>
                                 <child>
                                   <object class="GtkCheckButton" id="check_button_letters_usage_name">
                                     <property name="active">1</property>
@@ -185,6 +190,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -242,10 +249,13 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Place to put number:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkBox">
+                                <property name="margin-end">5</property>
                                 <child>
                                   <object class="GtkCheckButton" id="check_button_add_number_before_name">
                                     <property name="active">1</property>
@@ -273,6 +283,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Number Settings:</property>
+                                <property name="margin-end">5</property>
                               </object>
                             </child>
                             <child>
@@ -369,6 +380,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -400,6 +413,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Text to add:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
                               </object>
                             </child>
                             <child>
@@ -434,6 +449,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -471,6 +488,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="label" translatable="yes">Case Sensitivity</property>
+                                    <property name="margin-bottom">5</property>
+                                    <property name="margin-top">5</property>
                                   </object>
                                 </child>
                                 <child>
@@ -577,6 +596,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -624,6 +644,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Case Sensitivity</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
                               </object>
                             </child>
                             <child>
@@ -655,6 +677,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                             <child>
                               <object class="GtkLabel">
                                 <property name="label" translatable="yes">Trim text</property>
+                                <property name="margin-bottom">5</property>
                               </object>
                             </child>
                             <child>
@@ -682,6 +705,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkLabel">
                             <property name="label" translatable="yes">Normalize Name</property>
                             <property name="margin-bottom">10</property>
+                            <property name="margin-top">10</property>
                           </object>
                         </child>
                         <child>
@@ -788,6 +812,7 @@ Partial - works exacly same as option above, but allows
                     <child>
                       <object class="GtkButton" id="button_example_reset">
                         <property name="focusable">1</property>
+                        <property name="margin-bottom">1</property>
                         <property name="margin-start">5</property>
                         <property name="receives-default">1</property>
                         <child>
