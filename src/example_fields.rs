@@ -1,5 +1,6 @@
 use crate::gui_connection::common::connect_examples_entry_name;
 use gtk4::prelude::*;
+use regex::Regex;
 
 use crate::gui_data_things::class_dialog_rules::GuiDialogRules;
 use crate::gui_data_things::gui_data::GuiData;
@@ -34,9 +35,18 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
         return;
     };
 
+    let regex = if single_rule.rule_data.use_regex {
+        match Regex::new(&single_rule.rule_data.text_to_replace) {
+            Ok(r) => Some(r),
+            Err(_) => None,
+        }
+    } else {
+        None
+    };
+
     let mut all_rules = Rules::new();
     all_rules.rules.push(single_rule);
 
-    let text = all_rules.apply_all_rules_to_item(text_to_change, 1, 1, (0, 0, 0, "Parent folder"));
+    let text = all_rules.apply_all_rules_to_item(text_to_change, 1, 1, (0, 0, 0, "Parent folder"), &[regex]);
     label_example_after.set_text(text.as_str());
 }

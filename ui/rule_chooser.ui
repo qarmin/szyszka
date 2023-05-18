@@ -516,6 +516,15 @@ $(N)/$(K) - prints numbers(arguments are optional)
                               </object>
                             </child>
                             <child>
+                              <object class="GtkCheckButton" id="check_button_replace_regex">
+                                <property name="active">0</property>
+                                <property name="focusable">1</property>
+                                <property name="halign">center</property>
+                                <property name="hexpand">1</property>
+                                <property name="label">Use regex</property>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkGrid">
                                 <property name="column-homogeneous">1</property>
                                 <child>
@@ -539,7 +548,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="entry_replace_text_to_remove">
+                                  <object class="GtkEntry" id="entry_replace_text_to_find">
                                     <property name="focusable">1</property>
                                     <property name="max-length">100</property>
                                     <property name="text" translatable="yes">a</property>

@@ -53,10 +53,13 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
     let check_button_replace_both = window_rules.replace.check_button_replace_both.clone();
     let check_button_replace_case_insensitive = window_rules.replace.check_button_replace_case_insensitive.clone();
     let check_button_replace_case_sensitive = window_rules.replace.check_button_replace_case_sensitive.clone();
-    let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
+    let check_button_replace_regex = window_rules.replace.check_button_replace_regex.clone();
+    let entry_replace_text_to_find = window_rules.replace.entry_replace_text_to_find.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change.clone();
 
-    if check_button_replace_both.is_active() {
+    if check_button_replace_regex.is_active() {
+        rule_place = RulePlace::None;
+    } else if check_button_replace_both.is_active() {
         rule_place = RulePlace::ExtensionAndName;
     } else if check_button_replace_name.is_active() {
         rule_place = RulePlace::Name;
@@ -74,9 +77,12 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
         return None;
     }
 
-    rule_data.text_to_remove = entry_replace_text_to_remove.text().to_string();
+    rule_data.use_regex = check_button_replace_regex.is_active();
+
+    rule_data.text_to_find = entry_replace_text_to_find.text().to_string();
     rule_data.text_to_replace = entry_replace_text_to_change.text().to_string();
-    rule_description = format!("Replacing \"{}\" with \"{}\"", rule_data.text_to_remove, rule_data.text_to_replace);
+    let additional_regex_text = if check_button_replace_regex.is_active() { " regex" } else { "" };
+    rule_description = format!("Replacing{additional_regex_text} \"{}\" with \"{}\"", rule_data.text_to_find, rule_data.text_to_replace);
 
     Some((rule_type, rule_place, rule_description))
 }

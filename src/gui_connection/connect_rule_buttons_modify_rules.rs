@@ -204,7 +204,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
     let check_button_replace_both = window_rules.replace.check_button_replace_both.clone();
     let check_button_replace_case_insensitive = window_rules.replace.check_button_replace_case_insensitive.clone();
     let check_button_replace_case_sensitive = window_rules.replace.check_button_replace_case_sensitive.clone();
-    let entry_replace_text_to_remove = window_rules.replace.entry_replace_text_to_remove.clone();
+    let entry_replace_text_to_find = window_rules.replace.entry_replace_text_to_find.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change;
 
     let check_button_add_number_before_name = window_rules.add_number.check_button_add_number_before_name.clone();
@@ -321,7 +321,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
                     check_button_replace_case_insensitive.set_active(true);
                 }
 
-                entry_replace_text_to_remove.set_text(rule_data.text_to_remove.as_str());
+                entry_replace_text_to_find.set_text(rule_data.text_to_find.as_str());
                 entry_replace_text_to_change.set_text(rule_data.text_to_replace.as_str());
             }
             RuleType::AddNumber => {

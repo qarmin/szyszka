@@ -9,7 +9,9 @@ pub struct GuiReplace {
     pub check_button_replace_case_insensitive: gtk4::CheckButton,
     pub check_button_replace_case_sensitive: gtk4::CheckButton,
 
-    pub entry_replace_text_to_remove: gtk4::Entry,
+    pub check_button_replace_regex: gtk4::CheckButton,
+
+    pub entry_replace_text_to_find: gtk4::Entry,
     pub entry_replace_text_to_change: gtk4::Entry,
 }
 
@@ -22,8 +24,10 @@ impl GuiReplace {
         check_button_replace_extension.set_group(Some(&check_button_replace_name));
         check_button_replace_both.set_group(Some(&check_button_replace_name));
 
-        let entry_replace_text_to_remove: gtk4::Entry = builder.object("entry_replace_text_to_remove").unwrap();
+        let entry_replace_text_to_find: gtk4::Entry = builder.object("entry_replace_text_to_find").unwrap();
         let entry_replace_text_to_change: gtk4::Entry = builder.object("entry_replace_text_to_change").unwrap();
+
+        let check_button_replace_regex: gtk4::CheckButton = builder.object("check_button_replace_regex").unwrap();
 
         let check_button_replace_case_sensitive: gtk4::CheckButton = builder.object("check_button_replace_case_sensitive").unwrap();
         let check_button_replace_case_insensitive: gtk4::CheckButton = builder.object("check_button_replace_case_insensitive").unwrap();
@@ -36,7 +40,8 @@ impl GuiReplace {
             check_button_replace_both,
             check_button_replace_case_insensitive,
             check_button_replace_case_sensitive,
-            entry_replace_text_to_remove,
+            check_button_replace_regex,
+            entry_replace_text_to_find,
             entry_replace_text_to_change,
         }
     }

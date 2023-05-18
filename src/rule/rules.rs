@@ -6,6 +6,7 @@ use crate::rule::rule_normalize::rule_normalize;
 use crate::rule::rule_purge::rule_purge;
 use crate::rule::rule_replace::rule_replace;
 use crate::rule::rule_trim::rule_trim;
+use regex::Regex;
 
 #[derive(Clone)]
 pub struct SingleRule {
@@ -55,8 +56,9 @@ impl Rules {
     pub fn remove_rule(&mut self, index: usize) {
         self.rules.remove(index);
     }
-    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64, current_index_in_folder: u32, file_data: (u64, u64, u64, &str)) -> String {
-        for rule in &self.rules {
+    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64, current_index_in_folder: u32, file_data: (u64, u64, u64, &str), compiled_regexes: &[Option<Regex>]) -> String {
+        debug_assert_eq!(self.rules.len(), compiled_regexes.len());
+        for (rule, regex) in (self.rules.iter()).zip(compiled_regexes.iter()) {
             match rule.rule_type {
                 RuleType::CaseSize => {
                     item = rule_change_size_letters(item.as_str(), rule);
@@ -74,7 +76,7 @@ impl Rules {
                     item = rule_custom(item.as_str(), rule, current_index, current_index_in_folder as u64, Some(file_data));
                 }
                 RuleType::Replace => {
-                    item = rule_replace(item.as_str(), rule);
+                    item = rule_replace(item.as_str(), rule, regex);
                 }
                 RuleType::AddNumber => {
                     item = rule_add_number(item.as_str(), rule, current_index);
@@ -161,8 +163,9 @@ pub struct RuleData {
     pub number_step: i64,
     pub fill_with_zeros: i64,
 
-    pub text_to_remove: String,
+    pub text_to_find: String,
     pub text_to_replace: String,
+    pub use_regex: bool,
 
     pub full_normalize: bool,
 }
@@ -179,8 +182,9 @@ impl RuleData {
             number_start: 0,
             number_step: 0,
             fill_with_zeros: 0,
-            text_to_remove: String::new(),
+            text_to_find: String::new(),
             text_to_replace: String::new(),
+            use_regex: false,
             full_normalize: false,
         }
     }

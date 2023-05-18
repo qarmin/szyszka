@@ -5,6 +5,7 @@ use std::rc::Rc;
 use glib::Value;
 use gtk4::prelude::*;
 use gtk4::{Label, TreeView};
+use regex::Regex;
 
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
 use crate::rule::rules::{RuleType, Rules};
@@ -41,20 +42,35 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
     rules.updated = true;
     label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
 
+    let compiled_regexes: Vec<Option<Regex>> = rules
+        .rules
+        .iter()
+        .map(|e| {
+            if e.rule_data.use_regex {
+                match Regex::new(&e.rule_data.custom_text) {
+                    Ok(regex) => Some(regex),
+                    Err(_) => None,
+                }
+            } else {
+                None
+            }
+        })
+        .collect(); // TODO maybe there is a way to compile regexes only once, when adding them?
+
     match update_mode {
         UpdateMode::FileAdded | UpdateMode::RuleAdded | UpdateMode::RuleRemoved | UpdateMode::RuleMoved | UpdateMode::UpdateRecords => {
-            update_records_general(&list_store, rules);
+            update_records_general(&list_store, rules, &compiled_regexes);
         } // TODO Add Optimized version, that not calculate rules not changed files, rules etc.(e.g. when adding files, old files not needs to be calculated)
         UpdateMode::FileRemoved | UpdateMode::FileMoved => {
             // When using custom rules that are not related to its index in list store, update all records
             if rules.rules.iter().any(|e| (e.rule_type == RuleType::Custom) && (e.rule_data.custom_text.contains("(K") || e.rule_data.custom_text.contains("(N"))) {
-                update_records_general(&list_store, rules);
+                update_records_general(&list_store, rules, &compiled_regexes);
             }
         }
     }
 }
 
-fn update_records_general(list_store: &gtk4::ListStore, rules: &mut Rules) {
+fn update_records_general(list_store: &gtk4::ListStore, rules: &mut Rules, compiled_regexes: &[Option<Regex>]) {
     if let Some(iter) = list_store.iter_first() {
         let mut current_index = 0;
         let mut folder_name_counter: HashMap<String, u32> = Default::default();
@@ -65,7 +81,7 @@ fn update_records_general(list_store: &gtk4::ListStore, rules: &mut Rules) {
             let file_size: u64 = list_store.get::<u64>(&iter, ColumnsResults::Size as i32);
             let path: String = list_store.get::<String>(&iter, ColumnsResults::Path as i32);
             let curr_folder_file_index = folder_name_counter.entry(path.clone()).or_insert(0);
-            let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index + 1, *curr_folder_file_index + 1, (modification_date, creation_date, file_size, &path));
+            let changed_value = rules.apply_all_rules_to_item(value_to_change, current_index + 1, *curr_folder_file_index + 1, (modification_date, creation_date, file_size, &path), compiled_regexes);
             *curr_folder_file_index += 1;
             list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
             if !list_store.iter_next(&iter) {

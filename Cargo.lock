@@ -1416,6 +1416,7 @@ dependencies = [
  "once_cell",
  "open",
  "rayon",
+ "regex",
  "rust-embed",
  "slugmin",
 ]
