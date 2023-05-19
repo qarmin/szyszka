@@ -3,18 +3,6 @@
 <interface>
   <!-- interface-name rule_chooser.ui -->
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">$(NAME) - prints file name
-$(EXT) - prints extension
-$(MODIF) - prints file modification date
-$(CREAT) - prints file creation
-$(CURR) - prints current file name with extension
-$(PARENT) - prints parent folder name
-$(N)/$(K) - prints numbers(arguments are optional)
-	$(N:3:4:5) prints numbers from 3, with step 4
- and fills them with zeros to 5 positions.
-	K instead only position in list, also uses position item in folder.</property>
-  </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="child">
       <object class="GtkBox">
@@ -39,15 +27,23 @@ $(N)/$(K) - prints numbers(arguments are optional)
                       <object class="GtkBox">
                         <property name="margin-end">5</property>
                         <property name="margin-start">4</property>
+                        <property name="margin-top">10</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkTextView">
-                            <property name="buffer">textbuffer1</property>
-                            <property name="focusable">1</property>
-                            <property name="justification">center</property>
-                            <property name="margin-top">10</property>
+                          <object class="GtkLabel">
+                            <property name="justify">fill</property>
+                            <property name="label">$(NAME) - prints file name
+$(EXT) - prints extension
+$(MODIF) - prints file modification date
+$(CREAT) - prints file creation
+$(CURR) - prints current file name with extension
+$(PARENT) - prints parent folder name
+$(N)/$(K) - prints numbers(arguments are optional)
+$(N:3:4:5) prints numbers from 3, with step 4
+        and fills them with zeros to 5 positions.
+	K instead only position in list, also uses position item in folder.</property>
                           </object>
                         </child>
                         <child>
