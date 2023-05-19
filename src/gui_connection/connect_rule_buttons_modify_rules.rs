@@ -204,6 +204,8 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
     let check_button_replace_both = window_rules.replace.check_button_replace_both.clone();
     let check_button_replace_case_insensitive = window_rules.replace.check_button_replace_case_insensitive.clone();
     let check_button_replace_case_sensitive = window_rules.replace.check_button_replace_case_sensitive.clone();
+    let check_button_replace_regex = window_rules.replace.check_button_replace_regex.clone();
+    let check_button_replace_replace_all = window_rules.replace.check_button_replace_replace_all.clone();
     let entry_replace_text_to_find = window_rules.replace.entry_replace_text_to_find.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change;
 
@@ -307,13 +309,17 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
                 entry_custom_text_to_change.set_text(rule_data.custom_text.as_str());
             }
             RuleType::Replace => {
-                if rule_place == RulePlace::ExtensionAndName {
+                if rule_place == RulePlace::None {
+                    check_button_replace_regex.set_active(true);
+                } else if rule_place == RulePlace::ExtensionAndName {
                     check_button_replace_both.set_active(true);
                 } else if rule_place == RulePlace::Name {
                     check_button_replace_name.set_active(true);
                 } else if rule_place == RulePlace::Extension {
                     check_button_replace_extension.set_active(true);
                 }
+
+                check_button_replace_replace_all.set_active(rule_data.regex_replace_all);
 
                 if rule_data.case_sensitive {
                     check_button_replace_case_sensitive.set_active(true);

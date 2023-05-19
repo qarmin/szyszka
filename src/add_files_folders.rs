@@ -25,7 +25,7 @@ pub fn add_folders_to_check(folders_to_check: Vec<PathBuf>, list_store: &ListSto
     let mut folders;
     if check_folders_inside {
         for folder in folders_to_check {
-            for entry in WalkDir::new(folder).follow_links(false).into_iter().filter_map(Result::ok) {
+            for entry in WalkDir::new(folder).skip_hidden(true).into_iter().filter_map(Result::ok) {
                 if ignore_folders {
                     if let Ok(metadata) = entry.metadata() {
                         if metadata.is_file() {

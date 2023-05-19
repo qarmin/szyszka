@@ -556,7 +556,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 <child>
                                   <object class="GtkEntry" id="entry_replace_text_to_change">
                                     <property name="focusable">1</property>
-                                    <property name="max-length">100</property>
+                                    <property name="max-length">300</property>
                                     <property name="text" translatable="yes">k</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -567,7 +567,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 <child>
                                   <object class="GtkEntry" id="entry_replace_text_to_find">
                                     <property name="focusable">1</property>
-                                    <property name="max-length">200</property>
+                                    <property name="max-length">300</property>
                                     <property name="text" translatable="yes">a</property>
                                     <layout>
                                       <property name="column">1</property>
