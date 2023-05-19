@@ -1,12 +1,11 @@
 use std::path::PathBuf;
 
-use crate::gui_data_things::gui_data::GuiData;
-
-use crate::add_files_folders::add_folders_to_check;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType};
 
+use crate::add_files_folders::add_folders_to_check;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, get_selected_folders_files_in_dialog};
 use crate::update_records::{update_records, UpdateMode};
 
@@ -72,16 +71,16 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
             chooser.connect_response(move |chooser, response| {
                 if response == ResponseType::Ok {
-                    let mut result_entries = shared_result_entries.borrow_mut();
-
                     let list_store = get_list_store_from_tree_view(&tree_view_results);
 
                     let folders_to_check: Vec<PathBuf> = get_selected_folders_files_in_dialog(chooser);
 
                     let ignore_folders = switch_ignore_folders.is_active();
                     let check_folders_inside = switch_scan_inside.is_active();
-
-                    add_folders_to_check(folders_to_check, &list_store, &mut result_entries, check_folders_inside, ignore_folders);
+                    {
+                        let mut result_entries = shared_result_entries.borrow_mut();
+                        add_folders_to_check(folders_to_check, &list_store, &mut result_entries, check_folders_inside, ignore_folders);
+                    }
                     update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
                 }
 

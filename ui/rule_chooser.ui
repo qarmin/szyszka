@@ -516,12 +516,29 @@ $(N)/$(K) - prints numbers(arguments are optional)
                               </object>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="check_button_replace_regex">
-                                <property name="active">0</property>
-                                <property name="focusable">1</property>
-                                <property name="halign">center</property>
-                                <property name="hexpand">1</property>
-                                <property name="label">Use regex</property>
+                              <object class="GtkBox">
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
+                                <property name="spacing">42</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_button_replace_regex">
+                                    <property name="active">0</property>
+                                    <property name="focusable">1</property>
+                                    <property name="halign">end</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="label">Use regex</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_button_replace_replace_all">
+                                    <property name="active">0</property>
+                                    <property name="focusable">1</property>
+                                    <property name="halign">baseline</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="label">Replace All occurences</property>
+                                    <property name="sensitive">False</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
@@ -550,7 +567,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 <child>
                                   <object class="GtkEntry" id="entry_replace_text_to_find">
                                     <property name="focusable">1</property>
-                                    <property name="max-length">100</property>
+                                    <property name="max-length">200</property>
                                     <property name="text" translatable="yes">a</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -560,7 +577,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 </child>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Text to replace</property>
+                                    <property name="label" translatable="yes">Text to find</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="row">1</property>
@@ -575,6 +592,32 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                       <property name="column-span">2</property>
                                       <property name="row">0</property>
                                     </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="halign">center</property>
+                                <property name="margin-bottom">10</property>
+                                <property name="margin-top">10</property>
+                                <property name="spacing">30</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_replace_captures">
+                                    <property name="justify">center</property>
+                                    <property name="label">Regex captures</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="visible">False</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label_replace_captured_captures">
+                                    <property name="justify">center</property>
+                                    <property name="label">CAPTURED CAPTURES</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="visible">False</property>
                                   </object>
                                 </child>
                               </object>

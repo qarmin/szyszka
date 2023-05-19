@@ -25,7 +25,11 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: &Option<Rege
         RuleType::Replace => match rule.rule_place {
             RulePlace::None => {
                 if let Some(regex) = regex.as_ref() {
-                    return_string = regex.replace_all(data_to_change, text_to_replace.as_str()).to_string();
+                    if rule.rule_data.regex_replace_all {
+                        return_string = regex.replace_all(data_to_change, text_to_replace.as_str()).to_string();
+                    } else {
+                        return_string = regex.replace(data_to_change, text_to_replace.as_str()).to_string();
+                    }
                 } else {
                     return_string = data_to_change.to_string(); // Regex is broken, do not change content
                 }
@@ -143,17 +147,25 @@ mod test {
         rule.rule_data.text_to_find = "roman_staszek".to_string();
         rule.rule_data.text_to_replace = "RRR".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
+        rule.rule_data.regex_replace_all = true;
         assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_RRR_BSDE");
 
         rule.rule_data.text_to_find = "([a-z]+)".to_string();
         rule.rule_data.text_to_replace = "PRP".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
+        rule.rule_data.regex_replace_all = true;
         assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_PRP_BSDE");
 
         rule.rule_data.text_to_find = "([a-z]+)".to_string();
         rule.rule_data.text_to_replace = "PRP".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
-        dbg!(&regex.captures("ABCD_roman_staszek_BSDE"));
-        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_PRP_BSDE");
+        rule.rule_data.regex_replace_all = false;
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_staszek_BSDE");
+
+        rule.rule_data.text_to_find = "([a-z]+_[a-z]+)".to_string();
+        rule.rule_data.text_to_replace = "PRP".to_string();
+        regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
+        rule.rule_data.regex_replace_all = true;
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_BSDE");
     }
 }

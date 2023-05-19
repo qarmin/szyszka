@@ -34,11 +34,12 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
             if response_type == ResponseType::Ok {
                 let files: Vec<PathBuf> = get_selected_folders_files_in_dialog(dialog);
 
-                let mut result_entries = shared_result_entries.borrow_mut();
-
                 let list_store = get_list_store_from_tree_view(&tree_view_results);
+                {
+                    let mut result_entries = shared_result_entries.borrow_mut();
+                    add_files_to_check(files, &list_store, &mut result_entries);
+                }
 
-                add_files_to_check(files, &list_store, &mut result_entries);
                 update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
             }
 

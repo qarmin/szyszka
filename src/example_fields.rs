@@ -36,7 +36,7 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
     };
 
     let regex = if single_rule.rule_data.use_regex {
-        match Regex::new(&single_rule.rule_data.text_to_replace) {
+        match Regex::new(&single_rule.rule_data.text_to_find) {
             Ok(r) => Some(r),
             Err(_) => None,
         }

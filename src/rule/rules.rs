@@ -8,7 +8,7 @@ use crate::rule::rule_replace::rule_replace;
 use crate::rule::rule_trim::rule_trim;
 use regex::Regex;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SingleRule {
     pub rule_type: RuleType,
     pub rule_place: RulePlace,
@@ -35,7 +35,7 @@ impl SingleRule {
     //     }
     // }
 }
-
+#[derive(Clone, Debug)]
 pub struct Rules {
     pub rules: Vec<SingleRule>,
     pub edit_mode: Option<usize>,
@@ -90,7 +90,7 @@ impl Rules {
     }
 }
 
-#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug)]
 pub enum RuleType {
     Custom = 0,
     CaseSize,
@@ -103,7 +103,7 @@ pub enum RuleType {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug)]
 pub enum RulePlace {
     None = 0,
     Extension,
@@ -151,7 +151,7 @@ pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     .to_string()
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RuleData {
     pub add_text_text: String,
     pub trim_text: String,
@@ -166,6 +166,7 @@ pub struct RuleData {
     pub text_to_find: String,
     pub text_to_replace: String,
     pub use_regex: bool,
+    pub regex_replace_all: bool,
 
     pub full_normalize: bool,
 }
@@ -185,6 +186,7 @@ impl RuleData {
             text_to_find: String::new(),
             text_to_replace: String::new(),
             use_regex: false,
+            regex_replace_all: false,
             full_normalize: false,
         }
     }

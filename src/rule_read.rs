@@ -56,6 +56,7 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
     let check_button_replace_regex = window_rules.replace.check_button_replace_regex.clone();
     let entry_replace_text_to_find = window_rules.replace.entry_replace_text_to_find.clone();
     let entry_replace_text_to_change = window_rules.replace.entry_replace_text_to_change.clone();
+    let check_button_replace_replace_all = window_rules.replace.check_button_replace_replace_all.clone();
 
     if check_button_replace_regex.is_active() {
         rule_place = RulePlace::None;
@@ -78,6 +79,7 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
     }
 
     rule_data.use_regex = check_button_replace_regex.is_active();
+    rule_data.regex_replace_all = check_button_replace_replace_all.is_active();
 
     rule_data.text_to_find = entry_replace_text_to_find.text().to_string();
     rule_data.text_to_replace = entry_replace_text_to_change.text().to_string();

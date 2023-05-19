@@ -47,7 +47,7 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
         .iter()
         .map(|e| {
             if e.rule_data.use_regex {
-                match Regex::new(&e.rule_data.custom_text) {
+                match Regex::new(&e.rule_data.text_to_find) {
                     Ok(regex) => Some(regex),
                     Err(_) => None,
                 }
