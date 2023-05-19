@@ -4,8 +4,13 @@
   <!-- interface-name settings.ui -->
   <requires lib="gtk" version="4.0"/>
   <object class="GtkDialog" id="window_settings">
+    <property name="default-height">300</property>
+    <property name="default-width">350</property>
     <child>
       <object class="GtkBox">
+        <property name="margin-end">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-top">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
@@ -26,17 +31,31 @@
         <child>
           <object class="GtkButton" id="button_open_config_dir">
             <property name="label">Open config dir</property>
-            <property name="margin-top">10</property>
+            <property name="valign">end</property>
+            <property name="vexpand">True</property>
+            <property name="vexpand-set">True</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="button_open_cache_custom_texts">
             <property name="label">Open custom cache file</property>
+            <property name="valign">end</property>
+            <property name="vexpand-set">True</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="button_open_rules_settings">
             <property name="label">Open rules settings file</property>
+            <property name="valign">end</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label">Szyszka 2.0</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">5</property>
           </object>
         </child>
       </object>

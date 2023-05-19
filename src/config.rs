@@ -1,9 +1,11 @@
+use crate::rule::rules::MultipleRules;
 use directories_next::ProjectDirs;
 use std::fs;
+use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
 pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
-pub const RULES_FILE_NAME: &str = "rules_settings.txt";
+pub const RULES_FILE_NAME: &str = "rules_settings.json";
 
 pub fn get_config_path() -> Option<PathBuf> {
     if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
@@ -57,11 +59,52 @@ pub fn load_custom_rules() -> Vec<String> {
     vec![]
 }
 
+pub fn load_rules() -> Vec<MultipleRules> {
+    if let Some(custom_file) = get_rules_config_file() {
+        create_rules_file_if_needed();
+
+        let Ok(file_handler) = fs::File::open(&custom_file) else {
+            return vec![];
+        };
+        let reader = BufReader::new(file_handler);
+        let loaded_rules = match serde_json::from_reader(reader) {
+            Ok(t) => t,
+            Err(e) => {
+                eprintln!("Failed to load rules, reason {e}");
+                return vec![];
+            }
+        };
+        return loaded_rules;
+    }
+    vec![]
+}
+
+pub fn save_rules_to_file(rules: &[MultipleRules]) {
+    if let Some(custom_file) = get_rules_config_file() {
+        create_rules_file_if_needed();
+
+        let serialized = serde_json::to_string_pretty(rules).unwrap();
+        if let Err(e) = fs::write(&custom_file, serialized) {
+            eprintln!("Failed to save rules, reason {e}");
+        }
+    }
+}
+
 pub fn create_custom_text_file_if_needed() {
     if let Some(custom_file) = get_custom_text_config_file() {
         if !Path::new(&custom_file).is_file() {
             let _ = fs::create_dir_all(Path::new(&custom_file).parent().unwrap());
             if let Err(e) = fs::write(&custom_file, BASIC_CUSTOM_COMMANDS) {
+                eprintln!("Failed to create file, reason {e}");
+            }
+        }
+    }
+}
+pub fn create_rules_file_if_needed() {
+    if let Some(custom_file) = get_rules_config_file() {
+        if !Path::new(&custom_file).is_file() {
+            let _ = fs::create_dir_all(Path::new(&custom_file).parent().unwrap());
+            if let Err(e) = fs::write(&custom_file, RULES_FILE_NAME) {
                 eprintln!("Failed to create file, reason {e}");
             }
         }

@@ -15,6 +15,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let rules = gui_data.rules.clone();
 
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+    let button_save_rules = gui_data.rules_bottom_panel.button_save_rules.clone();
 
     let window_rules = gui_data.window_rules.clone();
 
@@ -36,6 +37,10 @@ pub fn connect_rule_add(gui_data: &GuiData) {
                 rule.rules[edit_mode].rule_data = single_rule.rule_data;
             } else {
                 rule.add_single_rule(single_rule);
+            }
+
+            if !rule.rules.is_empty() {
+                button_save_rules.set_sensitive(true);
             }
         }
 

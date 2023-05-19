@@ -101,6 +101,8 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
     connect_rule_modify_remove(&gui_data);
     connect_rule_modify_one_up(&gui_data);
     connect_rule_modify_one_down(&gui_data);
+    connect_rule_load(&gui_data);
+    connect_rule_save(&gui_data);
 
     // Renaming
     connect_start_renaming(&gui_data);

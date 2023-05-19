@@ -7,8 +7,15 @@ use crate::rule::rule_purge::rule_purge;
 use crate::rule::rule_replace::rule_replace;
 use crate::rule::rule_trim::rule_trim;
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct MultipleRules {
+    pub name: String,
+    pub rules: Vec<SingleRule>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SingleRule {
     pub rule_type: RuleType,
     pub rule_place: RulePlace,
@@ -90,7 +97,7 @@ impl Rules {
     }
 }
 
-#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum RuleType {
     Custom = 0,
     CaseSize,
@@ -103,7 +110,7 @@ pub enum RuleType {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug)]
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum RulePlace {
     None = 0,
     Extension,
@@ -151,7 +158,7 @@ pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     .to_string()
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RuleData {
     pub add_text_text: String,
     pub trim_text: String,

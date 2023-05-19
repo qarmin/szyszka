@@ -34,6 +34,9 @@ slugmin = "1.0"
 
 regex = "1.8.1"
 
+serde = {version="1.0.163", features=["derive"]}
+serde_json = "1.0.96"
+
 # Language
 i18n-embed = { version = "0.13", features = ["fluent-system", "desktop-requester"] }
 i18n-embed-fl = "0.6"

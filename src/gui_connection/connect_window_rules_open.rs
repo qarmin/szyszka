@@ -8,6 +8,7 @@ use crate::gui_data_things::gui_data::GuiData;
 pub fn connect_window_rules_open(gui_data: &GuiData) {
     let custom = gui_data.window_rules.custom.clone();
 
+    // Create popover
     gui_data.window_rules.window_with_rules.connect_show(move |_e| {
         let entry_custom_text_to_change = custom.entry_custom_text_to_change.clone();
         let menu_button_load_custom_rule = custom.menu_button_load_custom_rule.clone();

@@ -1,8 +1,12 @@
+use crate::config::{load_rules, save_rules_to_file};
 use gtk4::prelude::*;
+use gtk4::{Dialog, Entry, MenuButton, Orientation, ResponseType};
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows};
-use crate::rule::rules::{RulePlace, RuleType};
+use crate::rule::rules::{MultipleRules, RulePlace, RuleType};
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_rule_modify_add(gui_data: &GuiData) {
@@ -29,6 +33,8 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
 
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
+    let button_save_rules = gui_data.rules_bottom_panel.button_save_rules.clone();
+
     // Multiselection Ready
     button_remove_rule.connect_clicked(move |_e| {
         let vec_rule_to_delete = remove_selected_rows(&tree_view_window_rules);
@@ -39,6 +45,10 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
 
             for rule_to_delete in vec_rule_to_delete.iter().rev() {
                 rules.remove_rule(*rule_to_delete);
+            }
+
+            if rules.rules.is_empty() {
+                button_save_rules.set_sensitive(false);
             }
         }
 
@@ -355,4 +365,97 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
         window_with_rules.show();
         window_main.set_sensitive(false);
     });
+}
+
+pub fn connect_rule_save(gui_data: &GuiData) {
+    let button_save_rules = gui_data.rules_bottom_panel.button_save_rules.clone();
+    let window_main = gui_data.window_main.clone();
+    let imported_rules = gui_data.rules_bottom_panel.imported_rules.clone();
+    let rules = gui_data.rules.clone();
+    let menu_button_load_rules = gui_data.rules_bottom_panel.menu_button_load_rules.clone();
+    button_save_rules.connect_clicked(move |e| {
+        let menu_button_load_rules = menu_button_load_rules.clone();
+        let rules = rules.clone();
+        let imported_rules = imported_rules.clone();
+        let imported_rules_cloned = imported_rules.clone();
+        let (dialog, entry) = create_dialog(&window_main, imported_rules);
+
+        dialog.connect_response(move |dialog, response| {
+            let menu_button_load_rules = menu_button_load_rules.clone();
+            let imported_rules_cloned = imported_rules_cloned.clone();
+            if response == ResponseType::Ok {
+                let new_rule_name = entry.text().to_string();
+                {
+                    let rules = rules.borrow_mut();
+                    let mut imported_rules = imported_rules_cloned.borrow_mut();
+                    let mut used_rules = imported_rules.clone();
+                    used_rules.retain(|f| f.name != new_rule_name);
+                    used_rules.push(MultipleRules {
+                        name: new_rule_name,
+                        rules: rules.rules.clone(),
+                    });
+
+                    (*imported_rules) = used_rules;
+                    save_rules_to_file(&imported_rules);
+                    set_rules_popover(&imported_rules, &menu_button_load_rules);
+                }
+            }
+            dialog.close();
+        });
+    });
+}
+
+pub fn connect_rule_load(gui_data: &GuiData) {
+    let menu_button_load_rules = gui_data.rules_bottom_panel.menu_button_load_rules.clone();
+    let cached_rules = load_rules();
+    if !cached_rules.is_empty() {
+        let mut cached_borrowed = gui_data.rules_bottom_panel.imported_rules.borrow_mut();
+        set_rules_popover(&cached_rules, &menu_button_load_rules);
+        *cached_borrowed = cached_rules;
+    }
+}
+
+fn create_dialog(window_main: &gtk4::Window, imported_rules: Rc<RefCell<Vec<MultipleRules>>>) -> (Dialog, Entry) {
+    let dialog = Dialog::builder().title("Save Rule").transient_for(window_main).modal(true).build();
+    let button_ok = dialog.add_button("Ok", ResponseType::Ok);
+    button_ok.set_sensitive(false);
+    dialog.add_button("Close", ResponseType::Cancel);
+
+    let names = imported_rules.borrow().iter().map(|rule| rule.name.clone()).collect::<Vec<String>>();
+    let used_names = format!("Names used in rules: {}", names.join(", "));
+
+    let file_name_entry: Entry = Entry::builder().margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
+    let label: gtk4::Label = gtk4::Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
+    let label_name: gtk4::Label = gtk4::Label::builder().label("Choose name of rules(if exists, will override it)").margin_top(10).margin_start(10).margin_end(10).build();
+    button_ok.grab_focus();
+
+    let parent = button_ok.parent().unwrap().parent().unwrap().downcast::<gtk4::Box>().unwrap(); // TODO Hack, but not so ugly as before
+    parent.set_orientation(Orientation::Vertical);
+    parent.insert_child_after(&label_name, None::<&gtk4::Widget>);
+    parent.insert_child_after(&file_name_entry, Some(&label_name));
+    if !names.is_empty() {
+        parent.insert_child_after(&label, Some(&file_name_entry));
+    }
+
+    file_name_entry.connect_changed(move |entry| button_ok.set_sensitive(!entry.text().is_empty()));
+
+    dialog.show();
+    (dialog, file_name_entry)
+}
+
+fn set_rules_popover(cached_items: &[MultipleRules], menu_button_load_rules: &MenuButton) {
+    let popover = gtk4::Popover::builder().build();
+    let new_box = gtk4::Box::builder().orientation(Orientation::Vertical).build();
+    for item in cached_items {
+        let button = gtk4::Button::builder().label(&item.name).build();
+        let popover_clone = popover.clone();
+        button.connect_clicked(move |e| {
+            // TODO set rules
+            popover_clone.hide();
+        });
+
+        new_box.append(&button);
+    }
+    popover.set_child(Some(&new_box));
+    menu_button_load_rules.set_popover(Some(&popover));
 }

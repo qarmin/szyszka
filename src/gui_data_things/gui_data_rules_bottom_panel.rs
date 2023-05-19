@@ -1,7 +1,10 @@
 use gtk4::prelude::*;
 use gtk4::TreeView;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use crate::fls;
+use crate::rule::rules::MultipleRules;
 
 #[derive(Clone)]
 pub struct GuiRulesBottomPanel {
@@ -10,8 +13,12 @@ pub struct GuiRulesBottomPanel {
     pub button_remove_rule: gtk4::Button,
     pub button_rule_one_up: gtk4::Button,
     pub button_rule_one_down: gtk4::Button,
+    pub button_save_rules: gtk4::Button,
+    pub menu_button_load_rules: gtk4::MenuButton,
     pub scrolled_window_rules: gtk4::ScrolledWindow,
     pub tree_view_window_rules: TreeView,
+
+    pub imported_rules: Rc<RefCell<Vec<MultipleRules>>>,
 }
 
 impl GuiRulesBottomPanel {
@@ -22,8 +29,12 @@ impl GuiRulesBottomPanel {
         let button_rule_one_up: gtk4::Button = builder.object("button_rule_one_up").unwrap();
         let button_rule_one_down: gtk4::Button = builder.object("button_rule_one_down").unwrap();
         let scrolled_window_rules: gtk4::ScrolledWindow = builder.object("scrolled_window_rules").unwrap();
+        let button_save_rules: gtk4::Button = builder.object("button_save_rules").unwrap();
+        let menu_button_load_rules: gtk4::MenuButton = builder.object("menu_button_load_rules").unwrap();
 
         let tree_view_window_rules: TreeView = TreeView::new();
+
+        let imported_rules = Rc::new(RefCell::new(Vec::new()));
 
         Self {
             button_add_rule,
@@ -31,8 +42,11 @@ impl GuiRulesBottomPanel {
             button_remove_rule,
             button_rule_one_up,
             button_rule_one_down,
+            button_save_rules,
+            menu_button_load_rules,
             scrolled_window_rules,
             tree_view_window_rules,
+            imported_rules,
         }
     }
     pub fn update_language(&self) {
