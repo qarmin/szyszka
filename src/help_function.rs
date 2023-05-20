@@ -10,6 +10,18 @@ pub struct ResultEntries {
     pub files: BTreeSet<String>,
 }
 
+#[derive(Eq, PartialEq, Hash, Clone, Debug, Copy)]
+pub enum NotebookRules {
+    Custom = 0,
+    UpperLowerCases,
+    Purge,
+    AddNumber,
+    AddText,
+    Replace,
+    Trim,
+    Normalize,
+}
+
 #[derive(Copy, Clone)]
 pub enum ColumnsResults {
     TypeString = 0,
@@ -211,6 +223,22 @@ pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
     chooser_box.set_margin_end(5);
 
     dialog.show();
+}
+
+pub fn get_all_direct_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
+    let mut vector = vec![];
+    if let Some(mut child) = wid.first_child() {
+        vector.push(child.clone());
+        loop {
+            child = match child.next_sibling() {
+                Some(t) => t,
+                None => break,
+            };
+            vector.push(child.clone());
+        }
+    }
+
+    vector
 }
 
 pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {

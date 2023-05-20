@@ -131,6 +131,8 @@ check_button_replace_replace_all = Replace all occurrences
 label_replace_replacing_strings = Replacing Strings:
 label_replace_text_to_find = Text to find
 label_replace_text_to_replace = Replaced text
+label_replace_captures = Captures
+label_replace_captured_captures = Captured captures
 
 # Trim
 check_button_trim_name_start = Name Start
@@ -194,3 +196,18 @@ rule_description_end_of_extension = end of extension
 rule_description_trimming = Trimming "{ $trim_text }" from { $where_remove }
 rule_description_custom_rule = Custom rule: { $custom_rule }
 rule_description_replace = Replacing { $additional_regex_text } "{ $text_to_find }" with "{ $text_to_replace }"
+
+# Notebooks
+notebook_tab_custom = Custom
+notebook_tab_case_size = Upper/Lower Cases
+notebook_tab_purge = Purge
+notebook_tab_add_number = Add Number
+notebook_tab_add_text = Add Text
+notebook_tab_replace = Replace
+notebook_tab_trim = Trim
+notebook_tab_normalize = Normalize Name
+
+
+
+
+

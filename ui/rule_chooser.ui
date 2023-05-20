@@ -443,7 +443,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_replace_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">10</property>
@@ -482,7 +482,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                               <object class="GtkBox">
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_case_sensitivity">
                                     <property name="label" translatable="yes">Case Sensitivity</property>
                                     <property name="margin-bottom">5</property>
                                     <property name="margin-top">5</property>
@@ -642,7 +642,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                                 <property name="margin-top">10</property>
                               </object>

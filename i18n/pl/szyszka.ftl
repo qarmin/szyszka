@@ -121,6 +121,8 @@ check_button_replace_replace_all = Zastąp wszystkie wystąpienia
 label_replace_replacing_strings = Zastępowanie ciągów:
 label_replace_text_to_find = Tekst do znalezienia
 label_replace_text_to_replace = Tekst do zastąpienia
+label_replace_captures = Przechwycone elementy:
+label_replace_captured_captures = Zdobyte przechwytywania
 # Trim
 check_button_trim_name_start = Początek nazwy
 check_button_trim_name_end = Koniec nazwy
@@ -135,7 +137,7 @@ label_normalize_name =
     Wszystko - zmienia nazwę na nazwę, która zawiera tylko
                               znaki `a-z`, `0-9`, `-`, ` `, `.`.
                               e.g. `żółć CZERona.Txt` -> `zolc-czerwona.txt`
-    
+
     Częściowo - działa dokładnie tak samo jak powyższa opcja, ale pozwala
                       na użycie spacji ` ` i dużych liter `A-Z`
                       e.g. ` Źrebię Krokietowe.Rar ` -> `Zrebie Krokietowe.Rar`
@@ -179,3 +181,12 @@ rule_description_end_of_extension = koniec rozszerzenia
 rule_description_trimming = Przycinanie "{ $trim_text }" od { $where_remove }
 rule_description_custom_rule = Niestandardowa reguła: { $custom_rule }
 rule_description_replace = Zastępuje { $additional_regex_text } "{ $text_to_find }" z "{ $text_to_replace }"
+# Notebooks
+notebook_tab_custom = Własne reguły
+notebook_tab_case_size = Wielkie/Małe Litery
+notebook_tab_purge = Czyszczenie
+notebook_tab_add_number = Dodawanie Numeru
+notebook_tab_add_text = Dodawanie Tekstu
+notebook_tab_replace = Zamiana
+notebook_tab_trim = Przycinanie
+notebook_tab_normalize = Normalizowanie Nazwy

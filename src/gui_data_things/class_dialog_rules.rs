@@ -1,5 +1,6 @@
+use crate::fls;
 use gtk4::prelude::*;
-use gtk4::{Button, Entry, Label};
+use gtk4::{Button, Entry, Label, Widget};
 
 use crate::gui_data_things::class_dialog_rule_add_number::GuiAddNumber;
 use crate::gui_data_things::class_dialog_rule_add_text::GuiAddText;
@@ -9,6 +10,7 @@ use crate::gui_data_things::class_dialog_rule_purge::GuiPurge;
 use crate::gui_data_things::class_dialog_rule_replace::GuiReplace;
 use crate::gui_data_things::class_dialog_rule_size_letters::GuiSizeLetters;
 use crate::gui_data_things::class_dialog_rule_trim::GuiTrim;
+use crate::help_function::{get_all_direct_children, NotebookRules};
 
 #[derive(Clone)]
 pub struct GuiDialogRules {
@@ -80,9 +82,25 @@ impl GuiDialogRules {
         }
     }
     pub fn update_language(&self) {
-        self.button_rule_window_add.set_label(&crate::fls!("button_rule_window_add"));
-        self.label_example.set_label(&crate::fls!("label_example"));
-        self.label_example_text_before.set_label(&crate::fls!("label_example_text_before"));
-        self.label_example_text_after.set_label(&crate::fls!("label_example_text_after"));
+        self.button_rule_window_add.set_label(&fls!("button_rule_window_add"));
+        self.label_example.set_label(&fls!("label_example"));
+        self.label_example_text_before.set_label(&fls!("label_example_text_before"));
+        self.label_example_text_after.set_label(&fls!("label_example_text_after"));
+
+        let vec_children: Vec<Widget> = get_all_direct_children(&self.notebook_choose_rule);
+        let vec_children: Vec<Widget> = get_all_direct_children(&vec_children[1]);
+
+        for (main_enum, fl_thing) in [
+            (NotebookRules::Custom as usize, fls!("notebook_tab_custom")),
+            (NotebookRules::UpperLowerCases as usize, fls!("notebook_tab_case_size")),
+            (NotebookRules::Purge as usize, fls!("notebook_tab_purge")),
+            (NotebookRules::AddNumber as usize, fls!("notebook_tab_add_number")),
+            (NotebookRules::AddText as usize, fls!("notebook_tab_add_text")),
+            (NotebookRules::Replace as usize, fls!("notebook_tab_replace")),
+            (NotebookRules::Trim as usize, fls!("notebook_tab_trim")),
+            (NotebookRules::Normalize as usize, fls!("notebook_tab_normalize")),
+        ] {
+            self.notebook_choose_rule.tab_label(&vec_children[main_enum]).unwrap().downcast::<Label>().unwrap().set_text(&fl_thing);
+        }
     }
 }

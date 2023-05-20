@@ -15,11 +15,7 @@ pub fn connect_rule_modify_add(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();
     let window_main = gui_data.window_main.clone();
 
-    let button_rule_window_add = gui_data.window_rules.button_rule_window_add.clone();
-
     button_add_rule.connect_clicked(move |_e| {
-        button_rule_window_add.set_label("Add Rule");
-
         window_with_rules.show();
         window_main.set_sensitive(false);
     });
