@@ -1,3 +1,4 @@
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::GestureClick;
 use gtk4::TreeView;
@@ -22,5 +23,11 @@ impl GuiResults {
             gc_tree_view_results,
         }
     }
-    pub fn update_language(&self) {}
+    pub fn update_language(&self) {
+        let columns = self.tree_view_results.columns();
+        columns[0].set_title(&fls!("tree_view_upper_column_type"));
+        columns[1].set_title(&fls!("tree_view_upper_column_current_name"));
+        columns[2].set_title(&fls!("tree_view_upper_column_future_name"));
+        columns[3].set_title(&fls!("tree_view_upper_column_path"));
+    }
 }

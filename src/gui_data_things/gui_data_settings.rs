@@ -1,3 +1,4 @@
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::{Builder, Button, ComboBoxText, Label, Window};
 
@@ -32,5 +33,11 @@ impl GuiSettings {
             button_open_cache_custom_texts,
             button_open_config_dir,
         }
+    }
+    pub fn update_language(&self) {
+        self.label_settings_general_language.set_label(&fls!("settings_language_label"));
+        self.button_open_rules_settings.set_label(&fls!("settings_open_rules"));
+        self.button_open_cache_custom_texts.set_label(&fls!("settings_open_cache_custom_texts"));
+        self.button_open_config_dir.set_label(&fls!("settings_open_config_dir"));
     }
 }

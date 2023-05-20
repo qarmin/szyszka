@@ -32,7 +32,7 @@
                         <property name="spacing">2</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="label_custom_instruction">
                             <property name="justify">fill</property>
                             <property name="label">$(NAME) - prints file name
 $(EXT) - prints extension
@@ -94,7 +94,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_letters_tool_type">
                                 <property name="label" translatable="yes">Tool Type:</property>
                                 <property name="margin-top">10</property>
                               </object>
@@ -126,7 +126,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_letters_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                               </object>
                             </child>
@@ -184,7 +184,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_purge_tool_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">10</property>
@@ -243,7 +243,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_number_place">
                                 <property name="label" translatable="yes">Place to put number:</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">10</property>
@@ -277,7 +277,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_number_settings">
                                 <property name="label" translatable="yes">Number Settings:</property>
                                 <property name="margin-end">5</property>
                               </object>
@@ -286,7 +286,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                               <object class="GtkGrid">
                                 <property name="column-homogeneous">1</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_start_number">
                                     <property name="label" translatable="yes">Start Number</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -295,7 +295,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_step">
                                     <property name="label" translatable="yes">Step</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -328,7 +328,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_fill_zeros">
                                     <property name="label" translatable="yes">Fill with zeros</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -374,7 +374,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_text_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">10</property>
@@ -407,7 +407,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_text">
                                 <property name="label" translatable="yes">Text to add:</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">5</property>
@@ -541,7 +541,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                               <object class="GtkGrid">
                                 <property name="column-homogeneous">1</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_text_to_replace">
                                     <property name="label" translatable="yes">Replaced Text</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -572,7 +572,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_text_to_find">
                                     <property name="label" translatable="yes">Text to find</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -581,7 +581,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_replacing_strings">
                                     <property name="label" translatable="yes">Replacing Strings:</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -690,7 +690,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_case_sensitivity">
                                 <property name="label" translatable="yes">Case Sensitivity</property>
                                 <property name="margin-bottom">5</property>
                                 <property name="margin-top">5</property>
@@ -723,7 +723,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_trim_text">
                                 <property name="label" translatable="yes">Trim text</property>
                                 <property name="margin-bottom">5</property>
                               </object>
@@ -750,14 +750,7 @@ $(N:3:4:5) prints numbers from 3, with step 4
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Normalize Name</property>
-                            <property name="margin-bottom">10</property>
-                            <property name="margin-top">10</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="label_normalize_name">
                             <property name="justify">center</property>
                             <property name="label" translatable="yes">Everything - renames the name to one that containsonly the
                           characters `a-z`, `0-9`, `-`, ` `, `.`.
@@ -806,7 +799,7 @@ Partial - works exacly same as option above, but allows
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="label_example">
                     <property name="label" translatable="yes">EXAMPLE</property>
                     <property name="margin-bottom">5</property>
                     <property name="margin-top">5</property>
@@ -824,12 +817,12 @@ Partial - works exacly same as option above, but allows
                             <property name="margin-start">10</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_example_text_before">
                                 <property name="label" translatable="yes">Before:</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_example_text_after">
                                 <property name="label" translatable="yes">After:</property>
                               </object>
                             </child>

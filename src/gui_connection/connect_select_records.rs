@@ -1,3 +1,4 @@
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::{Dialog, ResponseType, TreeIter, TreeSelection, TreeView};
 
@@ -144,17 +145,17 @@ pub fn connect_select_custom(gui_data: &GuiData) {
         {
             let window_main = gui_data.window_main.clone();
             let custom_dialog = gtk4::Dialog::builder().title("Select custom").modal(true).transient_for(&window_main).build();
-            custom_dialog.add_button("Ok", ResponseType::Ok);
-            custom_dialog.add_button("Close", ResponseType::Cancel);
+            custom_dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
+            custom_dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
-            let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
+            let label: gtk4::Label = gtk4::Label::new(Some(&fls!("select_custom_example")));
 
-            let radio_path = gtk4::CheckButton::with_label("Path");
-            let radio_current_name = gtk4::CheckButton::with_label("Current Name");
-            let radio_future_name = gtk4::CheckButton::with_label("Future Name");
-            let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
-            let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
-            let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
+            let radio_path = gtk4::CheckButton::with_label(&fls!("select_custom_path"));
+            let radio_current_name = gtk4::CheckButton::with_label(&fls!("select_custom_current_path"));
+            let radio_future_name = gtk4::CheckButton::with_label(&fls!("select_custom_future_path"));
+            let radio_current_name_path = gtk4::CheckButton::with_label(&fls!("select_custom_path_current_name"));
+            let radio_future_name_path = gtk4::CheckButton::with_label(&fls!("select_custom_path_future_name"));
+            let radio_is_dir = gtk4::CheckButton::with_label(&fls!("select_custom_directory_file"));
 
             radio_current_name.set_group(Some(&radio_path));
             radio_future_name.set_group(Some(&radio_path));
@@ -171,7 +172,7 @@ pub fn connect_select_custom(gui_data: &GuiData) {
             let entry_future_name_path = gtk4::Entry::new();
             let check_button_is_dir = gtk4::CheckButton::new();
 
-            check_button_is_dir.set_label(Some("Select Directory"));
+            check_button_is_dir.set_label(Some(&fls!("select_custom_select_directory")));
 
             label.set_margin_bottom(5);
             label.set_margin_end(5);
@@ -237,16 +238,16 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
         {
             let window_main = gui_data.window_main.clone();
             let custom_dialog = gtk4::Dialog::builder().title("Unselect custom").modal(true).transient_for(&window_main).build();
-            custom_dialog.add_button("Ok", ResponseType::Ok);
-            custom_dialog.add_button("Close", ResponseType::Cancel);
-            let label: gtk4::Label = gtk4::Label::new(Some("Usage: */folder-nr*/* or name-version-*.txt"));
+            custom_dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
+            custom_dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
+            let label: gtk4::Label = gtk4::Label::new(Some(&fls!("select_custom_example")));
 
-            let radio_path = gtk4::CheckButton::with_label("Path");
-            let radio_current_name = gtk4::CheckButton::with_label("Current Name");
-            let radio_future_name = gtk4::CheckButton::with_label("Future Name");
-            let radio_current_name_path = gtk4::CheckButton::with_label("Path + Current Name");
-            let radio_future_name_path = gtk4::CheckButton::with_label("Path + Future Name");
-            let radio_is_dir = gtk4::CheckButton::with_label("Directory/File");
+            let radio_path = gtk4::CheckButton::with_label(&fls!("select_custom_path"));
+            let radio_current_name = gtk4::CheckButton::with_label(&fls!("select_custom_current_path"));
+            let radio_future_name = gtk4::CheckButton::with_label(&fls!("select_custom_future_path"));
+            let radio_current_name_path = gtk4::CheckButton::with_label(&fls!("select_custom_path_current_name"));
+            let radio_future_name_path = gtk4::CheckButton::with_label(&fls!("select_custom_path_future_name"));
+            let radio_is_dir = gtk4::CheckButton::with_label(&fls!("select_custom_directory_file"));
 
             radio_current_name.set_group(Some(&radio_path));
             radio_future_name.set_group(Some(&radio_path));
@@ -263,7 +264,7 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
             let entry_future_name_path = gtk4::Entry::new();
             let check_button_is_dir = gtk4::CheckButton::new();
 
-            check_button_is_dir.set_label(Some("Unselect Directory"));
+            check_button_is_dir.set_label(Some(&fls!("select_custom_unselect_directory")));
 
             label.set_margin_bottom(5);
             label.set_margin_end(5);

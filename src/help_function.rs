@@ -1,3 +1,4 @@
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::*;
 use std::collections::BTreeSet;
@@ -198,7 +199,7 @@ pub fn get_dialog_box_child(dialog: &Dialog) -> Box {
 pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
     let dialog = Dialog::builder().title(title).transient_for(window_main).modal(true).build();
     dialog.connect_response(|e, _r| e.close());
-    dialog.add_button("Ok", ResponseType::Ok);
+    dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
 
     let question_label = Label::new(Some(message));
 

@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use crate::add_files_folders::add_files_to_check;
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::ResponseType;
 
@@ -18,9 +19,14 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
 
     let window_main = gui_data.window_main.clone();
     button_add_files.connect_clicked(move |_| {
-        let chooser = gtk4::FileChooserDialog::builder().title("Files to include").action(gtk4::FileChooserAction::Open).transient_for(&window_main).modal(true).build();
-        chooser.add_button("OK", ResponseType::Ok);
-        chooser.add_button("Cancel", ResponseType::Cancel);
+        let chooser = gtk4::FileChooserDialog::builder()
+            .title(fls!("dialog_name_files_to_include"))
+            .action(gtk4::FileChooserAction::Open)
+            .transient_for(&window_main)
+            .modal(true)
+            .build();
+        chooser.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
+        chooser.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
         chooser.set_select_multiple(true);
         chooser.show();

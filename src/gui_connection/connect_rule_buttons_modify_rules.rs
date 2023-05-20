@@ -1,4 +1,5 @@
 use crate::config::{load_rules, save_rules_to_file};
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::{Dialog, Entry, Label, MenuButton, Orientation, ResponseType, TreeView};
 use std::cell::RefCell;
@@ -426,9 +427,9 @@ pub fn connect_rule_load(gui_data: &GuiData) {
 
 fn create_dialog(window_main: &gtk4::Window, imported_rules: &Rc<RefCell<Vec<MultipleRules>>>) -> (Dialog, Entry) {
     let dialog = Dialog::builder().title("Save Rule").transient_for(window_main).modal(true).build();
-    let button_ok = dialog.add_button("Ok", ResponseType::Ok);
+    let button_ok = dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
     button_ok.set_sensitive(false);
-    dialog.add_button("Close", ResponseType::Cancel);
+    dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
     let names = imported_rules.borrow().iter().map(|rule| rule.name.clone()).collect::<Vec<String>>();
     let used_names = format!("Names used in rules: {}", names.join(", "));

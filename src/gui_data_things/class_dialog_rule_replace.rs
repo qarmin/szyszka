@@ -54,4 +54,5 @@ impl GuiReplace {
             entry_replace_text_to_change,
         }
     }
+    pub fn update_language(&self) {}
 }

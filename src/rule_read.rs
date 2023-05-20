@@ -3,7 +3,9 @@
 
 use gtk4::prelude::*;
 
+use crate::fls;
 use crate::gui_data_things::class_dialog_rules::GuiDialogRules;
+use crate::localizer::generate_translation_hashmap;
 use crate::notebook_enum::{to_notebook_enum, NotebookEnum};
 use crate::rule::rules::{RuleData, RulePlace, RuleType, SingleRule};
 
@@ -84,7 +86,15 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
     rule_data.text_to_find = entry_replace_text_to_find.text().to_string();
     rule_data.text_to_replace = entry_replace_text_to_change.text().to_string();
     let additional_regex_text = if check_button_replace_regex.is_active() { " regex" } else { "" };
-    rule_description = format!("Replacing{additional_regex_text} \"{}\" with \"{}\"", rule_data.text_to_find, rule_data.text_to_replace);
+
+    rule_description = fls!(
+        "rule_description_replace",
+        generate_translation_hashmap(vec![
+            ("$text_to_find", rule_data.text_to_find.clone()),
+            ("$text_to_replace", rule_data.text_to_replace.clone()),
+            ("$additional_regex_text", additional_regex_text.to_string()),
+        ])
+    );
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -99,7 +109,7 @@ fn read_rule_custom(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -> 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
     rule_data.custom_text = entry_custom_text_to_change.text().to_string();
-    rule_description = format!("Custom rule: {}", rule_data.custom_text);
+    rule_description = fls!("rule_description_custom_rule", generate_translation_hashmap(vec![("$custom_rule", rule_data.custom_text.clone())]));
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -129,21 +139,21 @@ fn read_rule_trim(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -> Op
 
     if check_button_trim_name_start.is_active() {
         rule_place = RulePlace::FromNameStart;
-        where_remove = "start";
+        where_remove = fls!("rule_description_start");
     } else if check_button_trim_name_end.is_active() {
         rule_place = RulePlace::FromNameEndReverse;
-        where_remove = "end of name";
+        where_remove = fls!("rule_description_end_of_name");
     } else if check_button_trim_extension_start.is_active() {
         rule_place = RulePlace::FromExtensionStart;
-        where_remove = "extension";
+        where_remove = fls!("rule_description_extension");
     } else if check_button_trim_extension_end.is_active() {
         rule_place = RulePlace::FromExtensionEndReverse;
-        where_remove = "end of extension";
+        where_remove = fls!("rule_description_end_of_extension");
     } else {
         return None;
     }
     rule_data.trim_text = entry_add_text_text_to_trim.text().to_string();
-    rule_description = format!("Trimming \"{}\" from {}", rule_data.trim_text, where_remove);
+    rule_description = fls!("rule_description_trimming", generate_translation_hashmap(vec![("trim_text", rule_data.trim_text.clone()), ("where_remove", where_remove)]));
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -165,7 +175,7 @@ fn read_rule_add_text(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -
         return None;
     }
     rule_data.add_text_text = entry_add_text_text_to_add.text().to_string();
-    rule_description = format!("Added text: {}", rule_data.add_text_text);
+    rule_description = format!("{} {}", fls!("rule_description_added_text"), rule_data.add_text_text);
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -222,8 +232,12 @@ fn read_rule_case_size(window_rules: &GuiDialogRules, rule_data: &mut RuleData) 
         return None;
     }
 
-    let mut text = if rule_data.to_lowercase { "Lowercase".to_string() } else { "Uppercase".to_string() };
-    text.push_str(" text");
+    let text = if rule_data.to_lowercase {
+        format!("{} {}", fls!("rule_description_lowercase"), fls!("rule_description_text"))
+    } else {
+        format!("{} {}", fls!("rule_description_uppercase"), fls!("rule_description_text"))
+    };
+
     rule_description = text;
     Some((rule_type, rule_place, rule_description))
 }
@@ -251,8 +265,16 @@ fn read_rule_add_number(window_rules: &GuiDialogRules, rule_data: &mut RuleData)
     rule_data.number_step = entry_add_number_step.text().to_string().parse::<i64>().unwrap_or(1);
     rule_data.number_start = entry_add_number_start_number.text().to_string().parse::<i64>().unwrap_or(1);
 
-    let zeros = if rule_data.fill_with_zeros > 0 { format!(" and filling with {} zeros,", rule_data.fill_with_zeros) } else { String::new() };
-    rule_description = format!("Starting with {} with step {}{}", rule_data.number_step, rule_data.number_start, zeros);
+    let zeros = if rule_data.fill_with_zeros > 0 {
+        format!(" {}", fls!("rule_description_zeros", generate_translation_hashmap(vec![("zeros", rule_data.fill_with_zeros.to_string())])))
+    } else {
+        String::new()
+    };
+    rule_description = fls!(
+        "rule_description_step",
+        generate_translation_hashmap(vec![("step", rule_data.number_step.to_string()), ("start", rule_data.number_start.to_string()), ("zeros", zeros)])
+    );
+
     Some((rule_type, rule_place, rule_description))
 }
 
@@ -273,9 +295,9 @@ fn read_rule_normalize(window_rules: &GuiDialogRules, rule_data: &mut RuleData) 
     }
 
     if rule_data.full_normalize {
-        rule_description = "Full normalize".to_string();
+        rule_description = fls!("rule_description_full_normalize");
     } else {
-        rule_description = "Partial normalize".to_string();
+        rule_description = fls!("rule_description_partial_normalize");
     }
     Some((rule_type, rule_place, rule_description))
 }

@@ -19,4 +19,5 @@ impl GuiNormalize {
             check_button_normalize_partial,
         }
     }
+    pub fn update_language(&self) {}
 }

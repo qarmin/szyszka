@@ -41,4 +41,5 @@ impl GuiTrim {
             entry_add_text_text_to_trim,
         }
     }
+    pub fn update_language(&self) {}
 }

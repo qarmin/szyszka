@@ -1,3 +1,4 @@
+use crate::fls;
 use crate::rule::rule_add_number::rule_add_number;
 use crate::rule::rule_add_text::rule_add_text;
 use crate::rule::rule_change_size_letters::rule_change_size_letters;
@@ -128,34 +129,32 @@ pub enum RulePlace {
 
 pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     match rule_type {
-        RuleType::Custom => "Custom",
-        RuleType::CaseSize => "Case Size",
-        RuleType::Purge => "Purge",
-        RuleType::AddText => "Add Text",
-        RuleType::Trim => "Trim",
-        RuleType::Replace => "Replace",
-        RuleType::AddNumber => "Add Number",
-        RuleType::Normalize => "Normalize",
+        RuleType::Custom => fls!("rule_type_custom"),
+        RuleType::CaseSize => fls!("rule_type_case_size"),
+        RuleType::Purge => fls!("rule_type_purge"),
+        RuleType::AddText => fls!("rule_type_add_text"),
+        RuleType::Trim => fls!("rule_type_trim"),
+        RuleType::Replace => fls!("rule_type_replace"),
+        RuleType::AddNumber => fls!("rule_type_add_number"),
+        RuleType::Normalize => fls!("rule_type_normalize"),
     }
-    .to_string()
 }
 
 pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
     match rule_type {
-        RulePlace::None => "N/A",
-        RulePlace::Extension => "Only Extension",
-        RulePlace::Name => "Only Name",
-        RulePlace::ExtensionAndName => "Extension and Name",
-        RulePlace::BeforeExtension => "Before Extension",
-        RulePlace::AfterExtension => "After Extension",
-        RulePlace::BeforeName => "Before Name",
-        RulePlace::AfterName => "After Name",
-        RulePlace::FromNameStart => "From Start",
-        RulePlace::FromNameEndReverse => "From Name End to Start",
-        RulePlace::FromExtensionStart => "From Extension Start",
-        RulePlace::FromExtensionEndReverse => "From Extension End to Start",
+        RulePlace::None => fls!("rule_place_none"),
+        RulePlace::Extension => fls!("rule_place_extension"),
+        RulePlace::Name => fls!("rule_place_name"),
+        RulePlace::ExtensionAndName => fls!("rule_place_extension_name"),
+        RulePlace::BeforeExtension => fls!("rule_place_before_extension"),
+        RulePlace::AfterExtension => fls!("rule_place_after_extension"),
+        RulePlace::BeforeName => fls!("rule_place_before_name"),
+        RulePlace::AfterName => fls!("rule_place_after_name"),
+        RulePlace::FromNameStart => fls!("rule_place_from_name_start"),
+        RulePlace::FromNameEndReverse => fls!("rule_place_from_name_end_reverse"),
+        RulePlace::FromExtensionStart => fls!("rule_place_from_extension_start"),
+        RulePlace::FromExtensionEndReverse => fls!("rule_place_from_extension_end_reverse"),
     }
-    .to_string()
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

@@ -86,18 +86,16 @@ impl GuiData {
         self.upper_buttons.update_language();
         self.results.update_language();
         self.rules_bottom_panel.update_language();
-        // self.popover_select.update_language();
-        // self.settings.update_language();
-        // self.window_rules.update_language();
-
-        // self.check_button_music_title.set_label(&fls!("music_title_checkbox"));
-        // self.check_button_music_artist.set_label(&fls!("music_artist_checkbox"));
-        // self.check_button_music_album_title.set_label(&fls!("music_album_title_checkbox"));
-        // self.check_button_music_album_artist.set_label(&fls!("music_album_artist_checkbox"));
-        // self.check_button_music_year.set_label(&fls!("music_year_checkbox"));
-        // self.check_button_music_approximate_comparison.set_label(&fls!("music_comparison_checkbox"));
-        //
-        // self.check_button_music_approximate_comparison
-        //     .set_tooltip_text(Some(&fls!("music_comparison_checkbox_tooltip")));
+        self.settings.update_language();
+        self.popover_select.update_language();
+        self.window_rules.custom.update_language();
+        self.window_rules.replace.update_language();
+        self.window_rules.trim.update_language();
+        self.window_rules.add_number.update_language();
+        self.window_rules.add_text.update_language();
+        self.window_rules.normalize.update_language();
+        self.window_rules.size_letters.update_language();
+        self.window_rules.purge.update_language();
+        self.window_rules.update_language();
     }
 }

@@ -4,6 +4,7 @@ use std::fs;
 use std::path::Path;
 use std::rc::Rc;
 
+use crate::fls;
 use gtk4::prelude::*;
 use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
 
@@ -38,7 +39,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                 Some("Outdated results"),
                 Some(&window_main),
                 DialogFlags::DESTROY_WITH_PARENT,
-                &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)],
+                &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
             );
 
             let question_label = gtk4::Label::new(Some(
@@ -62,7 +63,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
             Some("Confirm renaming"),
             Some(&window_main),
             DialogFlags::DESTROY_WITH_PARENT,
-            &[("Ok", gtk4::ResponseType::Ok), ("Close", gtk4::ResponseType::Cancel)],
+            &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
         );
 
         let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {number_of_renamed_files} files").as_str()));
@@ -153,7 +154,7 @@ fn rename_items(old_name: String, new_name: String, ignored: &mut u32, properly_
 }
 
 fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
-    let chooser = Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[("Ok", gtk4::ResponseType::Ok)]);
+    let chooser = Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok)]);
 
     let label_good = gtk4::Label::new(Some(format!("Properly renamed {properly_renamed} files").as_str()));
     let label_ignored = gtk4::Label::new(Some(format!("Ignored {ignored} files, because the name before and after the change are the same.").as_str()));

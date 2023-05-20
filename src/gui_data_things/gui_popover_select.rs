@@ -1,3 +1,5 @@
+use gtk4::prelude::*;
+
 #[derive(Clone)]
 pub struct GuiPopoverSelect {
     pub popover_select: gtk4::Popover,
@@ -27,5 +29,14 @@ impl GuiPopoverSelect {
             button_select_changed,
             button_unselect_changed,
         }
+    }
+
+    pub fn update_language(&self) {
+        self.button_select_all.set_label(&crate::fls!("button_select_all"));
+        self.button_select_reverse.set_label(&crate::fls!("button_select_reverse"));
+        self.button_select_custom.set_label(&crate::fls!("button_select_custom"));
+        self.button_unselect_custom.set_label(&crate::fls!("button_unselect_custom"));
+        self.button_select_changed.set_label(&crate::fls!("button_select_changed"));
+        self.button_unselect_changed.set_label(&crate::fls!("button_unselect_changed"));
     }
 }

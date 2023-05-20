@@ -17,6 +17,7 @@ pub struct GuiRulesBottomPanel {
     pub menu_button_load_rules: gtk4::MenuButton,
     pub scrolled_window_rules: gtk4::ScrolledWindow,
     pub tree_view_window_rules: TreeView,
+    pub label_rules: gtk4::Label,
 
     pub imported_rules: Rc<RefCell<Vec<MultipleRules>>>,
 }
@@ -31,6 +32,7 @@ impl GuiRulesBottomPanel {
         let scrolled_window_rules: gtk4::ScrolledWindow = builder.object("scrolled_window_rules").unwrap();
         let button_save_rules: gtk4::Button = builder.object("button_save_rules").unwrap();
         let menu_button_load_rules: gtk4::MenuButton = builder.object("menu_button_load_rules").unwrap();
+        let label_rules: gtk4::Label = builder.object("label_rules").unwrap();
 
         let tree_view_window_rules: TreeView = TreeView::new();
 
@@ -46,6 +48,7 @@ impl GuiRulesBottomPanel {
             menu_button_load_rules,
             scrolled_window_rules,
             tree_view_window_rules,
+            label_rules,
             imported_rules,
         }
     }
@@ -55,5 +58,13 @@ impl GuiRulesBottomPanel {
         self.button_remove_rule.set_label(&fls!("bottom_rule_remove_button"));
         self.button_rule_one_up.set_label(&fls!("bottom_rule_one_up_button"));
         self.button_rule_one_down.set_label(&fls!("bottom_rule_one_down_button"));
+        self.button_save_rules.set_label(&fls!("bottom_rule_save_rules_button"));
+        self.menu_button_load_rules.set_label(&fls!("bottom_rule_load_rules_button"));
+        self.label_rules.set_label(&fls!("bottom_rule_label_rules"));
+
+        let columns = self.tree_view_window_rules.columns();
+        columns[0].set_title(&fls!("tree_view_bottom_tool_type"));
+        columns[1].set_title(&fls!("tree_view_bottom_usage_name"));
+        columns[2].set_title(&fls!("tree_view_bottom_description"));
     }
 }

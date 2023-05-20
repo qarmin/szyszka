@@ -1,3 +1,4 @@
+use gtk4::prelude::*;
 use gtk4::{Button, Entry, Label};
 
 use crate::gui_data_things::class_dialog_rule_add_number::GuiAddNumber;
@@ -28,6 +29,10 @@ pub struct GuiDialogRules {
     pub entry_example_before: Entry,
     pub label_example_after: Label,
     pub button_example_reset: Button,
+
+    pub label_example: Label,
+    pub label_example_text_before: Label,
+    pub label_example_text_after: Label,
 }
 
 impl GuiDialogRules {
@@ -47,9 +52,12 @@ impl GuiDialogRules {
         let normalize: GuiNormalize = GuiNormalize::create_from_builder(builder);
 
         let entry_example_before: Entry = builder.object("entry_example_before").unwrap();
-        let label_example_after: Label = builder.object("label_example_after").unwrap();
         let button_example_reset: Button = builder.object("button_example_reset").unwrap();
 
+        let label_example: Label = builder.object("label_example").unwrap();
+        let label_example_text_before: Label = builder.object("label_example_text_before").unwrap();
+        let label_example_text_after: Label = builder.object("label_example_text_after").unwrap();
+        let label_example_after: Label = builder.object("label_example_after").unwrap();
         Self {
             notebook_choose_rule,
             window_with_rules,
@@ -63,8 +71,18 @@ impl GuiDialogRules {
             add_number,
             normalize,
             entry_example_before,
+
             label_example_after,
             button_example_reset,
+            label_example,
+            label_example_text_before,
+            label_example_text_after,
         }
+    }
+    pub fn update_language(&self) {
+        self.button_rule_window_add.set_label(&crate::fls!("button_rule_window_add"));
+        self.label_example.set_label(&crate::fls!("label_example"));
+        self.label_example_text_before.set_label(&crate::fls!("label_example_text_before"));
+        self.label_example_text_after.set_label(&crate::fls!("label_example_text_after"));
     }
 }

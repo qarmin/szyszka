@@ -135,7 +135,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_rules">
             <property name="label">Rules</property>
             <property name="valign">end</property>
           </object>

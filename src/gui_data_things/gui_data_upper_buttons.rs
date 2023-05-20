@@ -43,26 +43,17 @@ impl GuiUpperButtons {
         }
     }
     pub fn update_language(&self) {
-        self.button_start_rename.set_label(&fls!("upper_start_renaming_button"));
+        let button_results_one_up_label = self.button_results_one_up.child().unwrap().first_child().unwrap().next_sibling().unwrap().downcast::<gtk4::Label>().unwrap();
+        let button_results_one_down_label = self.button_results_one_down.child().unwrap().first_child().unwrap().next_sibling().unwrap().downcast::<gtk4::Label>().unwrap();
 
-        // pub button_setting: gtk4::Button,
-        // pub button_start_rename: gtk4::Button,
-        // pub button_remove_selection: gtk4::Button,
-        // pub button_add_files: gtk4::Button,
-        // pub button_add_folders: gtk4::Button,
-        // pub menu_button_select_popup: gtk4::Button,
-        // pub button_update_names: gtk4::Button,
-        // pub label_files_folders: gtk4::Label,
-        // pub button_results_one_up: gtk4::Button,
-        // pub button_results_one_down: gtk4::Button,
-        // self.check_button_music_title.set_label(&fls!("music_title_checkbox"));
-        // self.check_button_music_artist.set_label(&fls!("music_artist_checkbox"));
-        // self.check_button_music_album_title.set_label(&fls!("music_album_title_checkbox"));
-        // self.check_button_music_album_artist.set_label(&fls!("music_album_artist_checkbox"));
-        // self.check_button_music_year.set_label(&fls!("music_year_checkbox"));
-        // self.check_button_music_approximate_comparison.set_label(&fls!("music_comparison_checkbox"));
-        //
-        // self.check_button_music_approximate_comparison
-        //     .set_tooltip_text(Some(&fls!("music_comparison_checkbox_tooltip")));
+        self.button_start_rename.set_label(&fls!("upper_start_renaming_button"));
+        self.button_add_files.set_label(&fls!("upper_add_files_button"));
+        self.button_add_folders.set_label(&fls!("upper_add_folders_button"));
+        self.button_remove_selection.set_label(&fls!("upper_remove_selection_button"));
+        self.button_update_names.set_label(&fls!("upper_update_names_button"));
+        self.label_files_folders.set_label(&fls!("upper_files_folders_label"));
+        button_results_one_up_label.set_label(&fls!("upper_results_one_up_button"));
+        button_results_one_down_label.set_label(&fls!("upper_results_one_down_button"));
+        self.menu_button_select_popup.set_label(&fls!("upper_select_popup_button"));
     }
 }

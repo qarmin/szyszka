@@ -5,6 +5,7 @@ use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType};
 
 use crate::add_files_folders::add_folders_to_check;
+use crate::fls;
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_all_boxes_from_widget, get_list_store_from_tree_view, get_selected_folders_files_in_dialog};
 use crate::update_records::{update_records, UpdateMode};
@@ -21,13 +22,13 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
     button_add_folders.connect_clicked(move |_| {
         let chooser = gtk4::FileChooserDialog::builder()
-            .title("Files to include")
+            .title(fls!("dialog_name_files_to_include"))
             .action(gtk4::FileChooserAction::SelectFolder)
             .transient_for(&window_main)
             .modal(true)
             .build();
-        chooser.add_button("OK", ResponseType::Ok);
-        chooser.add_button("Cancel", ResponseType::Cancel);
+        chooser.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
+        chooser.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
         chooser.set_select_multiple(true);
         {
@@ -36,20 +37,16 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
 
             let switch_scan_inside = gtk4::Switch::new();
             box_pack.append(&switch_scan_inside);
-            // box_pack.set_child_packing(&switch_scan_inside, false, true, 5, PackType::End); // TODO GTK 4
 
-            let label_scan_inside = gtk4::Label::new(Some("Scan inside "));
+            let label_scan_inside = gtk4::Label::builder().label(fls!("dialog_scan_inside")).margin_end(5).build();
             box_pack.append(&label_scan_inside);
-            // box_pack.set_child_packing(&label_scan_inside, false, true, 0, PackType::End);
 
             let switch_ignore_folders = gtk4::Switch::new();
             switch_ignore_folders.set_active(true);
             box_pack.append(&switch_ignore_folders);
-            // box_pack.set_child_packing(&switch_ignore_folders, false, true, 5, PackType::End);
 
-            let label_ignore_folders = gtk4::Label::new(Some("Ignore folders "));
+            let label_ignore_folders = gtk4::Label::builder().label(fls!("dialog_ignore_folders")).margin_end(5).build();
             box_pack.append(&label_ignore_folders);
-            // box_pack.set_child_packing(&label_ignore_folders, false, true, 0, PackType::End);
 
             let internal_box = get_all_boxes_from_widget(&chooser)[0].clone();
             internal_box.append(&box_pack);
@@ -61,7 +58,7 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
                 Inhibit(false)
             });
 
-            chooser.set_title(Some("Folders to include"));
+            chooser.set_title(Some(&fls!("dialog_name_folders_to_include")));
             chooser.show();
 
             let shared_result_entries = shared_result_entries.clone();
