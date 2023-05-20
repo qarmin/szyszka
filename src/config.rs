@@ -6,6 +6,14 @@ use std::path::{Path, PathBuf};
 
 pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
+pub const LANGUAGE_FILE_NAME: &str = "language.txt";
+
+pub fn get_language_config_path() -> Option<PathBuf> {
+    if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
+        return Some(PathBuf::from(proj_dirs.config_dir()).join(LANGUAGE_FILE_NAME));
+    }
+    None
+}
 
 pub fn get_config_path() -> Option<PathBuf> {
     if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {

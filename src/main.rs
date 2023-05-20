@@ -69,6 +69,7 @@ fn build_ui(application: &Application, arguments: &[String]) {
 
     initialize_gui(&gui_data);
 
+    load_language(&gui_data);
     connect_change_language(&gui_data);
 
     // Connect upper buttons
@@ -128,6 +129,11 @@ fn build_ui(application: &Application, arguments: &[String]) {
 
     parse_cli_arguments(&gui_data, arguments);
 
+    let gui_data_cloned = gui_data.clone();
     let window_main = gui_data.window_main;
-    window_main.connect_close_request(move |_| Inhibit(false));
+    window_main.connect_close_request(move |_| {
+        let gui_data_cloned = gui_data_cloned.clone();
+        save_language(&gui_data_cloned);
+        Inhibit(false)
+    });
 }
