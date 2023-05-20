@@ -3,13 +3,13 @@
 #![allow(clippy::needless_late_init)]
 
 use std::env;
-use std::ffi::OsString;
 
 use gio::ApplicationFlags;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::Application;
 
+use crate::cli_arguments::{parse_cli_arguments, parse_cli_help_version_arguments};
 use gui_connection::connect_add_files_button::*;
 use gui_connection::connect_add_folders_button::*;
 use gui_connection::connect_button_settings::*;
@@ -38,6 +38,7 @@ use crate::gui_data_things::gui_data::GuiData;
 use crate::initialize_gui::*;
 
 mod add_files_folders;
+mod cli_arguments;
 mod config;
 mod create_tree_view;
 mod example_fields;
@@ -55,13 +56,15 @@ mod update_records;
 fn main() {
     let application = Application::new(None::<String>, ApplicationFlags::HANDLES_OPEN | ApplicationFlags::HANDLES_COMMAND_LINE);
     application.connect_command_line(move |app, cmdline| {
-        build_ui(app, &cmdline.arguments());
+        build_ui(app, &cmdline.arguments().into_iter().map(|e| e.to_string_lossy().to_string()).collect::<Vec<_>>());
         0
     });
-    application.run_with_args(&env::args().collect::<Vec<_>>());
+    application.run_with_args(&env::args().collect::<Vec<String>>());
 }
 
-fn build_ui(application: &Application, _arguments: &[OsString]) {
+fn build_ui(application: &Application, arguments: &[String]) {
+    parse_cli_help_version_arguments(arguments);
+
     let gui_data: GuiData = GuiData::new_with_application(application);
 
     initialize_gui(&gui_data);
@@ -122,6 +125,8 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
     // Moving results
     connect_results_modify_one_up(&gui_data);
     connect_results_modify_one_down(&gui_data);
+
+    parse_cli_arguments(&gui_data, arguments);
 
     let window_main = gui_data.window_main;
     window_main.connect_close_request(move |_| Inhibit(false));

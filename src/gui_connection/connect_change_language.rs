@@ -45,18 +45,14 @@ pub fn _load_system_language(gui_data: &GuiData) {
                 break;
             }
         }
-        let mut found: bool = false;
+
         for (index, lang) in LANGUAGES_ALL.iter().enumerate() {
             if lang.short_text == short_lang {
-                found = true;
+                println!("INFO: Default system language {short_lang} is available, so choosing them");
                 gui_data.settings.combo_box_settings_language.set_active(Some(index as u32));
-                break;
+                return;
             }
         }
-        if found {
-            println!("INFO: Default system language {short_lang} is available, so choosing them");
-        } else {
-            println!("INFO: Default system language {short_lang} is not available, using English(en) instead");
-        }
+        println!("INFO: Default system language {short_lang} is not available, using English(en) instead");
     }
 }
