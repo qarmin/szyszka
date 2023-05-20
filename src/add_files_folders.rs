@@ -10,6 +10,7 @@ use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 
 pub struct ItemStruct {
+    pub full_name: String,
     pub name: String,
     pub path: String,
     pub size: u64,
@@ -142,8 +143,16 @@ fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries)
                     0
                 }
             };
+            let full_name = match file_entry.canonicalize() {
+                Ok(t) => t.to_string_lossy().to_string(),
+                Err(err) => {
+                    eprintln!("Unable to get canonical path of file {}, reason - \"{}\"", file_entry.display(), err);
+                    return None;
+                }
+            };
 
             Some(ItemStruct {
+                full_name,
                 name,
                 path,
                 size,
@@ -156,7 +165,7 @@ fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries)
         .filter_map(|t| t)
         .collect();
 
-    result_entries.files.extend(collected_items.iter().map(|t| t.name.clone()));
+    result_entries.files.extend(collected_items.iter().map(|t| t.full_name.clone()));
 
     collected_items
 }
