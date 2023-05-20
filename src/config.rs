@@ -63,7 +63,7 @@ pub fn load_rules() -> Vec<MultipleRules> {
     if let Some(custom_file) = get_rules_config_file() {
         create_rules_file_if_needed();
 
-        let Ok(file_handler) = fs::File::open(&custom_file) else {
+        let Ok(file_handler) = fs::File::open(custom_file) else {
             return vec![];
         };
         let reader = BufReader::new(file_handler);
@@ -84,7 +84,7 @@ pub fn save_rules_to_file(rules: &[MultipleRules]) {
         create_rules_file_if_needed();
 
         let serialized = serde_json::to_string_pretty(rules).unwrap();
-        if let Err(e) = fs::write(&custom_file, serialized) {
+        if let Err(e) = fs::write(custom_file, serialized) {
             eprintln!("Failed to save rules, reason {e}");
         }
     }

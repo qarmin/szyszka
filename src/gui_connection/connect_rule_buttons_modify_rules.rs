@@ -1,12 +1,12 @@
 use crate::config::{load_rules, save_rules_to_file};
 use gtk4::prelude::*;
-use gtk4::{Dialog, Entry, MenuButton, Orientation, ResponseType};
+use gtk4::{Dialog, Entry, Label, MenuButton, Orientation, ResponseType, TreeView};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{get_list_store_from_tree_view, remove_selected_rows};
-use crate::rule::rules::{MultipleRules, RulePlace, RuleType};
+use crate::help_function::{get_list_store_from_tree_view, populate_rules_tree_view, remove_selected_rows, ResultEntries};
+use crate::rule::rules::{MultipleRules, RulePlace, RuleType, Rules};
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_rule_modify_add(gui_data: &GuiData) {
@@ -371,33 +371,37 @@ pub fn connect_rule_save(gui_data: &GuiData) {
     let button_save_rules = gui_data.rules_bottom_panel.button_save_rules.clone();
     let window_main = gui_data.window_main.clone();
     let imported_rules = gui_data.rules_bottom_panel.imported_rules.clone();
-    let rules = gui_data.rules.clone();
     let menu_button_load_rules = gui_data.rules_bottom_panel.menu_button_load_rules.clone();
-    button_save_rules.connect_clicked(move |e| {
+    let tree_view_results = gui_data.results.tree_view_results.clone();
+    let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
+    let shared_result_entries = gui_data.shared_result_entries.clone();
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+
+    let rules = gui_data.rules.clone();
+    button_save_rules.connect_clicked(move |_| {
+        let shared_result_entries = shared_result_entries.clone();
+        let label_files_folders = label_files_folders.clone();
+        let tree_view_window_rules = tree_view_window_rules.clone();
+
         let menu_button_load_rules = menu_button_load_rules.clone();
+        let tree_view_results = tree_view_results.clone();
         let rules = rules.clone();
         let imported_rules = imported_rules.clone();
-        let imported_rules_cloned = imported_rules.clone();
-        let (dialog, entry) = create_dialog(&window_main, imported_rules);
+        let (dialog, entry) = create_dialog(&window_main, &imported_rules);
 
         dialog.connect_response(move |dialog, response| {
-            let menu_button_load_rules = menu_button_load_rules.clone();
-            let imported_rules_cloned = imported_rules_cloned.clone();
             if response == ResponseType::Ok {
                 let new_rule_name = entry.text().to_string();
                 {
-                    let rules = rules.borrow_mut();
-                    let mut imported_rules = imported_rules_cloned.borrow_mut();
+                    let rules_vec = rules.borrow_mut().rules.clone();
+                    let mut imported_rules = imported_rules.borrow_mut();
                     let mut used_rules = imported_rules.clone();
                     used_rules.retain(|f| f.name != new_rule_name);
-                    used_rules.push(MultipleRules {
-                        name: new_rule_name,
-                        rules: rules.rules.clone(),
-                    });
+                    used_rules.push(MultipleRules { name: new_rule_name, rules: rules_vec });
 
                     (*imported_rules) = used_rules;
                     save_rules_to_file(&imported_rules);
-                    set_rules_popover(&imported_rules, &menu_button_load_rules);
+                    set_rules_popover(&imported_rules, &menu_button_load_rules, &tree_view_results, &tree_view_window_rules, &shared_result_entries, &rules, &label_files_folders);
                 }
             }
             dialog.close();
@@ -407,15 +411,20 @@ pub fn connect_rule_save(gui_data: &GuiData) {
 
 pub fn connect_rule_load(gui_data: &GuiData) {
     let menu_button_load_rules = gui_data.rules_bottom_panel.menu_button_load_rules.clone();
+    let tree_view_results = gui_data.results.tree_view_results.clone();
+    let shared_result_entries = gui_data.shared_result_entries.clone();
+    let rules = gui_data.rules.clone();
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+    let tree_view_window_rules = gui_data.rules_bottom_panel.tree_view_window_rules.clone();
     let cached_rules = load_rules();
     if !cached_rules.is_empty() {
         let mut cached_borrowed = gui_data.rules_bottom_panel.imported_rules.borrow_mut();
-        set_rules_popover(&cached_rules, &menu_button_load_rules);
         *cached_borrowed = cached_rules;
+        set_rules_popover(&cached_borrowed, &menu_button_load_rules, &tree_view_results, &tree_view_window_rules, &shared_result_entries, &rules, &label_files_folders);
     }
 }
 
-fn create_dialog(window_main: &gtk4::Window, imported_rules: Rc<RefCell<Vec<MultipleRules>>>) -> (Dialog, Entry) {
+fn create_dialog(window_main: &gtk4::Window, imported_rules: &Rc<RefCell<Vec<MultipleRules>>>) -> (Dialog, Entry) {
     let dialog = Dialog::builder().title("Save Rule").transient_for(window_main).modal(true).build();
     let button_ok = dialog.add_button("Ok", ResponseType::Ok);
     button_ok.set_sensitive(false);
@@ -425,8 +434,8 @@ fn create_dialog(window_main: &gtk4::Window, imported_rules: Rc<RefCell<Vec<Mult
     let used_names = format!("Names used in rules: {}", names.join(", "));
 
     let file_name_entry: Entry = Entry::builder().margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
-    let label: gtk4::Label = gtk4::Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
-    let label_name: gtk4::Label = gtk4::Label::builder().label("Choose name of rules(if exists, will override it)").margin_top(10).margin_start(10).margin_end(10).build();
+    let label: Label = Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
+    let label_name: Label = Label::builder().label("Choose name of rules(if exists, will override it)").margin_top(10).margin_start(10).margin_end(10).build();
     button_ok.grab_focus();
 
     let parent = button_ok.parent().unwrap().parent().unwrap().downcast::<gtk4::Box>().unwrap(); // TODO Hack, but not so ugly as before
@@ -443,14 +452,33 @@ fn create_dialog(window_main: &gtk4::Window, imported_rules: Rc<RefCell<Vec<Mult
     (dialog, file_name_entry)
 }
 
-fn set_rules_popover(cached_items: &[MultipleRules], menu_button_load_rules: &MenuButton) {
+fn set_rules_popover(
+    cached_items: &[MultipleRules],
+    menu_button_load_rules: &MenuButton,
+    tree_view_results: &TreeView,
+    tree_view_window_rules: &TreeView,
+    shared_result_entries: &Rc<RefCell<ResultEntries>>,
+    rules: &Rc<RefCell<Rules>>,
+    label_files_folders: &Label,
+) {
     let popover = gtk4::Popover::builder().build();
     let new_box = gtk4::Box::builder().orientation(Orientation::Vertical).build();
     for item in cached_items {
         let button = gtk4::Button::builder().label(&item.name).build();
         let popover_clone = popover.clone();
-        button.connect_clicked(move |e| {
-            // TODO set rules
+
+        let tree_view_results = tree_view_results.clone();
+        let tree_view_window_rules = tree_view_window_rules.clone();
+        let shared_result_entries = shared_result_entries.clone();
+        let rules = rules.clone();
+        let label_files_folders = label_files_folders.clone();
+        let cloned_item = item.clone();
+        button.connect_clicked(move |_| {
+            let cloned_item = cloned_item.clone();
+            let rules = rules.clone();
+            rules.borrow_mut().rules = cloned_item.rules.clone();
+            populate_rules_tree_view(&tree_view_window_rules, &cloned_item.rules);
+            update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleAdded, &label_files_folders);
             popover_clone.hide();
         });
 

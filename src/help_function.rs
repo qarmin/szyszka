@@ -1,9 +1,7 @@
 use gtk4::prelude::*;
 use gtk4::*;
-use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
-use std::rc::Rc;
 
 use crate::rule::rules::*;
 
@@ -95,15 +93,13 @@ pub fn get_list_store_from_tree_view(tree_view: &TreeView) -> ListStore {
     tree_view.model().unwrap().downcast::<ListStore>().unwrap()
 }
 
-pub fn populate_rules_tree_view(tree_view: &TreeView, rules: &Rc<RefCell<Rules>>) {
-    let mut rules = rules.borrow_mut();
-    let rules = &mut *rules;
-
+pub fn populate_rules_tree_view(tree_view: &TreeView, rules: &[SingleRule]) {
     let list_store = get_list_store_from_tree_view(tree_view);
 
+    // dbg!(&rules);
     list_store.clear();
 
-    for rule in &rules.rules {
+    for rule in rules {
         let values: [(u32, &dyn ToValue); 3] = [
             (ColumnsRules::RuleType as u32, &rule_type_to_string(&rule.rule_type)),
             (ColumnsRules::UsageType as u32, &rule_place_to_string(&rule.rule_place)),
