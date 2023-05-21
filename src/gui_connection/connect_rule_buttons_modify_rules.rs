@@ -434,7 +434,7 @@ fn create_dialog(window_main: &gtk4::Window, imported_rules: &Rc<RefCell<Vec<Mul
 
     let names = imported_rules.borrow().iter().map(|rule| rule.name.clone()).collect::<Vec<String>>();
 
-    let used_names = fls!("edit_names_used_in_rules", generate_translation_hashmap(vec![("names", names.join(", "))]));
+    let used_names = fls!("edit_names_used_in_rules", generate_translation_hashmap(vec![("rules", names.join(", "))]));
 
     let file_name_entry: Entry = Entry::builder().margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
     let label: Label = Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();

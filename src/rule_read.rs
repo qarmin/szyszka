@@ -90,9 +90,9 @@ fn read_rule_replace(window_rules: &GuiDialogRules, rule_data: &mut RuleData) ->
     rule_description = fls!(
         "rule_description_replace",
         generate_translation_hashmap(vec![
-            ("$text_to_find", rule_data.text_to_find.clone()),
-            ("$text_to_replace", rule_data.text_to_replace.clone()),
-            ("$additional_regex_text", additional_regex_text.to_string()),
+            ("text_to_find", rule_data.text_to_find.clone()),
+            ("text_to_replace", rule_data.text_to_replace.clone()),
+            ("additional_regex_text", additional_regex_text.to_string()),
         ])
     );
 

@@ -8,6 +8,13 @@ pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
 pub const LANGUAGE_FILE_NAME: &str = "language.txt";
 
+const BASIC_CUSTOM_COMMANDS: &str = r#"FILE_$(N).$(EXT)
+FILE_$(K).$(EXT)
+$(PARENT)_$(K).$(EXT)
+"#;
+
+const BASIC_RULE_CONTENT: &str = r#"[]"#;
+
 pub fn get_language_config_path() -> Option<PathBuf> {
     if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
         return Some(PathBuf::from(proj_dirs.config_dir()).join(LANGUAGE_FILE_NAME));
@@ -35,11 +42,6 @@ pub fn get_rules_config_file() -> Option<PathBuf> {
     }
     None
 }
-
-const BASIC_CUSTOM_COMMANDS: &str = r#"
-FILE_$(N).$(EXT)
-FILE_$(K).$(EXT)
-"#;
 
 pub fn load_custom_rules() -> Vec<String> {
     if let Some(custom_file) = get_custom_text_config_file() {
@@ -112,7 +114,7 @@ pub fn create_rules_file_if_needed() {
     if let Some(custom_file) = get_rules_config_file() {
         if !Path::new(&custom_file).is_file() {
             let _ = fs::create_dir_all(Path::new(&custom_file).parent().unwrap());
-            if let Err(e) = fs::write(&custom_file, RULES_FILE_NAME) {
+            if let Err(e) = fs::write(&custom_file, BASIC_RULE_CONTENT) {
                 eprintln!("Failed to create file, reason {e}");
             }
         }

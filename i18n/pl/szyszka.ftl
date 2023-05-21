@@ -15,6 +15,9 @@ bottom_rule_one_up_button = Jeden w górę
 bottom_rule_one_down_button = Jedno w dół
 bottom_rule_save_rules_button = Zapisz reguły
 bottom_rule_load_rules_button = Załaduj reguły
+# Edit names
+edit_names_used_in_rules = Nazwy używane w regułach: { $rules }
+edit_names_choose_name = Wybierz nazwę reguł (jeśli istnieje, nadpisze ją)
 # Tree View Rules
 tree_view_upper_column_type = Rodzaj
 tree_view_upper_column_current_name = Bierząca nazwa
@@ -32,6 +35,8 @@ settings_open_config_dir = Otwórz katalog konfiguracyjny
 # Other in main window
 bottom_rule_label_rules = Reguły
 upper_files_folders_label = Pliki/Foldery
+upper_files_folders_label_update = Pliki/foldery({ $files_number }) - ##### WYMAGANA AKTUALIZACJA #####
+upper_files_folders_label_up_to_date = Pliki/foldery({ $files_number }) - aktualne
 # Select popover
 button_select_all = Zaznacz wszystko
 button_select_reverse = Odwróć zaznaczenie
@@ -57,6 +62,12 @@ dialog_name_files_to_include = Pliki do dodania
 dialog_name_folders_to_include = Foldery do dodania
 dialog_scan_inside = Skanuj wewnątrz
 dialog_ignore_folders = Ignoruj foldery
+dialog_confirm_renaming = Potwierdź zmianę nazwy
+dialog_outdated_results = Nieaktualne wyniki
+dialog_results_of_renaming = Wyniki zmiany nazwy
+dialog_save_rule = Zapisz regułę
+dialog_select_custom = Własne zaznaczanie
+dialog_unselect_custom = Własne odznaczanie
 
 # Rule Window
 
@@ -123,6 +134,9 @@ label_replace_text_to_find = Tekst do znalezienia
 label_replace_text_to_replace = Tekst do zastąpienia
 label_replace_captures = Przechwycone elementy:
 label_replace_captured_captures = Zdobyte przechwytywania
+label_replace_captures_number = ({ $capture_number } przechwyconych fragmentów)
+label_replace_no_captures = Brak przechwyceń
+label_replace_invalid_regex = NIEPRAWIDŁOWY REGEX
 # Trim
 check_button_trim_name_start = Początek nazwy
 check_button_trim_name_end = Koniec nazwy
@@ -137,7 +151,7 @@ label_normalize_name =
     Wszystko - zmienia nazwę na nazwę, która zawiera tylko
                               znaki `a-z`, `0-9`, `-`, ` `, `.`.
                               e.g. `żółć CZERona.Txt` -> `zolc-czerwona.txt`
-
+    
     Częściowo - działa dokładnie tak samo jak powyższa opcja, ale pozwala
                       na użycie spacji ` ` i dużych liter `A-Z`
                       e.g. ` Źrebię Krokietowe.Rar ` -> `Zrebie Krokietowe.Rar`
@@ -169,7 +183,7 @@ rule_place_from_extension_end_reverse = Od końca rozszerzenia do początku
 rule_description_full_normalize = Pełna normalizacja
 rule_description_partial_normalize = Częściowa normalizacja
 rule_description_zeros = i wypełnianie { $zeros } zerami,
-rule_description_step = Zaczynając od { step } od kroku { start }{ zeros }
+rule_description_step = Zaczynając od { $start } z krokiem { $step }{ $zeros }
 rule_description_lowercase = Małe litery
 rule_description_uppercase = Wielkie litery
 rule_description_text = tekst
@@ -190,3 +204,16 @@ notebook_tab_add_text = Dodawanie Tekstu
 notebook_tab_replace = Zamiana
 notebook_tab_trim = Przycinanie
 notebook_tab_normalize = Normalizowanie Nazwy
+# Renaming dialog
+renaming_question = Czy na pewno chcesz zmienić nazwę { $number_of_renamed_files } plików?
+renaming_destination_file_exists = Plik docelowy już istnieje.
+renaming_renamed_files = Poprawnie zmieniono nazwę { $properly_renamed } plików
+renaming_ignored_files = Zignorowano { $ignored } plików, ponieważ ich nowa nazwa była identyczna jak przed zmianą.
+renaming_failed_files = Nie udało się zmienić nazwy { $failed_vector } plików
+renaming_list_of_failed_to_rename = Lista wszystkich nieudanych zmian
+renaming_error = błąd
+renaming_some_records_not_updated = Niektóre rekordy nie są aktualizowane, możesz to zrobić klikając na przycisk Aktualizuj.\nCzy na pewno chcesz kontynuować bez aktualizowania nazw?
+renaming_missing_files = Brakujące pliki
+renaming_require_missing_files = Musisz użyć co najmniej 1 pliku
+renaming_missing_rules = Brakujące reguły
+renaming_require_missing_rules = Musisz użyć co najmniej 1 reguły
