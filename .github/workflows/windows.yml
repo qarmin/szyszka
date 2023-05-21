@@ -58,15 +58,81 @@ jobs:
           cp -f -t package $(pds -vv -f $MINGW_PREFIX/lib/gdk-pixbuf-2.0/2.10.0/loaders/*)
           find package -iname "*.dll" -or -iname "*.exe" -type f -exec mingw-strip {} +
 
-          cd package/share
-          wget2 https://github.com/qarmin/czkawka/files/8880216/gtk4_theme.zip
-          unzip gtk4_theme.zip
-          rm gtk4_theme.zip
-          cd ../..
+          # Do not use broken GTK4 theme - at least for now
+          #cd package/share
+          #wget2 https://github.com/qarmin/czkawka/files/8880216/gtk4_theme.zip
+          #unzip gtk4_theme.zip
+          #rm gtk4_theme.zip
+          #cd ../..
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: szyszka-windows-${{ github.sha }}
+          path: |
+            ./package
+          if-no-files-found: error
+
+  container_console_window:
+    runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/piegamesde/gtk4-cross:gtk-4.8
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install additional dependencies
+        # gio is for the build script
+        run: dnf install wget2 unzip mingw64-bzip2.noarch mingw64-poppler mingw64-poppler-glib mingw32-python3 rust-gio-devel adwaita-icon-theme -y && dnf clean all -y
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: x86_64-pc-windows-gnu
+      - name: Cache ~/.cargo
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo
+          key: windows-dotcargo
+      - name: Cache cargo build
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: windows-build-target
+      - name: Show console window on windows
+        run: sed -i 's|\#\!\[windows_subsystem|//#![windows_subsystem|' src/main.rs
+      - name: Cross compile for Windows
+        run: |
+          #!/bin/bash
+          set -euo pipefail
+          export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/share/pkgconfig:$MINGW_PREFIX/lib/pkgconfig/:/usr/x86_64-w64-mingw32/lib/pkgconfig/
+          cargo build --target=x86_64-pc-windows-gnu --release --locked
+          mkdir -p package
+          cp target/x86_64-pc-windows-gnu/release/szyszka.exe package/
+      - name: Package
+        run: |
+          #!/bin/bash
+          set -euo pipefail
+          cp -t package $(pds -vv -f package/*.exe)
+          # Add gdbus which is recommended on Windows (why?)
+          cp $MINGW_PREFIX/bin/gdbus.exe package
+          # Handle the glib schema compilation as well
+          glib-compile-schemas $MINGW_PREFIX/share/glib-2.0/schemas/
+          mkdir -p package/share/glib-2.0/schemas/
+          cp -T $MINGW_PREFIX/share/glib-2.0/schemas/gschemas.compiled package/share/glib-2.0/schemas/gschemas.compiled
+          # Pixbuf stuff, in order to get SVGs (scalable icons) to load
+          mkdir -p package/lib/gdk-pixbuf-2.0
+          cp -rT $MINGW_PREFIX/lib/gdk-pixbuf-2.0 package/lib/gdk-pixbuf-2.0
+          cp -f -t package $(pds -vv -f $MINGW_PREFIX/lib/gdk-pixbuf-2.0/2.10.0/loaders/*)
+          find package -iname "*.dll" -or -iname "*.exe" -type f -exec mingw-strip {} +
+
+          # Do not use broken GTK4 theme - at least for now
+          #cd package/share
+          #wget2 https://github.com/qarmin/czkawka/files/8880216/gtk4_theme.zip
+          #unzip gtk4_theme.zip
+          #rm gtk4_theme.zip
+          #cd ../..
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: szyszka-windows-console-${{ github.sha }}
           path: |
             ./package
           if-no-files-found: error
