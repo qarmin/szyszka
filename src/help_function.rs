@@ -321,7 +321,7 @@ pub fn get_all_children<P: IsA<Widget>>(wid: &P) -> Vec<Widget> {
     vector
 }
 
-pub fn get_selected_folders_files_in_dialog(dialog: &FileChooserDialog) -> Vec<PathBuf> {
+pub fn get_selected_folders_files_in_dialog(dialog: &FileChooserNative) -> Vec<PathBuf> {
     let mut files: Vec<PathBuf> = Vec::new();
     let g_files = dialog.files();
     for index in 0..g_files.n_items() {

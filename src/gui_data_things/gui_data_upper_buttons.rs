@@ -1,4 +1,5 @@
 use gtk4::prelude::*;
+use gtk4::Window;
 
 use crate::fls;
 use crate::help_function::{get_custom_label_from_widget, set_icon_of_button};
@@ -19,10 +20,13 @@ pub struct GuiUpperButtons {
     pub label_files_folders: gtk4::Label,
     pub button_results_one_up: gtk4::Button,
     pub button_results_one_down: gtk4::Button,
+
+    pub file_chooser_dialog_add_files: gtk4::FileChooserNative,
+    pub file_chooser_dialog_add_folders: gtk4::FileChooserNative,
 }
 
 impl GuiUpperButtons {
-    pub fn create_from_builder(builder: &gtk4::Builder) -> Self {
+    pub fn create_from_builder(builder: &gtk4::Builder, window_main: &Window) -> Self {
         let button_setting: gtk4::Button = builder.object("button_setting").unwrap();
         let button_start_rename: gtk4::Button = builder.object("button_start_rename").unwrap();
         let button_remove_selection: gtk4::Button = builder.object("button_remove_selection").unwrap();
@@ -38,6 +42,19 @@ impl GuiUpperButtons {
         set_icon_of_button(&button_results_one_up, SZY_ICON_UP);
         set_icon_of_button(&button_results_one_down, SZY_ICON_DOWN);
 
+        let file_chooser_dialog_add_files = gtk4::FileChooserNative::builder()
+            .action(gtk4::FileChooserAction::Open)
+            .transient_for(window_main)
+            .select_multiple(true)
+            .modal(true)
+            .build();
+        let file_chooser_dialog_add_folders = gtk4::FileChooserNative::builder()
+            .action(gtk4::FileChooserAction::SelectFolder)
+            .transient_for(window_main)
+            .select_multiple(true)
+            .modal(true)
+            .build();
+
         Self {
             button_setting,
             button_start_rename,
@@ -49,6 +66,8 @@ impl GuiUpperButtons {
             label_files_folders,
             button_results_one_up,
             button_results_one_down,
+            file_chooser_dialog_add_files,
+            file_chooser_dialog_add_folders,
         }
     }
     pub fn update_language(&self) {
@@ -61,5 +80,7 @@ impl GuiUpperButtons {
         get_custom_label_from_widget(&self.button_results_one_up).set_label(&fls!("upper_results_one_up_button"));
         get_custom_label_from_widget(&self.button_results_one_down).set_label(&fls!("upper_results_one_down_button"));
         self.menu_button_select_popup.set_label(&fls!("upper_select_popup_button"));
+        self.file_chooser_dialog_add_files.set_title(&fls!("dialog_name_files_to_include"));
+        self.file_chooser_dialog_add_folders.set_title(&fls!("dialog_name_folders_to_include"));
     }
 }

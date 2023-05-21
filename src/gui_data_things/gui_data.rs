@@ -58,7 +58,7 @@ impl GuiData {
         window_main.show();
         window_main.set_title(Some("Szyszka"));
 
-        let upper_buttons = GuiUpperButtons::create_from_builder(&builder_window_main);
+        let upper_buttons = GuiUpperButtons::create_from_builder(&builder_window_main, &window_main);
         let results = GuiResults::create_from_builder(&builder_window_main);
         let rules_bottom_panel = GuiRulesBottomPanel::create_from_builder(&builder_window_main);
         let popover_select = GuiPopoverSelect::create_from_builder(&builder_popover);

@@ -76,7 +76,7 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
 
         let label_name = fls!(
             "renaming_question",
-            generate_translation_hashmap(vec![("capture_number", number_of_renamed_files.to_string())])
+            generate_translation_hashmap(vec![("number_of_renamed_files", number_of_renamed_files.to_string())])
         );
         let question_label = Label::new(Some(label_name.as_str()));
 
