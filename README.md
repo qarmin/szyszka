@@ -21,7 +21,7 @@ Szyszka is a simple but powerful and fast bulk file renamer.
 
 ## Requirements
 ### Linux
-You need to install GTK 4 (it should be available by default on most distributions), which is bundled in Ubuntu 22.04 and newer.
+You need to install GTK 4.6 (it should be available by default on most distributions), which is bundled in Ubuntu 22.04 and newer.
 ```shell
 sudo apt install libgtk-4-bin
 ```

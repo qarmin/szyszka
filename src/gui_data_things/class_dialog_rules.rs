@@ -10,7 +10,9 @@ use crate::gui_data_things::class_dialog_rule_purge::GuiPurge;
 use crate::gui_data_things::class_dialog_rule_replace::GuiReplace;
 use crate::gui_data_things::class_dialog_rule_size_letters::GuiSizeLetters;
 use crate::gui_data_things::class_dialog_rule_trim::GuiTrim;
-use crate::help_function::{get_all_direct_children, NotebookRules};
+use crate::help_function::{get_all_direct_children, set_icon_of_button, NotebookRules};
+
+pub const SZY_ICON_RESET: &[u8] = include_bytes!("../../icons/szy_reset.svg");
 
 #[derive(Clone)]
 pub struct GuiDialogRules {
@@ -60,6 +62,9 @@ impl GuiDialogRules {
         let label_example_text_before: Label = builder.object("label_example_text_before").unwrap();
         let label_example_text_after: Label = builder.object("label_example_text_after").unwrap();
         let label_example_after: Label = builder.object("label_example_after").unwrap();
+
+        set_icon_of_button(&button_example_reset, SZY_ICON_RESET);
+
         Self {
             notebook_choose_rule,
             window_with_rules,
