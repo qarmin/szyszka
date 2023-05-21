@@ -17,6 +17,10 @@ bottom_rule_one_down_button = One Down
 bottom_rule_save_rules_button = Save Rules
 bottom_rule_load_rules_button = Load Rules
 
+# Edit names
+edit_names_used_in_rules = Names used in rules: { $rules }
+edit_names_choose_name = Choose name of rules(if exists, will override it)
+
 # Tree View Rules
 tree_view_upper_column_type = Type
 tree_view_upper_column_current_name = Current Name
@@ -37,6 +41,8 @@ settings_open_config_dir = Open cache dir
 # Other in main window
 bottom_rule_label_rules = Rules
 upper_files_folders_label = Files/Folders
+upper_files_folders_label_update = Files/Folders({ $files_number }) - ##### UPDATE REQUIRED #####
+upper_files_folders_label_up_to_date = Files/Folders({ $files_number }) - up to date
 
 # Select popover
 button_select_all = Select All
@@ -66,6 +72,12 @@ dialog_name_files_to_include = Files to include
 dialog_name_folders_to_include = Folders to include
 dialog_scan_inside = Scan inside
 dialog_ignore_folders = Ignore folders
+dialog_confirm_renaming = Confirm renaming
+dialog_outdated_results = Outdated results
+dialog_results_of_renaming = Results of renaming
+dialog_save_rule = Save Rule
+dialog_select_custom = Select Custom
+dialog_unselect_custom = Unselect Custom
 
 # Rule Window
 ## Common
@@ -133,6 +145,9 @@ label_replace_text_to_find = Text to find
 label_replace_text_to_replace = Replaced text
 label_replace_captures = Captures
 label_replace_captured_captures = Captured captures
+label_replace_captures_number = ({ $capture_number } captures)
+label_replace_no_captures = No captures
+label_replace_invalid_regex = INVALID REGEX
 
 # Trim
 check_button_trim_name_start = Name Start
@@ -207,6 +222,19 @@ notebook_tab_replace = Replace
 notebook_tab_trim = Trim
 notebook_tab_normalize = Normalize Name
 
+# Renaming dialog
+renaming_question = Are you sure that you want to rename { $number_of_renamed_files } files?
+renaming_destination_file_exists = Destination file already exists.
+renaming_renamed_files = Properly renamed { $properly_renamed } files
+renaming_ignored_files = Ignored { $ignored } files, because the name before and after the change are the same.
+renaming_failed_files = Failed to rename { $failed_vector } files
+renaming_list_of_failed_to_rename = List of all failing renames
+renaming_error = error
+renaming_some_records_not_updated = Some records are not updated, you can do it by clicking at the Update Names button.\nAre you sure that you want to proceed without updating names?
+renaming_missing_files = Missing Files
+renaming_require_missing_files = You need to use at least 1 file
+renaming_missing_rules = Missing Rules
+renaming_require_missing_rules = You need to use at least 1 rule
 
 
 

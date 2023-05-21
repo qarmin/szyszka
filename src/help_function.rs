@@ -212,6 +212,7 @@ pub fn create_message_window(window_main: &Window, title: &str, message: &str) {
     let dialog = Dialog::builder().title(title).transient_for(window_main).modal(true).build();
     dialog.connect_response(|e, _r| e.close());
     dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
+    dialog.set_default_width(300);
 
     let question_label = Label::new(Some(message));
 

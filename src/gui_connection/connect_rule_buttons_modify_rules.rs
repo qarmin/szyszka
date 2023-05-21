@@ -1,12 +1,14 @@
 use crate::config::{load_rules, save_rules_to_file};
 use crate::fls;
 use gtk4::prelude::*;
+
 use gtk4::{Dialog, Entry, Label, MenuButton, Orientation, ResponseType, TreeView};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_list_store_from_tree_view, populate_rules_tree_view, remove_selected_rows, ResultEntries};
+use crate::localizer::generate_translation_hashmap;
 use crate::rule::rules::{MultipleRules, RulePlace, RuleType, Rules};
 use crate::update_records::{update_records, UpdateMode};
 
@@ -15,7 +17,10 @@ pub fn connect_rule_modify_add(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();
     let window_main = gui_data.window_main.clone();
 
+    let button_rule_window_add = gui_data.window_rules.button_rule_window_add.clone();
     button_add_rule.connect_clicked(move |_e| {
+        button_rule_window_add.set_label(&fls!("bottom_rule_add_button"));
+
         window_with_rules.show();
         window_main.set_sensitive(false);
     });
@@ -357,7 +362,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
             }
         }
 
-        button_rule_window_add.set_label("Edit Rule");
+        button_rule_window_add.set_label(&fls!("bottom_rule_edit_button"));
 
         window_with_rules.show();
         window_main.set_sensitive(false);
@@ -422,17 +427,18 @@ pub fn connect_rule_load(gui_data: &GuiData) {
 }
 
 fn create_dialog(window_main: &gtk4::Window, imported_rules: &Rc<RefCell<Vec<MultipleRules>>>) -> (Dialog, Entry) {
-    let dialog = Dialog::builder().title("Save Rule").transient_for(window_main).modal(true).build();
+    let dialog = Dialog::builder().title(fls!("dialog_save_rule")).transient_for(window_main).modal(true).build();
     let button_ok = dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
     button_ok.set_sensitive(false);
     dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
     let names = imported_rules.borrow().iter().map(|rule| rule.name.clone()).collect::<Vec<String>>();
-    let used_names = format!("Names used in rules: {}", names.join(", "));
+
+    let used_names = fls!("edit_names_used_in_rules", generate_translation_hashmap(vec![("names", names.join(", "))]));
 
     let file_name_entry: Entry = Entry::builder().margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
     let label: Label = Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
-    let label_name: Label = Label::builder().label("Choose name of rules(if exists, will override it)").margin_top(10).margin_start(10).margin_end(10).build();
+    let label_name: Label = Label::builder().label(fls!("edit_names_choose_name")).margin_top(10).margin_start(10).margin_end(10).build();
     button_ok.grab_focus();
 
     let parent = button_ok.parent().unwrap().parent().unwrap().downcast::<gtk4::Box>().unwrap(); // TODO Hack, but not so ugly as before

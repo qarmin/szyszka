@@ -6,10 +6,12 @@ use std::rc::Rc;
 
 use crate::fls;
 use gtk4::prelude::*;
+use gtk4::Label;
 use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
 
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, to_dir_file_from_u8, ColumnsResults, DirFileType, ResultEntries, CHARACTER};
+use crate::localizer::generate_translation_hashmap;
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
     let button_start_rename = gui_data.upper_buttons.button_start_rename.clone();
@@ -25,26 +27,24 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
     button_start_rename.connect_clicked(move |_e| {
         let number_of_renamed_files = count_rows_in_tree_view(&tree_view_results);
         if number_of_renamed_files == 0 {
-            create_message_window(&window_main, "Missing Files", "You need to use at least 1 file");
+            create_message_window(&window_main, &fls!("renaming_missing_files"), &fls!("renaming_require_missing_files"));
             return;
         }
         let rules = rules.borrow();
         if rules.rules.is_empty() {
-            create_message_window(&window_main, "Missing Rules", "You need to use at least 1 rule");
+            create_message_window(&window_main, &fls!("renaming_missing_rules"), &fls!("renaming_require_missing_rules"));
             return;
         }
 
         if !rules.updated {
             let chooser_update = Dialog::with_buttons(
-                Some("Outdated results"),
+                Some(fls!("dialog_outdated_results")),
                 Some(&window_main),
                 DialogFlags::DESTROY_WITH_PARENT,
                 &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
             );
 
-            let question_label = gtk4::Label::new(Some(
-                "Some records are not updated, you can do it by clicking at the Update Names button.\nAre you sure that you want to proceed without updating names?",
-            ));
+            let question_label = Label::new(Some(&fls!("renaming_some_records_not_updated")));
 
             let chooser_box = get_dialog_box_child(&chooser_update);
             chooser_box.insert_child_after(&question_label, None::<&Widget>);
@@ -60,13 +60,14 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
         }
 
         let chooser = Dialog::with_buttons(
-            Some("Confirm renaming"),
+            Some(fls!("dialog_confirm_renaming")),
             Some(&window_main),
             DialogFlags::DESTROY_WITH_PARENT,
             &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
         );
 
-        let question_label = gtk4::Label::new(Some(format!("Are you sure that you want to rename {number_of_renamed_files} files").as_str()));
+        let label_name = fls!("renaming_question", generate_translation_hashmap(vec![("capture_number", number_of_renamed_files.to_string())]));
+        let question_label = Label::new(Some(label_name.as_str()));
 
         let chooser_box = get_dialog_box_child(&chooser);
         chooser_box.insert_child_after(&question_label, None::<&Widget>);
@@ -145,7 +146,7 @@ fn rename_items(old_name: String, new_name: String, ignored: &mut u32, properly_
     if new_name == old_name {
         *ignored += 1;
     } else if Path::new(&new_name).exists() {
-        failed_renames.push((old_name, new_name, "Destination file already exists.".to_string()));
+        failed_renames.push((old_name, new_name, fls!("renaming_destination_file_exists")));
     } else if let Err(e) = fs::rename(&old_name, &new_name) {
         failed_renames.push((old_name, new_name, e.to_string()));
     } else {
@@ -154,10 +155,13 @@ fn rename_items(old_name: String, new_name: String, ignored: &mut u32, properly_
 }
 
 fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
-    let chooser = Dialog::with_buttons(Some("Results of renaming"), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok)]);
+    let chooser = Dialog::with_buttons(Some(fls!("dialog_results_of_renaming")), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok)]);
 
-    let label_good = gtk4::Label::new(Some(format!("Properly renamed {properly_renamed} files").as_str()));
-    let label_ignored = gtk4::Label::new(Some(format!("Ignored {ignored} files, because the name before and after the change are the same.").as_str()));
+    let label_good_name = fls!("renaming_renamed_files", generate_translation_hashmap(vec![("properly_renamed", properly_renamed.to_string())]));
+    let label_ignored_name = fls!("renaming_ignored_files", generate_translation_hashmap(vec![("ignored", ignored.to_string())]));
+
+    let label_good = Label::new(Some(label_good_name.as_str()));
+    let label_ignored = Label::new(Some(label_ignored_name.as_str()));
 
     let chooser_box = get_dialog_box_child(&chooser);
     chooser_box.set_margin_top(5);
@@ -165,7 +169,8 @@ fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u
     chooser_box.set_margin_start(5);
     chooser_box.set_margin_end(5);
 
-    let label_bad = gtk4::Label::new(Some(format!("Failed to rename {} files", failed_vector.len()).as_str()));
+    let label_good_name = fls!("renaming_failed_files", generate_translation_hashmap(vec![("failed_vector", failed_vector.len().to_string())]));
+    let label_bad = Label::new(Some(label_good_name.as_str()));
 
     chooser_box.insert_child_after(&label_good, None::<&Widget>);
     chooser_box.insert_child_after(&label_ignored, Some(&label_good));
@@ -173,7 +178,7 @@ fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u
 
     if !failed_vector.is_empty() {
         chooser.set_default_size(800, 200);
-        let label_info_bad = gtk4::Label::new(Some("List of all failing renames"));
+        let label_info_bad = Label::new(Some(fls!("renaming_list_of_failed_to_rename").as_str()));
         label_info_bad.set_margin_top(10);
         chooser_box.insert_child_after(&label_info_bad, Some(&label_bad));
 
@@ -187,13 +192,10 @@ fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u
         text_view.set_buffer(Some(&buffer));
         let mut text = String::new();
 
+        let text_err = fls!("renaming_error");
+
         for i in failed_vector {
-            text.push_str(i.0.as_str());
-            text.push_str(" -> ");
-            text.push_str(i.1.as_str());
-            text.push_str(", error: ");
-            text.push_str(i.2.as_str());
-            text.push('\n');
+            text.push_str(format!("{} -> {}, {text_err}: {}\n", i.0, i.1, i.2).as_str());
         }
         buffer.set_text(&text);
 

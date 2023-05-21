@@ -109,7 +109,7 @@ fn read_rule_custom(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -> 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
     rule_data.custom_text = entry_custom_text_to_change.text().to_string();
-    rule_description = fls!("rule_description_custom_rule", generate_translation_hashmap(vec![("$custom_rule", rule_data.custom_text.clone())]));
+    rule_description = fls!("rule_description_custom_rule", generate_translation_hashmap(vec![("custom_rule", rule_data.custom_text.clone())]));
 
     Some((rule_type, rule_place, rule_description))
 }

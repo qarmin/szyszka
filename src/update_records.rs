@@ -2,12 +2,14 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+use crate::fls;
 use glib::Value;
 use gtk4::prelude::*;
 use gtk4::{Label, TreeView};
 use regex::Regex;
 
 use crate::help_function::{get_list_store_from_tree_view, ColumnsResults, ResultEntries};
+use crate::localizer::generate_translation_hashmap;
 use crate::rule::rules::{RuleType, Rules};
 
 // Do not update records automatically when there is a big number of entries each time due possible freezes, when rule_number * files_number > RULES_UPDATE_LIMIT, show info about needing to update results
@@ -35,12 +37,12 @@ pub fn update_records(files_tree_view: &TreeView, shared_result_entries: &Rc<Ref
 
     rules.edit_mode = None;
     if shared_result_entries.files.len() * rules.rules.len() > RULES_UPDATE_LIMIT && update_mode != &UpdateMode::UpdateRecords {
-        label_files_folders.set_text(format!("Files/Folders({}) - ##### UPDATE REQUIRED ##### ", shared_result_entries.files.len()).as_str());
+        label_files_folders.set_text(&fls!("upper_files_folders_label_update", generate_translation_hashmap(vec![("files_number", shared_result_entries.files.len().to_string()),])));
         rules.updated = false;
         return;
     }
     rules.updated = true;
-    label_files_folders.set_text(format!("Files/Folders({}) - up to date", shared_result_entries.files.len()).as_str());
+    label_files_folders.set_text(&fls!("upper_files_folders_label_up_to_date", generate_translation_hashmap(vec![("files_number", shared_result_entries.files.len().to_string()),])));
 
     let compiled_regexes: Vec<Option<Regex>> = rules
         .rules

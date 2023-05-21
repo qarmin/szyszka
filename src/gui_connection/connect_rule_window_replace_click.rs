@@ -1,5 +1,7 @@
+use crate::fls;
 use crate::gui_connection::common::{connect_examples_check_button, connect_examples_entry_name};
 use crate::gui_data_things::gui_data::GuiData;
+use crate::localizer::generate_translation_hashmap;
 use gtk4::prelude::*;
 use gtk4::{Entry, Label};
 use regex::Regex;
@@ -73,12 +75,13 @@ pub fn connect_rule_window_replace_click(gui_data: &GuiData) {
 
 fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_replace_text_to_find: &Entry, entry_example_before: &Entry) {
     if entry_replace_text_to_find.text().len() == 0 {
-        label_replace_captured_captures.set_label("No captures");
+        label_replace_captured_captures.set_label(&fls!("label_replace_no_captures"));
         return;
     }
 
     let Ok(regex) = Regex::new(entry_replace_text_to_find.text().as_str()) else {
-        label_replace_captured_captures.set_label("INVALID REGEX");
+
+        label_replace_captured_captures.set_label(&fls!("label_replace_invalid_regex"));
         return;
     };
 
@@ -87,7 +90,8 @@ fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_rep
     match captures {
         Some(captures) => {
             let mut items = Vec::new();
-            items.push(format!("({} captures) - ", captures.len()));
+            items.push(fls!("label_replace_captures_number", generate_translation_hashmap(vec![("capture_number", captures.len().to_string())])));
+            items.push(" - ".to_string());
             for (idx, capture) in captures.iter().enumerate() {
                 // TODO check logic, why match can be None?
                 let mat = match capture {
@@ -111,7 +115,7 @@ fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_rep
             label_replace_captured_captures.set_label(&txt);
         }
         None => {
-            label_replace_captured_captures.set_label("No captures");
+            label_replace_captured_captures.set_label(&fls!("label_replace_no_captures"));
         }
     };
 }

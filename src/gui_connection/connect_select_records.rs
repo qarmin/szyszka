@@ -144,7 +144,7 @@ pub fn connect_select_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let custom_dialog = gtk4::Dialog::builder().title("Select custom").modal(true).transient_for(&window_main).build();
+            let custom_dialog = Dialog::builder().title(fls!("dialog_select_custom")).modal(true).transient_for(&window_main).build();
             custom_dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
             custom_dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
 
@@ -237,7 +237,7 @@ pub fn connect_unselect_custom(gui_data: &GuiData) {
         // Accept Dialog
         {
             let window_main = gui_data.window_main.clone();
-            let custom_dialog = gtk4::Dialog::builder().title("Unselect custom").modal(true).transient_for(&window_main).build();
+            let custom_dialog = Dialog::builder().title(fls!("dialog_unselect_custom")).modal(true).transient_for(&window_main).build();
             custom_dialog.add_button(&fls!("dialog_button_ok"), ResponseType::Ok);
             custom_dialog.add_button(&fls!("dialog_button_cancel"), ResponseType::Cancel);
             let label: gtk4::Label = gtk4::Label::new(Some(&fls!("select_custom_example")));
