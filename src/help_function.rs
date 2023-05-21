@@ -1,7 +1,9 @@
 use crate::fls;
+use gtk4::gdk_pixbuf::{InterpType, Pixbuf};
 use gtk4::prelude::*;
 use gtk4::*;
 use std::collections::BTreeSet;
+use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
 use crate::rule::rules::*;
@@ -332,4 +334,37 @@ pub fn get_selected_folders_files_in_dialog(dialog: &FileChooserDialog) -> Vec<P
         }
     }
     files
+}
+
+const SIZE_OF_ICON: i32 = 18;
+const TYPE_OF_INTERPOLATION: InterpType = InterpType::Tiles;
+
+pub fn set_icon_of_button<P: IsA<Widget>>(button: &P, data: &'static [u8]) {
+    let image = get_custom_image_from_widget(&button.clone());
+    let pixbuf = Pixbuf::from_read(BufReader::new(data)).unwrap();
+    let pixbuf = pixbuf.scale_simple(SIZE_OF_ICON, SIZE_OF_ICON, TYPE_OF_INTERPOLATION).unwrap();
+    image.set_from_pixbuf(Some(&pixbuf));
+}
+
+pub fn get_custom_image_from_widget<P: IsA<Widget>>(item: &P) -> gtk4::Image {
+    let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
+
+    while let Some(widget) = widgets_to_check.pop() {
+        if let Ok(image) = widget.clone().downcast::<gtk4::Image>() {
+            return image;
+        }
+        widgets_to_check.extend(get_all_direct_children(&widget));
+    }
+    panic!("Button doesn't have proper custom label child");
+}
+pub fn get_custom_label_from_widget<P: IsA<Widget>>(item: &P) -> gtk4::Label {
+    let mut widgets_to_check = vec![item.clone().upcast::<Widget>()];
+
+    while let Some(widget) = widgets_to_check.pop() {
+        if let Ok(label) = widget.clone().downcast::<gtk4::Label>() {
+            return label;
+        }
+        widgets_to_check.extend(get_all_direct_children(&widget));
+    }
+    panic!("Button doesn't have proper custom label child");
 }

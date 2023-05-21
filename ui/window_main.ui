@@ -213,6 +213,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="menu_button_load_rules">
+                    <property name="direction">none</property>
                     <property name="label">Load rules</property>
                   </object>
                 </child>

@@ -1,6 +1,11 @@
 use gtk4::prelude::*;
 
 use crate::fls;
+use crate::help_function::{get_custom_label_from_widget, set_icon_of_button};
+
+pub const SZY_ICON_SETTINGS: &[u8] = include_bytes!("../../icons/szy_settings.svg");
+pub const SZY_ICON_UP: &[u8] = include_bytes!("../../icons/szy_up.svg");
+pub const SZY_ICON_DOWN: &[u8] = include_bytes!("../../icons/szy_down.svg");
 
 #[derive(Clone)]
 pub struct GuiUpperButtons {
@@ -29,6 +34,10 @@ impl GuiUpperButtons {
         let button_results_one_up: gtk4::Button = builder.object("button_results_one_up").unwrap();
         let button_results_one_down: gtk4::Button = builder.object("button_results_one_down").unwrap();
 
+        set_icon_of_button(&button_setting, SZY_ICON_SETTINGS);
+        set_icon_of_button(&button_results_one_up, SZY_ICON_UP);
+        set_icon_of_button(&button_results_one_down, SZY_ICON_DOWN);
+
         Self {
             button_setting,
             button_start_rename,
@@ -43,35 +52,14 @@ impl GuiUpperButtons {
         }
     }
     pub fn update_language(&self) {
-        let button_results_one_up_label = self
-            .button_results_one_up
-            .child()
-            .unwrap()
-            .first_child()
-            .unwrap()
-            .next_sibling()
-            .unwrap()
-            .downcast::<gtk4::Label>()
-            .unwrap();
-        let button_results_one_down_label = self
-            .button_results_one_down
-            .child()
-            .unwrap()
-            .first_child()
-            .unwrap()
-            .next_sibling()
-            .unwrap()
-            .downcast::<gtk4::Label>()
-            .unwrap();
-
         self.button_start_rename.set_label(&fls!("upper_start_renaming_button"));
         self.button_add_files.set_label(&fls!("upper_add_files_button"));
         self.button_add_folders.set_label(&fls!("upper_add_folders_button"));
         self.button_remove_selection.set_label(&fls!("upper_remove_selection_button"));
         self.button_update_names.set_label(&fls!("upper_update_names_button"));
         self.label_files_folders.set_label(&fls!("upper_files_folders_label"));
-        button_results_one_up_label.set_label(&fls!("upper_results_one_up_button"));
-        button_results_one_down_label.set_label(&fls!("upper_results_one_down_button"));
+        get_custom_label_from_widget(&self.button_results_one_up).set_label(&fls!("upper_results_one_up_button"));
+        get_custom_label_from_widget(&self.button_results_one_down).set_label(&fls!("upper_results_one_down_button"));
         self.menu_button_select_popup.set_label(&fls!("upper_select_popup_button"));
     }
 }

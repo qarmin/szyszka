@@ -4,6 +4,8 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::fls;
+use crate::gui_data_things::gui_data_upper_buttons::{SZY_ICON_DOWN, SZY_ICON_UP};
+use crate::help_function::{get_custom_label_from_widget, set_icon_of_button};
 use crate::rule::rules::MultipleRules;
 
 #[derive(Clone)]
@@ -38,6 +40,9 @@ impl GuiRulesBottomPanel {
 
         let imported_rules = Rc::new(RefCell::new(Vec::new()));
 
+        set_icon_of_button(&button_rule_one_up, SZY_ICON_UP);
+        set_icon_of_button(&button_rule_one_down, SZY_ICON_DOWN);
+
         Self {
             button_add_rule,
             button_edit_rule,
@@ -56,8 +61,8 @@ impl GuiRulesBottomPanel {
         self.button_add_rule.set_label(&fls!("bottom_rule_add_button"));
         self.button_edit_rule.set_label(&fls!("bottom_rule_edit_button"));
         self.button_remove_rule.set_label(&fls!("bottom_rule_remove_button"));
-        self.button_rule_one_up.set_label(&fls!("bottom_rule_one_up_button"));
-        self.button_rule_one_down.set_label(&fls!("bottom_rule_one_down_button"));
+        get_custom_label_from_widget(&self.button_rule_one_up).set_label(&fls!("bottom_rule_one_up_button"));
+        get_custom_label_from_widget(&self.button_rule_one_down).set_label(&fls!("bottom_rule_one_down_button"));
         self.button_save_rules.set_label(&fls!("bottom_rule_save_rules_button"));
         self.menu_button_load_rules.set_label(&fls!("bottom_rule_load_rules_button"));
         self.label_rules.set_label(&fls!("bottom_rule_label_rules"));

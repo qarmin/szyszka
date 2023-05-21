@@ -7,14 +7,20 @@ description: |
 
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
+compression: lzo
+
+license: MIT
+website: https://github.com/qarmin/szyszka
+issues: https://github.com/qarmin/szyszka/issues
+donation: https://github.com/sponsors/qarmin
 
 parts:
-  user-part:
-    source: .
+  rust-deps:
+    plugin: nil
+    override-pull: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.69.0
+  czkawka:
     plugin: rust
-    build-packages: [cargo, rustc]
-  szyszka:
-    plugin: rust
+    after: [ rust-deps ]
     source: https://github.com/qarmin/szyszka.git
     build-packages:
       - curl

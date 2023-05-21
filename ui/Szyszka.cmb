@@ -646,6 +646,7 @@
 	(5,91,"GtkWidget","hexpand","1",None,None,None,None,None),
 	(5,92,"GtkMenuButton","direction","none",None,None,None,None,None),
 	(5,92,"GtkMenuButton","label","Select",None,None,None,None,None),
+	(5,93,"GtkMenuButton","direction","none",None,None,None,None,None),
 	(5,93,"GtkMenuButton","label","Load rules",None,None,None,None,None),
 	(5,94,"GtkButton","label","Save Rules",None,None,None,None,None),
 	(5,94,"GtkWidget","focusable","1",None,None,None,None,None),
