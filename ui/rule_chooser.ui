@@ -3,17 +3,6 @@
 <interface>
   <!-- interface-name rule_chooser.ui -->
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">$(NAME) - prints file name
-$(EXT) - prints extension
-$(MODIF) - prints file modification date
-$(CREAT) - prints file creation
-$(CURR) - prints current file name with extension
-$(PARENT) - prints parent folder name
-$(N)/$(K) - prints numbers(arguments are optional)
-	$(N:3:4:5) prints numbers from 3, with step 4 and fills them with zeros to 5 positions.
-	K instead only position in list, also uses position item in folder.</property>
-  </object>
   <object class="GtkWindow" id="window_with_rules">
     <property name="child">
       <object class="GtkBox">
@@ -36,23 +25,51 @@ $(N)/$(K) - prints numbers(arguments are optional)
                   <object class="GtkNotebookPage">
                     <property name="child">
                       <object class="GtkBox">
-                        <property name="margin-bottom">5</property>
                         <property name="margin-end">5</property>
-                        <property name="margin-start">5</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-top">10</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
+                        <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkTextView">
-                            <property name="buffer">textbuffer1</property>
-                            <property name="focusable">1</property>
-                            <property name="justification">center</property>
+                          <object class="GtkLabel" id="label_custom_instruction">
+                            <property name="justify">fill</property>
+                            <property name="label">$(NAME) - prints file name
+$(EXT) - prints extension
+$(MODIF) - prints file modification date
+$(CREAT) - prints file creation
+$(CURR) - prints current file name with extension
+$(PARENT) - prints parent folder name
+$(N)/$(K) - prints numbers(arguments are optional)
+$(N:3:4:5) prints numbers from 3, with step 4
+        and fills them with zeros to 5 positions.
+	K instead only position in list, also uses position item in folder.</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry_custom_text_to_change">
                             <property name="focusable">1</property>
+                            <property name="margin-top">5</property>
                             <property name="max-length">150</property>
                             <property name="text" translatable="yes">$(CURR)</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuButton" id="menu_button_load_custom_rule">
+                            <property name="accessible-role">meter</property>
+                            <property name="halign">center</property>
+                            <property name="label">Custom rule chooser</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="valign">end</property>
+                            <property name="vexpand">True</property>
+                            <property name="vexpand-set">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_save_custom_rule">
+                            <property name="halign">center</property>
+                            <property name="label">Save custom rule</property>
+                            <property name="margin-bottom">5</property>
                           </object>
                         </child>
                       </object>
@@ -77,8 +94,9 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_letters_tool_type">
                                 <property name="label" translatable="yes">Tool Type:</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -108,12 +126,13 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_letters_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkBox">
+                                <property name="margin-top">5</property>
                                 <child>
                                   <object class="GtkCheckButton" id="check_button_letters_usage_name">
                                     <property name="active">1</property>
@@ -165,8 +184,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_purge_tool_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -222,12 +243,15 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_number_place">
                                 <property name="label" translatable="yes">Place to put number:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkBox">
+                                <property name="margin-end">5</property>
                                 <child>
                                   <object class="GtkCheckButton" id="check_button_add_number_before_name">
                                     <property name="active">1</property>
@@ -253,15 +277,16 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_number_settings">
                                 <property name="label" translatable="yes">Number Settings:</property>
+                                <property name="margin-end">5</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkGrid">
                                 <property name="column-homogeneous">1</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_start_number">
                                     <property name="label" translatable="yes">Start Number</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -270,7 +295,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_step">
                                     <property name="label" translatable="yes">Step</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -303,7 +328,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_number_fill_zeros">
                                     <property name="label" translatable="yes">Fill with zeros</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -349,8 +374,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_text_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -380,8 +407,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_add_text">
                                 <property name="label" translatable="yes">Text to add:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
                               </object>
                             </child>
                             <child>
@@ -414,8 +443,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_replace_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -451,8 +482,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                               <object class="GtkBox">
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_case_sensitivity">
                                     <property name="label" translatable="yes">Case Sensitivity</property>
+                                    <property name="margin-bottom">5</property>
+                                    <property name="margin-top">5</property>
                                   </object>
                                 </child>
                                 <child>
@@ -479,10 +512,36 @@ $(N)/$(K) - prints numbers(arguments are optional)
                               </object>
                             </child>
                             <child>
+                              <object class="GtkBox">
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
+                                <property name="spacing">42</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_button_replace_regex">
+                                    <property name="active">0</property>
+                                    <property name="focusable">1</property>
+                                    <property name="halign">end</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="label">Use regex</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_button_replace_replace_all">
+                                    <property name="active">0</property>
+                                    <property name="focusable">1</property>
+                                    <property name="halign">baseline</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="label">Replace All occurences</property>
+                                    <property name="sensitive">False</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkGrid">
                                 <property name="column-homogeneous">1</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_text_to_replace">
                                     <property name="label" translatable="yes">Replaced Text</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -493,7 +552,7 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                 <child>
                                   <object class="GtkEntry" id="entry_replace_text_to_change">
                                     <property name="focusable">1</property>
-                                    <property name="max-length">100</property>
+                                    <property name="max-length">300</property>
                                     <property name="text" translatable="yes">k</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -502,9 +561,9 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="entry_replace_text_to_remove">
+                                  <object class="GtkEntry" id="entry_replace_text_to_find">
                                     <property name="focusable">1</property>
-                                    <property name="max-length">100</property>
+                                    <property name="max-length">300</property>
                                     <property name="text" translatable="yes">a</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -513,8 +572,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Text to replace</property>
+                                  <object class="GtkLabel" id="label_replace_text_to_find">
+                                    <property name="label" translatable="yes">Text to find</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="row">1</property>
@@ -522,13 +581,39 @@ $(N)/$(K) - prints numbers(arguments are optional)
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="label_replace_replacing_strings">
                                     <property name="label" translatable="yes">Replacing Strings:</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="column-span">2</property>
                                       <property name="row">0</property>
                                     </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="halign">center</property>
+                                <property name="margin-bottom">10</property>
+                                <property name="margin-top">10</property>
+                                <property name="spacing">30</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_replace_captures">
+                                    <property name="justify">center</property>
+                                    <property name="label">Regex captures</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="visible">False</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label_replace_captured_captures">
+                                    <property name="justify">center</property>
+                                    <property name="label">CAPTURED CAPTURES</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="margin-start">5</property>
+                                    <property name="visible">False</property>
                                   </object>
                                 </child>
                               </object>
@@ -557,8 +642,9 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_usage_type">
                                 <property name="label" translatable="yes">Usage Type:</property>
+                                <property name="margin-top">10</property>
                               </object>
                             </child>
                             <child>
@@ -604,8 +690,10 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_case_sensitivity">
                                 <property name="label" translatable="yes">Case Sensitivity</property>
+                                <property name="margin-bottom">5</property>
+                                <property name="margin-top">5</property>
                               </object>
                             </child>
                             <child>
@@ -635,8 +723,9 @@ $(N)/$(K) - prints numbers(arguments are optional)
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_trim_trim_text">
                                 <property name="label" translatable="yes">Trim text</property>
+                                <property name="margin-bottom">5</property>
                               </object>
                             </child>
                             <child>
@@ -661,14 +750,8 @@ $(N)/$(K) - prints numbers(arguments are optional)
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Normalize Name</property>
-                            <property name="margin-bottom">10</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
+                          <object class="GtkLabel" id="label_normalize_name">
+                            <property name="justify">center</property>
                             <property name="label" translatable="yes">Everything - renames the name to one that containsonly the
                           characters `a-z`, `0-9`, `-`, ` `, `.`.
                           e.g. `żółć CZERona.Txt` -&gt; `zolc-czerwona.txt`
@@ -716,7 +799,7 @@ Partial - works exacly same as option above, but allows
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="label_example">
                     <property name="label" translatable="yes">EXAMPLE</property>
                     <property name="margin-bottom">5</property>
                     <property name="margin-top">5</property>
@@ -734,12 +817,12 @@ Partial - works exacly same as option above, but allows
                             <property name="margin-start">10</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_example_text_before">
                                 <property name="label" translatable="yes">Before:</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_example_text_after">
                                 <property name="label" translatable="yes">After:</property>
                               </object>
                             </child>
@@ -770,6 +853,7 @@ Partial - works exacly same as option above, but allows
                     <child>
                       <object class="GtkButton" id="button_example_reset">
                         <property name="focusable">1</property>
+                        <property name="margin-bottom">1</property>
                         <property name="margin-start">5</property>
                         <property name="receives-default">1</property>
                         <child>

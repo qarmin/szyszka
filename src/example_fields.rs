@@ -1,10 +1,13 @@
+use crate::gui_connection::common::connect_examples_entry_name;
 use gtk4::prelude::*;
+use regex::Regex;
 
-use crate::class_dialog_rules::GuiDialogRules;
-use crate::gui_data::GuiData;
-use crate::help_function::{read_rule_from_window, validate_name};
+use crate::gui_data_things::class_dialog_rules::GuiDialogRules;
+use crate::gui_data_things::gui_data::GuiData;
+
 use crate::notebook_enum::EXAMPLE_NAME;
 use crate::rule::rules::Rules;
+use crate::rule_read::read_rule_from_window;
 
 pub fn connect_update_examples(gui_data: &GuiData) {
     let notebook_choose_rule = gui_data.window_rules.notebook_choose_rule.clone();
@@ -21,16 +24,7 @@ pub fn connect_update_examples(gui_data: &GuiData) {
         entry_example_before.set_text(EXAMPLE_NAME);
     });
 
-    let window_rules = gui_data.window_rules.clone();
-    let entry_example_before = gui_data.window_rules.entry_example_before.clone();
-    entry_example_before.connect_changed(move |e| {
-        let old_name = e.text().to_string();
-        let validate_name = validate_name(&old_name);
-        if validate_name != old_name {
-            e.set_text(&validate_name);
-        }
-        update_examples(&window_rules, None);
-    });
+    connect_examples_entry_name(&gui_data.window_rules.entry_example_before, &gui_data.window_rules);
 }
 
 pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u32>) {
@@ -41,9 +35,18 @@ pub fn update_examples(window_rules: &GuiDialogRules, notebook_number: Option<u3
         return;
     };
 
+    let regex = if single_rule.rule_data.use_regex {
+        match Regex::new(&single_rule.rule_data.text_to_find) {
+            Ok(r) => Some(r),
+            Err(_) => None,
+        }
+    } else {
+        None
+    };
+
     let mut all_rules = Rules::new();
     all_rules.rules.push(single_rule);
 
-    let text = all_rules.apply_all_rules_to_item(text_to_change, 1, 1, (0, 0, 0, "Parent folder"));
+    let text = all_rules.apply_all_rules_to_item(text_to_change, 1, 1, (0, 0, 0, "Parent folder"), &[regex]);
     label_example_after.set_text(text.as_str());
 }

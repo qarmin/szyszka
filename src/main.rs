@@ -3,13 +3,13 @@
 #![allow(clippy::needless_late_init)]
 
 use std::env;
-use std::ffi::OsString;
 
 use gio::ApplicationFlags;
 use glib::signal::Inhibit;
 use gtk4::prelude::*;
 use gtk4::Application;
 
+use crate::cli_arguments::{parse_cli_arguments, parse_cli_help_version_arguments};
 use gui_connection::connect_add_files_button::*;
 use gui_connection::connect_add_folders_button::*;
 use gui_connection::connect_button_settings::*;
@@ -32,49 +32,44 @@ use gui_connection::connect_select_records::*;
 use gui_connection::connect_start_renaming::*;
 
 use crate::example_fields::connect_update_examples;
-use crate::gui_data::GuiData;
+use crate::gui_connection::connect_settings::connect_settings_buttons;
+use crate::gui_connection::connect_window_rules_open::connect_window_rules_open;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::initialize_gui::*;
 
-mod class_dialog_rule_add_number;
-mod class_dialog_rule_add_text;
-mod class_dialog_rule_custom;
-mod class_dialog_rule_normalize;
-mod class_dialog_rule_purge;
-mod class_dialog_rule_replace;
-mod class_dialog_rule_size_letters;
-mod class_dialog_rule_trim;
-mod class_dialog_rules;
+mod add_files_folders;
+mod cli_arguments;
+mod config;
 mod create_tree_view;
 mod example_fields;
 mod gui_connection;
-mod gui_data;
-mod gui_data_results;
-mod gui_data_rules_bottom_panel;
-mod gui_data_settings;
-mod gui_data_upper_buttons;
-mod gui_popover_select;
+mod gui_data_things;
 mod help_function;
 mod initialize_gui;
 mod language_functions;
 mod localizer;
 mod notebook_enum;
 mod rule;
+mod rule_read;
 mod update_records;
 
 fn main() {
     let application = Application::new(None::<String>, ApplicationFlags::HANDLES_OPEN | ApplicationFlags::HANDLES_COMMAND_LINE);
     application.connect_command_line(move |app, cmdline| {
-        build_ui(app, &cmdline.arguments());
+        build_ui(app, &cmdline.arguments().into_iter().map(|e| e.to_string_lossy().to_string()).collect::<Vec<_>>());
         0
     });
-    application.run_with_args(&env::args().collect::<Vec<_>>());
+    application.run_with_args(&env::args().collect::<Vec<String>>());
 }
 
-fn build_ui(application: &Application, _arguments: &[OsString]) {
+fn build_ui(application: &Application, arguments: &[String]) {
+    parse_cli_help_version_arguments(arguments);
+
     let gui_data: GuiData = GuiData::new_with_application(application);
 
     initialize_gui(&gui_data);
 
+    load_language(&gui_data);
     connect_change_language(&gui_data);
 
     // Connect upper buttons
@@ -85,6 +80,8 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
 
     // Connect buttons OK and Close in select dialog
     connect_rule_window_close(&gui_data);
+    connect_window_rules_open(&gui_data);
+    connect_settings_buttons(&gui_data);
 
     // Connect buttons about rules at the bottom
     connect_rule_add(&gui_data);
@@ -108,6 +105,8 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
     connect_rule_modify_remove(&gui_data);
     connect_rule_modify_one_up(&gui_data);
     connect_rule_modify_one_down(&gui_data);
+    connect_rule_load(&gui_data);
+    connect_rule_save(&gui_data);
 
     // Renaming
     connect_start_renaming(&gui_data);
@@ -128,6 +127,13 @@ fn build_ui(application: &Application, _arguments: &[OsString]) {
     connect_results_modify_one_up(&gui_data);
     connect_results_modify_one_down(&gui_data);
 
+    parse_cli_arguments(&gui_data, arguments);
+
+    let gui_data_cloned = gui_data.clone();
     let window_main = gui_data.window_main;
-    window_main.connect_close_request(move |_| Inhibit(false));
+    window_main.connect_close_request(move |_| {
+        let gui_data_cloned = gui_data_cloned.clone();
+        save_language(&gui_data_cloned);
+        Inhibit(false)
+    });
 }

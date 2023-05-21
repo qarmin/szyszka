@@ -1,7 +1,8 @@
 use gtk4::prelude::*;
 
-use crate::gui_data::GuiData;
-use crate::help_function::{populate_rules_tree_view, read_rule_from_window};
+use crate::gui_data_things::gui_data::GuiData;
+use crate::help_function::populate_rules_tree_view;
+use crate::rule_read::read_rule_from_window;
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_rule_add(gui_data: &GuiData) {
@@ -14,6 +15,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
     let rules = gui_data.rules.clone();
 
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+    let button_save_rules = gui_data.rules_bottom_panel.button_save_rules.clone();
 
     let window_rules = gui_data.window_rules.clone();
 
@@ -36,11 +38,15 @@ pub fn connect_rule_add(gui_data: &GuiData) {
             } else {
                 rule.add_single_rule(single_rule);
             }
+
+            if !rule.rules.is_empty() {
+                button_save_rules.set_sensitive(true);
+            }
         }
 
         // Reset TreeView and populate it again
 
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
-        populate_rules_tree_view(&tree_view_window_rules, &rules);
+        populate_rules_tree_view(&tree_view_window_rules, &rules.borrow().rules);
     });
 }

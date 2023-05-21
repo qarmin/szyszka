@@ -135,7 +135,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_rules">
             <property name="label">Rules</property>
             <property name="valign">end</property>
           </object>
@@ -149,70 +149,22 @@
                 <child>
                   <object class="GtkButton" id="button_add_rule">
                     <property name="focusable">1</property>
+                    <property name="label">Add Rule</property>
                     <property name="receives-default">1</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="halign">center</property>
-                        <property name="spacing">7</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">list-add-symbolic</property>
-                            <property name="visible">0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Add Rule</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="button_edit_rule">
                     <property name="focusable">1</property>
+                    <property name="label">Edit Rule</property>
                     <property name="receives-default">1</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="halign">center</property>
-                        <property name="spacing">7</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">applications-engineering</property>
-                            <property name="visible">0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Edit Rule</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="button_remove_rule">
                     <property name="focusable">1</property>
+                    <property name="label">Remove Rule</property>
                     <property name="receives-default">1</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="halign">center</property>
-                        <property name="spacing">7</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">list-remove</property>
-                            <property name="visible">0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Remove Rule</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
@@ -257,6 +209,20 @@
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="menu_button_load_rules">
+                    <property name="direction">none</property>
+                    <property name="label">Load rules</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_save_rules">
+                    <property name="focusable">1</property>
+                    <property name="label">Save Rules</property>
+                    <property name="receives-default">1</property>
+                    <property name="sensitive">False</property>
                   </object>
                 </child>
               </object>

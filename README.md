@@ -4,9 +4,9 @@ Szyszka is a simple but powerful and fast bulk file renamer.
 
 ![Szyszka](https://user-images.githubusercontent.com/41945903/126200297-e0552164-2970-449f-9e68-bd47d231e041.png)
 ## Features
-- Written in Rust
+- Great performance
 - Available for Linux, Mac and Windows
-- Simple GUI created using GTK3
+- Gui created with GTK 4
 - Multiple rules which can be freely combined:
   - Replace text
   - Trim text
@@ -15,14 +15,15 @@ Szyszka is a simple but powerful and fast bulk file renamer.
   - Purge text
   - Change letters to upper/lowercase
   - Custom rules
+- Save rules to be able to use them later
 - Ability to edit, reorder rules and results
 - Handle even hundreds thousands of records
 
 ## Requirements
 ### Linux
-You need to install GTK (it should be available by default on most distributions) and the canberra-gtk-module.
+You need to install GTK 4.6 (it should be available by default on most distributions), which is bundled in Ubuntu 22.04 and newer.
 ```shell
-sudo apt install libgtk3-dev libcanberra-gtk-module
+sudo apt install libgtk-4-bin
 ```
 ### MacOS (not tested)
 You need to install GTK using brew
@@ -32,8 +33,7 @@ brew install rust gtk+3
 ```
 
 ### Windows
-The released zip file contains all dependencies, so it work on Windows 7 SP1+.  
-If you want to, you can install the GTK runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases, ensure that its environment variables are set properly and run Szyszka from anywhere.
+The released zip file contains all dependencies, so it work out of the box on Windows 10+;
 
 ## Installation
 ### Precompiled Binaries
@@ -61,10 +61,11 @@ szyszka is available on Gentoo's GURU overlay
 emerge -av gui-apps/szyszka
 ```
 
-## Future work
-- Adding Regex support
-- Saving/loading presets
-- Trim x number of characters
+## Alternatives
+I tried to use different apps, but they didn't suit my needs.
+- [Nautilus Renamer](https://launchpad.net/nautilus-renamer) - Quite fast, builtin into nautilus but hang when using it with >10k files and cannot be used with files/folders from different directories
+- [Thunar Bulk Rename](https://docs.xfce.org/xfce/thunar/bulk-renamer/start) - Szyszka bases a lot of its features on this app, thunar bulk rename cannot add items recursivelly or rename folders.
+- [Bulky](https://github.com/linuxmint/bulky) - simple, good looking and quite powerfull app, but slow and I had problems in install it
 
 ## Contribution
 Contributions are very welcome - bug reports, pull requests, testing etc.   
@@ -79,12 +80,6 @@ Would you remember another app name like Rename Files Ultra?
 Probably not.  
 But will you remember name Szyszka?  
 Well... probably also not, but when you hear this name, you will instantly think of this app.
-
-## Why?
-I know that on Linux, which I primarily use, there is a lot of good file renamers (and even more on Windows), but I couldn't find any that would suit my needs.
-Available apps install a lot of dependencies, work slowly or just have a very bloated UI.  
-
-If you want very simple apps without too much of features, look at [Bulky](https://github.com/linuxmint/bulky), [Thunar Bulk Rename](https://docs.xfce.org/xfce/thunar/bulk-renamer/start) or [Nautilus Renamer](https://launchpad.net/nautilus-renamer).
 
 ## License
 MIT

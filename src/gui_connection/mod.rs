@@ -1,3 +1,4 @@
+pub mod common;
 pub mod connect_add_files_button;
 pub mod connect_add_folders_button;
 pub mod connect_button_settings;
@@ -17,4 +18,6 @@ pub mod connect_rule_window_replace_click;
 pub mod connect_rule_window_size_letters_click;
 pub mod connect_rule_window_trim_click;
 pub mod connect_select_records;
+pub mod connect_settings;
 pub mod connect_start_renaming;
+pub mod connect_window_rules_open;

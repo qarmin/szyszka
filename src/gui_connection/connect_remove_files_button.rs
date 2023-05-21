@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 
-use crate::gui_data::GuiData;
+use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{get_full_file_names_from_selection, remove_selected_rows};
 use crate::update_records::{update_records, UpdateMode};
 
@@ -17,7 +17,8 @@ pub fn connect_remove_files_button(gui_data: &GuiData) {
             let mut result_entries = shared_result_entries.borrow_mut();
 
             for i in get_full_file_names_from_selection(&tree_view_results) {
-                result_entries.files.remove(&i);
+                let removed = result_entries.files.remove(&i);
+                debug_assert!(removed);
             }
         }
 

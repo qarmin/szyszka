@@ -12,24 +12,14 @@ jobs:
   linux-default:
     strategy:
       matrix:
-        toolchain: [ stable, 1.65.0 ]
+        toolchain: [ stable, 1.69.0 ]
         type: [ release ]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          override: true
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            target
-          key: linux-default-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            linux-default-${{github.ref}}-${{github.sha}}
+      - name: Setup rust version
+        run: rustup default ${{ matrix.toolchain }}
 
       - name: Install basic libraries
         run: sudo apt-get update; sudo apt install libgtk-4-dev -y
@@ -57,18 +47,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          override: true
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            target
-          key: linux-appimage-gui-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            linux-appimage-gui-${{github.ref}}-${{github.sha}}
+      - name: Setup rust version
+        run: rustup default ${{ matrix.toolchain }}
 
       - name: Install Dependencies
         run: sudo apt-get update; sudo apt install libgtk-4-dev librsvg2-dev wget fuse libfuse2 -y
@@ -123,10 +103,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          override: true
+      - name: Setup rust version
+        run: rustup default ${{ matrix.toolchain }}
 
       - name: Install Dependencies
         run: sudo apt-get update; sudo apt install libgtk-4-dev librsvg2-dev wget fuse libfuse2 -y xvfb

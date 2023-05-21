@@ -29,11 +29,8 @@ pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64
 
             let mut text_to_add = number.to_string();
 
-            let mut zeros: String = String::new();
             if text_to_add.len() < fill_with_zeros as usize {
-                for _i in 0..(fill_with_zeros - text_to_add.len() as i64) {
-                    zeros.push('0');
-                }
+                let zeros: String = "0".repeat((fill_with_zeros - text_to_add.len() as i64) as usize);
                 text_to_add = zeros + text_to_add.as_str();
             }
 

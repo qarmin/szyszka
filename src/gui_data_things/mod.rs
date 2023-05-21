@@ -1,0 +1,15 @@
+mod class_dialog_rule_add_number;
+mod class_dialog_rule_add_text;
+mod class_dialog_rule_custom;
+mod class_dialog_rule_normalize;
+mod class_dialog_rule_purge;
+mod class_dialog_rule_replace;
+mod class_dialog_rule_size_letters;
+mod class_dialog_rule_trim;
+pub mod class_dialog_rules;
+pub mod gui_data;
+mod gui_data_results;
+mod gui_data_rules_bottom_panel;
+mod gui_data_settings;
+mod gui_data_upper_buttons;
+mod gui_popover_select;
