@@ -100,7 +100,12 @@ impl GuiDialogRules {
             (NotebookRules::Trim as usize, fls!("notebook_tab_trim")),
             (NotebookRules::Normalize as usize, fls!("notebook_tab_normalize")),
         ] {
-            self.notebook_choose_rule.tab_label(&vec_children[main_enum]).unwrap().downcast::<Label>().unwrap().set_text(&fl_thing);
+            self.notebook_choose_rule
+                .tab_label(&vec_children[main_enum])
+                .unwrap()
+                .downcast::<Label>()
+                .unwrap()
+                .set_text(&fl_thing);
         }
     }
 }

@@ -52,7 +52,9 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
                         if let Some(end) = string_to_parse[latest_end_index + 2 + start..].find(')') {
                             new_string.push_str(&string_to_parse[latest_end_index..latest_end_index + start]);
 
-                            let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2].split(':').collect::<Vec<&str>>();
+                            let typ = string_to_parse[latest_end_index + start + 2..end + start + latest_end_index + 2]
+                                .split(':')
+                                .collect::<Vec<&str>>();
 
                             if !typ.is_empty() {
                                 let invalid_data = parse_string_rules(

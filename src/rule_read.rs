@@ -109,7 +109,10 @@ fn read_rule_custom(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -> 
     let entry_custom_text_to_change = window_rules.custom.entry_custom_text_to_change.clone();
 
     rule_data.custom_text = entry_custom_text_to_change.text().to_string();
-    rule_description = fls!("rule_description_custom_rule", generate_translation_hashmap(vec![("custom_rule", rule_data.custom_text.clone())]));
+    rule_description = fls!(
+        "rule_description_custom_rule",
+        generate_translation_hashmap(vec![("custom_rule", rule_data.custom_text.clone())])
+    );
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -153,7 +156,10 @@ fn read_rule_trim(window_rules: &GuiDialogRules, rule_data: &mut RuleData) -> Op
         return None;
     }
     rule_data.trim_text = entry_add_text_text_to_trim.text().to_string();
-    rule_description = fls!("rule_description_trimming", generate_translation_hashmap(vec![("trim_text", rule_data.trim_text.clone()), ("where_remove", where_remove)]));
+    rule_description = fls!(
+        "rule_description_trimming",
+        generate_translation_hashmap(vec![("trim_text", rule_data.trim_text.clone()), ("where_remove", where_remove)])
+    );
 
     Some((rule_type, rule_place, rule_description))
 }
@@ -266,13 +272,23 @@ fn read_rule_add_number(window_rules: &GuiDialogRules, rule_data: &mut RuleData)
     rule_data.number_start = entry_add_number_start_number.text().to_string().parse::<i64>().unwrap_or(1);
 
     let zeros = if rule_data.fill_with_zeros > 0 {
-        format!(" {}", fls!("rule_description_zeros", generate_translation_hashmap(vec![("zeros", rule_data.fill_with_zeros.to_string())])))
+        format!(
+            " {}",
+            fls!(
+                "rule_description_zeros",
+                generate_translation_hashmap(vec![("zeros", rule_data.fill_with_zeros.to_string())])
+            )
+        )
     } else {
         String::new()
     };
     rule_description = fls!(
         "rule_description_step",
-        generate_translation_hashmap(vec![("step", rule_data.number_step.to_string()), ("start", rule_data.number_start.to_string()), ("zeros", zeros)])
+        generate_translation_hashmap(vec![
+            ("step", rule_data.number_step.to_string()),
+            ("start", rule_data.number_start.to_string()),
+            ("zeros", zeros)
+        ])
     );
 
     Some((rule_type, rule_place, rule_description))

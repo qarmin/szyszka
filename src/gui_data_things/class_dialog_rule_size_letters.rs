@@ -42,10 +42,13 @@ impl GuiSizeLetters {
         }
     }
     pub fn update_language(&self) {
-        self.check_button_letters_type_uppercase.set_label(Some(&crate::fls!("check_button_letters_type_uppercase")));
-        self.check_button_letters_type_lowercase.set_label(Some(&crate::fls!("check_button_letters_type_lowercase")));
+        self.check_button_letters_type_uppercase
+            .set_label(Some(&crate::fls!("check_button_letters_type_uppercase")));
+        self.check_button_letters_type_lowercase
+            .set_label(Some(&crate::fls!("check_button_letters_type_lowercase")));
         self.check_button_letters_usage_name.set_label(Some(&crate::fls!("check_button_letters_usage_name")));
-        self.check_button_letters_usage_extension.set_label(Some(&crate::fls!("check_button_letters_usage_extension")));
+        self.check_button_letters_usage_extension
+            .set_label(Some(&crate::fls!("check_button_letters_usage_extension")));
         self.check_button_letters_usage_both.set_label(Some(&crate::fls!("check_button_letters_usage_both")));
         self.label_letters_tool_type.set_label(&crate::fls!("label_letters_tool_type"));
         self.label_letters_usage_type.set_label(&crate::fls!("label_usage_type"));

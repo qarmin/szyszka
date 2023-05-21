@@ -53,7 +53,11 @@ pub struct Rules {
 
 impl Rules {
     pub fn new() -> Self {
-        Rules { rules: vec![], edit_mode: None, updated: true }
+        Rules {
+            rules: vec![],
+            edit_mode: None,
+            updated: true,
+        }
     }
     // pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
     //     self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
@@ -64,7 +68,14 @@ impl Rules {
     pub fn remove_rule(&mut self, index: usize) {
         self.rules.remove(index);
     }
-    pub fn apply_all_rules_to_item(&mut self, mut item: String, current_index: u64, current_index_in_folder: u32, file_data: (u64, u64, u64, &str), compiled_regexes: &[Option<Regex>]) -> String {
+    pub fn apply_all_rules_to_item(
+        &mut self,
+        mut item: String,
+        current_index: u64,
+        current_index_in_folder: u32,
+        file_data: (u64, u64, u64, &str),
+        compiled_regexes: &[Option<Regex>],
+    ) -> String {
         debug_assert_eq!(self.rules.len(), compiled_regexes.len());
         for (rule, regex) in (self.rules.iter()).zip(compiled_regexes.iter()) {
             match rule.rule_type {

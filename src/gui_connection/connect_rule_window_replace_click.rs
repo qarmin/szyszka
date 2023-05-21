@@ -90,7 +90,10 @@ fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_rep
     match captures {
         Some(captures) => {
             let mut items = Vec::new();
-            items.push(fls!("label_replace_captures_number", generate_translation_hashmap(vec![("capture_number", captures.len().to_string())])));
+            items.push(fls!(
+                "label_replace_captures_number",
+                generate_translation_hashmap(vec![("capture_number", captures.len().to_string())])
+            ));
             items.push(" - ".to_string());
             for (idx, capture) in captures.iter().enumerate() {
                 // TODO check logic, why match can be None?

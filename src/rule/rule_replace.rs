@@ -62,7 +62,12 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: &Option<Rege
                     let mut start_index = 0;
                     while let Some(index) = extension[start_index..].to_lowercase().find(&text_to_find_lowercase) {
                         start_index += index;
-                        extension = format!("{}{}{}", &extension[..start_index], text_to_replace, &extension[start_index + text_to_find_lowercase.len()..]);
+                        extension = format!(
+                            "{}{}{}",
+                            &extension[..start_index],
+                            text_to_replace,
+                            &extension[start_index + text_to_find_lowercase.len()..]
+                        );
                         start_index = (text_to_replace.len() as isize + start_index as isize) as usize;
                     }
                     return_string = format!("{name}.{extension}");
@@ -76,7 +81,12 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: &Option<Rege
                     let mut start_index = 0;
                     while let Some(index) = data_to_change[start_index..].to_lowercase().find(&text_to_find_lowercase) {
                         start_index += index;
-                        data_to_change = format!("{}{}{}", &data_to_change[..start_index], text_to_replace, &data_to_change[start_index + text_to_find_lowercase.len()..]);
+                        data_to_change = format!(
+                            "{}{}{}",
+                            &data_to_change[..start_index],
+                            text_to_replace,
+                            &data_to_change[start_index + text_to_find_lowercase.len()..]
+                        );
                         start_index = (text_to_replace.len() as isize + start_index as isize) as usize;
                     }
                     return_string = data_to_change;

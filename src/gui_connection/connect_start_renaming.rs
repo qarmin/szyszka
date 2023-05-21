@@ -10,7 +10,9 @@ use gtk4::Label;
 use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::{count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, to_dir_file_from_u8, ColumnsResults, DirFileType, ResultEntries, CHARACTER};
+use crate::help_function::{
+    count_rows_in_tree_view, create_message_window, get_dialog_box_child, get_list_store_from_tree_view, to_dir_file_from_u8, ColumnsResults, DirFileType, ResultEntries, CHARACTER,
+};
 use crate::localizer::generate_translation_hashmap;
 
 pub fn connect_start_renaming(gui_data: &GuiData) {
@@ -41,7 +43,10 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
                 Some(fls!("dialog_outdated_results")),
                 Some(&window_main),
                 DialogFlags::DESTROY_WITH_PARENT,
-                &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
+                &[
+                    (&fls!("dialog_button_ok"), gtk4::ResponseType::Ok),
+                    (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel),
+                ],
             );
 
             let question_label = Label::new(Some(&fls!("renaming_some_records_not_updated")));
@@ -63,10 +68,16 @@ pub fn connect_start_renaming(gui_data: &GuiData) {
             Some(fls!("dialog_confirm_renaming")),
             Some(&window_main),
             DialogFlags::DESTROY_WITH_PARENT,
-            &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok), (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel)],
+            &[
+                (&fls!("dialog_button_ok"), gtk4::ResponseType::Ok),
+                (&fls!("dialog_button_cancel"), gtk4::ResponseType::Cancel),
+            ],
         );
 
-        let label_name = fls!("renaming_question", generate_translation_hashmap(vec![("capture_number", number_of_renamed_files.to_string())]));
+        let label_name = fls!(
+            "renaming_question",
+            generate_translation_hashmap(vec![("capture_number", number_of_renamed_files.to_string())])
+        );
         let question_label = Label::new(Some(label_name.as_str()));
 
         let chooser_box = get_dialog_box_child(&chooser);
@@ -155,9 +166,17 @@ fn rename_items(old_name: String, new_name: String, ignored: &mut u32, properly_
 }
 
 fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u32, failed_vector: Vec<(String, String, String)>) {
-    let chooser = Dialog::with_buttons(Some(fls!("dialog_results_of_renaming")), Some(window_main), DialogFlags::DESTROY_WITH_PARENT, &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok)]);
+    let chooser = Dialog::with_buttons(
+        Some(fls!("dialog_results_of_renaming")),
+        Some(window_main),
+        DialogFlags::DESTROY_WITH_PARENT,
+        &[(&fls!("dialog_button_ok"), gtk4::ResponseType::Ok)],
+    );
 
-    let label_good_name = fls!("renaming_renamed_files", generate_translation_hashmap(vec![("properly_renamed", properly_renamed.to_string())]));
+    let label_good_name = fls!(
+        "renaming_renamed_files",
+        generate_translation_hashmap(vec![("properly_renamed", properly_renamed.to_string())])
+    );
     let label_ignored_name = fls!("renaming_ignored_files", generate_translation_hashmap(vec![("ignored", ignored.to_string())]));
 
     let label_good = Label::new(Some(label_good_name.as_str()));
@@ -169,7 +188,10 @@ fn create_results_dialog(window_main: &Window, properly_renamed: u32, ignored: u
     chooser_box.set_margin_start(5);
     chooser_box.set_margin_end(5);
 
-    let label_good_name = fls!("renaming_failed_files", generate_translation_hashmap(vec![("failed_vector", failed_vector.len().to_string())]));
+    let label_good_name = fls!(
+        "renaming_failed_files",
+        generate_translation_hashmap(vec![("failed_vector", failed_vector.len().to_string())])
+    );
     let label_bad = Label::new(Some(label_good_name.as_str()));
 
     chooser_box.insert_child_after(&label_good, None::<&Widget>);

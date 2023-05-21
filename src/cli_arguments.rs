@@ -33,7 +33,11 @@ pub fn parse_cli_help_version_arguments(arguments: &[String]) {
         println!("  szyszka -i /home/user/Downloads -r /home/user/Pictures /home/user/Music");
         process::exit(0);
     } else if second_argument == "-v" || second_argument == "--version" {
-        println!("{package_name} {package_version}", package_name = env!("CARGO_PKG_NAME"), package_version = env!("CARGO_PKG_VERSION"));
+        println!(
+            "{package_name} {package_version}",
+            package_name = env!("CARGO_PKG_NAME"),
+            package_version = env!("CARGO_PKG_VERSION")
+        );
         process::exit(0);
     }
 }

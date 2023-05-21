@@ -43,8 +43,26 @@ impl GuiUpperButtons {
         }
     }
     pub fn update_language(&self) {
-        let button_results_one_up_label = self.button_results_one_up.child().unwrap().first_child().unwrap().next_sibling().unwrap().downcast::<gtk4::Label>().unwrap();
-        let button_results_one_down_label = self.button_results_one_down.child().unwrap().first_child().unwrap().next_sibling().unwrap().downcast::<gtk4::Label>().unwrap();
+        let button_results_one_up_label = self
+            .button_results_one_up
+            .child()
+            .unwrap()
+            .first_child()
+            .unwrap()
+            .next_sibling()
+            .unwrap()
+            .downcast::<gtk4::Label>()
+            .unwrap();
+        let button_results_one_down_label = self
+            .button_results_one_down
+            .child()
+            .unwrap()
+            .first_child()
+            .unwrap()
+            .next_sibling()
+            .unwrap()
+            .downcast::<gtk4::Label>()
+            .unwrap();
 
         self.button_start_rename.set_label(&fls!("upper_start_renaming_button"));
         self.button_add_files.set_label(&fls!("upper_add_files_button"));

@@ -399,11 +399,22 @@ pub fn connect_rule_save(gui_data: &GuiData) {
                     let mut imported_rules = imported_rules.borrow_mut();
                     let mut used_rules = imported_rules.clone();
                     used_rules.retain(|f| f.name != new_rule_name);
-                    used_rules.push(MultipleRules { name: new_rule_name, rules: rules_vec });
+                    used_rules.push(MultipleRules {
+                        name: new_rule_name,
+                        rules: rules_vec,
+                    });
 
                     (*imported_rules) = used_rules;
                     save_rules_to_file(&imported_rules);
-                    set_rules_popover(&imported_rules, &menu_button_load_rules, &tree_view_results, &tree_view_window_rules, &shared_result_entries, &rules, &label_files_folders);
+                    set_rules_popover(
+                        &imported_rules,
+                        &menu_button_load_rules,
+                        &tree_view_results,
+                        &tree_view_window_rules,
+                        &shared_result_entries,
+                        &rules,
+                        &label_files_folders,
+                    );
                 }
             }
             dialog.close();
@@ -422,7 +433,15 @@ pub fn connect_rule_load(gui_data: &GuiData) {
     if !cached_rules.is_empty() {
         let mut cached_borrowed = gui_data.rules_bottom_panel.imported_rules.borrow_mut();
         *cached_borrowed = cached_rules;
-        set_rules_popover(&cached_borrowed, &menu_button_load_rules, &tree_view_results, &tree_view_window_rules, &shared_result_entries, &rules, &label_files_folders);
+        set_rules_popover(
+            &cached_borrowed,
+            &menu_button_load_rules,
+            &tree_view_results,
+            &tree_view_window_rules,
+            &shared_result_entries,
+            &rules,
+            &label_files_folders,
+        );
     }
 }
 
@@ -438,7 +457,12 @@ fn create_dialog(window_main: &gtk4::Window, imported_rules: &Rc<RefCell<Vec<Mul
 
     let file_name_entry: Entry = Entry::builder().margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
     let label: Label = Label::builder().label(used_names).margin_top(10).margin_bottom(10).margin_start(10).margin_end(10).build();
-    let label_name: Label = Label::builder().label(fls!("edit_names_choose_name")).margin_top(10).margin_start(10).margin_end(10).build();
+    let label_name: Label = Label::builder()
+        .label(fls!("edit_names_choose_name"))
+        .margin_top(10)
+        .margin_start(10)
+        .margin_end(10)
+        .build();
     button_ok.grab_focus();
 
     let parent = button_ok.parent().unwrap().parent().unwrap().downcast::<gtk4::Box>().unwrap(); // TODO Hack, but not so ugly as before
