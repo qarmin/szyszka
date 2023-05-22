@@ -7,6 +7,9 @@ use crate::help_function::{get_custom_label_from_widget, set_icon_of_button};
 pub const SZY_ICON_SETTINGS: &[u8] = include_bytes!("../../icons/szy_settings.svg");
 pub const SZY_ICON_UP: &[u8] = include_bytes!("../../icons/szy_up.svg");
 pub const SZY_ICON_DOWN: &[u8] = include_bytes!("../../icons/szy_down.svg");
+pub const SZY_ICON_SETTINGS_DARK: &[u8] = include_bytes!("../../icons/szy_settings_dark.svg");
+pub const SZY_ICON_UP_DARK: &[u8] = include_bytes!("../../icons/szy_up_dark.svg");
+pub const SZY_ICON_DOWN_DARK: &[u8] = include_bytes!("../../icons/szy_down_dark.svg");
 
 #[derive(Clone)]
 pub struct GuiUpperButtons {
@@ -37,10 +40,6 @@ impl GuiUpperButtons {
         let label_files_folders: gtk4::Label = builder.object("label_files_folders").unwrap();
         let button_results_one_up: gtk4::Button = builder.object("button_results_one_up").unwrap();
         let button_results_one_down: gtk4::Button = builder.object("button_results_one_down").unwrap();
-
-        set_icon_of_button(&button_setting, SZY_ICON_SETTINGS);
-        set_icon_of_button(&button_results_one_up, SZY_ICON_UP);
-        set_icon_of_button(&button_results_one_down, SZY_ICON_DOWN);
 
         let file_chooser_dialog_add_files = gtk4::FileChooserNative::builder()
             .action(gtk4::FileChooserAction::Open)
@@ -82,5 +81,16 @@ impl GuiUpperButtons {
         self.menu_button_select_popup.set_label(&fls!("upper_select_popup_button"));
         self.file_chooser_dialog_add_files.set_title(&fls!("dialog_name_files_to_include"));
         self.file_chooser_dialog_add_folders.set_title(&fls!("dialog_name_folders_to_include"));
+    }
+    pub fn update_dark_theme(&self, is_dark_theme: bool) {
+        if is_dark_theme {
+            set_icon_of_button(&self.button_setting, SZY_ICON_SETTINGS_DARK);
+            set_icon_of_button(&self.button_results_one_up, SZY_ICON_UP_DARK);
+            set_icon_of_button(&self.button_results_one_down, SZY_ICON_DOWN_DARK);
+        } else {
+            set_icon_of_button(&self.button_setting, SZY_ICON_SETTINGS);
+            set_icon_of_button(&self.button_results_one_up, SZY_ICON_UP);
+            set_icon_of_button(&self.button_results_one_down, SZY_ICON_DOWN);
+        }
     }
 }

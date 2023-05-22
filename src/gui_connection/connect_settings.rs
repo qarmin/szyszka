@@ -2,13 +2,24 @@ use std::path::Path;
 
 use gtk4::prelude::*;
 
-use crate::config::{create_custom_text_file_if_needed, create_rule_settings_if_needed, get_config_path, get_custom_text_config_file, get_rules_config_file};
+use crate::config::{
+    create_custom_text_file_if_needed, create_rule_settings_if_needed, get_config_path, get_custom_text_config_file, get_rules_config_file, load_dark_theme_config_or_create,
+    save_dark_theme,
+};
 use crate::gui_data_things::gui_data::GuiData;
 
 pub fn connect_settings_buttons(gui_data: &GuiData) {
     let button_open_config_dir = gui_data.settings.button_open_config_dir.clone();
     let button_open_cache_custom_texts = gui_data.settings.button_open_cache_custom_texts.clone();
     let button_open_rules_settings = gui_data.settings.button_open_rules_settings.clone();
+    let check_button_dark_theme = gui_data.settings.check_button_dark_theme.clone();
+
+    check_button_dark_theme.set_active(load_dark_theme_config_or_create());
+    let gui_data_clone = gui_data.clone();
+    check_button_dark_theme.connect_toggled(move |e| {
+        save_dark_theme(e.is_active());
+        gui_data_clone.update_dark_theme(e.is_active());
+    });
 
     button_open_config_dir.connect_clicked(|_f| {
         if let Some(t) = get_config_path() {

@@ -4,7 +4,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::fls;
-use crate::gui_data_things::gui_data_upper_buttons::{SZY_ICON_DOWN, SZY_ICON_UP};
+use crate::gui_data_things::gui_data_upper_buttons::{SZY_ICON_DOWN, SZY_ICON_DOWN_DARK, SZY_ICON_UP, SZY_ICON_UP_DARK};
 use crate::help_function::{get_custom_label_from_widget, set_icon_of_button};
 use crate::rule::rules::MultipleRules;
 
@@ -40,9 +40,6 @@ impl GuiRulesBottomPanel {
 
         let imported_rules = Rc::new(RefCell::new(Vec::new()));
 
-        set_icon_of_button(&button_rule_one_up, SZY_ICON_UP);
-        set_icon_of_button(&button_rule_one_down, SZY_ICON_DOWN);
-
         Self {
             button_add_rule,
             button_edit_rule,
@@ -71,5 +68,14 @@ impl GuiRulesBottomPanel {
         columns[0].set_title(&fls!("tree_view_bottom_tool_type"));
         columns[1].set_title(&fls!("tree_view_bottom_usage_name"));
         columns[2].set_title(&fls!("tree_view_bottom_description"));
+    }
+    pub fn update_dark_theme(&self, is_dark_theme: bool) {
+        if is_dark_theme {
+            set_icon_of_button(&self.button_rule_one_up, SZY_ICON_UP_DARK);
+            set_icon_of_button(&self.button_rule_one_down, SZY_ICON_DOWN_DARK);
+        } else {
+            set_icon_of_button(&self.button_rule_one_up, SZY_ICON_UP);
+            set_icon_of_button(&self.button_rule_one_down, SZY_ICON_DOWN);
+        }
     }
 }

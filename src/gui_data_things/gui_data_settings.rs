@@ -1,6 +1,6 @@
 use crate::fls;
 use gtk4::prelude::*;
-use gtk4::{Builder, Button, ComboBoxText, Label, Window};
+use gtk4::{Builder, Button, CheckButton, ComboBoxText, Label, Window};
 
 #[derive(Clone)]
 pub struct GuiSettings {
@@ -10,6 +10,7 @@ pub struct GuiSettings {
     pub button_open_rules_settings: Button,
     pub button_open_cache_custom_texts: Button,
     pub button_open_config_dir: Button,
+    pub check_button_dark_theme: CheckButton,
 }
 
 impl GuiSettings {
@@ -25,6 +26,7 @@ impl GuiSettings {
         let button_open_cache_custom_texts: Button = builder.object("button_open_cache_custom_texts").unwrap();
         let button_open_config_dir: Button = builder.object("button_open_config_dir").unwrap();
 
+        let check_button_dark_theme: CheckButton = builder.object("check_button_dark_theme").unwrap();
         Self {
             window_settings,
             label_settings_general_language,
@@ -32,6 +34,7 @@ impl GuiSettings {
             button_open_rules_settings,
             button_open_cache_custom_texts,
             button_open_config_dir,
+            check_button_dark_theme,
         }
     }
     pub fn update_language(&self) {
