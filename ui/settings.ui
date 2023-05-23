@@ -57,7 +57,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label">Szyszka 2.0</property>
+            <property name="label">Szyszka 3.0.0</property>
             <property name="margin-bottom">5</property>
             <property name="margin-end">10</property>
             <property name="margin-top">5</property>

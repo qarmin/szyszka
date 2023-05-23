@@ -32,6 +32,7 @@ settings_language_label = Lingua
 settings_open_rules = Apri file impostazioni regole
 settings_open_cache_custom_texts = Apri file cache personalizzato
 settings_open_config_dir = Apri cache dir
+check_button_dark_theme = Icone scure
 # Other in main window
 bottom_rule_label_rules = Regole
 upper_files_folders_label = File/Cartelle

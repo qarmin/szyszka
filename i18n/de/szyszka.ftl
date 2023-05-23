@@ -32,6 +32,7 @@ settings_language_label = Sprache
 settings_open_rules = Öffne Regel-Einstellungsdatei
 settings_open_cache_custom_texts = Eigene Cache-Datei öffnen
 settings_open_config_dir = Cache-Verzeichnis öffnen
+check_button_dark_theme = Dunkle Symbole
 # Other in main window
 bottom_rule_label_rules = Regeln
 upper_files_folders_label = Dateien/Ordner

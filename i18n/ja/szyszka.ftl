@@ -32,6 +32,7 @@ settings_language_label = 言語
 settings_open_rules = ルール設定ファイルを開く
 settings_open_cache_custom_texts = カスタム キャッシュ ファイルを開く
 settings_open_config_dir = キャッシュディレクトリを開く
+check_button_dark_theme = ダークアイコン
 # Other in main window
 bottom_rule_label_rules = ルール
 upper_files_folders_label = ファイル/フォルダ

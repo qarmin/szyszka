@@ -32,6 +32,7 @@ settings_language_label = Jazyk
 settings_open_rules = Otevřít soubor s nastavením pravidel
 settings_open_cache_custom_texts = Otevřít vlastní soubor mezipaměti
 settings_open_config_dir = Otevřít dir keše
+check_button_dark_theme = Tmavé ikony
 # Other in main window
 bottom_rule_label_rules = Pravidla
 upper_files_folders_label = Soubory/Složky

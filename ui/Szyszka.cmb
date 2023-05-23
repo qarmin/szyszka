@@ -575,7 +575,7 @@
 	(4,9,"GtkWidget","vexpand-set","True",None,None,None,None,None),
 	(4,10,"GtkButton","label","Open rules settings file",None,None,None,None,None),
 	(4,10,"GtkWidget","valign","end",None,None,None,None,None),
-	(4,11,"GtkLabel","label","Szyszka 2.0",None,None,None,None,None),
+	(4,11,"GtkLabel","label","Szyszka 3.0.0",None,None,None,None,None),
 	(4,11,"GtkWidget","halign","end",None,None,None,None,None),
 	(4,11,"GtkWidget","margin-bottom","5",None,None,None,None,None),
 	(4,11,"GtkWidget","margin-end","10",None,None,None,None,None),

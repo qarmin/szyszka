@@ -69,7 +69,8 @@ I tried to use different apps, but they didn't suit my needs.
 
 ## Contribution
 Contributions are very welcome - bug reports, pull requests, testing etc.   
-When creating or modifying existing rules, don't forget about updating/adding tests!
+When creating or modifying existing rules, don't forget about updating/adding tests!  
+You can also add/improve translations in crowdin - https://crowdin.com/project/szyszka
 
 ## Name 
 Szyszka is Polish word which means Pinecone.

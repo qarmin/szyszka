@@ -32,10 +32,10 @@ open = "4.1"
 # For slugs
 slugmin = "1.0"
 
-regex = "1.8.1"
+regex = "1.8"
 
-serde = {version="1.0.163", features=["derive"]}
-serde_json = "1.0.96"
+serde = {version="1.0", features=["derive"]}
+serde_json = "1.0"
 
 # Language
 i18n-embed = { version = "0.13", features = ["fluent-system", "desktop-requester"] }
