@@ -3,7 +3,7 @@ use gtk4::TreeView;
 use std::collections::HashSet;
 
 use crate::gui_data_things::gui_data::GuiData;
-use crate::help_function::get_list_store_from_tree_view;
+use crate::help_function::{cache_list_store_items, get_list_store_from_tree_view, swap_cached_list_store_items};
 use crate::update_records::{update_records, UpdateMode};
 
 pub fn connect_results_modify_one_up(gui_data: &GuiData) {
@@ -28,24 +28,23 @@ fn move_items_multiple(tree_view: &TreeView, going_up: bool) {
     let list_store = get_list_store_from_tree_view(tree_view);
     let list_store_length = list_store.iter_n_children(None);
     let (selected_rows, _tree_model) = selection.selected_rows();
+    let mut cached_items = cache_list_store_items(&list_store);
 
     let mut selected_results = selected_rows.iter().map(|path| path.indices()[0]).collect::<Vec<_>>();
-    selected_results.sort();
+    selected_results.sort_unstable();
 
     // Items can be swapped, only if element is not selected
-    let mut disallowed_indexes = selected_results.iter().cloned().collect::<HashSet<_>>();
+    let mut disallowed_indexes = selected_results.iter().copied().collect::<HashSet<_>>();
     let going_up_int = if going_up { -1 } else { 1 };
     if !going_up {
         selected_results.reverse();
     }
-    // TODO consider to optimize this by caching the iter_nth_child in a vector
+
     for idx in selected_results {
         if (going_up && idx == 0) || (!going_up && idx == list_store_length - 1) || disallowed_indexes.contains(&(idx + going_up_int)) {
             continue;
         }
-        let where_to_go_iter = list_store.iter_nth_child(None, idx + going_up_int).unwrap();
-        let current_iter = list_store.iter_nth_child(None, idx).unwrap();
-        list_store.swap(&where_to_go_iter, &current_iter);
+        swap_cached_list_store_items(&list_store, &mut cached_items, idx as usize, (idx + going_up_int) as usize);
         disallowed_indexes.remove(&idx);
     }
 }

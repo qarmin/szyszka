@@ -368,3 +368,23 @@ pub fn get_custom_label_from_widget<P: IsA<Widget>>(item: &P) -> gtk4::Label {
     }
     panic!("Button doesn't have proper custom label child");
 }
+
+pub fn cache_list_store_items(list_store: &ListStore) -> Vec<TreeIter> {
+    let mut items = Vec::new();
+    let iter = list_store.iter_first();
+    if let Some(iter) = iter {
+        loop {
+            items.push(iter);
+            if !list_store.iter_next(&iter) {
+                break;
+            }
+        }
+    }
+    // TODO debug assert
+    assert_eq!(items.len(), list_store.iter_n_children(None) as usize);
+    items
+}
+pub fn swap_cached_list_store_items(list_store: &ListStore, cached_items: &mut [TreeIter], idx1: usize, idx2: usize) {
+    list_store.swap(&cached_items[idx1], &cached_items[idx2]);
+    cached_items.swap(idx1, idx2);
+}
