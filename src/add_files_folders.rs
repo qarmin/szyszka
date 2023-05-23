@@ -9,6 +9,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::time::UNIX_EPOCH;
 
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ItemStruct {
     pub full_name: String,
     pub name: String,

@@ -53,7 +53,7 @@ pub fn update_records(
     rules.updated = true;
     label_files_folders.set_text(&fls!(
         "upper_files_folders_label_up_to_date",
-        generate_translation_hashmap(vec![("files_number", shared_result_entries.files.len().to_string()),])
+        generate_translation_hashmap(vec![("files_number", shared_result_entries.files.len().to_string())])
     ));
 
     let compiled_regexes: Vec<Option<Regex>> = rules
