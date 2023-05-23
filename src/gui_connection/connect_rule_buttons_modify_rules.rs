@@ -2,7 +2,7 @@ use crate::config::{load_rules, save_rules_to_file};
 use crate::fls;
 use gtk4::prelude::*;
 
-use gtk4::{Dialog, Entry, Label, ListStore, MenuButton, Orientation, ResponseType, TreeIter, TreePath, TreeSelection, TreeView};
+use gtk4::{Dialog, Entry, Label, MenuButton, Orientation, ResponseType, TreeView};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -69,7 +69,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
 
     // TODO only works with single selection
     button_rule_one_up.connect_clicked(move |_e| {
-        if !try_to_move_item(&tree_view_window_rules, rules.clone(), true) {
+        if !try_to_move_item(&tree_view_window_rules, &rules, true) {
             return;
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
@@ -86,20 +86,21 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
     button_rule_one_down.connect_clicked(move |_e| {
-        if !try_to_move_item(&tree_view_window_rules, rules.clone(), false) {
+        if !try_to_move_item(&tree_view_window_rules, &rules, false) {
             return;
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
-fn try_to_move_item(tree_view: &TreeView, rules: Rc<RefCell<Rules>>, clicking_up: bool) -> bool {
+fn try_to_move_item(tree_view: &TreeView, rules: &Rc<RefCell<Rules>>, clicking_up: bool) -> bool {
     let selection = tree_view.selection();
     if selection.selected_rows().0.is_empty() {
         return false;
     }
-    let list_store = get_list_store_from_tree_view(&tree_view);
-    if list_store.iter_n_children(None) < 2 {
+    let list_store = get_list_store_from_tree_view(tree_view);
+    let list_store_items = list_store.iter_n_children(None);
+    if list_store_items < 2 {
         return false;
     }
 
@@ -107,37 +108,28 @@ fn try_to_move_item(tree_view: &TreeView, rules: Rc<RefCell<Rules>>, clicking_up
     let rules = &mut *rules;
 
     let selected_path = selection.selected_rows().0[0].clone();
-    let mut before_iter = list_store.iter_first().unwrap();
-    let mut later_iter = list_store.iter_first().unwrap();
+    let currently_selected_iter = list_store.iter(&selected_path).unwrap();
+    let current_selected_index = selected_path.indices()[0] as usize;
 
-    let mut later_index = 0;
-    loop {
-        later_index += 1;
-        let current_path = list_store.path(&later_iter);
-
-        if selected_path == current_path {
-            before_iter = later_iter.clone();
-            let is_next_item = list_store.iter_next(&later_iter);
-            if !clicking_up {
-                // Check if there is place to move down, if not just exit, because is the last element
-                if !is_next_item {
-                    return false;
-                }
-            }
-            break;
-        }
-
-        before_iter = later_iter.clone();
-        list_store.iter_next(&later_iter);
+    // At the top
+    if clicking_up && current_selected_index == 0 {
+        return false;
     }
-    dbg!(&before_iter, &later_iter, &later_index, &clicking_up);
+    // At the bottom
+    if !clicking_up && current_selected_index == (list_store_items - 1) as usize {
+        return false;
+    }
 
-    rules.rules.swap(later_index - 1, later_index);
-    list_store.swap(&before_iter, &later_iter);
     if clicking_up {
-        selection.select_iter(&later_iter);
+        rules.rules.swap(current_selected_index - 1, current_selected_index);
+        let previous_iter = list_store.iter_nth_child(None, (current_selected_index - 1) as i32).unwrap();
+        selection.select_iter(&currently_selected_iter);
+        list_store.swap(&currently_selected_iter, &previous_iter);
     } else {
-        selection.select_iter(&before_iter);
+        rules.rules.swap(current_selected_index, current_selected_index + 1);
+        let next_iter = list_store.iter_nth_child(None, (current_selected_index + 1) as i32).unwrap();
+        selection.select_iter(&currently_selected_iter);
+        list_store.swap(&currently_selected_iter, &next_iter);
     }
     true
 }

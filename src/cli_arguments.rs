@@ -67,17 +67,17 @@ pub fn parse_cli_arguments(gui_data: &GuiData, arguments: &[String]) {
             if path.is_dir() {
                 match current_mode {
                     SearchMode::Normal => {
-                        folders_to_add.push(path.to_path_buf());
+                        folders_to_add.push(path.clone());
                     }
                     SearchMode::RecursiveSkipFolders => {
-                        folders_to_add_recursive_skip_folders.push(path.to_path_buf());
+                        folders_to_add_recursive_skip_folders.push(path.clone());
                     }
                     SearchMode::Recursive => {
-                        folders_to_add_recursive.push(path.to_path_buf());
+                        folders_to_add_recursive.push(path.clone());
                     }
                 }
             } else if path.is_file() {
-                files_to_add.push(path.to_path_buf());
+                files_to_add.push(path.clone());
             } else {
                 eprintln!("Error: {i} is not valid file or folder");
             }
