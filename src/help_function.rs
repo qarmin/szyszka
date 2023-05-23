@@ -380,8 +380,8 @@ pub fn cache_list_store_items(list_store: &ListStore) -> Vec<TreeIter> {
             }
         }
     }
-    // TODO debug assert
-    assert_eq!(items.len(), list_store.iter_n_children(None) as usize);
+
+    debug_assert_eq!(items.len(), list_store.iter_n_children(None) as usize);
     items
 }
 pub fn swap_cached_list_store_items(list_store: &ListStore, cached_items: &mut [TreeIter], idx1: usize, idx2: usize) {
