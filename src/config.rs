@@ -1,12 +1,15 @@
-use crate::rule::rules::MultipleRules;
-use directories_next::ProjectDirs;
 use std::fs;
 use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
+use directories_next::ProjectDirs;
+
+use crate::rule::rules::MultipleRules;
+
 pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
 pub const LANGUAGE_FILE_NAME: &str = "language.txt";
+pub const DARK_THEME_FILE_NAME: &str = "dark_theme.txt";
 
 const BASIC_CUSTOM_COMMANDS: &str = r#"FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
@@ -14,6 +17,32 @@ $(PARENT)_$(K).$(EXT)
 "#;
 
 const BASIC_RULE_CONTENT: &str = r#"[]"#;
+
+pub fn get_dark_theme_config_path() -> Option<PathBuf> {
+    if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
+        return Some(PathBuf::from(proj_dirs.config_dir()).join(DARK_THEME_FILE_NAME));
+    }
+    None
+}
+
+pub fn load_dark_theme_config_or_create() -> bool {
+    if let Some(path) = get_dark_theme_config_path() {
+        if !Path::new(&path).is_file() {
+            let _ = fs::write(&path, "false");
+        }
+
+        if let Ok(thing) = fs::read_to_string(&path) {
+            return thing.parse().unwrap_or(false);
+        };
+    }
+    false
+}
+
+pub fn save_dark_theme(is_dark_theme: bool) {
+    if let Some(path) = get_dark_theme_config_path() {
+        let _ = fs::write(path, is_dark_theme.to_string());
+    }
+}
 
 pub fn get_language_config_path() -> Option<PathBuf> {
     if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
@@ -110,6 +139,7 @@ pub fn create_custom_text_file_if_needed() {
         }
     }
 }
+
 pub fn create_rules_file_if_needed() {
     if let Some(custom_file) = get_rules_config_file() {
         if !Path::new(&custom_file).is_file() {

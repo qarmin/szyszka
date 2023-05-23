@@ -37,6 +37,7 @@ settings_language_label = Language
 settings_open_rules = Open rules settings file
 settings_open_cache_custom_texts = Open custom cache file
 settings_open_config_dir = Open cache dir
+check_button_dark_theme = Dark theme icons
 
 # Other in main window
 bottom_rule_label_rules = Rules

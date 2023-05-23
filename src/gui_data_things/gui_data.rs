@@ -98,4 +98,9 @@ impl GuiData {
         self.window_rules.purge.update_language();
         self.window_rules.update_language();
     }
+    pub fn update_dark_theme(&self, is_dark_theme: bool) {
+        self.upper_buttons.update_dark_theme(is_dark_theme);
+        self.rules_bottom_panel.update_dark_theme(is_dark_theme);
+        self.window_rules.update_dark_theme(is_dark_theme);
+    }
 }

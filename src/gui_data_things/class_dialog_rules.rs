@@ -13,6 +13,7 @@ use crate::gui_data_things::class_dialog_rule_trim::GuiTrim;
 use crate::help_function::{get_all_direct_children, set_icon_of_button, NotebookRules};
 
 pub const SZY_ICON_RESET: &[u8] = include_bytes!("../../icons/szy_reset.svg");
+pub const SZY_ICON_RESET_DARK: &[u8] = include_bytes!("../../icons/szy_reset_dark.svg");
 
 #[derive(Clone)]
 pub struct GuiDialogRules {
@@ -63,8 +64,6 @@ impl GuiDialogRules {
         let label_example_text_after: Label = builder.object("label_example_text_after").unwrap();
         let label_example_after: Label = builder.object("label_example_after").unwrap();
 
-        set_icon_of_button(&button_example_reset, SZY_ICON_RESET);
-
         Self {
             notebook_choose_rule,
             window_with_rules,
@@ -111,6 +110,13 @@ impl GuiDialogRules {
                 .downcast::<Label>()
                 .unwrap()
                 .set_text(&fl_thing);
+        }
+    }
+    pub fn update_dark_theme(&self, is_dark_theme: bool) {
+        if is_dark_theme {
+            set_icon_of_button(&self.button_example_reset, SZY_ICON_RESET_DARK);
+        } else {
+            set_icon_of_button(&self.button_example_reset, SZY_ICON_RESET);
         }
     }
 }

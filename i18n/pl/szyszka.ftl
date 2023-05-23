@@ -32,6 +32,7 @@ settings_language_label = Język
 settings_open_rules = Otwórz plik ustawień reguł
 settings_open_cache_custom_texts = Otwórz plik ustawień niestandardowych reguł
 settings_open_config_dir = Otwórz katalog konfiguracyjny
+check_button_dark_theme = Ciemny styl ikon
 # Other in main window
 bottom_rule_label_rules = Reguły
 upper_files_folders_label = Pliki/Foldery

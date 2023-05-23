@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   enable-background="new 0 0 512 512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="szy_reset_dark.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.6601562"
+     inkscape:cx="256.00001"
+     inkscape:cy="256.90354"
+     inkscape:window-width="1452"
+     inkscape:window-height="752"
+     inkscape:window-x="50"
+     inkscape:window-y="114"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg12" />
+  <circle
+     cx="256"
+     cy="256"
+     fill="#f00"
+     r="245.42"
+     id="circle2"
+     style="fill:none" />
+  <path
+     d="m256 512c-141.16 0-256-114.84-256-256s114.84-256 256-256 256 114.84 256 256-114.84 256-256 256zm0-490.84c-129.49 0-234.84 105.35-234.84 234.84s105.35 234.84 234.84 234.84 234.84-105.35 234.84-234.84-105.35-234.84-234.84-234.84z"
+     id="path4"
+     style="fill:#1a1a1a" />
+  <g
+     fill="#f2f2f2"
+     transform="matrix(.7071438 .70706976 -.70706976 .7071438 261.591021 -107.343357)"
+     id="g10"
+     style="fill:#1a1a1a">
+    <path
+       d="m96.446 234.14h327.87v55.947h-327.87z"
+       id="path6"
+       style="fill:#1a1a1a" />
+    <path
+       d="m98.184-288.35h327.87v55.947h-327.87z"
+       transform="rotate(90)"
+       id="path8"
+       style="fill:#1a1a1a" />
+  </g>
+</svg>

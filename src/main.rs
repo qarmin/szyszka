@@ -10,6 +10,7 @@ use gtk4::prelude::*;
 use gtk4::Application;
 
 use crate::cli_arguments::{parse_cli_arguments, parse_cli_help_version_arguments};
+use crate::config::load_dark_theme_config_or_create;
 use gui_connection::connect_add_files_button::*;
 use gui_connection::connect_add_folders_button::*;
 use gui_connection::connect_button_settings::*;
@@ -66,6 +67,7 @@ fn build_ui(application: &Application, arguments: &[String]) {
     parse_cli_help_version_arguments(arguments);
 
     let gui_data: GuiData = GuiData::new_with_application(application);
+    gui_data.update_dark_theme(load_dark_theme_config_or_create());
 
     initialize_gui(&gui_data);
 
