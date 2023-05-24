@@ -2,7 +2,7 @@
 
 Szyszka is a simple but powerful and fast bulk file renamer.
 
-![Szyszka](https://user-images.githubusercontent.com/41945903/126200297-e0552164-2970-449f-9e68-bd47d231e041.png)
+![Szyszka](https://github.com/qarmin/szyszka/assets/41945903/c8da9bf2-2962-46cb-a9e3-0172e2bd6033)
 ## Features
 - Great performance
 - Available for Linux, Mac and Windows
@@ -29,7 +29,7 @@ sudo apt install libgtk-4-bin
 You need to install GTK using brew
 ```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install rust gtk+3
+brew install gtk4 adwaita-icon-theme librsvg pkg-config
 ```
 
 ### Windows
