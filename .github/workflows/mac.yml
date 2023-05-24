@@ -28,7 +28,13 @@ jobs:
         run: rm '/usr/local/bin/2to3'
 
       - name: Install GTK4
-        run: brew install rust gtk4 libheif
+        run: brew install rust gtk4
+
+      - name: Build Release
+        run: cargo build --release
+        env:
+          CARGO_INCREMENTAL: 0
+        if: ${{ matrix.type == 'release'}}
 
       - name: Store MacOS GUI
         uses: actions/upload-artifact@v3
