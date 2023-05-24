@@ -32,6 +32,7 @@ settings_language_label = IDIOMA
 settings_open_rules = Abrir arquivo de configurações das regras
 settings_open_cache_custom_texts = Abrir arquivo de cache personalizado
 settings_open_config_dir = Abrir cache dir
+check_button_dark_theme = Ícones escuros
 # Other in main window
 bottom_rule_label_rules = Regras
 upper_files_folders_label = Arquivos/Pastas

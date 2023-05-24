@@ -32,6 +32,7 @@ settings_language_label = 语言
 settings_open_rules = 打开规则设置文件
 settings_open_cache_custom_texts = 打开自定义缓存文件
 settings_open_config_dir = 打开缓存目录
+check_button_dark_theme = 暗色图标
 # Other in main window
 bottom_rule_label_rules = 规则
 upper_files_folders_label = 文件/文件夹

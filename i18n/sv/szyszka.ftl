@@ -32,6 +32,7 @@ settings_language_label = Språk
 settings_open_rules = Öppna regelinställningar fil
 settings_open_cache_custom_texts = Öppna anpassad cachefil
 settings_open_config_dir = Öppna cache dir
+check_button_dark_theme = Mörka ikoner
 # Other in main window
 bottom_rule_label_rules = Regler
 upper_files_folders_label = Filer/Mappar

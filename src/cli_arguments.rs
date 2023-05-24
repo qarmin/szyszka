@@ -1,6 +1,8 @@
 use crate::add_files_folders::{add_files_to_check, add_folders_to_check};
+use crate::fls;
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::get_list_store_from_tree_view;
+use crate::localizer::generate_translation_hashmap;
 use std::path::{Path, PathBuf};
 use std::process;
 
@@ -59,21 +61,23 @@ pub fn parse_cli_arguments(gui_data: &GuiData, arguments: &[String]) {
         } else if i == "-f" {
             current_mode = SearchMode::Recursive;
         } else {
-            let path = Path::new(i);
+            let Ok(path) = Path::new(i).canonicalize() else {
+                continue
+            };
             if path.is_dir() {
                 match current_mode {
                     SearchMode::Normal => {
-                        folders_to_add.push(path.to_path_buf());
+                        folders_to_add.push(path.clone());
                     }
                     SearchMode::RecursiveSkipFolders => {
-                        folders_to_add_recursive_skip_folders.push(path.to_path_buf());
+                        folders_to_add_recursive_skip_folders.push(path.clone());
                     }
                     SearchMode::Recursive => {
-                        folders_to_add_recursive.push(path.to_path_buf());
+                        folders_to_add_recursive.push(path.clone());
                     }
                 }
             } else if path.is_file() {
-                files_to_add.push(path.to_path_buf());
+                files_to_add.push(path.clone());
             } else {
                 eprintln!("Error: {i} is not valid file or folder");
             }
@@ -89,4 +93,10 @@ pub fn parse_cli_arguments(gui_data: &GuiData, arguments: &[String]) {
     add_folders_to_check(folders_to_add, &list_store, &mut result_entries, false, false);
     add_folders_to_check(folders_to_add_recursive, &list_store, &mut result_entries, true, false);
     add_folders_to_check(folders_to_add_recursive_skip_folders, &list_store, &mut result_entries, true, true);
+
+    let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
+    label_files_folders.set_text(&fls!(
+        "upper_files_folders_label_up_to_date",
+        generate_translation_hashmap(vec![("files_number", result_entries.files.len().to_string())])
+    ));
 }

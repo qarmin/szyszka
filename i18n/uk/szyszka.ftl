@@ -32,6 +32,7 @@ settings_language_label = Мова:
 settings_open_rules = Відкрити файл налаштувань правил
 settings_open_cache_custom_texts = Відкрити користувацький файл кешу
 settings_open_config_dir = Відкрити кеш dir
+check_button_dark_theme = Темні іконки
 # Other in main window
 bottom_rule_label_rules = Правила
 upper_files_folders_label = Файли/Теки

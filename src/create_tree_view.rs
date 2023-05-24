@@ -22,7 +22,7 @@ pub fn create_tree_view_rules(tree_view: &TreeView) {
 }
 
 #[allow(clippy::option_option)]
-fn create_default_column(tree_view: &TreeView, column_id: i32, sort_column_id: Option<Option<i32>>, name: &str) -> (CellRendererText, TreeViewColumn) {
+fn create_default_column(tree_view: &TreeView, column_id: i32, _sort_column_id: Option<Option<i32>>, name: &str) -> (CellRendererText, TreeViewColumn) {
     let renderer = CellRendererText::new();
     let column: TreeViewColumn = TreeViewColumn::new();
     column.pack_start(&renderer, true);
@@ -30,13 +30,17 @@ fn create_default_column(tree_view: &TreeView, column_id: i32, sort_column_id: O
     column.set_resizable(true);
     column.set_min_width(50);
     column.add_attribute(&renderer, "text", column_id);
-    if let Some(sort_column_id) = sort_column_id {
-        if let Some(sort_column_id) = sort_column_id {
-            column.set_sort_column_id(sort_column_id);
-        } else {
-            column.set_sort_column_id(column_id);
-        }
-    }
+
+    // TODO sorting is disabled, because broke list_store swaps, which is needed to move items in list
+    // Consider to add manual sorting feature
+
+    // if let Some(sort_column_id) = sort_column_id {
+    //     if let Some(sort_column_id) = sort_column_id {
+    //         column.set_sort_column_id(sort_column_id);
+    //     } else {
+    //         column.set_sort_column_id(column_id);
+    //     }
+    // }
     tree_view.append_column(&column);
     (renderer, column)
 }

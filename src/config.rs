@@ -13,7 +13,8 @@ pub const DARK_THEME_FILE_NAME: &str = "dark_theme.txt";
 
 const BASIC_CUSTOM_COMMANDS: &str = r#"FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
-$(PARENT)_$(K).$(EXT)
+$(PARENT) $(N).$(EXT)
+$(PARENT) $(K).$(EXT)
 "#;
 
 const BASIC_RULE_CONTENT: &str = r#"[]"#;

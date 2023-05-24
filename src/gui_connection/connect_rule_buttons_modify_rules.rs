@@ -69,50 +69,8 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
 
     // TODO only works with single selection
     button_rule_one_up.connect_clicked(move |_e| {
-        let selection = tree_view_window_rules.selection();
-        if selection.selected_rows().0.is_empty() {
+        if !try_to_move_item(&tree_view_window_rules, &rules, true) {
             return;
-        }
-
-        {
-            let mut rules = rules.borrow_mut();
-            let rules = &mut *rules;
-            let list_store = get_list_store_from_tree_view(&tree_view_window_rules);
-
-            let (selected_rows, _tree_model) = selection.selected_rows();
-
-            let first_iter = list_store.iter_first().unwrap();
-            let first_path = list_store.path(&first_iter);
-
-            if selected_rows.iter().any(|selected_path| *selected_path == first_path) {
-                return; // First thing is selected - this works only in single selection mode
-            }
-
-            let current_iter = first_iter;
-            let mut previous_iter = first_iter;
-
-            if list_store.iter_next(&current_iter) {
-                let mut current_index = 0;
-                loop {
-                    current_index += 1;
-                    let current_path = list_store.path(&current_iter);
-
-                    if selected_rows.iter().any(|selected_path| *selected_path == current_path) {
-                        break;
-                    }
-
-                    previous_iter = current_iter;
-                    assert!(list_store.iter_next(&current_iter), "");
-                }
-                // Swap rules
-                {
-                    rules.rules.swap(current_index, current_index - 1);
-                    list_store.swap(&current_iter, &previous_iter);
-                }
-                selection.select_iter(&current_iter);
-            } else {
-                return;
-            }
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
@@ -128,50 +86,52 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
     button_rule_one_down.connect_clicked(move |_e| {
-        let selection = tree_view_window_rules.selection();
-        if selection.selected_rows().0.is_empty() {
+        if !try_to_move_item(&tree_view_window_rules, &rules, false) {
             return;
-        }
-
-        {
-            let mut rules = rules.borrow_mut();
-            let rules = &mut *rules;
-            let list_store = get_list_store_from_tree_view(&tree_view_window_rules);
-
-            let (selected_rows, _tree_model) = selection.selected_rows();
-
-            let first_iter = list_store.iter_first().unwrap();
-
-            let current_iter;
-            let previous_iter = first_iter;
-
-            let mut current_index = 0;
-            loop {
-                current_index += 1;
-                let current_path = list_store.path(&previous_iter);
-
-                if selected_rows.iter().any(|selected_path| *selected_path == current_path) {
-                    break;
-                }
-
-                assert!(list_store.iter_next(&previous_iter));
-            }
-
-            current_iter = previous_iter;
-            if !list_store.iter_next(&current_iter) {
-                return;
-                // Latest element
-            }
-
-            // Swap rules
-            {
-                rules.rules.swap(current_index, current_index - 1);
-                list_store.swap(&current_iter, &previous_iter);
-            }
-            selection.select_iter(&previous_iter);
         }
         update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
     });
+}
+
+fn try_to_move_item(tree_view: &TreeView, rules: &Rc<RefCell<Rules>>, clicking_up: bool) -> bool {
+    let selection = tree_view.selection();
+    if selection.selected_rows().0.is_empty() {
+        return false;
+    }
+    let list_store = get_list_store_from_tree_view(tree_view);
+    let list_store_items = list_store.iter_n_children(None);
+    if list_store_items < 2 {
+        return false;
+    }
+
+    let mut rules = rules.borrow_mut();
+    let rules = &mut *rules;
+
+    let selected_path = selection.selected_rows().0[0].clone();
+    let currently_selected_iter = list_store.iter(&selected_path).unwrap();
+    let current_selected_index = selected_path.indices()[0] as usize;
+
+    // At the top
+    if clicking_up && current_selected_index == 0 {
+        return false;
+    }
+    // At the bottom
+    if !clicking_up && current_selected_index == (list_store_items - 1) as usize {
+        return false;
+    }
+
+    if clicking_up {
+        rules.rules.swap(current_selected_index - 1, current_selected_index);
+        let previous_iter = list_store.iter_nth_child(None, (current_selected_index - 1) as i32).unwrap();
+        selection.select_iter(&currently_selected_iter);
+        list_store.swap(&currently_selected_iter, &previous_iter);
+    } else {
+        rules.rules.swap(current_selected_index, current_selected_index + 1);
+        let next_iter = list_store.iter_nth_child(None, (current_selected_index + 1) as i32).unwrap();
+        selection.select_iter(&currently_selected_iter);
+        list_store.swap(&currently_selected_iter, &next_iter);
+    }
+    true
 }
 
 pub fn connect_rule_modify_edit(gui_data: &GuiData) {

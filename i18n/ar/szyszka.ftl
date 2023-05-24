@@ -32,6 +32,7 @@ settings_language_label = اللغة
 settings_open_rules = فتح ملف إعدادات القواعد
 settings_open_cache_custom_texts = فتح ملف ذاكرة التخزين المؤقت المخصص
 settings_open_config_dir = فتح ذاكرة التخزين المؤقت
+check_button_dark_theme = أيقونات داكنة
 # Other in main window
 bottom_rule_label_rules = القواعد
 upper_files_folders_label = الملفات/المجلدات
