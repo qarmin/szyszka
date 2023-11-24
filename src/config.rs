@@ -11,13 +11,13 @@ pub const RULES_FILE_NAME: &str = "rules_settings.json";
 pub const LANGUAGE_FILE_NAME: &str = "language.txt";
 pub const DARK_THEME_FILE_NAME: &str = "dark_theme.txt";
 
-const BASIC_CUSTOM_COMMANDS: &str = r#"FILE_$(N).$(EXT)
+const BASIC_CUSTOM_COMMANDS: &str = r"FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
 $(PARENT) $(N).$(EXT)
 $(PARENT) $(K).$(EXT)
-"#;
+";
 
-const BASIC_RULE_CONTENT: &str = r#"[]"#;
+const BASIC_RULE_CONTENT: &str = r"[]";
 
 pub fn get_dark_theme_config_path() -> Option<PathBuf> {
     if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {

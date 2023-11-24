@@ -5,7 +5,7 @@
 use std::env;
 
 use gio::ApplicationFlags;
-use glib::signal::Inhibit;
+use glib::Propagation;
 use gtk4::prelude::*;
 use gtk4::Application;
 
@@ -136,6 +136,6 @@ fn build_ui(application: &Application, arguments: &[String]) {
     window_main.connect_close_request(move |_| {
         let gui_data_cloned = gui_data_cloned.clone();
         save_language(&gui_data_cloned);
-        Inhibit(false)
+        Propagation::Stop
     });
 }

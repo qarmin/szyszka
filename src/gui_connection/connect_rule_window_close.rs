@@ -1,6 +1,7 @@
 use gtk4::prelude::*;
 
 use crate::gui_data_things::gui_data::GuiData;
+use glib::Propagation;
 
 pub fn connect_rule_window_close(gui_data: &GuiData) {
     let window_with_rules = gui_data.window_rules.window_with_rules.clone();
@@ -16,6 +17,6 @@ pub fn connect_rule_window_close(gui_data: &GuiData) {
 
         window_main.set_sensitive(true);
         e.hide();
-        gtk4::Inhibit(true)
+        Propagation::Stop
     });
 }

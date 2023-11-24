@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use glib::signal::Inhibit;
+use glib::Propagation;
 use gtk4::prelude::*;
 use gtk4::{Orientation, ResponseType, Widget, Window};
 
@@ -24,11 +24,6 @@ pub fn connect_add_folders_button(gui_data: &GuiData) {
     let window_main = gui_data.window_main.clone();
 
     let file_chooser_dialog_add_folders = gui_data.upper_buttons.file_chooser_dialog_add_folders.clone();
-
-    let shared_result_entries = shared_result_entries;
-    let label_files_folders = label_files_folders;
-    let tree_view_results = tree_view_results;
-    let rules = rules;
 
     file_chooser_dialog_add_folders.connect_response(move |file_chooser_dialog_add_folders, response| {
         let shared_result_entries = shared_result_entries.clone();
@@ -102,7 +97,7 @@ fn create_scan_inside_ignore_files_dialog(
     let sif = switch_ignore_folders.clone();
     switch_scan_inside.connect_state_set(move |_, b| {
         sif.set_sensitive(b);
-        Inhibit(false)
+        Propagation::Stop
     });
 
     dialog.connect_response(move |dialog, response| {

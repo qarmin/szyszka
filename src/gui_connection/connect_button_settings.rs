@@ -1,4 +1,4 @@
-use glib::signal::Inhibit;
+use glib::Propagation;
 use gtk4::prelude::*;
 
 use crate::GuiData;
@@ -13,6 +13,6 @@ pub fn connect_button_settings(gui_data: &GuiData) {
     let window_settings = gui_data.settings.window_settings.clone();
     window_settings.connect_close_request(|window_settings| {
         window_settings.hide();
-        Inhibit(true)
+        Propagation::Stop
     });
 }

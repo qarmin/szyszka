@@ -121,7 +121,7 @@ fn connect_renaming_response(chooser: &Dialog, shared_result_entries: &Rc<RefCel
                 match typ {
                     DirFileType::Directory => {
                         let how_much = old_name.matches(CHARACTER).count();
-                        folder_renames.entry(how_much).or_insert_with(Vec::new);
+                        folder_renames.entry(how_much).or_default();
                         folder_renames.get_mut(&how_much).unwrap().push((old_name, new_name));
                     }
                     DirFileType::File => {
