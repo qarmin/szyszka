@@ -1,6 +1,6 @@
 use crate::help_function::{split_path, to_dir_file_name, to_dir_file_type, ColumnsResults, ResultEntries};
 use chrono::{Local, NaiveDateTime};
-use glib::ToValue;
+use glib::prelude::ToValue;
 use gtk4::ListStore;
 use jwalk::WalkDir;
 use rayon::prelude::*;

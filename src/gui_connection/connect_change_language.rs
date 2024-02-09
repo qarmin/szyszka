@@ -47,7 +47,7 @@ pub fn load_language(gui_data: &GuiData) {
 }
 
 pub fn load_settings_language() -> Option<String> {
-    let Some(lang_path) = get_language_config_path() else  {
+    let Some(lang_path) = get_language_config_path() else {
         return None;
     };
     let Ok(short_lang) = read_to_string(lang_path) else {
@@ -59,7 +59,7 @@ pub fn save_language(gui_data: &GuiData) {
     let idx = gui_data.settings.combo_box_settings_language.active().unwrap_or(0) as usize;
     let lang_short = LANGUAGES_ALL[idx].short_text;
 
-    let Some(lang_config_path) = get_language_config_path() else  {
+    let Some(lang_config_path) = get_language_config_path() else {
         return;
     };
 
@@ -71,7 +71,7 @@ pub fn save_language(gui_data: &GuiData) {
 pub fn get_system_language() -> Option<String> {
     let requested_languages = DesktopLanguageRequester::requested_languages();
 
-    if let Some(language) = requested_languages.get(0) {
+    if let Some(language) = requested_languages.first() {
         let old_short_lang = language.to_string();
         let mut short_lang = String::new();
         // removes from e.g. en_zb, ending _zd since Szyszka don't support this
