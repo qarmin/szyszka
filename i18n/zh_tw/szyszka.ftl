@@ -16,7 +16,7 @@ bottom_rule_one_down_button = 下移一位
 bottom_rule_save_rules_button = 儲存規則
 bottom_rule_load_rules_button = 載入規則
 # Edit names
-edit_names_used_in_rules = 規則中使用的名稱：{ $rules }
+edit_names_used_in_rules = 已使用的規則名稱：{ $rules }
 edit_names_choose_name = 選擇規則名稱（如果存在將覆蓋）
 # Tree View Rules
 tree_view_upper_column_type = 類型
