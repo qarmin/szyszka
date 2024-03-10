@@ -57,6 +57,10 @@ pub const LANGUAGES_ALL: &[Language] = &[
         combo_box_text: "Swedish (Svenska)",
         short_text: "sv",
     },
+    Language {
+        combo_box_text: "繁體中文 (Traditional Chinese)",
+        short_text: "zh_tw",
+    },
 ];
 
 pub fn get_language_from_combo_box_text(combo_box_text: &str) -> Language {
