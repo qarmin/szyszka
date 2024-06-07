@@ -47,7 +47,9 @@ sudo snap connect szyszka:removable-media # Allows to see files on external devi
 ```
 
 ### Flatpak
-TODO
+```
+flatpak install flathub com.github.qarmin.szyszka
+```
 
 ### Cargo/Crates.io
 https://crates.io/crates/szyszka
