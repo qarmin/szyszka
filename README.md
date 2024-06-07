@@ -1,6 +1,6 @@
 # Szyszka
 
-Szyszka is a simple but powerful and fast bulk file renamer.
+**Szyszka** (_shish•ka_ (IPA: [ˈʂɨʂka] or [ˈʃɨʂka]), "pine cone" in Polish) is a simple, fast, and powerful bulk file renamer.
 
 ![Szyszka](https://github.com/qarmin/szyszka/assets/41945903/c8da9bf2-2962-46cb-a9e3-0172e2bd6033)
 ## Features
@@ -47,7 +47,9 @@ sudo snap connect szyszka:removable-media # Allows to see files on external devi
 ```
 
 ### Flatpak
-TODO
+```
+flatpak install flathub com.github.qarmin.szyszka
+```
 
 ### Cargo/Crates.io
 https://crates.io/crates/szyszka
