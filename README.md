@@ -1,6 +1,6 @@
 # Szyszka
 
-Szyszka is a simple but powerful and fast bulk file renamer.
+**Szyszka** (_shish•ka_ (IPA: [ˈʂɨʂka] or [ˈʃɨʂka]), "pine cone" in Polish) is a simple, fast, and powerful bulk file renamer.
 
 ![Szyszka](https://github.com/qarmin/szyszka/assets/41945903/c8da9bf2-2962-46cb-a9e3-0172e2bd6033)
 ## Features
