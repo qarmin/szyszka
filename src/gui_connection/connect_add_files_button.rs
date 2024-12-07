@@ -28,7 +28,7 @@ pub fn connect_add_files_button(gui_data: &GuiData) {
                 add_files_to_check(files_to_check, &list_store, &mut result_entries);
             }
 
-            update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
+            update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::FileAdded, &label_files_folders);
         }
     });
 

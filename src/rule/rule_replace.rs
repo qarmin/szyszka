@@ -4,7 +4,7 @@ use std::path::Path;
 use crate::help_function::split_file_name;
 use crate::rule::rules::*;
 
-pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: &Option<Regex>) -> String {
+pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: Option<&Regex>) -> String {
     // No data to change
     if rule.rule_data.text_to_find.is_empty() {
         return data_to_change.to_string();
@@ -119,33 +119,33 @@ mod test {
         rule.rule_data.text_to_find = "konstantynopolitańczykiewiczówna".to_string();
         rule.rule_data.text_to_replace = "rar".to_string();
         rule.rule_data.case_sensitive = false;
-        assert_eq!(rule_replace("QKonstantynopolitańczykiewiczówna.txt", &rule, &None), "Qrar.txt");
+        assert_eq!(rule_replace("QKonstantynopolitańczykiewiczówna.txt", &rule, None), "Qrar.txt");
         rule.rule_data.case_sensitive = true;
-        assert_eq!(rule_replace("QKonstantynopolitańczykiewiczówna.txt", &rule, &None), "QKonstantynopolitańczykiewiczówna.txt");
+        assert_eq!(rule_replace("QKonstantynopolitańczykiewiczówna.txt", &rule, None), "QKonstantynopolitańczykiewiczówna.txt");
 
         rule.rule_place = RulePlace::ExtensionAndName;
         rule.rule_data.text_to_find = "qw.".to_string();
         rule.rule_data.text_to_replace = "tw".to_string();
         rule.rule_data.case_sensitive = false;
-        assert_eq!(rule_replace("QQw.Qw.txt", &rule, &None), "Qtwtwtxt");
+        assert_eq!(rule_replace("QQw.Qw.txt", &rule, None), "Qtwtwtxt");
         rule.rule_data.case_sensitive = true;
-        assert_eq!(rule_replace("QQw.txt", &rule, &None), "QQw.txt");
+        assert_eq!(rule_replace("QQw.txt", &rule, None), "QQw.txt");
 
         rule.rule_place = RulePlace::ExtensionAndName;
         rule.rule_data.text_to_find = "rrra".to_string();
         rule.rule_data.text_to_replace = "rr".to_string();
         rule.rule_data.case_sensitive = false;
-        assert_eq!(rule_replace("Qsr.RrRa", &rule, &None), "Qsr.rr");
+        assert_eq!(rule_replace("Qsr.RrRa", &rule, None), "Qsr.rr");
         rule.rule_data.case_sensitive = true;
-        assert_eq!(rule_replace("Qsr.RrRarrra", &rule, &None), "Qsr.RrRarr");
+        assert_eq!(rule_replace("Qsr.RrRarrra", &rule, None), "Qsr.RrRarr");
 
         rule.rule_place = RulePlace::ExtensionAndName;
         rule.rule_data.text_to_find = "a".to_string();
         rule.rule_data.text_to_replace = "aa".to_string();
         rule.rule_data.case_sensitive = false;
-        assert_eq!(rule_replace("aaa", &rule, &None), "aaaaaa");
+        assert_eq!(rule_replace("aaa", &rule, None), "aaaaaa");
         rule.rule_data.case_sensitive = true;
-        assert_eq!(rule_replace("aaa", &rule, &None), "aaaaaa");
+        assert_eq!(rule_replace("aaa", &rule, None), "aaaaaa");
     }
     #[test]
     fn test_replace_regex() {
@@ -158,24 +158,24 @@ mod test {
         rule.rule_data.text_to_replace = "RRR".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
         rule.rule_data.regex_replace_all = true;
-        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_RRR_BSDE");
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, Some(&regex)), "ABCD_RRR_BSDE");
 
         rule.rule_data.text_to_find = "([a-z]+)".to_string();
         rule.rule_data.text_to_replace = "PRP".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
         rule.rule_data.regex_replace_all = true;
-        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_PRP_BSDE");
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, Some(&regex)), "ABCD_PRP_PRP_BSDE");
 
         rule.rule_data.text_to_find = "([a-z]+)".to_string();
         rule.rule_data.text_to_replace = "PRP".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
         rule.rule_data.regex_replace_all = false;
-        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_staszek_BSDE");
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, Some(&regex)), "ABCD_PRP_staszek_BSDE");
 
         rule.rule_data.text_to_find = "([a-z]+_[a-z]+)".to_string();
         rule.rule_data.text_to_replace = "PRP".to_string();
         regex = Regex::new(&rule.rule_data.text_to_find).unwrap();
         rule.rule_data.regex_replace_all = true;
-        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, &Some(regex)), "ABCD_PRP_BSDE");
+        assert_eq!(rule_replace("ABCD_roman_staszek_BSDE", &rule, Some(&regex)), "ABCD_PRP_BSDE");
     }
 }

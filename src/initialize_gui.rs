@@ -53,9 +53,9 @@ fn create_tree_view_in_scrolled_window(gui_data: &GuiData) {
 
         if number_of_clicks == 2 {
             if gesture_click.current_button() == 1 {
-                common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, &OpenMode::PathAndName);
+                common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, OpenMode::PathAndName);
             } else if gesture_click.current_button() == 3 {
-                common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, &OpenMode::OnlyPath);
+                common_open_function(&tree_view, ColumnsResults::CurrentName as i32, ColumnsResults::Path as i32, OpenMode::OnlyPath);
             }
         }
     });
@@ -91,7 +91,7 @@ fn set_example_name(gui_data: &GuiData) {
     update_examples(&gui_data.window_rules, None);
 }
 
-fn common_open_function(tree_view: &TreeView, column_name: i32, column_path: i32, opening_mode: &OpenMode) {
+fn common_open_function(tree_view: &TreeView, column_name: i32, column_path: i32, opening_mode: OpenMode) {
     let selection = tree_view.selection();
     let (selected_rows, tree_model) = selection.selected_rows();
 

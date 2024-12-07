@@ -47,12 +47,9 @@ pub fn load_language(gui_data: &GuiData) {
 }
 
 pub fn load_settings_language() -> Option<String> {
-    let Some(lang_path) = get_language_config_path() else {
-        return None;
-    };
-    let Ok(short_lang) = read_to_string(lang_path) else {
-        return None;
-    };
+    let lang_path = get_language_config_path()?;
+    let short_lang = read_to_string(lang_path).ok()?;
+
     Some(short_lang)
 }
 pub fn save_language(gui_data: &GuiData) {

@@ -32,7 +32,7 @@ pub fn update_records(
     files_tree_view: &TreeView,
     shared_result_entries: &Rc<RefCell<ResultEntries>>,
     rules: &Rc<RefCell<Rules>>,
-    update_mode: &UpdateMode,
+    update_mode: UpdateMode,
     label_files_folders: &Label,
 ) {
     let list_store = get_list_store_from_tree_view(files_tree_view);
@@ -42,7 +42,7 @@ pub fn update_records(
     let shared_result_entries = &mut *shared_result_entries;
 
     rules.edit_mode = None;
-    if shared_result_entries.files.len() * rules.rules.len() > RULES_UPDATE_LIMIT && update_mode != &UpdateMode::UpdateRecords {
+    if shared_result_entries.files.len() * rules.rules.len() > RULES_UPDATE_LIMIT && update_mode != UpdateMode::UpdateRecords {
         label_files_folders.set_text(&fls!(
             "upper_files_folders_label_update",
             generate_translation_hashmap(vec![("files_number", shared_result_entries.files.len().to_string()),])

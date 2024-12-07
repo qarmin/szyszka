@@ -95,7 +95,7 @@ impl Rules {
                     item = rule_custom(item.as_str(), rule, current_index, current_index_in_folder as u64, Some(file_data));
                 }
                 RuleType::Replace => {
-                    item = rule_replace(item.as_str(), rule, regex);
+                    item = rule_replace(item.as_str(), rule, regex.as_ref());
                 }
                 RuleType::AddNumber => {
                     item = rule_add_number(item.as_str(), rule, current_index);
@@ -138,7 +138,7 @@ pub enum RulePlace {
     FromExtensionEndReverse,
 }
 
-pub fn rule_type_to_string(rule_type: &RuleType) -> String {
+pub fn rule_type_to_string(rule_type: RuleType) -> String {
     match rule_type {
         RuleType::Custom => fls!("rule_type_custom"),
         RuleType::CaseSize => fls!("rule_type_case_size"),
@@ -151,7 +151,7 @@ pub fn rule_type_to_string(rule_type: &RuleType) -> String {
     }
 }
 
-pub fn rule_place_to_string(rule_type: &RulePlace) -> String {
+pub fn rule_place_to_string(rule_type: RulePlace) -> String {
     match rule_type {
         RulePlace::None => fls!("rule_place_none"),
         RulePlace::Extension => fls!("rule_place_extension"),

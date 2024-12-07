@@ -17,7 +17,7 @@ donation: https://github.com/sponsors/qarmin
 parts:
   rust-deps:
     plugin: nil
-    override-pull: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.69.0
+    override-pull: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.70.0
   czkawka:
     plugin: rust
     after: [ rust-deps ]
@@ -30,7 +30,7 @@ parts:
 apps:
   szyszka:
     command: bin/szyszka
-    extensions: [gnome]
+    extensions: [ gnome ]
     plugs:
       - home
       - removable-media

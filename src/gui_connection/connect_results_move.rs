@@ -16,7 +16,7 @@ pub fn connect_results_modify_one_up(gui_data: &GuiData) {
 
     button_results_one_up.connect_clicked(move |_e| {
         move_items_multiple(&tree_view_results, true);
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileMoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::FileMoved, &label_files_folders);
     });
 }
 fn move_items_multiple(tree_view: &TreeView, going_up: bool) {
@@ -59,6 +59,6 @@ pub fn connect_results_modify_one_down(gui_data: &GuiData) {
 
     button_results_one_down.connect_clicked(move |_e| {
         move_items_multiple(&tree_view_results, false);
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileMoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::FileMoved, &label_files_folders);
     });
 }

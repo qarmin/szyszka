@@ -6,8 +6,7 @@ use std::rc::Rc;
 
 use crate::fls;
 use gtk4::prelude::*;
-use gtk4::Label;
-use gtk4::{Dialog, DialogFlags, ListStore, ScrolledWindow, TextView, Widget, Window};
+use gtk4::{Dialog, DialogFlags, Label, ListStore, ScrolledWindow, TextView, Widget, Window};
 
 use crate::gui_data_things::gui_data::GuiData;
 use crate::help_function::{

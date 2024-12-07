@@ -54,7 +54,7 @@ pub fn connect_rule_modify_remove(gui_data: &GuiData) {
             }
         }
 
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
@@ -72,7 +72,7 @@ pub fn connect_rule_modify_one_up(gui_data: &GuiData) {
         if !try_to_move_item(&tree_view_window_rules, &rules, true) {
             return;
         }
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
@@ -89,7 +89,7 @@ pub fn connect_rule_modify_one_down(gui_data: &GuiData) {
         if !try_to_move_item(&tree_view_window_rules, &rules, false) {
             return;
         }
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::RuleRemoved, &label_files_folders);
     });
 }
 
@@ -465,7 +465,7 @@ fn set_rules_popover(
             let rules = rules.clone();
             rules.borrow_mut().rules = cloned_item.rules.clone();
             populate_rules_tree_view(&tree_view_window_rules, &cloned_item.rules);
-            update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleAdded, &label_files_folders);
+            update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::RuleAdded, &label_files_folders);
             popover_clone.hide();
         });
 

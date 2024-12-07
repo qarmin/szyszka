@@ -116,8 +116,8 @@ pub fn populate_rules_tree_view(tree_view: &TreeView, rules: &[SingleRule]) {
 
     for rule in rules {
         let values: [(u32, &dyn ToValue); 3] = [
-            (ColumnsRules::RuleType as u32, &rule_type_to_string(&rule.rule_type)),
-            (ColumnsRules::UsageType as u32, &rule_place_to_string(&rule.rule_place)),
+            (ColumnsRules::RuleType as u32, &rule_type_to_string(rule.rule_type)),
+            (ColumnsRules::UsageType as u32, &rule_place_to_string(rule.rule_place)),
             (ColumnsRules::Description as u32, &rule.rule_description),
         ];
         list_store.set(&list_store.append(), &values);

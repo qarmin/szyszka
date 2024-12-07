@@ -111,7 +111,7 @@ fn create_scan_inside_ignore_files_dialog(
                 let mut result_entries = shared_result_entries.borrow_mut();
                 add_folders_to_check(folders_to_check, &list_store, &mut result_entries, check_folders_inside, ignore_folders);
             }
-            update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileAdded, &label_files_folders);
+            update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::FileAdded, &label_files_folders);
         }
         dialog.close();
     });

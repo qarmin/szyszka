@@ -1,7 +1,6 @@
 use crate::fls;
 use gtk4::prelude::*;
-use gtk4::GestureClick;
-use gtk4::TreeView;
+use gtk4::{GestureClick, TreeView};
 
 #[derive(Clone)]
 pub struct GuiResults {

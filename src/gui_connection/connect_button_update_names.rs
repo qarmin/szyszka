@@ -12,6 +12,6 @@ pub fn connect_button_update_names(gui_data: &GuiData) {
     let label_files_folders = gui_data.upper_buttons.label_files_folders.clone();
 
     button_update_names.connect_clicked(move |_| {
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::UpdateRecords, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::UpdateRecords, &label_files_folders);
     });
 }

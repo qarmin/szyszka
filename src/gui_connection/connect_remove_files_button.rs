@@ -23,6 +23,6 @@ pub fn connect_remove_files_button(gui_data: &GuiData) {
         }
 
         remove_selected_rows(&tree_view_results);
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::FileRemoved, &label_files_folders);
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::FileRemoved, &label_files_folders);
     });
 }

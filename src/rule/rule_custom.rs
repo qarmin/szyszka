@@ -3,8 +3,7 @@ use std::path::Component::Normal;
 use std::path::Path;
 
 use chrono::DateTime;
-use humansize::format_size;
-use humansize::BINARY;
+use humansize::{format_size, BINARY};
 
 use crate::help_function::split_file_name;
 use crate::rule::rules::*;
@@ -66,8 +65,8 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
                                 let invalid_data = parse_string_rules(
                                     &typ,
                                     &mut new_string,
-                                    &general_rule_number,
-                                    &rule_number_in_folder,
+                                    general_rule_number,
+                                    rule_number_in_folder,
                                     &name,
                                     &creation_date,
                                     &modification_date,
@@ -106,8 +105,8 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
 pub fn parse_string_rules(
     typ: &[&str],
     new_string: &mut String,
-    general_rule_number: &u64,
-    rule_number_in_folder: &u64,
+    general_rule_number: u64,
+    rule_number_in_folder: u64,
     name: &str,
     creation_date: &str,
     modification_date: &str,
@@ -197,7 +196,7 @@ pub fn parse_string_rules(
                     // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
                     let fill_zeros = min(fill_zeros, 50);
 
-                    let used_number = (if typ[0] == "N" { *general_rule_number } else { *rule_number_in_folder }) as i64;
+                    let used_number = (if typ[0] == "N" { general_rule_number } else { rule_number_in_folder }) as i64;
 
                     let mut number;
                     if step_number.checked_mul(used_number).is_none() {
@@ -278,10 +277,10 @@ mod test {
         rule.rule_data.custom_text = "$(K)".to_string();
         assert_eq!(rule_custom("wombat.txt", &rule, 0, 1, None), "1");
         rule.rule_data.custom_text = "$(K)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 1111111110, 0, None), "0");
+        assert_eq!(rule_custom("wombat.txt", &rule, 1_111_111_110, 0, None), "0");
 
         rule.rule_data.custom_text = "$(N)".to_string();
-        assert_eq!(rule_custom("wombat.txt", &rule, 0, 111110, None), "0");
+        assert_eq!(rule_custom("wombat.txt", &rule, 0, 111_110, None), "0");
         rule.rule_data.custom_text = "$(N)".to_string();
         assert_eq!(rule_custom("wombat.txt", &rule, 1, 0, None), "1");
         rule.rule_data.custom_text = "$(N:)".to_string();

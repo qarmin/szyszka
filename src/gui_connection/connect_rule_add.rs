@@ -46,7 +46,7 @@ pub fn connect_rule_add(gui_data: &GuiData) {
 
         // Reset TreeView and populate it again
 
-        update_records(&tree_view_results, &shared_result_entries, &rules, &UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
+        update_records(&tree_view_results, &shared_result_entries, &rules, UpdateMode::RuleAdded, &label_files_folders); // TODO Not only RuleAdded but also RuleEdited, but for now there is no difference
         populate_rules_tree_view(&tree_view_window_rules, &rules.borrow().rules);
     });
 }
