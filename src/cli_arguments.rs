@@ -61,9 +61,7 @@ pub fn parse_cli_arguments(gui_data: &GuiData, arguments: &[String]) {
         } else if i == "-f" {
             current_mode = SearchMode::Recursive;
         } else {
-            let Ok(path) = Path::new(i).canonicalize() else {
-                continue
-            };
+            let Ok(path) = Path::new(i).canonicalize() else { continue };
             if path.is_dir() {
                 match current_mode {
                     SearchMode::Normal => {

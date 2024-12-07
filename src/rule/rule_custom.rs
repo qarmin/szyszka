@@ -2,7 +2,7 @@ use std::cmp::min;
 use std::path::Component::Normal;
 use std::path::Path;
 
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use humansize::format_size;
 use humansize::BINARY;
 
@@ -22,8 +22,14 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
 
     // Random data to visualize typical usage in examples
     if let Some(f_data) = file_data {
-        modification_date = NaiveDateTime::from_timestamp_opt(f_data.0 as i64, 0).unwrap().to_string().replace(':', "_");
-        creation_date = NaiveDateTime::from_timestamp_opt(f_data.1 as i64, 0).unwrap().to_string().replace(':', "_");
+        modification_date = DateTime::from_timestamp(f_data.0 as i64, 0)
+            .expect("Failed to create DateTime(should never happens)")
+            .to_string()
+            .replace(':', "_");
+        creation_date = DateTime::from_timestamp(f_data.1 as i64, 0)
+            .expect("Failed to create DateTime(should never happens)")
+            .to_string()
+            .replace(':', "_");
         size = format_size(f_data.2, BINARY);
         if let Some(last_component) = Path::new(&f_data.3).components().last() {
             if let Normal(path) = last_component {

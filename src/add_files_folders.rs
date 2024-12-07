@@ -1,5 +1,5 @@
 use crate::help_function::{split_path, to_dir_file_name, to_dir_file_type, ColumnsResults, ResultEntries};
-use chrono::{Local, NaiveDateTime};
+use chrono::{DateTime, Local};
 use glib::prelude::ToValue;
 use gtk4::ListStore;
 use jwalk::WalkDir;
@@ -115,6 +115,7 @@ fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries)
                     return None;
                 }
             };
+
             let size = file_metadata.len();
             let modification_date = match file_metadata.modified() {
                 Ok(t) => {
@@ -159,7 +160,10 @@ fn collect_files(items_to_check: &[PathBuf], result_entries: &mut ResultEntries)
                 size,
                 modification_date,
                 creation_date,
-                date: NaiveDateTime::from_timestamp_opt(creation_date as i64, 0).unwrap().format("%Y-%m-%d %H:%M:%S").to_string(),
+                date: DateTime::from_timestamp(creation_date as i64, 0)
+                    .expect("Creating date from timestamp should never fail")
+                    .format("%Y-%m-%d %H:%M:%S")
+                    .to_string(),
                 is_dir: file_metadata.is_dir(),
             })
         })

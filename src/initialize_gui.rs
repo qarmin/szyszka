@@ -45,7 +45,11 @@ fn create_tree_view_in_scrolled_window(gui_data: &GuiData) {
 
     gc_tree_view.set_button(0);
     gc_tree_view.connect_pressed(|gesture_click: &GestureClick, number_of_clicks: i32, _b: f64, _c: f64| {
-        let tree_view = gesture_click.widget().downcast::<TreeView>().unwrap();
+        let tree_view = gesture_click
+            .widget()
+            .expect("Cannot find child widget")
+            .downcast::<TreeView>()
+            .expect("Cannot downcast to TreeView");
 
         if number_of_clicks == 2 {
             if gesture_click.current_button() == 1 {

@@ -80,7 +80,6 @@ fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_rep
     }
 
     let Ok(regex) = Regex::new(entry_replace_text_to_find.text().as_str()) else {
-
         label_replace_captured_captures.set_label(&fls!("label_replace_invalid_regex"));
         return;
     };
