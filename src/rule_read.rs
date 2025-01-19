@@ -23,7 +23,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         to_notebook_enum(notebook_choose_rule.current_page().unwrap())
     };
 
-    let (rule_type, rule_place, rule_description) = match match notebook_enum {
+    let (rule_type, rule_place, rule_description) = match notebook_enum {
         NotebookEnum::CaseSize => read_rule_case_size(window_rules, &mut rule_data),
         NotebookEnum::Purge => read_rule_purge(window_rules, &mut rule_data),
         NotebookEnum::AddText => read_rule_add_text(window_rules, &mut rule_data),
@@ -32,10 +32,7 @@ pub fn read_rule_from_window(window_rules: &GuiDialogRules, notebook_number: Opt
         NotebookEnum::Replace => read_rule_replace(window_rules, &mut rule_data),
         NotebookEnum::AddNumber => read_rule_add_number(window_rules, &mut rule_data),
         NotebookEnum::Normalize => read_rule_normalize(window_rules, &mut rule_data),
-    } {
-        Some(t) => t,
-        None => return None,
-    };
+    }?;
 
     Some(SingleRule {
         rule_type,

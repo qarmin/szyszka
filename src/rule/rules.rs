@@ -27,7 +27,7 @@ pub struct SingleRule {
 impl SingleRule {
     #[allow(dead_code)] // Used in tests for now
     pub fn new() -> Self {
-        SingleRule {
+        Self {
             rule_type: RuleType::Custom,
             rule_place: RulePlace::None,
             rule_data: RuleData::new(),
@@ -53,7 +53,7 @@ pub struct Rules {
 
 impl Rules {
     pub fn new() -> Self {
-        Rules {
+        Self {
             rules: vec![],
             edit_mode: None,
             updated: true,
@@ -69,7 +69,7 @@ impl Rules {
         self.rules.remove(index);
     }
     pub fn apply_all_rules_to_item(
-        &mut self,
+        &self,
         mut item: String,
         current_index: u64,
         current_index_in_folder: u32,
@@ -191,7 +191,7 @@ pub struct RuleData {
 impl RuleData {
     // A little wasteful, but rules will be max 10 most of time, so this is not necessary to optimize
     pub fn new() -> Self {
-        RuleData {
+        Self {
             add_text_text: String::new(),
             trim_text: String::new(),
             to_lowercase: false,

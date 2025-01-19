@@ -18,12 +18,11 @@ pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64
             // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app
             let fill_with_zeros = min(fill_with_zeros, 50);
 
-            let mut number: i64;
-            if step_number.checked_mul(rule_number as i64).is_none() {
-                number = 0;
+            let mut number: i64 = if step_number.checked_mul(rule_number as i64).is_none() {
+                0
             } else {
-                number = step_number * rule_number as i64;
-            }
+                step_number * rule_number as i64
+            };
 
             number = number.checked_add(start_number).unwrap_or(0);
 

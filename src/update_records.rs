@@ -88,7 +88,7 @@ pub fn update_records(
     }
 }
 
-fn update_records_general(list_store: &gtk4::ListStore, rules: &mut Rules, compiled_regexes: &[Option<Regex>]) {
+fn update_records_general(list_store: &gtk4::ListStore, rules: &Rules, compiled_regexes: &[Option<Regex>]) {
     if let Some(iter) = list_store.iter_first() {
         let mut current_index = 0;
         let mut folder_name_counter: HashMap<String, u32> = Default::default();

@@ -24,8 +24,7 @@ pub struct ItemStruct {
 pub fn add_folders_to_check(folders_to_check: Vec<PathBuf>, list_store: &ListStore, result_entries: &mut ResultEntries, check_folders_inside: bool, ignore_folders: bool) {
     let mut new_entries = Vec::new();
 
-    let mut folders;
-    if check_folders_inside {
+    let mut folders = if check_folders_inside {
         for folder in folders_to_check {
             for entry in WalkDir::new(folder).skip_hidden(true).into_iter().filter_map(Result::ok) {
                 if ignore_folders {
@@ -39,10 +38,10 @@ pub fn add_folders_to_check(folders_to_check: Vec<PathBuf>, list_store: &ListSto
                 }
             }
         }
-        folders = new_entries;
+        new_entries
     } else {
-        folders = folders_to_check;
-    }
+        folders_to_check
+    };
 
     folders.sort_by(|a, b| {
         let (path_a, name_a) = split_path(a);

@@ -198,12 +198,7 @@ pub fn parse_string_rules(
 
                     let used_number = (if typ[0] == "N" { general_rule_number } else { rule_number_in_folder }) as i64;
 
-                    let mut number;
-                    if step_number.checked_mul(used_number).is_none() {
-                        number = 0;
-                    } else {
-                        number = step_number * used_number;
-                    }
+                    let mut number = if step_number.checked_mul(used_number).is_none() { 0 } else { step_number * used_number };
 
                     if number.checked_add(start_number).is_none() {
                         number = 0;

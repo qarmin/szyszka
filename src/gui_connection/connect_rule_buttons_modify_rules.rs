@@ -219,7 +219,7 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
         rules.edit_mode = Some(item_number);
 
         let rule = rules.rules[item_number].clone();
-        let rule_data = rule.rule_data.clone();
+        let rule_data = rule.rule_data;
         let rule_place = rule.rule_place;
         let rule_type = rule.rule_type;
 
