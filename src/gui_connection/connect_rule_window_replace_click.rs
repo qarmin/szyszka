@@ -74,7 +74,7 @@ pub fn connect_rule_window_replace_click(gui_data: &GuiData) {
 }
 
 fn recalculate_regex_captures(label_replace_captured_captures: &Label, entry_replace_text_to_find: &Entry, entry_example_before: &Entry) {
-    if entry_replace_text_to_find.text().len() == 0 {
+    if entry_replace_text_to_find.text().is_empty() {
         label_replace_captured_captures.set_label(&fls!("label_replace_no_captures"));
         return;
     }

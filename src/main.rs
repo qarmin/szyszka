@@ -5,7 +5,7 @@
 use std::env;
 
 use gio::ApplicationFlags;
-use glib::Propagation;
+use glib::{ExitCode, Propagation};
 use gtk4::prelude::*;
 use gtk4::Application;
 
@@ -58,7 +58,7 @@ fn main() {
     let application = Application::new(None::<String>, ApplicationFlags::HANDLES_OPEN | ApplicationFlags::HANDLES_COMMAND_LINE);
     application.connect_command_line(move |app, cmdline| {
         build_ui(app, &cmdline.arguments().into_iter().map(|e| e.to_string_lossy().to_string()).collect::<Vec<_>>());
-        0
+        ExitCode::new(0)
     });
     application.run_with_args(&env::args().collect::<Vec<String>>());
 }

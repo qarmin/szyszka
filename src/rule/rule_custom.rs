@@ -30,7 +30,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
             .to_string()
             .replace(':', "_");
         size = format_size(f_data.2, BINARY);
-        if let Some(last_component) = Path::new(&f_data.3).components().last() {
+        if let Some(last_component) = Path::new(&f_data.3).components().next_back() {
             if let Normal(path) = last_component {
                 parent_folder = path.to_str().unwrap_or("").to_string();
             } else {

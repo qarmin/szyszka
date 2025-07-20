@@ -59,16 +59,7 @@ pub fn update_records(
     let compiled_regexes: Vec<Option<Regex>> = rules
         .rules
         .iter()
-        .map(|e| {
-            if e.rule_data.use_regex {
-                match Regex::new(&e.rule_data.text_to_find) {
-                    Ok(regex) => Some(regex),
-                    Err(_) => None,
-                }
-            } else {
-                None
-            }
-        })
+        .map(|e| if e.rule_data.use_regex { Regex::new(&e.rule_data.text_to_find).ok() } else { None })
         .collect(); // TODO maybe there is a way to compile regexes only once, when adding them?
 
     match update_mode {
