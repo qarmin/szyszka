@@ -139,18 +139,18 @@ pub fn remove_selected_rows(tree_view: &TreeView) -> Vec<usize> {
     let mut vec_index_to_delete: Vec<_> = Vec::new();
     let mut current_iter: usize = 0;
 
-    let tree_iter = list_store.iter_first().unwrap();
+    let mut tree_iter = list_store.iter_first().unwrap();
 
     // Get indexes of removed values
     for selected_tree_path in &selected_rows {
         loop {
             if list_store.path(&tree_iter) == *selected_tree_path {
                 vec_index_to_delete.push(current_iter);
-                list_store.iter_next(&tree_iter);
+                list_store.iter_next(&mut tree_iter);
                 current_iter += 1;
                 break;
             }
-            list_store.iter_next(&tree_iter);
+            list_store.iter_next(&mut tree_iter);
             current_iter += 1;
         }
     }
@@ -194,10 +194,10 @@ pub fn count_rows_in_tree_view(tree_view: &TreeView) -> u32 {
     let list_store = get_list_store_from_tree_view(tree_view);
     let mut number = 0;
 
-    if let Some(curr_iter) = list_store.iter_first() {
+    if let Some(mut curr_iter) = list_store.iter_first() {
         loop {
             number += 1;
-            if !list_store.iter_next(&curr_iter) {
+            if !list_store.iter_next(&mut curr_iter) {
                 break;
             }
         }
@@ -372,10 +372,10 @@ pub fn get_custom_label_from_widget<P: IsA<Widget>>(item: &P) -> gtk4::Label {
 pub fn cache_list_store_items(list_store: &ListStore) -> Vec<TreeIter> {
     let mut items = Vec::new();
     let iter = list_store.iter_first();
-    if let Some(iter) = iter {
+    if let Some(mut iter) = iter {
         loop {
             items.push(iter);
-            if !list_store.iter_next(&iter) {
+            if !list_store.iter_next(&mut iter) {
                 break;
             }
         }

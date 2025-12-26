@@ -107,7 +107,7 @@ fn connect_renaming_response(chooser: &Dialog, shared_result_entries: &Rc<RefCel
             let mut properly_renamed = 0;
             let mut ignored = 0;
 
-            let tree_iter = list_store.iter_first().unwrap();
+            let mut tree_iter = list_store.iter_first().unwrap();
             let mut file_renames: Vec<(String, String)> = Vec::new();
             let mut folder_renames: BTreeMap<usize, Vec<(String, String)>> = Default::default();
 
@@ -128,7 +128,7 @@ fn connect_renaming_response(chooser: &Dialog, shared_result_entries: &Rc<RefCel
                     }
                 }
 
-                if !list_store.iter_next(&tree_iter) {
+                if !list_store.iter_next(&mut tree_iter) {
                     break;
                 }
             }

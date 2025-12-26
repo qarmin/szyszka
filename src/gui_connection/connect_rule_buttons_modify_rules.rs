@@ -204,14 +204,14 @@ pub fn connect_rule_modify_edit(gui_data: &GuiData) {
 
         let mut item_number: usize = 0;
 
-        let iter = model.iter_first().unwrap();
+        let mut iter = model.iter_first().unwrap();
 
         loop {
             if model.path(&iter) == selected_item {
                 break;
             }
 
-            assert!(model.iter_next(&iter));
+            assert!(model.iter_next(&mut iter));
 
             item_number += 1;
         }

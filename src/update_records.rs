@@ -80,7 +80,7 @@ pub fn update_records(
 }
 
 fn update_records_general(list_store: &gtk4::ListStore, rules: &Rules, compiled_regexes: &[Option<Regex>]) {
-    if let Some(iter) = list_store.iter_first() {
+    if let Some(mut iter) = list_store.iter_first() {
         let mut current_index = 0;
         let mut folder_name_counter: HashMap<String, u32> = Default::default();
         loop {
@@ -99,7 +99,7 @@ fn update_records_general(list_store: &gtk4::ListStore, rules: &Rules, compiled_
             );
             *curr_folder_file_index += 1;
             list_store.set_value(&iter, ColumnsResults::FutureName as u32, &Value::from(&changed_value));
-            if !list_store.iter_next(&iter) {
+            if !list_store.iter_next(&mut iter) {
                 break; // This is the end
             }
             current_index += 1;

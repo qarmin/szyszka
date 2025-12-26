@@ -49,7 +49,7 @@ pub fn connect_select_reverse(gui_data: &GuiData) {
         if vector_tree_path.is_empty() {
             selection.select_all();
         } else {
-            let tree_iter_all = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+            let mut tree_iter_all = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
 
             let mut current_path_index = 0;
             let mut tree_iter_selected: TreeIter;
@@ -65,7 +65,7 @@ pub fn connect_select_reverse(gui_data: &GuiData) {
                         selection.select_iter(&tree_iter_all);
                     }
                 }
-                if !tree_model.iter_next(&tree_iter_all) {
+                if !tree_model.iter_next(&mut tree_iter_all) {
                     break;
                 }
             }
@@ -85,7 +85,7 @@ pub fn connect_select_changed(gui_data: &GuiData) {
         let selection = tree_view.selection();
         let model = get_list_store_from_tree_view(&tree_view);
 
-        if let Some(iter) = model.iter_first() {
+        if let Some(mut iter) = model.iter_first() {
             loop {
                 let old_name = model.get::<String>(&iter, ColumnsResults::CurrentName as i32);
                 let new_name = model.get::<String>(&iter, ColumnsResults::FutureName as i32);
@@ -94,7 +94,7 @@ pub fn connect_select_changed(gui_data: &GuiData) {
                     selection.select_iter(&iter);
                 }
 
-                if !model.iter_next(&iter) {
+                if !model.iter_next(&mut iter) {
                     break;
                 }
             }
@@ -113,7 +113,7 @@ pub fn connect_unselect_changed(gui_data: &GuiData) {
         let selection = tree_view.selection();
         let model = get_list_store_from_tree_view(&tree_view);
 
-        if let Some(iter) = model.iter_first() {
+        if let Some(mut iter) = model.iter_first() {
             loop {
                 let old_name = model.get::<String>(&iter, ColumnsResults::CurrentName as i32);
                 let new_name = model.get::<String>(&iter, ColumnsResults::FutureName as i32);
@@ -122,7 +122,7 @@ pub fn connect_unselect_changed(gui_data: &GuiData) {
                     selection.unselect_iter(&iter);
                 }
 
-                if !model.iter_next(&iter) {
+                if !model.iter_next(&mut iter) {
                     break;
                 }
             }
@@ -372,7 +372,7 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
                 let selection = tree_view.selection();
                 let tree_model = tree_view.model().unwrap();
 
-                let tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
+                let mut tree_iter = tree_model.iter_first().unwrap(); // Never should be available button where there is no available records
 
                 loop {
                     let typ = to_dir_file_from_u8(tree_model.get::<u8>(&tree_iter, ColumnsResults::Type as i32));
@@ -412,7 +412,7 @@ fn connect_dialog_selection_unselection(custom_dialog: &Dialog, tree_view: &Tree
                         }
                     }
 
-                    if !tree_model.iter_next(&tree_iter) {
+                    if !tree_model.iter_next(&mut tree_iter) {
                         break;
                     }
                 }
