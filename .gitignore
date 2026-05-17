@@ -6,3 +6,4 @@
 TestSuite*
 *.snap
 DO_NOT_RENAME/
+port/target

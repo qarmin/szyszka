@@ -1,0 +1,58 @@
+use std::cmp::min;
+use std::path::Path;
+
+use crate::rule::rules::{split_file_name, RulePlace, RuleType, SingleRule};
+
+pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64) -> String {
+    let (name, extension) = split_file_name(Path::new(data_to_change));
+    let mut return_string;
+    let is_empty_extension_and_dot_at_the_end = extension.is_empty() && data_to_change.ends_with('.');
+
+    let start_number = rule.rule_data.number_start;
+    let step_number = rule.rule_data.number_step;
+    let fill_with_zeros = rule.rule_data.fill_with_zeros;
+
+    match rule.rule_type {
+        RuleType::AddNumber => {
+            let fill_with_zeros = min(fill_with_zeros, 50);
+
+            let mut number: i64 = if step_number.checked_mul(rule_number as i64).is_none() {
+                0
+            } else {
+                step_number * rule_number as i64
+            };
+
+            number = number.checked_add(start_number).unwrap_or(0);
+
+            let mut text_to_add = number.to_string();
+
+            if text_to_add.len() < fill_with_zeros as usize {
+                let zeros: String = "0".repeat((fill_with_zeros - text_to_add.len() as i64) as usize);
+                text_to_add = zeros + text_to_add.as_str();
+            }
+
+            match rule.rule_place {
+                RulePlace::BeforeName => {
+                    return_string = text_to_add + name.as_str();
+                }
+                RulePlace::AfterName => {
+                    return_string = name + text_to_add.as_str();
+                }
+                _ => {
+                    panic!("Not implemented function");
+                }
+            }
+
+            if !extension.is_empty() {
+                return_string = return_string + "." + extension.as_str();
+            } else if is_empty_extension_and_dot_at_the_end {
+                return_string += ".";
+            }
+        }
+        _ => {
+            panic!("Not implemented function");
+        }
+    }
+
+    return_string
+}

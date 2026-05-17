@@ -1,0 +1,343 @@
+// Enums shared with Rust. Order/names must match Rust definitions.
+
+export enum RuleTypeUi {
+    custom,
+    case-size,
+    purge,
+    add-number,
+    add-text,
+    replace,
+    trim,
+    normalize,
+}
+
+export enum RulePlaceUi {
+    none-p,
+    extension,
+    name-p,
+    extension-and-name,
+    before-extension,
+    after-extension,
+    before-name,
+    after-name,
+    from-name-start,
+    from-name-end-reverse,
+    from-extension-start,
+    from-extension-end-reverse,
+}
+
+export enum DirFileTypeUi {
+    file-t,
+    directory-t,
+}
+
+export enum NotebookTab {
+    custom,
+    case-size,
+    purge,
+    add-number,
+    add-text,
+    replace,
+    trim,
+    normalize,
+}
+
+export enum SelectMode {
+    select-all,
+    reverse,
+    select-custom,
+    unselect-custom,
+    select-changed,
+    unselect-changed,
+}
+
+export enum LoadDirection {
+    load,
+    save,
+    delete,
+}
+
+export struct FileRow {
+    selected: bool,
+    dir_type: DirFileTypeUi,
+    current_name: string,
+    future_name: string,
+    path: string,
+    size_text: string,
+    date_text: string,
+}
+
+export struct RuleRow {
+    selected: bool,
+    rule_type_text: string,
+    usage_text: string,
+    description: string,
+}
+
+export struct RuleSetEntry {
+    name: string,
+}
+
+export global Translations {
+    in-out property <string> upper_start_renaming_button: "Start Renaming";
+    in-out property <string> upper_add_files_button: "Add Files";
+    in-out property <string> upper_add_folders_button: "Add Folders";
+    in-out property <string> upper_remove_selection_button: "Remove Selection";
+    in-out property <string> upper_update_names_button: "Update Names";
+    in-out property <string> upper_results_one_up_button: "One Up";
+    in-out property <string> upper_results_one_down_button: "One Down";
+    in-out property <string> upper_select_popup_button: "Select";
+
+    in-out property <string> bottom_rule_add_button: "Add Rule";
+    in-out property <string> bottom_rule_edit_button: "Edit Rule";
+    in-out property <string> bottom_rule_remove_button: "Remove Rule";
+    in-out property <string> bottom_rule_one_up_button: "One Up";
+    in-out property <string> bottom_rule_one_down_button: "One Down";
+    in-out property <string> bottom_rule_save_rules_button: "Save Rules";
+    in-out property <string> bottom_rule_load_rules_button: "Load Rules";
+
+    in-out property <string> bottom_rule_label_rules: "Rules";
+    in-out property <string> upper_files_folders_label: "Files/Folders";
+
+    in-out property <string> tree_view_upper_column_type: "Type";
+    in-out property <string> tree_view_upper_column_current_name: "Current Name";
+    in-out property <string> tree_view_upper_column_future_name: "Future Name";
+    in-out property <string> tree_view_upper_column_path: "Path";
+
+    in-out property <string> tree_view_bottom_tool_type: "Tool Type";
+    in-out property <string> tree_view_bottom_usage_name: "Usage Name";
+    in-out property <string> tree_view_bottom_description: "Description";
+
+    in-out property <string> settings_language_label: "Language";
+    in-out property <string> check_button_dark_theme: "Dark icons";
+    in-out property <string> settings_open_rules: "Open rules settings file";
+    in-out property <string> settings_open_cache_custom_texts: "Open custom cache file";
+    in-out property <string> settings_open_config_dir: "Open cache dir";
+
+    in-out property <string> button_select_all: "Select All";
+    in-out property <string> button_select_reverse: "Reverse Selection";
+    in-out property <string> button_select_custom: "Select Custom";
+    in-out property <string> button_unselect_custom: "Unselect Custom";
+    in-out property <string> button_select_changed: "Select Changed";
+    in-out property <string> button_unselect_changed: "Unselect Changed";
+
+    in-out property <string> dialog_button_ok: "Ok";
+    in-out property <string> dialog_button_cancel: "Cancel";
+
+    in-out property <string> dialog_name_files_to_include: "Files to include";
+    in-out property <string> dialog_name_folders_to_include: "Folders to include";
+    in-out property <string> dialog_scan_inside: "Scan inside";
+    in-out property <string> dialog_ignore_folders: "Ignore folders";
+    in-out property <string> dialog_confirm_renaming: "Confirm renaming";
+    in-out property <string> dialog_outdated_results: "Outdated results";
+    in-out property <string> dialog_results_of_renaming: "Results of renaming";
+    in-out property <string> dialog_save_rule: "Save Rule";
+    in-out property <string> dialog_select_custom: "Select Custom";
+    in-out property <string> dialog_unselect_custom: "Unselect Custom";
+
+    in-out property <string> label_usage_type: "Usage Type:";
+    in-out property <string> label_example: "EXAMPLE";
+    in-out property <string> label_example_text_before: "Before:";
+    in-out property <string> label_example_text_after: "After:";
+    in-out property <string> button_rule_window_add: "Rule Add";
+
+    in-out property <string> label_custom_instruction: "$(NAME), $(EXT), $(MODIF), $(CREAT), $(CURR), $(PARENT), $(N)/$(K) - numbers";
+    in-out property <string> menu_button_load_custom_rule: "Custom rule chooser";
+    in-out property <string> button_save_custom_rule: "Save custom rule";
+
+    in-out property <string> check_button_letters_type_uppercase: "Uppercase";
+    in-out property <string> check_button_letters_type_lowercase: "Lowercase";
+    in-out property <string> check_button_letters_usage_name: "Only Name";
+    in-out property <string> check_button_letters_usage_extension: "Only Extension";
+    in-out property <string> check_button_letters_usage_both: "Both";
+    in-out property <string> label_letters_tool_type: "Tool Type:";
+
+    in-out property <string> label_purge_tool_type: "Tool Type:";
+    in-out property <string> check_button_purge_name: "Only Name";
+    in-out property <string> check_button_purge_extension: "Only Extension";
+    in-out property <string> check_button_purge_both: "Both";
+
+    in-out property <string> label_add_number_place: "Place to put number:";
+    in-out property <string> label_add_number_settings: "Number settings:";
+    in-out property <string> check_button_add_number_before_name: "Before Name";
+    in-out property <string> check_button_add_number_after_name: "After Name";
+    in-out property <string> label_number_start_number: "Start number";
+    in-out property <string> label_number_step: "Step";
+    in-out property <string> label_number_fill_zeros: "Fill with zeros";
+
+    in-out property <string> check_button_add_text_before_name: "Before Name";
+    in-out property <string> check_button_add_text_after_name: "After Name";
+    in-out property <string> label_add_text: "Text to add:";
+
+    in-out property <string> check_button_replace_name: "Only Name";
+    in-out property <string> check_button_replace_extension: "Only Extension";
+    in-out property <string> check_button_replace_both: "Both";
+    in-out property <string> check_button_replace_case_sensitive: "Case Sensitive";
+    in-out property <string> check_button_replace_case_insensitive: "Case Insensitive";
+    in-out property <string> check_button_replace_regex: "Use regex";
+    in-out property <string> check_button_replace_replace_all: "Replace all occurrences";
+    in-out property <string> label_replace_text_to_find: "Text to find";
+    in-out property <string> label_replace_text_to_replace: "Replaced text";
+    in-out property <string> label_replace_invalid_regex: "INVALID REGEX";
+
+    in-out property <string> check_button_trim_name_start: "Name Start";
+    in-out property <string> check_button_trim_name_end: "Name End";
+    in-out property <string> check_button_trim_extension_start: "Extension Start";
+    in-out property <string> check_button_trim_extension_end: "Extension End";
+    in-out property <string> check_button_trim_case_sensitive: "Case Sensitive";
+    in-out property <string> check_button_trim_case_insensitive: "Case Insensitive";
+    in-out property <string> label_trim_trim_text: "Trim text";
+    in-out property <string> label_trim_case_sensitivity: "Case Sensitivity";
+
+    in-out property <string> label_normalize_name: "Everything / Partial normalization";
+    in-out property <string> check_button_normalize_everything: "Everything";
+    in-out property <string> check_button_normalize_partial: "Partial";
+
+    in-out property <string> notebook_tab_custom: "Custom";
+    in-out property <string> notebook_tab_case_size: "Upper/Lower Cases";
+    in-out property <string> notebook_tab_purge: "Purge";
+    in-out property <string> notebook_tab_add_number: "Add Number";
+    in-out property <string> notebook_tab_add_text: "Add Text";
+    in-out property <string> notebook_tab_replace: "Replace";
+    in-out property <string> notebook_tab_trim: "Trim";
+    in-out property <string> notebook_tab_normalize: "Normalize Name";
+}
+
+export global Settings {
+    in-out property <bool> dark_theme: true;
+    in-out property <string> selected_language: "English";
+    in-out property <[string]> available_languages: [
+        "English",
+        "Français (French)",
+        "Italiano (Italian)",
+        "Polski (Polish)",
+        "Русский (Russian)",
+        "український (Ukrainian)",
+        "Česky (Czech)",
+        "Deutsch (German)",
+        "やまと (Japanese)",
+        "Português (Portuguese)",
+        "简体中文 (Simplified Chinese)",
+        "Español (Spanish)",
+        "Swedish (Svenska)",
+    ];
+}
+
+export global EditorState {
+    in-out property <NotebookTab> current_tab: NotebookTab.custom;
+    in-out property <string> example_before_text: "Gżegżółka.Txt";
+    in-out property <string> example_after_text: "Gżegżółka.Txt";
+
+    in-out property <string> custom_text: "FILE_$(N).$(EXT)";
+
+    in-out property <bool> case_lowercase: true;
+    in-out property <RulePlaceUi> case_place: RulePlaceUi.name-p;
+
+    in-out property <RulePlaceUi> purge_place: RulePlaceUi.name-p;
+
+    in-out property <RulePlaceUi> add_number_place: RulePlaceUi.before-name;
+    in-out property <string> add_number_start: "0";
+    in-out property <string> add_number_step: "1";
+    in-out property <string> add_number_zeros: "0";
+
+    in-out property <RulePlaceUi> add_text_place: RulePlaceUi.before-name;
+    in-out property <string> add_text_text: "";
+
+    in-out property <RulePlaceUi> replace_place: RulePlaceUi.name-p;
+    in-out property <bool> replace_case_sensitive: false;
+    in-out property <bool> replace_use_regex: false;
+    in-out property <bool> replace_all_occurrences: true;
+    in-out property <string> replace_text_to_find: "";
+    in-out property <string> replace_text_to_replace: "";
+    in-out property <bool> replace_invalid_regex: false;
+
+    in-out property <RulePlaceUi> trim_place: RulePlaceUi.from-name-start;
+    in-out property <bool> trim_case_sensitive: false;
+    in-out property <string> trim_text: "";
+
+    in-out property <bool> normalize_full: true;
+}
+
+export global ProgressState {
+    in-out property <bool> visible: false;
+    in-out property <string> title: "";
+    in-out property <string> message: "";
+    in-out property <int> current: 0;
+    in-out property <int> total: 0;
+    in-out property <bool> indeterminate: true;
+}
+
+export global GuiState {
+    in-out property <bool> rule_editor_open: false;
+    in-out property <bool> settings_open: false;
+    in-out property <bool> select_popup_open: false;
+    in-out property <bool> load_popup_open: false;
+    in-out property <bool> confirm_dialog_open: false;
+    in-out property <bool> results_dialog_open: false;
+    in-out property <bool> message_dialog_open: false;
+    in-out property <bool> select_custom_dialog_open: false;
+    in-out property <bool> save_rule_dialog_open: false;
+    in-out property <bool> add_files_dialog_open: false;
+    in-out property <bool> add_folders_dialog_open: false;
+
+    in-out property <string> message_dialog_title: "";
+    in-out property <string> message_dialog_text: "";
+
+    in-out property <int> file_count: 0;
+    in-out property <int> rule_count: 0;
+    in-out property <bool> results_outdated: false;
+
+    in-out property <int> properly_renamed: 0;
+    in-out property <int> ignored_count: 0;
+    in-out property <string> failed_text: "";
+
+    in-out property <string> select_custom_text: "";
+    in-out property <bool> select_custom_select_dirs: true;
+    in-out property <int> select_custom_mode_index: 0;
+
+    in-out property <string> save_rule_name: "";
+
+    in-out property <bool> add_folder_scan_inside: false;
+    in-out property <bool> add_folder_ignore_folders: false;
+}
+
+export global Callabler {
+    callback request-add-files();
+    callback request-add-folders(bool /*scan_inside*/, bool /*ignore_folders*/);
+    callback remove-selected-files();
+    callback select-action(SelectMode);
+    callback select-custom-apply(string /*pattern*/, bool /*include_dirs*/, int /*mode_index*/, bool /*select_else_unselect*/);
+    callback results-move-up();
+    callback results-move-down();
+    callback update-names();
+    callback start-renaming();
+    callback confirm-renaming();
+
+    callback open-rule-editor(int /*edit_index_or_-1*/);
+    callback close-rule-editor();
+    callback rule-editor-add();
+    callback rule-editor-update-example();
+    callback rule-remove(int);
+    callback rule-move-up();
+    callback rule-move-down();
+
+    callback rule-set-save(string /*name*/);
+    callback rule-set-load(int /*index*/);
+    callback rule-set-delete(int /*index*/);
+    callback request-load-rule-sets();
+    in-out property <[RuleSetEntry]> saved_rule_sets: [];
+
+    callback custom-rule-save(string);
+    callback custom-rule-load(int);
+    callback custom-rule-delete(int);
+    in-out property <[string]> saved_custom_rules: [];
+
+    callback set-dark-theme(bool);
+    callback set-language(string);
+    callback open-rules-file();
+    callback open-custom-texts-file();
+    callback open-config-dir();
+
+    callback set-file-selected(int, bool);
+    callback set-rule-selected(int, bool);
+}

@@ -1,0 +1,452 @@
+import { Button, LineEdit, CheckBox, ScrollView, ListView, HorizontalBox, VerticalBox, Palette } from "std-widgets.slint";
+import { Translations, NotebookTab, RuleTypeUi, RulePlaceUi, Callabler, GuiState, EditorState } from "common.slint";
+
+component TabBtn inherits Rectangle {
+    in property <string> label_text;
+    in property <bool> active;
+    callback clicked();
+    background: active ? Palette.accent-background : Palette.alternate-background;
+    border-radius: 4px;
+    min-height: 32px;
+    TouchArea { clicked => { root.clicked(); } }
+    Text {
+        text: root.label_text;
+        color: root.active ? Palette.accent-foreground : Palette.foreground;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+}
+
+component RadioBtn inherits Rectangle {
+    in property <string> label_text;
+    in property <bool> active;
+    callback clicked();
+    background: active ? Palette.accent-background : Palette.alternate-background;
+    border-color: active ? Palette.accent-foreground : Palette.border;
+    border-width: 1px;
+    border-radius: 4px;
+    horizontal-stretch: 1;
+    min-height: 30px;
+    TouchArea { clicked => { root.clicked(); } }
+    Text {
+        text: root.label_text;
+        color: root.active ? Palette.accent-foreground : Palette.foreground;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+}
+
+export component RuleEditorPanel inherits Rectangle {
+    background: Palette.background;
+
+    VerticalBox {
+        padding: 12px;
+        spacing: 8px;
+
+        HorizontalLayout {
+            spacing: 8px;
+
+            // Left tab sidebar
+            VerticalLayout {
+                width: 170px;
+                spacing: 4px;
+                TabBtn {
+                    label_text: Translations.notebook_tab_custom;
+                    active: EditorState.current_tab == NotebookTab.custom;
+                    clicked => { EditorState.current_tab = NotebookTab.custom; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_case_size;
+                    active: EditorState.current_tab == NotebookTab.case-size;
+                    clicked => { EditorState.current_tab = NotebookTab.case-size; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_purge;
+                    active: EditorState.current_tab == NotebookTab.purge;
+                    clicked => { EditorState.current_tab = NotebookTab.purge; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_add_number;
+                    active: EditorState.current_tab == NotebookTab.add-number;
+                    clicked => { EditorState.current_tab = NotebookTab.add-number; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_add_text;
+                    active: EditorState.current_tab == NotebookTab.add-text;
+                    clicked => { EditorState.current_tab = NotebookTab.add-text; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_replace;
+                    active: EditorState.current_tab == NotebookTab.replace;
+                    clicked => { EditorState.current_tab = NotebookTab.replace; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_trim;
+                    active: EditorState.current_tab == NotebookTab.trim;
+                    clicked => { EditorState.current_tab = NotebookTab.trim; Callabler.rule-editor-update-example(); }
+                }
+                TabBtn {
+                    label_text: Translations.notebook_tab_normalize;
+                    active: EditorState.current_tab == NotebookTab.normalize;
+                    clicked => { EditorState.current_tab = NotebookTab.normalize; Callabler.rule-editor-update-example(); }
+                }
+                Rectangle { vertical-stretch: 1; }
+            }
+
+            // Tab body
+            Rectangle {
+                background: Palette.alternate-background;
+                border-radius: 6px;
+                horizontal-stretch: 1;
+
+                VerticalBox {
+                    padding: 10px;
+                    spacing: 8px;
+
+                    // CUSTOM
+                    if EditorState.current_tab == NotebookTab.custom : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_custom_instruction; wrap: word-wrap; }
+                        LineEdit {
+                            text: EditorState.custom_text;
+                            edited(t) => { EditorState.custom_text = t; Callabler.rule-editor-update-example(); }
+                        }
+                        HorizontalLayout {
+                            spacing: 6px;
+                            Button {
+                                text: Translations.button_save_custom_rule;
+                                clicked => { Callabler.custom-rule-save(EditorState.custom_text); }
+                            }
+                        }
+                        Text { text: "Saved custom texts:"; }
+                        Rectangle {
+                            background: Palette.background;
+                            border-radius: 4px;
+                            vertical-stretch: 1;
+                            ListView {
+                                for entry[idx] in Callabler.saved_custom_rules : Rectangle {
+                                    height: 28px;
+                                    HorizontalLayout {
+                                        padding: 4px;
+                                        spacing: 4px;
+                                        Text { text: entry; vertical-alignment: center; horizontal-stretch: 1; }
+                                        Button { text: "Load"; clicked => { Callabler.custom-rule-load(idx); } }
+                                        Button { text: "X"; clicked => { Callabler.custom-rule-delete(idx); } }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // CASE SIZE
+                    if EditorState.current_tab == NotebookTab.case-size : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_letters_tool_type; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_letters_type_lowercase;
+                                active: EditorState.case_lowercase;
+                                clicked => { EditorState.case_lowercase = true; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_letters_type_uppercase;
+                                active: !EditorState.case_lowercase;
+                                clicked => { EditorState.case_lowercase = false; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Text { text: Translations.label_usage_type; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_letters_usage_name;
+                                active: EditorState.case_place == RulePlaceUi.name-p;
+                                clicked => { EditorState.case_place = RulePlaceUi.name-p; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_letters_usage_extension;
+                                active: EditorState.case_place == RulePlaceUi.extension;
+                                clicked => { EditorState.case_place = RulePlaceUi.extension; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_letters_usage_both;
+                                active: EditorState.case_place == RulePlaceUi.extension-and-name;
+                                clicked => { EditorState.case_place = RulePlaceUi.extension-and-name; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // PURGE
+                    if EditorState.current_tab == NotebookTab.purge : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_purge_tool_type; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_purge_name;
+                                active: EditorState.purge_place == RulePlaceUi.name-p;
+                                clicked => { EditorState.purge_place = RulePlaceUi.name-p; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_purge_extension;
+                                active: EditorState.purge_place == RulePlaceUi.extension;
+                                clicked => { EditorState.purge_place = RulePlaceUi.extension; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_purge_both;
+                                active: EditorState.purge_place == RulePlaceUi.extension-and-name;
+                                clicked => { EditorState.purge_place = RulePlaceUi.extension-and-name; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // ADD NUMBER
+                    if EditorState.current_tab == NotebookTab.add-number : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_add_number_place; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_add_number_before_name;
+                                active: EditorState.add_number_place == RulePlaceUi.before-name;
+                                clicked => { EditorState.add_number_place = RulePlaceUi.before-name; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_add_number_after_name;
+                                active: EditorState.add_number_place == RulePlaceUi.after-name;
+                                clicked => { EditorState.add_number_place = RulePlaceUi.after-name; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Text { text: Translations.label_add_number_settings; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            VerticalLayout {
+                                Text { text: Translations.label_number_start_number; }
+                                LineEdit {
+                                    text: EditorState.add_number_start;
+                                    input-type: number;
+                                    edited(t) => { EditorState.add_number_start = t; Callabler.rule-editor-update-example(); }
+                                }
+                            }
+                            VerticalLayout {
+                                Text { text: Translations.label_number_step; }
+                                LineEdit {
+                                    text: EditorState.add_number_step;
+                                    input-type: number;
+                                    edited(t) => { EditorState.add_number_step = t; Callabler.rule-editor-update-example(); }
+                                }
+                            }
+                            VerticalLayout {
+                                Text { text: Translations.label_number_fill_zeros; }
+                                LineEdit {
+                                    text: EditorState.add_number_zeros;
+                                    input-type: number;
+                                    edited(t) => { EditorState.add_number_zeros = t; Callabler.rule-editor-update-example(); }
+                                }
+                            }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // ADD TEXT
+                    if EditorState.current_tab == NotebookTab.add-text : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_usage_type; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_add_text_before_name;
+                                active: EditorState.add_text_place == RulePlaceUi.before-name;
+                                clicked => { EditorState.add_text_place = RulePlaceUi.before-name; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_add_text_after_name;
+                                active: EditorState.add_text_place == RulePlaceUi.after-name;
+                                clicked => { EditorState.add_text_place = RulePlaceUi.after-name; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Text { text: Translations.label_add_text; }
+                        LineEdit {
+                            text: EditorState.add_text_text;
+                            edited(t) => { EditorState.add_text_text = t; Callabler.rule-editor-update-example(); }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // REPLACE
+                    if EditorState.current_tab == NotebookTab.replace : VerticalLayout {
+                        spacing: 6px;
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_replace_name;
+                                active: EditorState.replace_place == RulePlaceUi.name-p && !EditorState.replace_use_regex;
+                                clicked => { EditorState.replace_place = RulePlaceUi.name-p; EditorState.replace_use_regex = false; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_replace_extension;
+                                active: EditorState.replace_place == RulePlaceUi.extension && !EditorState.replace_use_regex;
+                                clicked => { EditorState.replace_place = RulePlaceUi.extension; EditorState.replace_use_regex = false; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_replace_both;
+                                active: EditorState.replace_place == RulePlaceUi.extension-and-name && !EditorState.replace_use_regex;
+                                clicked => { EditorState.replace_place = RulePlaceUi.extension-and-name; EditorState.replace_use_regex = false; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_replace_case_sensitive;
+                                active: EditorState.replace_case_sensitive;
+                                clicked => { EditorState.replace_case_sensitive = true; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_replace_case_insensitive;
+                                active: !EditorState.replace_case_sensitive;
+                                clicked => { EditorState.replace_case_sensitive = false; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        CheckBox {
+                            text: Translations.check_button_replace_regex;
+                            checked: EditorState.replace_use_regex;
+                            toggled => {
+                                EditorState.replace_use_regex = self.checked;
+                                if (self.checked) { EditorState.replace_place = RulePlaceUi.none-p; }
+                                Callabler.rule-editor-update-example();
+                            }
+                        }
+                        CheckBox {
+                            text: Translations.check_button_replace_replace_all;
+                            checked: EditorState.replace_all_occurrences;
+                            toggled => { EditorState.replace_all_occurrences = self.checked; Callabler.rule-editor-update-example(); }
+                        }
+                        Text { text: Translations.label_replace_text_to_find; }
+                        LineEdit {
+                            text: EditorState.replace_text_to_find;
+                            edited(t) => { EditorState.replace_text_to_find = t; Callabler.rule-editor-update-example(); }
+                        }
+                        Text { text: Translations.label_replace_text_to_replace; }
+                        LineEdit {
+                            text: EditorState.replace_text_to_replace;
+                            edited(t) => { EditorState.replace_text_to_replace = t; Callabler.rule-editor-update-example(); }
+                        }
+                        if EditorState.replace_invalid_regex : Text { color: red; text: Translations.label_replace_invalid_regex; }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // TRIM
+                    if EditorState.current_tab == NotebookTab.trim : VerticalLayout {
+                        spacing: 6px;
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_name_start;
+                                active: EditorState.trim_place == RulePlaceUi.from-name-start;
+                                clicked => { EditorState.trim_place = RulePlaceUi.from-name-start; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_name_end;
+                                active: EditorState.trim_place == RulePlaceUi.from-name-end-reverse;
+                                clicked => { EditorState.trim_place = RulePlaceUi.from-name-end-reverse; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_extension_start;
+                                active: EditorState.trim_place == RulePlaceUi.from-extension-start;
+                                clicked => { EditorState.trim_place = RulePlaceUi.from-extension-start; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_extension_end;
+                                active: EditorState.trim_place == RulePlaceUi.from-extension-end-reverse;
+                                clicked => { EditorState.trim_place = RulePlaceUi.from-extension-end-reverse; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_case_sensitive;
+                                active: EditorState.trim_case_sensitive;
+                                clicked => { EditorState.trim_case_sensitive = true; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_trim_case_insensitive;
+                                active: !EditorState.trim_case_sensitive;
+                                clicked => { EditorState.trim_case_sensitive = false; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Text { text: Translations.label_trim_trim_text; }
+                        LineEdit {
+                            text: EditorState.trim_text;
+                            edited(t) => { EditorState.trim_text = t; Callabler.rule-editor-update-example(); }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+
+                    // NORMALIZE
+                    if EditorState.current_tab == NotebookTab.normalize : VerticalLayout {
+                        spacing: 6px;
+                        Text { text: Translations.label_normalize_name; wrap: word-wrap; }
+                        HorizontalLayout {
+                            spacing: 4px;
+                            RadioBtn {
+                                label_text: Translations.check_button_normalize_everything;
+                                active: EditorState.normalize_full;
+                                clicked => { EditorState.normalize_full = true; Callabler.rule-editor-update-example(); }
+                            }
+                            RadioBtn {
+                                label_text: Translations.check_button_normalize_partial;
+                                active: !EditorState.normalize_full;
+                                clicked => { EditorState.normalize_full = false; Callabler.rule-editor-update-example(); }
+                            }
+                        }
+                        Rectangle { vertical-stretch: 1; }
+                    }
+                }
+            }
+        }
+
+        // Example panel
+        Rectangle {
+            background: Palette.alternate-background;
+            border-radius: 6px;
+            VerticalLayout {
+                padding: 8px;
+                spacing: 4px;
+                Text { text: Translations.label_example; horizontal-alignment: center; font-weight: 700; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Text { text: Translations.label_example_text_before; vertical-alignment: center; min-width: 60px; }
+                    LineEdit {
+                        text: EditorState.example_before_text;
+                        edited(t) => { EditorState.example_before_text = t; Callabler.rule-editor-update-example(); }
+                    }
+                    Button {
+                        text: "↺";
+                        clicked => { EditorState.example_before_text = "Gżegżółka.Txt"; Callabler.rule-editor-update-example(); }
+                    }
+                }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Text { text: Translations.label_example_text_after; vertical-alignment: center; min-width: 60px; }
+                    Text { text: EditorState.example_after_text; vertical-alignment: center; }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            spacing: 6px;
+            Rectangle { horizontal-stretch: 1; }
+            Button {
+                text: Translations.button_rule_window_add;
+                primary: true;
+                clicked => { Callabler.rule-editor-add(); }
+            }
+            Button {
+                text: Translations.dialog_button_cancel;
+                clicked => { Callabler.close-rule-editor(); }
+            }
+        }
+    }
+}

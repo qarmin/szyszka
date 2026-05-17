@@ -1,0 +1,687 @@
+import { Button, LineEdit, CheckBox, ComboBox, ScrollView, GroupBox, HorizontalBox, VerticalBox, ListView, StandardButton, Palette } from "std-widgets.slint";
+import { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, FileRow, RuleRow, RuleSetEntry, SelectMode, DirFileTypeUi, NotebookTab, RuleTypeUi, RulePlaceUi } from "common.slint";
+import { RuleEditorPanel } from "rule_editor.slint";
+
+export { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, RuleTypeUi, RulePlaceUi, NotebookTab, DirFileTypeUi, SelectMode }
+
+export component MainWindow inherits Window {
+    title: "Szyszka";
+    preferred-width: 1100px;
+    preferred-height: 720px;
+    min-width: 800px;
+    min-height: 600px;
+
+    in property <[FileRow]> files: [];
+    in property <[RuleRow]> rules: [];
+
+    property <bool> theme_sync: Settings.dark_theme;
+    changed theme_sync => { Palette.color-scheme = self.theme_sync ? ColorScheme.dark : ColorScheme.light; }
+    init => { Palette.color-scheme = Settings.dark_theme ? ColorScheme.dark : ColorScheme.light; }
+
+    // Top bar
+    VerticalBox {
+        padding: 8px;
+        spacing: 6px;
+
+        // Header bar
+        HorizontalLayout {
+            spacing: 6px;
+            Button {
+                text: Translations.upper_start_renaming_button;
+                primary: true;
+                enabled: GuiState.file_count > 0 && GuiState.rule_count > 0;
+                clicked => { Callabler.start-renaming(); }
+            }
+            Rectangle { horizontal-stretch: 1; }
+            Button {
+                text: "⚙ " + Translations.settings_language_label;
+                clicked => { GuiState.settings_open = !GuiState.settings_open; }
+            }
+        }
+
+        // Files section label
+        Text {
+            text: GuiState.file_count == 0
+                ? Translations.upper_files_folders_label
+                : (GuiState.results_outdated
+                    ? Translations.upper_files_folders_label + " (" + GuiState.file_count + ") - UPDATE REQUIRED"
+                    : Translations.upper_files_folders_label + " (" + GuiState.file_count + ") - up to date");
+            color: GuiState.file_count > 0 && GuiState.results_outdated ? red : Palette.foreground;
+            font-weight: 600;
+        }
+
+        // Files area
+        HorizontalLayout {
+            spacing: 6px;
+            min-height: 200px;
+            vertical-stretch: 1;
+
+            // File list
+            Rectangle {
+                background: Palette.alternate-background;
+                border-radius: 6px;
+                border-width: 1px;
+                border-color: Palette.border;
+                horizontal-stretch: 1;
+
+                VerticalLayout {
+                    // header
+                    Rectangle {
+                        height: 28px;
+                        background: Palette.control-background;
+                        border-radius: 6px;
+                        HorizontalLayout {
+                            padding-left: 8px;
+                            padding-right: 8px;
+                            spacing: 4px;
+                            Text { width: 24px; text: ""; vertical-alignment: center; }
+                            Text { width: 30px; text: Translations.tree_view_upper_column_type; vertical-alignment: center; font-weight: 700; }
+                            Text { horizontal-stretch: 1; text: Translations.tree_view_upper_column_current_name; vertical-alignment: center; font-weight: 700; }
+                            Text { horizontal-stretch: 1; text: Translations.tree_view_upper_column_future_name; vertical-alignment: center; font-weight: 700; }
+                            Text { horizontal-stretch: 2; text: Translations.tree_view_upper_column_path; vertical-alignment: center; font-weight: 700; }
+                        }
+                    }
+                    ListView {
+                        vertical-stretch: 1;
+                        for row[idx] in root.files : Rectangle {
+                            height: 26px;
+                            background: row.selected ? Palette.accent-background : (mod(idx, 2) == 0 ? Palette.alternate-background : Palette.background);
+                            ta := TouchArea {
+                                clicked => {
+                                    Callabler.set-file-selected(idx, !row.selected);
+                                }
+                            }
+                            HorizontalLayout {
+                                padding-left: 8px;
+                                padding-right: 8px;
+                                spacing: 4px;
+                                CheckBox {
+                                    width: 24px;
+                                    checked: row.selected;
+                                    toggled => { Callabler.set-file-selected(idx, self.checked); }
+                                }
+                                Text { width: 30px; text: row.dir_type == DirFileTypeUi.directory-t ? "Dir" : "File"; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
+                                Text { horizontal-stretch: 1; text: row.current_name; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                                Text { horizontal-stretch: 1; text: row.future_name; vertical-alignment: center; color: row.future_name != row.current_name ? #2e8b57 : (row.selected ? Palette.accent-foreground : Palette.foreground); overflow: elide; }
+                                Text { horizontal-stretch: 2; text: row.path; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Right action buttons
+            VerticalLayout {
+                spacing: 4px;
+                width: 180px;
+                Button { text: Translations.upper_add_files_button; clicked => { GuiState.add_files_dialog_open = true; } }
+                Button { text: Translations.upper_add_folders_button; clicked => { GuiState.add_folders_dialog_open = true; } }
+                Button { text: Translations.upper_remove_selection_button; clicked => { Callabler.remove-selected-files(); } }
+                Button {
+                    text: Translations.upper_select_popup_button + " ▾";
+                    clicked => { GuiState.select_popup_open = !GuiState.select_popup_open; }
+                }
+                Button { text: Translations.upper_update_names_button; clicked => { Callabler.update-names(); } }
+                Button {
+                    text: "↑ " + Translations.upper_results_one_up_button;
+                    clicked => { Callabler.results-move-up(); }
+                }
+                Button {
+                    text: "↓ " + Translations.upper_results_one_down_button;
+                    clicked => { Callabler.results-move-down(); }
+                }
+                Rectangle { vertical-stretch: 1; }
+            }
+        }
+
+        // Rules section label
+        Text {
+            text: Translations.bottom_rule_label_rules;
+            font-weight: 600;
+        }
+
+        // Rules area
+        HorizontalLayout {
+            spacing: 6px;
+            min-height: 150px;
+            vertical-stretch: 1;
+
+            // Rules buttons
+            VerticalLayout {
+                spacing: 4px;
+                width: 180px;
+                Button { text: Translations.bottom_rule_add_button; clicked => { Callabler.open-rule-editor(-1); } }
+                Button { text: Translations.bottom_rule_edit_button; clicked => {
+                    // find first selected rule index
+                    Callabler.open-rule-editor(0);
+                } }
+                Button { text: Translations.bottom_rule_remove_button; clicked => {
+                    Callabler.rule-remove(-1); // -1 means remove all selected
+                } }
+                Button { text: "↑ " + Translations.bottom_rule_one_up_button; clicked => { Callabler.rule-move-up(); } }
+                Button { text: "↓ " + Translations.bottom_rule_one_down_button; clicked => { Callabler.rule-move-down(); } }
+                Button {
+                    text: Translations.bottom_rule_load_rules_button + " ▾";
+                    clicked => { Callabler.request-load-rule-sets(); GuiState.load_popup_open = !GuiState.load_popup_open; }
+                }
+                Button { text: Translations.bottom_rule_save_rules_button; clicked => { GuiState.save_rule_dialog_open = true; } }
+                Rectangle { vertical-stretch: 1; }
+            }
+
+            // Rules list
+            Rectangle {
+                background: Palette.alternate-background;
+                border-radius: 6px;
+                border-width: 1px;
+                border-color: Palette.border;
+                horizontal-stretch: 1;
+                VerticalLayout {
+                    Rectangle {
+                        height: 28px;
+                        background: Palette.control-background;
+                        border-radius: 6px;
+                        HorizontalLayout {
+                            padding-left: 8px;
+                            padding-right: 8px;
+                            spacing: 4px;
+                            Text { width: 24px; text: ""; vertical-alignment: center; }
+                            Text { horizontal-stretch: 1; text: Translations.tree_view_bottom_tool_type; vertical-alignment: center; font-weight: 700; }
+                            Text { horizontal-stretch: 1; text: Translations.tree_view_bottom_usage_name; vertical-alignment: center; font-weight: 700; }
+                            Text { horizontal-stretch: 2; text: Translations.tree_view_bottom_description; vertical-alignment: center; font-weight: 700; }
+                        }
+                    }
+                    ListView {
+                        vertical-stretch: 1;
+                        for row[idx] in root.rules : Rectangle {
+                            height: 26px;
+                            background: row.selected ? Palette.accent-background : (mod(idx, 2) == 0 ? Palette.alternate-background : Palette.background);
+                            TouchArea {
+                                clicked => { Callabler.set-rule-selected(idx, !row.selected); }
+                                double-clicked => { Callabler.open-rule-editor(idx); }
+                            }
+                            HorizontalLayout {
+                                padding-left: 8px;
+                                padding-right: 8px;
+                                spacing: 4px;
+                                CheckBox {
+                                    width: 24px;
+                                    checked: row.selected;
+                                    toggled => { Callabler.set-rule-selected(idx, self.checked); }
+                                }
+                                Text { horizontal-stretch: 1; text: row.rule_type_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
+                                Text { horizontal-stretch: 1; text: row.usage_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
+                                Text { horizontal-stretch: 2; text: row.description; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Rule editor overlay (single instance held inside main window)
+    if GuiState.rule_editor_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => {} } // swallow clicks
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 780px;
+            height: 660px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            RuleEditorPanel {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    // Select popup
+    if GuiState.select_popup_open : Rectangle {
+        background: #00000077;
+        TouchArea { clicked => { GuiState.select_popup_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 280px;
+            height: 280px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 8px;
+                spacing: 4px;
+                Button { text: Translations.button_select_all; clicked => { Callabler.select-action(SelectMode.select-all); GuiState.select_popup_open = false; } }
+                Button { text: Translations.button_select_reverse; clicked => { Callabler.select-action(SelectMode.reverse); GuiState.select_popup_open = false; } }
+                Button { text: Translations.button_select_custom; clicked => { GuiState.select_popup_open = false; GuiState.select_custom_dialog_open = true; } }
+                Button { text: Translations.button_unselect_custom; clicked => { GuiState.select_popup_open = false; GuiState.select_custom_dialog_open = true; } }
+                Button { text: Translations.button_select_changed; clicked => { Callabler.select-action(SelectMode.select-changed); GuiState.select_popup_open = false; } }
+                Button { text: Translations.button_unselect_changed; clicked => { Callabler.select-action(SelectMode.unselect-changed); GuiState.select_popup_open = false; } }
+            }
+        }
+    }
+
+    // Saved rule sets popup
+    if GuiState.load_popup_open : Rectangle {
+        background: #00000077;
+        TouchArea { clicked => { GuiState.load_popup_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 360px;
+            height: 360px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 8px;
+                spacing: 4px;
+                Text { text: "Saved rule sets:"; font-weight: 700; }
+                ListView {
+                    vertical-stretch: 1;
+                    for entry[idx] in Callabler.saved_rule_sets : Rectangle {
+                        height: 32px;
+                        HorizontalLayout {
+                            padding: 2px;
+                            spacing: 4px;
+                            Text { text: entry.name; vertical-alignment: center; horizontal-stretch: 1; }
+                            Button { text: "Load"; clicked => { Callabler.rule-set-load(idx); GuiState.load_popup_open = false; } }
+                            Button { text: "X"; clicked => { Callabler.rule-set-delete(idx); } }
+                        }
+                    }
+                }
+                Button { text: Translations.dialog_button_cancel; clicked => { GuiState.load_popup_open = false; } }
+            }
+        }
+    }
+
+    // Settings overlay
+    if GuiState.settings_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => { GuiState.settings_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 420px;
+            height: 320px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 14px;
+                spacing: 10px;
+                Text { text: "Settings"; font-weight: 700; font-size: 18px; }
+                CheckBox {
+                    text: Translations.check_button_dark_theme;
+                    checked: Settings.dark_theme;
+                    toggled => {
+                        Settings.dark_theme = self.checked;
+                        Palette.color-scheme = self.checked ? ColorScheme.dark : ColorScheme.light;
+                        Callabler.set-dark-theme(self.checked);
+                    }
+                }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Text { text: Translations.settings_language_label; vertical-alignment: center; }
+                    ComboBox {
+                        horizontal-stretch: 1;
+                        model: Settings.available_languages;
+                        current-value: Settings.selected_language;
+                        selected(v) => {
+                            Settings.selected_language = v;
+                            Callabler.set-language(v);
+                        }
+                    }
+                }
+                Button { text: Translations.settings_open_rules; clicked => { Callabler.open-rules-file(); } }
+                Button { text: Translations.settings_open_cache_custom_texts; clicked => { Callabler.open-custom-texts-file(); } }
+                Button { text: Translations.settings_open_config_dir; clicked => { Callabler.open-config-dir(); } }
+                Rectangle { vertical-stretch: 1; }
+                Button { text: Translations.dialog_button_ok; clicked => { GuiState.settings_open = false; } }
+            }
+        }
+    }
+
+    // Add files dialog
+    if GuiState.add_files_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => { GuiState.add_files_dialog_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 360px;
+            height: 180px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_name_files_to_include; font-weight: 700; }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button {
+                        text: Translations.dialog_button_ok;
+                        primary: true;
+                        clicked => { GuiState.add_files_dialog_open = false; Callabler.request-add-files(); }
+                    }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.add_files_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Add folders dialog
+    if GuiState.add_folders_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => { GuiState.add_folders_dialog_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 360px;
+            height: 220px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_name_folders_to_include; font-weight: 700; }
+                CheckBox {
+                    text: Translations.dialog_scan_inside;
+                    checked: GuiState.add_folder_scan_inside;
+                    toggled => { GuiState.add_folder_scan_inside = self.checked; }
+                }
+                CheckBox {
+                    text: Translations.dialog_ignore_folders;
+                    checked: GuiState.add_folder_ignore_folders;
+                    toggled => { GuiState.add_folder_ignore_folders = self.checked; }
+                }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button {
+                        text: Translations.dialog_button_ok;
+                        primary: true;
+                        clicked => { GuiState.add_folders_dialog_open = false; Callabler.request-add-folders(GuiState.add_folder_scan_inside, GuiState.add_folder_ignore_folders); }
+                    }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.add_folders_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Save rule set dialog
+    if GuiState.save_rule_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => { GuiState.save_rule_dialog_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 380px;
+            height: 200px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_save_rule; font-weight: 700; }
+                LineEdit {
+                    placeholder-text: "Rule name";
+                    text: GuiState.save_rule_name;
+                    edited(t) => { GuiState.save_rule_name = t; }
+                }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button {
+                        text: Translations.dialog_button_ok;
+                        primary: true;
+                        clicked => { GuiState.save_rule_dialog_open = false; Callabler.rule-set-save(GuiState.save_rule_name); }
+                    }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.save_rule_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Select custom dialog
+    if GuiState.select_custom_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => { GuiState.select_custom_dialog_open = false; } }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 440px;
+            height: 320px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea { clicked => {} }
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_select_custom; font-weight: 700; }
+                Text { text: "Usage: */folder*/* or name-version-*.txt"; }
+                LineEdit {
+                    placeholder-text: "Pattern";
+                    text: GuiState.select_custom_text;
+                    edited(t) => { GuiState.select_custom_text = t; }
+                }
+                CheckBox {
+                    text: "Include directories";
+                    checked: GuiState.select_custom_select_dirs;
+                    toggled => { GuiState.select_custom_select_dirs = self.checked; }
+                }
+                ComboBox {
+                    model: ["Path + Current Name", "Path + Future Name", "Current Path", "Future Path"];
+                    current-index: GuiState.select_custom_mode_index;
+                    selected(v) => {
+                        if (v == "Path + Current Name") { GuiState.select_custom_mode_index = 0; }
+                        else if (v == "Path + Future Name") { GuiState.select_custom_mode_index = 1; }
+                        else if (v == "Current Path") { GuiState.select_custom_mode_index = 2; }
+                        else { GuiState.select_custom_mode_index = 3; }
+                    }
+                }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button {
+                        text: "Select";
+                        primary: true;
+                        clicked => {
+                            GuiState.select_custom_dialog_open = false;
+                            Callabler.select-custom-apply(GuiState.select_custom_text, GuiState.select_custom_select_dirs, GuiState.select_custom_mode_index, true);
+                        }
+                    }
+                    Button {
+                        text: "Unselect";
+                        clicked => {
+                            GuiState.select_custom_dialog_open = false;
+                            Callabler.select-custom-apply(GuiState.select_custom_text, GuiState.select_custom_select_dirs, GuiState.select_custom_mode_index, false);
+                        }
+                    }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.select_custom_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Confirm renaming
+    if GuiState.confirm_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => {} }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 400px;
+            height: 180px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_confirm_renaming; font-weight: 700; }
+                Text { text: "Are you sure that you want to rename " + GuiState.file_count + " files?"; wrap: word-wrap; }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button { text: Translations.dialog_button_ok; primary: true; clicked => { GuiState.confirm_dialog_open = false; Callabler.confirm-renaming(); } }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.confirm_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Results dialog
+    if GuiState.results_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => {} }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 600px;
+            height: 360px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 6px;
+                Text { text: Translations.dialog_results_of_renaming; font-weight: 700; }
+                Text { text: "Properly renamed: " + GuiState.properly_renamed; }
+                Text { text: "Ignored: " + GuiState.ignored_count; }
+                if GuiState.failed_text != "" : Text { text: "Errors:"; font-weight: 700; }
+                if GuiState.failed_text != "" : Rectangle {
+                    background: Palette.alternate-background;
+                    border-radius: 4px;
+                    vertical-stretch: 1;
+                    ScrollView {
+                        VerticalLayout {
+                            padding: 6px;
+                            Text { text: GuiState.failed_text; wrap: word-wrap; }
+                        }
+                    }
+                }
+                HorizontalLayout {
+                    Rectangle { horizontal-stretch: 1; }
+                    Button { text: Translations.dialog_button_ok; clicked => { GuiState.results_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Generic message dialog
+    if GuiState.message_dialog_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => {} }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 360px;
+            height: 180px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: GuiState.message_dialog_title; font-weight: 700; }
+                Text { text: GuiState.message_dialog_text; wrap: word-wrap; }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    Rectangle { horizontal-stretch: 1; }
+                    Button { text: Translations.dialog_button_ok; clicked => { GuiState.message_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Progress overlay - blocks everything, no cancel
+    if ProgressState.visible : Rectangle {
+        background: #000000cc;
+        // Swallow clicks so nothing underneath receives them
+        TouchArea {
+            clicked => {}
+            pointer-event(_) => {}
+        }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 480px;
+            height: 200px;
+            background: Palette.background;
+            border-radius: 10px;
+            border-width: 1px;
+            border-color: Palette.border;
+            TouchArea {}
+            VerticalLayout {
+                padding: 20px;
+                spacing: 12px;
+                Text {
+                    text: ProgressState.title;
+                    font-weight: 700;
+                    font-size: 18px;
+                }
+                Text {
+                    text: ProgressState.message;
+                    wrap: word-wrap;
+                    horizontal-stretch: 1;
+                }
+                Rectangle { vertical-stretch: 1; }
+                // Progress bar (only when we know total)
+                if !ProgressState.indeterminate : Rectangle {
+                    height: 18px;
+                    background: Palette.alternate-background;
+                    border-radius: 4px;
+                    Rectangle {
+                        x: 0;
+                        y: 0;
+                        height: parent.height;
+                        width: ProgressState.total > 0
+                            ? parent.width * (ProgressState.current / ProgressState.total)
+                            : 0px;
+                        background: Palette.accent-background;
+                        border-radius: 4px;
+                    }
+                }
+                if ProgressState.indeterminate : Text {
+                    text: "Working…";
+                    horizontal-alignment: center;
+                    color: Palette.foreground;
+                }
+                if !ProgressState.indeterminate : Text {
+                    text: ProgressState.current + " / " + ProgressState.total;
+                    horizontal-alignment: center;
+                }
+            }
+        }
+    }
+}

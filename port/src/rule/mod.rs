@@ -1,0 +1,9 @@
+pub mod rule_add_number;
+pub mod rule_add_text;
+pub mod rule_change_size_letters;
+pub mod rule_custom;
+pub mod rule_normalize;
+pub mod rule_purge;
+pub mod rule_replace;
+pub mod rule_trim;
+pub mod rules;
