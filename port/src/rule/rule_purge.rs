@@ -24,3 +24,23 @@ pub fn rule_purge(data_to_change: &str, rule: &SingleRule) -> String {
 
     return_string
 }
+
+#[cfg(test)]
+mod test {
+    use crate::rule::rule_purge::rule_purge;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
+
+    #[test]
+    fn test_purge() {
+        let mut rule = SingleRule::new();
+
+        rule.rule_type = RuleType::Purge;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_purge("Roman.txt", &rule), "txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_purge("Roman.txt", &rule), "Roman");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_purge("Roman.txt", &rule), "");
+    }
+}

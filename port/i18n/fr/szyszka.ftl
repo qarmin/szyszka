@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - affiche les nombres (les arguments sont facultatifs)
     $(N:3:4:5) affiche les numéros à partir de 3, avec l'étape 4
             et les remplit avec des zéros à 5 positions.
-    	K à la place seulement position dans la liste, utilise également l'élément de position dans le dossier.
+            K à la place seulement position dans la liste, utilise également l'élément de position dans le dossier.
 menu_button_load_custom_rule = Sélecteur de règles personnalisé
 button_save_custom_rule = Enregistrer la règle personnalisée
 

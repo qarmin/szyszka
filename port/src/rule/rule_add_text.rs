@@ -30,3 +30,23 @@ pub fn rule_add_text(data_to_change: &str, rule: &SingleRule) -> String {
 
     return_string
 }
+
+#[cfg(test)]
+mod test {
+    use crate::rule::rule_add_text::rule_add_text;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
+
+    #[test]
+    fn test_add_text() {
+        let mut rule = SingleRule::new();
+
+        rule.rule_data.add_text_text = "Qwark".to_string();
+        rule.rule_type = RuleType::AddText;
+
+        rule.rule_place = RulePlace::BeforeName;
+        assert_eq!(rule_add_text("wombat.txt", &rule), "Qwarkwombat.txt");
+
+        rule.rule_place = RulePlace::AfterName;
+        assert_eq!(rule_add_text("wombat.txt", &rule), "wombatQwark.txt");
+    }
+}

@@ -108,8 +108,8 @@ export component RuleEditorPanel inherits Rectangle {
                         spacing: 6px;
                         Text { text: Translations.label_custom_instruction; wrap: word-wrap; }
                         LineEdit {
-                            text: EditorState.custom_text;
-                            edited(t) => { EditorState.custom_text = t; Callabler.rule-editor-update-example(); }
+                            text <=> EditorState.custom_text;
+                            edited => { Callabler.rule-editor-update-example(); }
                         }
                         HorizontalLayout {
                             spacing: 6px;
@@ -225,25 +225,25 @@ export component RuleEditorPanel inherits Rectangle {
                             VerticalLayout {
                                 Text { text: Translations.label_number_start_number; }
                                 LineEdit {
-                                    text: EditorState.add_number_start;
+                                    text <=> EditorState.add_number_start;
                                     input-type: number;
-                                    edited(t) => { EditorState.add_number_start = t; Callabler.rule-editor-update-example(); }
+                                    edited => { Callabler.rule-editor-update-example(); }
                                 }
                             }
                             VerticalLayout {
                                 Text { text: Translations.label_number_step; }
                                 LineEdit {
-                                    text: EditorState.add_number_step;
+                                    text <=> EditorState.add_number_step;
                                     input-type: number;
-                                    edited(t) => { EditorState.add_number_step = t; Callabler.rule-editor-update-example(); }
+                                    edited => { Callabler.rule-editor-update-example(); }
                                 }
                             }
                             VerticalLayout {
                                 Text { text: Translations.label_number_fill_zeros; }
                                 LineEdit {
-                                    text: EditorState.add_number_zeros;
+                                    text <=> EditorState.add_number_zeros;
                                     input-type: number;
-                                    edited(t) => { EditorState.add_number_zeros = t; Callabler.rule-editor-update-example(); }
+                                    edited => { Callabler.rule-editor-update-example(); }
                                 }
                             }
                         }
@@ -269,8 +269,8 @@ export component RuleEditorPanel inherits Rectangle {
                         }
                         Text { text: Translations.label_add_text; }
                         LineEdit {
-                            text: EditorState.add_text_text;
-                            edited(t) => { EditorState.add_text_text = t; Callabler.rule-editor-update-example(); }
+                            text <=> EditorState.add_text_text;
+                            edited => { Callabler.rule-editor-update-example(); }
                         }
                         Rectangle { vertical-stretch: 1; }
                     }
@@ -325,13 +325,13 @@ export component RuleEditorPanel inherits Rectangle {
                         }
                         Text { text: Translations.label_replace_text_to_find; }
                         LineEdit {
-                            text: EditorState.replace_text_to_find;
-                            edited(t) => { EditorState.replace_text_to_find = t; Callabler.rule-editor-update-example(); }
+                            text <=> EditorState.replace_text_to_find;
+                            edited => { Callabler.rule-editor-update-example(); }
                         }
                         Text { text: Translations.label_replace_text_to_replace; }
                         LineEdit {
-                            text: EditorState.replace_text_to_replace;
-                            edited(t) => { EditorState.replace_text_to_replace = t; Callabler.rule-editor-update-example(); }
+                            text <=> EditorState.replace_text_to_replace;
+                            edited => { Callabler.rule-editor-update-example(); }
                         }
                         if EditorState.replace_invalid_regex : Text { color: red; text: Translations.label_replace_invalid_regex; }
                         Rectangle { vertical-stretch: 1; }
@@ -378,8 +378,8 @@ export component RuleEditorPanel inherits Rectangle {
                         }
                         Text { text: Translations.label_trim_trim_text; }
                         LineEdit {
-                            text: EditorState.trim_text;
-                            edited(t) => { EditorState.trim_text = t; Callabler.rule-editor-update-example(); }
+                            text <=> EditorState.trim_text;
+                            edited => { Callabler.rule-editor-update-example(); }
                         }
                         Rectangle { vertical-stretch: 1; }
                     }
@@ -419,8 +419,8 @@ export component RuleEditorPanel inherits Rectangle {
                     spacing: 6px;
                     Text { text: Translations.label_example_text_before; vertical-alignment: center; min-width: 60px; }
                     LineEdit {
-                        text: EditorState.example_before_text;
-                        edited(t) => { EditorState.example_before_text = t; Callabler.rule-editor-update-example(); }
+                        text <=> EditorState.example_before_text;
+                        edited => { Callabler.rule-editor-update-example(); }
                     }
                     Button {
                         text: "↺";

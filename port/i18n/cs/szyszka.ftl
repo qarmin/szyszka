@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - vytiskne čísla (argumenty jsou volitelné)
     $(N:3:4:5) vytiskne čísla od 3, s kroku 4
             a vyplní je nulami na 5 pozic.
-    	K místo pouze pozice v seznamu, také používá položku pozice ve složce.
+            K místo pouze pozice v seznamu, také používá položku pozice ve složce.
 menu_button_load_custom_rule = Vlastní výběr pravidel
 button_save_custom_rule = Uložit vlastní pravidlo
 

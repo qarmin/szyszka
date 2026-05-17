@@ -46,3 +46,33 @@ pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> Stri
         name
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::rule::rule_change_size_letters::rule_change_size_letters;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
+
+    #[test]
+    fn test_size_letters() {
+        let mut rule = SingleRule::new();
+        rule.rule_type = RuleType::CaseSize;
+
+        rule.rule_data.to_lowercase = true;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "roman.Txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "Roman.txt");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "roman.txt");
+
+        rule.rule_data.to_lowercase = false;
+
+        rule.rule_place = RulePlace::Name;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "ROMAN.Txt");
+        rule.rule_place = RulePlace::Extension;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "Roman.TXT");
+        rule.rule_place = RulePlace::ExtensionAndName;
+        assert_eq!(rule_change_size_letters("Roman.Txt", &rule), "ROMAN.TXT");
+    }
+}

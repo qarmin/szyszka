@@ -20,9 +20,24 @@ pub fn pick_files_and_add(ui: &MainWindow, state: &SharedState) {
     start_async_scan(ui, state, sorted, "Adding files…");
 }
 
-pub fn pick_folders_and_add(ui: &MainWindow, state: &SharedState, scan_inside: bool, ignore_folders: bool) {
+pub fn pick_folders_into_state(ui: &MainWindow, state: &SharedState) -> bool {
     let folders = rfd::FileDialog::new().set_title("Add folders").pick_folders();
-    let Some(folders) = folders else { return };
+    let Some(folders) = folders else { return false };
+    if folders.is_empty() {
+        return false;
+    }
+
+    let display: Vec<slint::SharedString> = folders.iter().map(|p| p.display().to_string().into()).collect();
+    ui.global::<crate::slint_gen::GuiState>().set_add_folder_picked_paths(slint::ModelRc::new(slint::VecModel::from(display)));
+    state.borrow_mut().pending_folders = folders;
+    true
+}
+
+pub fn confirm_add_folders(ui: &MainWindow, state: &SharedState, scan_inside: bool, ignore_folders: bool) {
+    let folders = std::mem::take(&mut state.borrow_mut().pending_folders);
+    if folders.is_empty() {
+        return;
+    }
 
     show_overlay(ui, "Scanning folders…", "Enumerating contents", true);
 
@@ -186,6 +201,53 @@ pub fn move_selected_down(ui: &MainWindow, state: &SharedState) {
                 state_mut.file_selected.swap(i, i + 1);
             }
         }
+    }
+    sync_files(ui, state);
+}
+
+#[derive(Copy, Clone, PartialEq)]
+pub enum SortKey {
+    None,
+    Type,
+    Current,
+    Future,
+    Path,
+}
+
+pub fn sort_files_by(ui: &MainWindow, state: &SharedState, key: SortKey, descending: bool) {
+    {
+        let mut state_mut = state.borrow_mut();
+        let len = state_mut.files.len();
+        state_mut.file_selected.resize(len, false);
+
+        let mut indices: Vec<usize> = (0..len).collect();
+        let files = &state_mut.files;
+        indices.sort_by(|&a, &b| {
+            let fa = &files[a];
+            let fb = &files[b];
+            let ord = match key {
+                SortKey::None => fa
+                    .path
+                    .cmp(&fb.path)
+                    .then_with(|| natord::compare(&fa.name, &fb.name)),
+                SortKey::Type => (!fa.is_dir).cmp(&!fb.is_dir).then_with(|| natord::compare(&fa.name, &fb.name)),
+                SortKey::Current => natord::compare(&fa.name, &fb.name),
+                SortKey::Future => natord::compare(&fa.future_name, &fb.future_name),
+                SortKey::Path => natord::compare(&fa.path, &fb.path).then_with(|| natord::compare(&fa.name, &fb.name)),
+            };
+            if descending { ord.reverse() } else { ord }
+        });
+
+        let files = std::mem::take(&mut state_mut.files);
+        let selected = std::mem::take(&mut state_mut.file_selected);
+        let mut new_files = Vec::with_capacity(len);
+        let mut new_selected = Vec::with_capacity(len);
+        for i in indices {
+            new_files.push(files[i].clone());
+            new_selected.push(selected.get(i).copied().unwrap_or(false));
+        }
+        state_mut.files = new_files;
+        state_mut.file_selected = new_selected;
     }
     sync_files(ui, state);
 }

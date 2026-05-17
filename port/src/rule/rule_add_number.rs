@@ -56,3 +56,25 @@ pub fn rule_add_number(data_to_change: &str, rule: &SingleRule, rule_number: u64
 
     return_string
 }
+
+#[cfg(test)]
+mod test {
+    use crate::rule::rule_add_number::rule_add_number;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
+
+    #[test]
+    fn test_add_number() {
+        let mut rule = SingleRule::new();
+
+        rule.rule_data.number_start = 10;
+        rule.rule_data.number_step = 5;
+        rule.rule_data.fill_with_zeros = 4;
+        rule.rule_type = RuleType::AddNumber;
+
+        rule.rule_place = RulePlace::BeforeName;
+        assert_eq!(rule_add_number("Roman.txt", &rule, 0), "0010Roman.txt");
+
+        rule.rule_place = RulePlace::AfterName;
+        assert_eq!(rule_add_number("Roman.txt", &rule, 1), "Roman0015.txt");
+    }
+}

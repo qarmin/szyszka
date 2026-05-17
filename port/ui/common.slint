@@ -57,6 +57,14 @@ export enum LoadDirection {
     delete,
 }
 
+export enum SortColumn {
+    none,
+    type-c,
+    current,
+    future,
+    path,
+}
+
 export struct FileRow {
     selected: bool,
     dir_type: DirFileTypeUi,
@@ -208,9 +216,9 @@ export global Settings {
     in-out property <string> selected_language: "English";
     in-out property <[string]> available_languages: [
         "English",
+        "Polski (Polish)",
         "Français (French)",
         "Italiano (Italian)",
-        "Polski (Polish)",
         "Русский (Russian)",
         "український (Ukrainian)",
         "Česky (Czech)",
@@ -299,11 +307,16 @@ export global GuiState {
 
     in-out property <bool> add_folder_scan_inside: false;
     in-out property <bool> add_folder_ignore_folders: false;
+    in-out property <[string]> add_folder_picked_paths: [];
+
+    in-out property <SortColumn> sort_column: SortColumn.none;
+    in-out property <bool> sort_descending: false;
 }
 
 export global Callabler {
     callback request-add-files();
-    callback request-add-folders(bool /*scan_inside*/, bool /*ignore_folders*/);
+    callback request-pick-folders();
+    callback confirm-add-folders(bool /*scan_inside*/, bool /*ignore_folders*/);
     callback remove-selected-files();
     callback select-action(SelectMode);
     callback select-custom-apply(string /*pattern*/, bool /*include_dirs*/, int /*mode_index*/, bool /*select_else_unselect*/);
@@ -340,4 +353,6 @@ export global Callabler {
 
     callback set-file-selected(int, bool);
     callback set-rule-selected(int, bool);
+
+    callback sort-files(SortColumn);
 }

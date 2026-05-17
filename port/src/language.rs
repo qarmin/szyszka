@@ -11,9 +11,9 @@ pub struct Language {
 
 pub const LANGUAGES_ALL: &[Language] = &[
     Language { combo_box_text: "English", short_text: "en" },
+    Language { combo_box_text: "Polski (Polish)", short_text: "pl" },
     Language { combo_box_text: "Français (French)", short_text: "fr" },
     Language { combo_box_text: "Italiano (Italian)", short_text: "it" },
-    Language { combo_box_text: "Polski (Polish)", short_text: "pl" },
     Language { combo_box_text: "Русский (Russian)", short_text: "ru" },
     Language { combo_box_text: "український (Ukrainian)", short_text: "uk" },
     Language { combo_box_text: "Česky (Czech)", short_text: "cs" },

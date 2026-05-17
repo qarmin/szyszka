@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::path::PathBuf;
 use std::rc::Rc;
 
 use crate::files::{ItemStruct, ResultEntries};
@@ -13,6 +14,7 @@ pub struct AppState {
     pub result_entries: ResultEntries,
     pub edit_index: Option<usize>,
     pub active_timer: Option<slint::Timer>,
+    pub pending_folders: Vec<PathBuf>,
 }
 
 pub type SharedState = Rc<RefCell<AppState>>;

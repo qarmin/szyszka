@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - prints numbers(arguments are optional)
     $(N:3:4:5) print numbers from 3, con el paso 4
             y los llena con cero a 5 posiciones.
-    	K en su lugar sólo la posición en la lista, también utiliza el elemento de posición en la carpeta.
+            K en su lugar sólo la posición en la lista, también utiliza el elemento de posición en la carpeta.
 menu_button_load_custom_rule = Selector de reglas personalizado
 button_save_custom_rule = Guardar regla personalizada
 

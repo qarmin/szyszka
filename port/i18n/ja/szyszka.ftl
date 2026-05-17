@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - prints numbers(arguments are optional)
     $(N:3:4:5) prints numbers from 3, with step 4
             and fills them with zeros to 5 positions.
-    	K instead only position in list, also uses position item in folder.
+            K instead only position in list, also uses position item in folder.
 menu_button_load_custom_rule = カスタムルール選択
 button_save_custom_rule = カスタムルールを保存
 

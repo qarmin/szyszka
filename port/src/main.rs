@@ -15,7 +15,7 @@ mod slint_gen {
 use slint::ComponentHandle;
 
 use crate::config::{load_dark_theme_config_or_create, save_dark_theme};
-use crate::connect::files::{move_selected_down, move_selected_up, pick_files_and_add, pick_folders_and_add, remove_selected};
+use crate::connect::files::{confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey};
 use crate::connect::renaming::{perform_renaming, start_renaming_request};
 use crate::connect::rules_ops::{
     add_or_update_rule, close_editor, delete_custom_text, delete_rule_set, load_custom_text_into_editor, load_rule_set, move_rule_down, move_rule_up, open_editor, refresh_custom_texts,
@@ -25,7 +25,7 @@ use crate::connect::select::{apply_select, apply_select_custom};
 use crate::connect::sync::{sync_files, sync_outdated, sync_rules};
 use crate::connect::translations::apply_translations;
 use crate::language::{apply_language, load_saved_language, save_language};
-use crate::slint_gen::{Callabler, MainWindow, SelectMode, Settings};
+use crate::slint_gen::{Callabler, GuiState, MainWindow, SelectMode, Settings, SortColumn};
 use crate::state::new_shared;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -60,9 +60,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         let ui_weak = ui.as_weak();
         let state = state.clone();
-        cb.on_request_add_folders(move |scan_inside, ignore_folders| {
+        cb.on_request_pick_folders(move || {
             if let Some(ui) = ui_weak.upgrade() {
-                pick_folders_and_add(&ui, &state, scan_inside, ignore_folders);
+                if pick_folders_into_state(&ui, &state) {
+                    ui.global::<GuiState>().set_add_folders_dialog_open(true);
+                }
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_confirm_add_folders(move |scan_inside, ignore_folders| {
+            if let Some(ui) = ui_weak.upgrade() {
+                confirm_add_folders(&ui, &state, scan_inside, ignore_folders);
             }
         });
     }
@@ -354,6 +365,37 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 sync_rules(&ui, &state);
+            }
+        });
+    }
+
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_sort_files(move |column| {
+            if let Some(ui) = ui_weak.upgrade() {
+                let g = ui.global::<GuiState>();
+                let prev_column = g.get_sort_column();
+                let prev_desc = g.get_sort_descending();
+                let (new_column, new_desc) = if prev_column == column {
+                    if !prev_desc {
+                        (column, true)
+                    } else {
+                        (SortColumn::None, false)
+                    }
+                } else {
+                    (column, false)
+                };
+                g.set_sort_column(new_column);
+                g.set_sort_descending(new_desc);
+                let key = match new_column {
+                    SortColumn::None => SortKey::None,
+                    SortColumn::TypeC => SortKey::Type,
+                    SortColumn::Current => SortKey::Current,
+                    SortColumn::Future => SortKey::Future,
+                    SortColumn::Path => SortKey::Path,
+                };
+                sort_files_by(&ui, &state, key, new_desc);
             }
         });
     }

@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - 打印数字(参数是可选的)
     $(N:3:4:5) 打印数字从3, 打印数字。 带第4步
             并填充零到5个位置。
-    	K只是列表中的位置，也使用文件夹中的位置项。
+            K只是列表中的位置，也使用文件夹中的位置项。
 menu_button_load_custom_rule = 自定义规则选择器
 button_save_custom_rule = 保存自定义规则
 

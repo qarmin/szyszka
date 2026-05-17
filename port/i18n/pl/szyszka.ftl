@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - dodaje numery (argumenty są opcjonalne)
     $(N:3:4:5) dodaje numery od 3, z krokiem 4
             i wypełnia je zerami do 5 pozycji.
-    	K zamiast pozycji na liście, używa pozycji w folderze.
+            K zamiast pozycji na liście, używa pozycji w folderze.
 menu_button_load_custom_rule = Wybierz zapisane reguły
 button_save_custom_rule = Zapisz własną regułę
 

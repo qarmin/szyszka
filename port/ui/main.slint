@@ -1,6 +1,21 @@
 import { Button, LineEdit, CheckBox, ComboBox, ScrollView, GroupBox, HorizontalBox, VerticalBox, ListView, StandardButton, Palette } from "std-widgets.slint";
-import { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, FileRow, RuleRow, RuleSetEntry, SelectMode, DirFileTypeUi, NotebookTab, RuleTypeUi, RulePlaceUi } from "common.slint";
+import { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, FileRow, RuleRow, RuleSetEntry, SelectMode, DirFileTypeUi, NotebookTab, RuleTypeUi, RulePlaceUi, SortColumn } from "common.slint";
 import { RuleEditorPanel } from "rule_editor.slint";
+
+component SortHeaderCell inherits Rectangle {
+    in property <string> label_text;
+    in property <SortColumn> column;
+    background: ta.has-hover ? Palette.alternate-background : transparent;
+    ta := TouchArea {
+        clicked => { Callabler.sort-files(root.column); }
+    }
+    Text {
+        text: root.label_text;
+        vertical-alignment: center;
+        font-weight: 700;
+        overflow: elide;
+    }
+}
 
 export { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, RuleTypeUi, RulePlaceUi, NotebookTab, DirFileTypeUi, SelectMode }
 
@@ -34,7 +49,7 @@ export component MainWindow inherits Window {
             }
             Rectangle { horizontal-stretch: 1; }
             Button {
-                text: "⚙ " + Translations.settings_language_label;
+                text: "⚙";
                 clicked => { GuiState.settings_open = !GuiState.settings_open; }
             }
         }
@@ -75,10 +90,26 @@ export component MainWindow inherits Window {
                             padding-right: 8px;
                             spacing: 4px;
                             Text { width: 24px; text: ""; vertical-alignment: center; }
-                            Text { width: 30px; text: Translations.tree_view_upper_column_type; vertical-alignment: center; font-weight: 700; }
-                            Text { horizontal-stretch: 1; text: Translations.tree_view_upper_column_current_name; vertical-alignment: center; font-weight: 700; }
-                            Text { horizontal-stretch: 1; text: Translations.tree_view_upper_column_future_name; vertical-alignment: center; font-weight: 700; }
-                            Text { horizontal-stretch: 2; text: Translations.tree_view_upper_column_path; vertical-alignment: center; font-weight: 700; }
+                            SortHeaderCell {
+                                width: 30px;
+                                label_text: Translations.tree_view_upper_column_type;
+                                column: SortColumn.type-c;
+                            }
+                            SortHeaderCell {
+                                horizontal-stretch: 1;
+                                label_text: Translations.tree_view_upper_column_current_name;
+                                column: SortColumn.current;
+                            }
+                            SortHeaderCell {
+                                horizontal-stretch: 1;
+                                label_text: Translations.tree_view_upper_column_future_name;
+                                column: SortColumn.future;
+                            }
+                            SortHeaderCell {
+                                horizontal-stretch: 2;
+                                label_text: Translations.tree_view_upper_column_path;
+                                column: SortColumn.path;
+                            }
                         }
                     }
                     ListView {
@@ -114,8 +145,8 @@ export component MainWindow inherits Window {
             VerticalLayout {
                 spacing: 4px;
                 width: 180px;
-                Button { text: Translations.upper_add_files_button; clicked => { GuiState.add_files_dialog_open = true; } }
-                Button { text: Translations.upper_add_folders_button; clicked => { GuiState.add_folders_dialog_open = true; } }
+                Button { text: Translations.upper_add_files_button; clicked => { Callabler.request-add-files(); } }
+                Button { text: Translations.upper_add_folders_button; clicked => { Callabler.request-pick-folders(); } }
                 Button { text: Translations.upper_remove_selection_button; clicked => { Callabler.remove-selected-files(); } }
                 Button {
                     text: Translations.upper_select_popup_button + " ▾";
@@ -161,10 +192,15 @@ export component MainWindow inherits Window {
                 Button { text: "↑ " + Translations.bottom_rule_one_up_button; clicked => { Callabler.rule-move-up(); } }
                 Button { text: "↓ " + Translations.bottom_rule_one_down_button; clicked => { Callabler.rule-move-down(); } }
                 Button {
-                    text: Translations.bottom_rule_load_rules_button + " ▾";
+                    text: Translations.bottom_rule_load_rules_button;
+                    enabled: Callabler.saved_rule_sets.length > 0;
                     clicked => { Callabler.request-load-rule-sets(); GuiState.load_popup_open = !GuiState.load_popup_open; }
                 }
-                Button { text: Translations.bottom_rule_save_rules_button; clicked => { GuiState.save_rule_dialog_open = true; } }
+                Button {
+                    text: Translations.bottom_rule_save_rules_button;
+                    enabled: GuiState.rule_count > 0;
+                    clicked => { GuiState.save_rule_dialog_open = true; }
+                }
                 Rectangle { vertical-stretch: 1; }
             }
 
@@ -184,7 +220,6 @@ export component MainWindow inherits Window {
                             padding-left: 8px;
                             padding-right: 8px;
                             spacing: 4px;
-                            Text { width: 24px; text: ""; vertical-alignment: center; }
                             Text { horizontal-stretch: 1; text: Translations.tree_view_bottom_tool_type; vertical-alignment: center; font-weight: 700; }
                             Text { horizontal-stretch: 1; text: Translations.tree_view_bottom_usage_name; vertical-alignment: center; font-weight: 700; }
                             Text { horizontal-stretch: 2; text: Translations.tree_view_bottom_description; vertical-alignment: center; font-weight: 700; }
@@ -203,11 +238,6 @@ export component MainWindow inherits Window {
                                 padding-left: 8px;
                                 padding-right: 8px;
                                 spacing: 4px;
-                                CheckBox {
-                                    width: 24px;
-                                    checked: row.selected;
-                                    toggled => { Callabler.set-rule-selected(idx, self.checked); }
-                                }
                                 Text { horizontal-stretch: 1; text: row.rule_type_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
                                 Text { horizontal-stretch: 1; text: row.usage_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
                                 Text { horizontal-stretch: 2; text: row.description; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
@@ -352,38 +382,6 @@ export component MainWindow inherits Window {
     }
 
     // Add files dialog
-    if GuiState.add_files_dialog_open : Rectangle {
-        background: #00000099;
-        TouchArea { clicked => { GuiState.add_files_dialog_open = false; } }
-        Rectangle {
-            x: (parent.width - self.width) / 2;
-            y: (parent.height - self.height) / 2;
-            width: 360px;
-            height: 180px;
-            background: Palette.background;
-            border-radius: 8px;
-            border-width: 1px;
-            border-color: Palette.border;
-            TouchArea { clicked => {} }
-            VerticalLayout {
-                padding: 14px;
-                spacing: 8px;
-                Text { text: Translations.dialog_name_files_to_include; font-weight: 700; }
-                Rectangle { vertical-stretch: 1; }
-                HorizontalLayout {
-                    spacing: 6px;
-                    Rectangle { horizontal-stretch: 1; }
-                    Button {
-                        text: Translations.dialog_button_ok;
-                        primary: true;
-                        clicked => { GuiState.add_files_dialog_open = false; Callabler.request-add-files(); }
-                    }
-                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.add_files_dialog_open = false; } }
-                }
-            }
-        }
-    }
-
     // Add folders dialog
     if GuiState.add_folders_dialog_open : Rectangle {
         background: #00000099;
@@ -391,8 +389,8 @@ export component MainWindow inherits Window {
         Rectangle {
             x: (parent.width - self.width) / 2;
             y: (parent.height - self.height) / 2;
-            width: 360px;
-            height: 220px;
+            width: 520px;
+            height: 380px;
             background: Palette.background;
             border-radius: 8px;
             border-width: 1px;
@@ -402,6 +400,21 @@ export component MainWindow inherits Window {
                 padding: 14px;
                 spacing: 8px;
                 Text { text: Translations.dialog_name_folders_to_include; font-weight: 700; }
+                Rectangle {
+                    background: Palette.alternate-background;
+                    border-radius: 4px;
+                    vertical-stretch: 1;
+                    ListView {
+                        for p in GuiState.add_folder_picked_paths : Rectangle {
+                            height: 22px;
+                            HorizontalLayout {
+                                padding-left: 6px;
+                                padding-right: 6px;
+                                Text { text: p; vertical-alignment: center; overflow: elide; }
+                            }
+                        }
+                    }
+                }
                 CheckBox {
                     text: Translations.dialog_scan_inside;
                     checked: GuiState.add_folder_scan_inside;
@@ -412,14 +425,13 @@ export component MainWindow inherits Window {
                     checked: GuiState.add_folder_ignore_folders;
                     toggled => { GuiState.add_folder_ignore_folders = self.checked; }
                 }
-                Rectangle { vertical-stretch: 1; }
                 HorizontalLayout {
                     spacing: 6px;
                     Rectangle { horizontal-stretch: 1; }
                     Button {
                         text: Translations.dialog_button_ok;
                         primary: true;
-                        clicked => { GuiState.add_folders_dialog_open = false; Callabler.request-add-folders(GuiState.add_folder_scan_inside, GuiState.add_folder_ignore_folders); }
+                        clicked => { GuiState.add_folders_dialog_open = false; Callabler.confirm-add-folders(GuiState.add_folder_scan_inside, GuiState.add_folder_ignore_folders); }
                     }
                     Button { text: Translations.dialog_button_cancel; clicked => { GuiState.add_folders_dialog_open = false; } }
                 }
@@ -447,8 +459,7 @@ export component MainWindow inherits Window {
                 Text { text: Translations.dialog_save_rule; font-weight: 700; }
                 LineEdit {
                     placeholder-text: "Rule name";
-                    text: GuiState.save_rule_name;
-                    edited(t) => { GuiState.save_rule_name = t; }
+                    text <=> GuiState.save_rule_name;
                 }
                 Rectangle { vertical-stretch: 1; }
                 HorizontalLayout {
@@ -486,8 +497,7 @@ export component MainWindow inherits Window {
                 Text { text: "Usage: */folder*/* or name-version-*.txt"; }
                 LineEdit {
                     placeholder-text: "Pattern";
-                    text: GuiState.select_custom_text;
-                    edited(t) => { GuiState.select_custom_text = t; }
+                    text <=> GuiState.select_custom_text;
                 }
                 CheckBox {
                     text: "Include directories";

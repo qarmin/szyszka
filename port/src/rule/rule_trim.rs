@@ -81,3 +81,97 @@ pub fn rule_trim(data_to_change: &str, rule: &SingleRule) -> String {
 
     return_string
 }
+
+#[cfg(test)]
+mod test {
+    use crate::rule::rule_trim::rule_trim;
+    use crate::rule::rules::{RulePlace, RuleType, SingleRule};
+
+    #[test]
+    fn test_trim() {
+        let mut rule = SingleRule::new();
+        rule.rule_type = RuleType::Trim;
+
+        rule.rule_place = RulePlace::FromExtensionEndReverse;
+        rule.rule_data.trim_text = "Txt".to_string();
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roman.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.Txt", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.Txt", &rule), "Roman.");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.asb", &rule), "Roman.asb");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.asb", &rule), "Roman.asb");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("txt", &rule), "");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Txt", &rule), "");
+
+        rule.rule_place = RulePlace::FromNameStart;
+        rule.rule_data.trim_text = "R".to_string();
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.txt", &rule), "oman.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.txt", &rule), "oman.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("roman.txt", &rule), "oman.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("roman.txt", &rule), "roman.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Koman.txt", &rule), "Koman.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Koman.txt", &rule), "Koman.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("r", &rule), "");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("R", &rule), "");
+
+        rule.rule_place = RulePlace::FromNameEndReverse;
+        rule.rule_data.trim_text = "n".to_string();
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roma.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roma.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("RomaN.txt", &rule), "Roma.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("RomaN.txt", &rule), "RomaN.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("RomaZ.txt", &rule), "RomaZ.txt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("RomaZ.txt", &rule), "RomaZ.txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("N", &rule), "");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("n", &rule), "");
+
+        rule.rule_place = RulePlace::FromExtensionStart;
+        rule.rule_data.trim_text = "t".to_string();
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roman.xt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.txt", &rule), "Roman.xt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.Txt", &rule), "Roman.xt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.Txt", &rule), "Roman.Txt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.Zxt", &rule), "Roman.Zxt");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.Zxt", &rule), "Roman.Zxt");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("T", &rule), "T");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("t", &rule), "t");
+        rule.rule_data.case_sensitive = false;
+        assert_eq!(rule_trim("Roman.t", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.t", &rule), "Roman.");
+        rule.rule_data.case_sensitive = true;
+        assert_eq!(rule_trim("Roman.T", &rule), "Roman.T");
+    }
+}

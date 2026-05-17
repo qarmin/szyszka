@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - utskrifter siffror (argument är frivilliga)
     $(N:3:4:5) utskrifter nummer från 3, med steg 4
             och fyller dem med nollor till 5 positioner.
-    	<unk> K istället bara position i listan, använder även positionsobjekt i mappen.
+            <unk> K istället bara position i listan, använder även positionsobjekt i mappen.
 menu_button_load_custom_rule = Anpassad regel väljare
 button_save_custom_rule = Spara anpassad regel
 

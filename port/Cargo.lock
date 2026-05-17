@@ -4851,6 +4851,7 @@ dependencies = [
  "i18n-embed",
  "i18n-embed-fl",
  "jwalk",
+ "natord",
  "once_cell",
  "open",
  "rayon",
