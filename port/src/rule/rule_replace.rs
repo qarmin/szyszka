@@ -1,3 +1,5 @@
+#![allow(clippy::string_slice)]
+
 use regex::Regex;
 use std::path::Path;
 

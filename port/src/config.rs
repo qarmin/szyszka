@@ -3,6 +3,7 @@ use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
 use directories_next::ProjectDirs;
+use log::error;
 use serde::{Deserialize, Serialize};
 
 use crate::rule::rules::MultipleRules;
@@ -113,7 +114,7 @@ pub fn load_custom_rules() -> Vec<String> {
                     .collect();
             }
             Err(e) => {
-                eprintln!("Error while reading file with custom texts {e}");
+                error!("Error while reading file with custom texts {e}");
             }
         }
     }
@@ -125,7 +126,7 @@ pub fn save_custom_rules(rules: &[String]) {
         create_custom_text_file_if_needed();
         let joined = rules.join("\n");
         if let Err(e) = fs::write(custom_file, joined) {
-            eprintln!("Failed to save custom texts: {e}");
+            error!("Failed to save custom texts: {e}");
         }
     }
 }
@@ -141,7 +142,7 @@ pub fn load_rules() -> Vec<MultipleRules> {
         match serde_json::from_reader(reader) {
             Ok(t) => return t,
             Err(e) => {
-                eprintln!("Failed to load rules, reason {e}");
+                error!("Failed to load rules, reason {e}");
                 return vec![];
             }
         }
@@ -156,12 +157,12 @@ pub fn save_rules_to_file(rules: &[MultipleRules]) {
         let serialized = match serde_json::to_string_pretty(rules) {
             Ok(s) => s,
             Err(e) => {
-                eprintln!("Failed to serialize rules, reason {e}");
+                error!("Failed to serialize rules, reason {e}");
                 return;
             }
         };
         if let Err(e) = fs::write(custom_file, serialized) {
-            eprintln!("Failed to save rules, reason {e}");
+            error!("Failed to save rules, reason {e}");
         }
     }
 }
@@ -173,7 +174,7 @@ pub fn create_custom_text_file_if_needed() {
                 let _ = fs::create_dir_all(parent);
             }
             if let Err(e) = fs::write(&custom_file, BASIC_CUSTOM_COMMANDS) {
-                eprintln!("Failed to create file, reason {e}");
+                error!("Failed to create file, reason {e}");
             }
         }
     }
@@ -186,7 +187,7 @@ pub fn create_rules_file_if_needed() {
                 let _ = fs::create_dir_all(parent);
             }
             if let Err(e) = fs::write(&custom_file, BASIC_RULE_CONTENT) {
-                eprintln!("Failed to create file, reason {e}");
+                error!("Failed to create file, reason {e}");
             }
         }
     }

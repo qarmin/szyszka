@@ -504,6 +504,7 @@ export component MainWindow inherits Window {
                 Button { text: Translations.settings_open_rules; clicked => { Callabler.open-rules-file(); } }
                 Button { text: Translations.settings_open_cache_custom_texts; clicked => { Callabler.open-custom-texts-file(); } }
                 Button { text: Translations.settings_open_config_dir; clicked => { Callabler.open-config-dir(); } }
+                Button { text: Translations.settings_open_log_folder; clicked => { Callabler.open-log-folder(); } }
                 Rectangle { vertical-stretch: 1; }
                 Button { text: Translations.dialog_button_ok; clicked => { GuiState.settings_open = false; } }
             }

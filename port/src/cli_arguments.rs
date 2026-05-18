@@ -1,6 +1,8 @@
 use std::path::{Path, PathBuf};
 use std::process;
 
+use log::error;
+
 #[derive(Copy, Clone, Eq, PartialEq)]
 enum SearchMode {
     Normal,
@@ -22,6 +24,7 @@ impl CliPaths {
     }
 }
 
+#[expect(clippy::print_stdout)]
 pub fn handle_help_version(arguments: &[String]) {
     let Some(second) = arguments.get(1) else {
         return;
@@ -60,7 +63,7 @@ pub fn parse_cli_paths(arguments: &[String]) -> CliPaths {
             current_mode = SearchMode::Recursive;
         } else {
             let Ok(path) = Path::new(arg).canonicalize() else {
-                eprintln!("Skipping invalid path: {arg}");
+                error!("Skipping invalid path: {arg}");
                 continue;
             };
             if path.is_dir() {
@@ -72,7 +75,7 @@ pub fn parse_cli_paths(arguments: &[String]) -> CliPaths {
             } else if path.is_file() {
                 paths.files.push(path);
             } else {
-                eprintln!("Error: {arg} is not a valid file or folder");
+                error!("Error: {arg} is not a valid file or folder");
             }
         }
     }

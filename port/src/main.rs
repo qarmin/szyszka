@@ -6,6 +6,7 @@ mod connect;
 mod files;
 mod language;
 mod localizer;
+mod logger;
 mod rule;
 mod state;
 
@@ -29,12 +30,13 @@ use crate::connect::select::{apply_select, apply_select_custom, file_click_range
 use crate::connect::sync::{sync_files, sync_outdated, sync_rules};
 use crate::connect::translations::apply_translations;
 use crate::language::apply_language;
-use crate::slint_gen::{Callabler, GuiState, MainWindow, SelectMode, Settings, SortColumn};
+use crate::slint_gen::{Callabler, GuiState, MainWindow, Settings, SortColumn};
 use crate::state::new_shared;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli_args: Vec<String> = std::env::args().collect();
     handle_help_version(&cli_args);
+    crate::logger::setup_logger();
     let cli_paths = parse_cli_paths(&cli_args);
 
     let saved_language = load_saved_language();
@@ -340,6 +342,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         });
     }
+    {
+        cb.on_open_log_folder(|| {
+            if let Some(p) = crate::logger::get_cache_path() {
+                let _ = std::fs::create_dir_all(&p);
+                let _ = open::that(p);
+            }
+        });
+    }
 
     // Selection toggles for individual rows
     {
@@ -494,6 +504,3 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ui.run()?;
     Ok(())
 }
-
-#[expect(unused)]
-fn _force_used(_m: SelectMode) {}

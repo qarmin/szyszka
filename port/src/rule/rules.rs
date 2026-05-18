@@ -24,6 +24,7 @@ pub struct SingleRule {
     pub rule_description: String,
 }
 
+#[cfg(test)]
 impl SingleRule {
     pub fn new() -> Self {
         Self {
@@ -38,7 +39,6 @@ impl SingleRule {
 #[derive(Clone, Debug)]
 pub struct Rules {
     pub rules: Vec<SingleRule>,
-    pub edit_mode: Option<usize>,
     pub updated: bool,
 }
 
@@ -50,19 +50,11 @@ impl Default for Rules {
 
 impl Rules {
     pub fn new() -> Self {
-        Self {
-            rules: vec![],
-            edit_mode: None,
-            updated: true,
-        }
+        Self { rules: vec![], updated: true }
     }
 
     pub fn add_single_rule(&mut self, single_rule: SingleRule) {
         self.rules.push(single_rule);
-    }
-
-    pub fn remove_rule(&mut self, index: usize) {
-        self.rules.remove(index);
     }
 
     pub fn apply_all_rules_to_item(
@@ -118,7 +110,6 @@ pub enum RuleType {
     Normalize,
 }
 
-#[expect(dead_code)]
 #[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum RulePlace {
     None = 0,

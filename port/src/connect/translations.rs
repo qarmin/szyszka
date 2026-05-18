@@ -40,6 +40,7 @@ pub fn apply_translations(ui: &MainWindow) {
     t.set_settings_open_rules(fls!("settings_open_rules").into());
     t.set_settings_open_cache_custom_texts(fls!("settings_open_cache_custom_texts").into());
     t.set_settings_open_config_dir(fls!("settings_open_config_dir").into());
+    t.set_settings_open_log_folder(fls!("settings_open_log_folder").into());
 
     t.set_button_select_all(fls!("button_select_all").into());
     t.set_button_unselect_all(fls!("button_unselect_all").into());

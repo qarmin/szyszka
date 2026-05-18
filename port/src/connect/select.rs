@@ -170,7 +170,6 @@ pub fn apply_select_custom(ui: &MainWindow, state: &SharedState, pattern: &str, 
                         false
                     } else {
                         let target = match mode_index {
-                            0 => path.clone(),
                             1 => current_name.clone(),
                             2 => future_name.clone(),
                             3 => format!("{path}{CHARACTER}{current_name}"),

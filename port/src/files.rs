@@ -94,7 +94,7 @@ pub fn sort_files(mut files: Vec<PathBuf>) -> Vec<PathBuf> {
     files
 }
 
-pub fn collect_files_async(items_to_check: Vec<PathBuf>, dedup: BTreeSet<String>, progress: Arc<ScanProgress>) -> Vec<ItemStruct> {
+pub fn collect_files_async(items_to_check: Vec<PathBuf>, dedup: &BTreeSet<String>, progress: &Arc<ScanProgress>) -> Vec<ItemStruct> {
     progress.total.store(items_to_check.len(), AtomicOrdering::Relaxed);
     progress.current.store(0, AtomicOrdering::Relaxed);
     let timezone_offset = Local::now().offset().local_minus_utc();
@@ -102,7 +102,7 @@ pub fn collect_files_async(items_to_check: Vec<PathBuf>, dedup: BTreeSet<String>
     items_to_check
         .into_par_iter()
         .map(|file_entry| {
-            let result = process_one_item(&file_entry, &dedup, timezone_offset);
+            let result = process_one_item(&file_entry, dedup, timezone_offset);
             progress.current.fetch_add(1, AtomicOrdering::Relaxed);
             result
         })
@@ -192,10 +192,13 @@ pub fn regex_check(expression: &str, directory: impl AsRef<Path>) -> bool {
         if current_index > directory.len() {
             return false;
         }
-        found_index = match directory[current_index..].find(i.1) {
-            Some(t) => t,
-            None => return false,
+        let Some(rest) = directory.get(current_index..) else {
+            return false;
         };
+        let Some(t) = rest.find(i.1) else {
+            return false;
+        };
+        found_index = t;
         position_of_splits.push(found_index + current_index);
     }
     true

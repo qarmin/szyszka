@@ -1,3 +1,5 @@
+#![allow(clippy::string_slice)]
+
 use std::path::Path;
 
 use crate::rule::rules::{split_file_name, RulePlace, RuleType, SingleRule};

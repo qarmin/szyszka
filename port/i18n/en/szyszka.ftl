@@ -37,6 +37,7 @@ settings_language_label = Language
 settings_open_rules = Open rules settings file
 settings_open_cache_custom_texts = Open custom texts file
 settings_open_config_dir = Open config dir
+settings_open_log_folder = Open log folder
 check_button_dark_theme = Dark theme
 
 # Other in main window

@@ -117,7 +117,7 @@ fn start_async_scan(ui: &MainWindow, state: &SharedState, items: Vec<PathBuf>, m
 
     let (tx, rx) = mpsc::channel::<Vec<ItemStruct>>();
     std::thread::spawn(move || {
-        let result = collect_files_async(items, dedup, progress_w);
+        let result = collect_files_async(items, &dedup, &progress_w);
         let _ = tx.send(result);
     });
 

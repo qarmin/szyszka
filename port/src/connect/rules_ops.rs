@@ -33,10 +33,7 @@ pub fn close_editor(ui: &MainWindow) {
 }
 
 pub fn add_or_update_rule(ui: &MainWindow, state: &SharedState) {
-    let single_rule = match read_rule_from_editor(ui) {
-        Some(r) => r,
-        None => return,
-    };
+    let single_rule = read_rule_from_editor(ui);
 
     {
         let mut state_mut = state.borrow_mut();
@@ -145,13 +142,7 @@ fn format_captures(regex: &Regex, text: &str) -> String {
 pub fn update_example(ui: &MainWindow, state: &SharedState) {
     let es = ui.global::<EditorState>();
 
-    let single_rule = match read_rule_from_editor(ui) {
-        Some(r) => r,
-        None => {
-            es.set_example_after_text(es.get_example_before_text());
-            return;
-        }
-    };
+    let single_rule = read_rule_from_editor(ui);
 
     let regex = if single_rule.rule_data.use_regex {
         match Regex::new(&single_rule.rule_data.text_to_find) {
@@ -238,7 +229,7 @@ pub fn refresh_future_names(ui: &MainWindow, state: &SharedState) {
     crate::connect::sync::sync_files(ui, state);
 }
 
-fn read_rule_from_editor(ui: &MainWindow) -> Option<SingleRule> {
+fn read_rule_from_editor(ui: &MainWindow) -> SingleRule {
     let es = ui.global::<EditorState>();
     let mut rule_data = RuleData::new();
     let (rule_type, rule_place, rule_description) = match es.get_current_tab() {
@@ -346,12 +337,12 @@ fn read_rule_from_editor(ui: &MainWindow) -> Option<SingleRule> {
         }
     };
 
-    Some(SingleRule {
+    SingleRule {
         rule_type,
         rule_place,
         rule_data,
         rule_description,
-    })
+    }
 }
 
 fn ui_place_to_rule_place(p: RulePlaceUi) -> RulePlace {

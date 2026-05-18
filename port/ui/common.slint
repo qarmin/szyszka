@@ -122,6 +122,7 @@ export global Translations {
     in-out property <string> settings_open_rules: "Open rules settings file";
     in-out property <string> settings_open_cache_custom_texts: "Open custom texts file";
     in-out property <string> settings_open_config_dir: "Open config dir";
+    in-out property <string> settings_open_log_folder: "Open log folder";
 
     in-out property <string> button_select_all: "Select All";
     in-out property <string> button_unselect_all: "Unselect All";
@@ -362,6 +363,7 @@ export global Callabler {
     callback open-rules-file();
     callback open-custom-texts-file();
     callback open-config-dir();
+    callback open-log-folder();
 
     callback set-file-selected(int, bool);
     callback set-rule-selected(int, bool);

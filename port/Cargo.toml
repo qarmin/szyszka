@@ -40,6 +40,11 @@ i18n-embed-fl = "0.10"
 rust-embed = "8.2"
 once_cell = "1.19"
 
+log = "0.4"
+handsome_logger = "0.9"
+file-rotate = "0.8"
+log-panics = { version = "2.1", features = ["with-backtrace"] }
+
 [build-dependencies]
 slint-build = "1.13"
 
