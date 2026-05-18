@@ -39,7 +39,11 @@ pub fn start_renaming_request(ui: &MainWindow, state: &SharedState) {
         return;
     }
 
-    gs.set_confirm_dialog_open(true);
+    if !state_ref.rules.updated {
+        gs.set_outdated_warning_open(true);
+    } else {
+        gs.set_confirm_dialog_open(true);
+    }
 }
 
 pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {

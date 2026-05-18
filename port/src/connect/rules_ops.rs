@@ -54,7 +54,7 @@ pub fn add_or_update_rule(ui: &MainWindow, state: &SharedState) {
         state_mut.rule_selected.resize(new_len, false);
     }
     sync_rules(ui, state);
-    sync_outdated(ui, state);
+    refresh_outdated_or_recompute(ui, state);
     ui.global::<GuiState>().set_rule_editor_open(false);
 }
 
@@ -88,7 +88,7 @@ pub fn remove_rule(ui: &MainWindow, state: &SharedState, idx: i32) {
         state_mut.rules.updated = false;
     }
     sync_rules(ui, state);
-    sync_outdated(ui, state);
+    refresh_outdated_or_recompute(ui, state);
 }
 
 pub fn move_rule_up(ui: &MainWindow, state: &SharedState) {
@@ -104,7 +104,7 @@ pub fn move_rule_up(ui: &MainWindow, state: &SharedState) {
         }
     }
     sync_rules(ui, state);
-    sync_outdated(ui, state);
+    refresh_outdated_or_recompute(ui, state);
 }
 
 pub fn move_rule_down(ui: &MainWindow, state: &SharedState) {
@@ -123,7 +123,23 @@ pub fn move_rule_down(ui: &MainWindow, state: &SharedState) {
         }
     }
     sync_rules(ui, state);
-    sync_outdated(ui, state);
+    refresh_outdated_or_recompute(ui, state);
+}
+
+fn format_captures(regex: &Regex, text: &str) -> String {
+    match regex.captures(text) {
+        Some(caps) => {
+            let n = caps.len();
+            let header = fls!("label_replace_captures_number", generate_translation_hashmap(vec![("capture_number", n.to_string())]));
+            let mut groups = Vec::with_capacity(n);
+            for (i, m) in caps.iter().enumerate() {
+                let s = m.map(|x| x.as_str()).unwrap_or("");
+                groups.push(format!("{i}: {s}"));
+            }
+            format!("{header} - {}", groups.join(", "))
+        }
+        None => fls!("label_replace_no_captures"),
+    }
 }
 
 pub fn update_example(ui: &MainWindow, state: &SharedState) {
@@ -145,13 +161,20 @@ pub fn update_example(ui: &MainWindow, state: &SharedState) {
             }
             Err(_) => {
                 es.set_replace_invalid_regex(true);
+                es.set_replace_captures_text("".into());
                 None
             }
         }
     } else {
         es.set_replace_invalid_regex(false);
+        es.set_replace_captures_text("".into());
         None
     };
+
+    if let Some(r) = regex.as_ref() {
+        let before = es.get_example_before_text().to_string();
+        es.set_replace_captures_text(format_captures(r, &before).into());
+    }
 
     let mut all_rules = Rules::new();
     all_rules.rules.push(single_rule);
@@ -161,6 +184,34 @@ pub fn update_example(ui: &MainWindow, state: &SharedState) {
     es.set_example_after_text(text.into());
 
     refresh_future_names(ui, state);
+}
+
+/// Skip auto-recompute when files * rules would freeze the UI on large datasets.
+/// Why: GTK had the same heuristic at src/update_records.rs:16. User can still
+/// trigger a manual recompute via the Update Names button.
+const RULES_UPDATE_LIMIT: usize = 20000;
+
+pub fn refresh_outdated_or_recompute(ui: &MainWindow, state: &SharedState) {
+    let (files_n, rules_n) = {
+        let s = state.borrow();
+        (s.files.len(), s.rules.rules.len())
+    };
+    if rules_n == 0 {
+        // No rules → future_name == name (ItemStruct init), nothing to recompute, nothing outdated.
+        let mut state_mut = state.borrow_mut();
+        for file in state_mut.files.iter_mut() {
+            if file.future_name != file.name {
+                file.future_name = file.name.clone();
+            }
+        }
+        state_mut.rules.updated = true;
+        drop(state_mut);
+        crate::connect::sync::sync_files(ui, state);
+    } else if files_n * rules_n <= RULES_UPDATE_LIMIT {
+        refresh_future_names(ui, state);
+        state.borrow_mut().rules.updated = true;
+    }
+    sync_outdated(ui, state);
 }
 
 pub fn refresh_future_names(ui: &MainWindow, state: &SharedState) {
@@ -457,7 +508,7 @@ pub fn load_rule_set(ui: &MainWindow, state: &SharedState, index: i32) {
             state_mut.rule_selected.resize(len, false);
         }
         sync_rules(ui, state);
-        sync_outdated(ui, state);
+        refresh_outdated_or_recompute(ui, state);
     }
 }
 
@@ -475,6 +526,14 @@ pub fn delete_rule_set(ui: &MainWindow, index: i32) {
 
 pub fn refresh_rule_sets(ui: &MainWindow) {
     let all = load_rules();
+    let names: Vec<String> = all.iter().map(|m| m.name.clone()).collect();
+    let names_text = if names.is_empty() {
+        String::new()
+    } else {
+        fls!("edit_names_used_in_rules", generate_translation_hashmap(vec![("rules", names.join(", "))]))
+    };
+    ui.global::<GuiState>().set_existing_rule_set_names(names_text.into());
+
     let entries: Vec<RuleSetEntry> = all
         .into_iter()
         .map(|m| RuleSetEntry { name: m.name.into() })

@@ -44,6 +44,7 @@ export enum NotebookTab {
 
 export enum SelectMode {
     select-all,
+    unselect-all,
     reverse,
     select-custom,
     unselect-custom,
@@ -119,13 +120,13 @@ export global Translations {
     in-out property <string> settings_language_label: "Language";
     in-out property <string> check_button_dark_theme: "Dark icons";
     in-out property <string> settings_open_rules: "Open rules settings file";
-    in-out property <string> settings_open_cache_custom_texts: "Open custom cache file";
-    in-out property <string> settings_open_config_dir: "Open cache dir";
+    in-out property <string> settings_open_cache_custom_texts: "Open custom texts file";
+    in-out property <string> settings_open_config_dir: "Open config dir";
 
     in-out property <string> button_select_all: "Select All";
+    in-out property <string> button_unselect_all: "Unselect All";
     in-out property <string> button_select_reverse: "Reverse Selection";
-    in-out property <string> button_select_custom: "Select Custom";
-    in-out property <string> button_unselect_custom: "Unselect Custom";
+    in-out property <string> button_select_custom: "Select / Unselect Custom";
     in-out property <string> button_select_changed: "Select Changed";
     in-out property <string> button_unselect_changed: "Unselect Changed";
 
@@ -138,10 +139,11 @@ export global Translations {
     in-out property <string> dialog_ignore_folders: "Ignore folders";
     in-out property <string> dialog_confirm_renaming: "Confirm renaming";
     in-out property <string> dialog_outdated_results: "Outdated results";
+    in-out property <string> renaming_some_records_not_updated: "Some records are not updated. Continue anyway?";
     in-out property <string> dialog_results_of_renaming: "Results of renaming";
     in-out property <string> dialog_save_rule: "Save Rule";
-    in-out property <string> dialog_select_custom: "Select Custom";
-    in-out property <string> dialog_unselect_custom: "Unselect Custom";
+    in-out property <string> edit_names_choose_name: "Choose name of rules (if exists, will override it)";
+    in-out property <string> dialog_select_custom: "Select / Unselect Custom";
 
     in-out property <string> label_usage_type: "Usage Type:";
     in-out property <string> label_example: "EXAMPLE";
@@ -258,6 +260,7 @@ export global EditorState {
     in-out property <string> replace_text_to_find: "";
     in-out property <string> replace_text_to_replace: "";
     in-out property <bool> replace_invalid_regex: false;
+    in-out property <string> replace_captures_text: "";
 
     in-out property <RulePlaceUi> trim_place: RulePlaceUi.from-name-start;
     in-out property <bool> trim_case_sensitive: false;
@@ -281,6 +284,7 @@ export global GuiState {
     in-out property <bool> select_popup_open: false;
     in-out property <bool> load_popup_open: false;
     in-out property <bool> confirm_dialog_open: false;
+    in-out property <bool> outdated_warning_open: false;
     in-out property <bool> results_dialog_open: false;
     in-out property <bool> message_dialog_open: false;
     in-out property <bool> select_custom_dialog_open: false;
@@ -304,6 +308,7 @@ export global GuiState {
     in-out property <int> select_custom_mode_index: 0;
 
     in-out property <string> save_rule_name: "";
+    in-out property <string> existing_rule_set_names: "";
 
     in-out property <bool> add_folder_scan_inside: false;
     in-out property <bool> add_folder_ignore_folders: false;
@@ -311,6 +316,13 @@ export global GuiState {
 
     in-out property <SortColumn> sort_column: SortColumn.none;
     in-out property <bool> sort_descending: false;
+
+    in-out property <length> col_type_width: 50px;
+    in-out property <length> col_current_width: 240px;
+    in-out property <length> col_future_width: 240px;
+
+    in-out property <int> last_file_anchor_idx: -1;
+    in-out property <int> last_rule_anchor_idx: -1;
 }
 
 export global Callabler {
@@ -354,5 +366,20 @@ export global Callabler {
     callback set-file-selected(int, bool);
     callback set-rule-selected(int, bool);
 
+    // Row-click selection (krokiet-style):
+    //   plain click  -> select-only (clears others, selects this)
+    //   ctrl+click   -> toggle      (flips this row)
+    //   shift+click  -> range       (selects every row between anchor and idx)
+    callback file-row-click-select(int /*idx*/);
+    callback file-row-click-toggle(int /*idx*/);
+    callback file-row-click-range(int /*anchor*/, int /*idx*/);
+    callback rule-row-click-select(int /*idx*/);
+    callback rule-row-click-toggle(int /*idx*/);
+    callback rule-row-click-range(int /*anchor*/, int /*idx*/);
+
     callback sort-files(SortColumn);
+    callback open-file(int);
+    callback open-file-folder(int);
+
+    pure callback filter-number(string) -> string;
 }

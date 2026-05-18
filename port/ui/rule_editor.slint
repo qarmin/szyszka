@@ -227,7 +227,10 @@ export component RuleEditorPanel inherits Rectangle {
                                 LineEdit {
                                     text <=> EditorState.add_number_start;
                                     input-type: number;
-                                    edited => { Callabler.rule-editor-update-example(); }
+                                    edited => {
+                                        EditorState.add_number_start = Callabler.filter-number(EditorState.add_number_start);
+                                        Callabler.rule-editor-update-example();
+                                    }
                                 }
                             }
                             VerticalLayout {
@@ -235,7 +238,10 @@ export component RuleEditorPanel inherits Rectangle {
                                 LineEdit {
                                     text <=> EditorState.add_number_step;
                                     input-type: number;
-                                    edited => { Callabler.rule-editor-update-example(); }
+                                    edited => {
+                                        EditorState.add_number_step = Callabler.filter-number(EditorState.add_number_step);
+                                        Callabler.rule-editor-update-example();
+                                    }
                                 }
                             }
                             VerticalLayout {
@@ -243,7 +249,10 @@ export component RuleEditorPanel inherits Rectangle {
                                 LineEdit {
                                     text <=> EditorState.add_number_zeros;
                                     input-type: number;
-                                    edited => { Callabler.rule-editor-update-example(); }
+                                    edited => {
+                                        EditorState.add_number_zeros = Callabler.filter-number(EditorState.add_number_zeros);
+                                        Callabler.rule-editor-update-example();
+                                    }
                                 }
                             }
                         }
@@ -334,6 +343,11 @@ export component RuleEditorPanel inherits Rectangle {
                             edited => { Callabler.rule-editor-update-example(); }
                         }
                         if EditorState.replace_invalid_regex : Text { color: red; text: Translations.label_replace_invalid_regex; }
+                        if EditorState.replace_use_regex && !EditorState.replace_invalid_regex : Text {
+                            text: EditorState.replace_captures_text;
+                            wrap: word-wrap;
+                            font-italic: true;
+                        }
                         Rectangle { vertical-stretch: 1; }
                     }
 
@@ -423,7 +437,8 @@ export component RuleEditorPanel inherits Rectangle {
                         edited => { Callabler.rule-editor-update-example(); }
                     }
                     Button {
-                        text: "↺";
+                        icon: @image-url("../../icons/szy_reset.svg");
+                        colorize-icon: true;
                         clicked => { EditorState.example_before_text = "Gżegżółka.Txt"; Callabler.rule-editor-update-example(); }
                     }
                 }

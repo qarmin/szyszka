@@ -40,9 +40,9 @@ upper_files_folders_label_update = Pliki/foldery({ $files_number }) - ##### WYMA
 upper_files_folders_label_up_to_date = Pliki/foldery({ $files_number }) - aktualne
 # Select popover
 button_select_all = Zaznacz wszystko
+button_unselect_all = Odznacz wszystko
 button_select_reverse = Odwróć zaznaczenie
-button_select_custom = Własne zaznaczanie
-button_unselect_custom = Własne odznaczanie
+button_select_custom = Własne zaznaczanie / odznaczanie
 button_select_changed = Wybierz zmienione
 button_unselect_changed = Odznacz zmienione
 # Un/Select custom
@@ -67,8 +67,7 @@ dialog_confirm_renaming = Potwierdź zmianę nazwy
 dialog_outdated_results = Nieaktualne wyniki
 dialog_results_of_renaming = Wyniki zmiany nazwy
 dialog_save_rule = Zapisz regułę
-dialog_select_custom = Własne zaznaczanie
-dialog_unselect_custom = Własne odznaczanie
+dialog_select_custom = Własne zaznaczanie / odznaczanie
 
 # Rule Window
 

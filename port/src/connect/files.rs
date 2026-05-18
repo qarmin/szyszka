@@ -8,7 +8,8 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use crate::connect::progress::{hide_overlay, show_overlay};
-use crate::connect::sync::{sync_files, sync_outdated};
+use crate::connect::rules_ops::refresh_outdated_or_recompute;
+use crate::connect::sync::sync_files;
 use crate::files::{collect_files_async, enumerate_folder_contents, sort_files, ItemStruct, ScanProgress};
 use crate::slint_gen::{MainWindow, ProgressState};
 use crate::state::SharedState;
@@ -18,6 +19,28 @@ pub fn pick_files_and_add(ui: &MainWindow, state: &SharedState) {
     let Some(files) = files else { return };
     let sorted = sort_files(files);
     start_async_scan(ui, state, sorted, "Adding files…");
+}
+
+pub fn add_cli_paths(ui: &MainWindow, state: &SharedState, paths: crate::cli_arguments::CliPaths) {
+    if paths.is_empty() {
+        return;
+    }
+
+    let mut items: Vec<PathBuf> = Vec::new();
+    items.extend(sort_files(paths.files));
+    if !paths.folders_normal.is_empty() {
+        items.extend(enumerate_folder_contents(paths.folders_normal, false, false));
+    }
+    if !paths.folders_recursive.is_empty() {
+        items.extend(enumerate_folder_contents(paths.folders_recursive, true, false));
+    }
+    if !paths.folders_recursive_skip.is_empty() {
+        items.extend(enumerate_folder_contents(paths.folders_recursive_skip, true, true));
+    }
+
+    if !items.is_empty() {
+        start_async_scan(ui, state, items, "Reading file metadata…");
+    }
 }
 
 pub fn pick_folders_into_state(ui: &MainWindow, state: &SharedState) -> bool {
@@ -131,7 +154,7 @@ fn start_async_scan(ui: &MainWindow, state: &SharedState, items: Vec<PathBuf>, m
                     s.rules.updated = false;
                 }
                 sync_files(&ui, &state_clone);
-                sync_outdated(&ui, &state_clone);
+                refresh_outdated_or_recompute(&ui, &state_clone);
                 hide_overlay(&ui);
                 if let Some(t) = th_c.borrow().as_ref() {
                     t.stop();
@@ -171,7 +194,7 @@ pub fn remove_selected(ui: &MainWindow, state: &SharedState) {
         }
     }
     sync_files(ui, state);
-    sync_outdated(ui, state);
+    refresh_outdated_or_recompute(ui, state);
 }
 
 pub fn move_selected_up(ui: &MainWindow, state: &SharedState) {

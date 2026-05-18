@@ -5,15 +5,43 @@ import { RuleEditorPanel } from "rule_editor.slint";
 component SortHeaderCell inherits Rectangle {
     in property <string> label_text;
     in property <SortColumn> column;
+    in property <bool> resizable: true;
+    in-out property <length> col_width;
+    callback width-changed(length);
+
     background: ta.has-hover ? Palette.alternate-background : transparent;
+
     ta := TouchArea {
         clicked => { Callabler.sort-files(root.column); }
     }
+
     Text {
+        x: 6px;
+        width: root.width - 10px;
         text: root.label_text;
         vertical-alignment: center;
+        horizontal-alignment: center;
         font-weight: 700;
         overflow: elide;
+    }
+
+    if root.resizable : Rectangle {
+        x: root.width - 1px;
+        y: 4px;
+        width: 1px;
+        height: root.height - 8px;
+        background: Palette.border;
+
+        handle := TouchArea {
+            mouse-cursor: ew-resize;
+            width: 8px;
+            x: (parent.width - self.width) / 2;
+            moved => {
+                if self.pressed {
+                    root.width-changed(max(40px, root.col_width + (self.mouse-x - self.pressed-x)));
+                }
+            }
+        }
     }
 }
 
@@ -49,7 +77,8 @@ export component MainWindow inherits Window {
             }
             Rectangle { horizontal-stretch: 1; }
             Button {
-                text: "⚙";
+                icon: @image-url("../../icons/szy_settings.svg");
+                colorize-icon: true;
                 clicked => { GuiState.settings_open = !GuiState.settings_open; }
             }
         }
@@ -88,25 +117,32 @@ export component MainWindow inherits Window {
                         HorizontalLayout {
                             padding-left: 8px;
                             padding-right: 8px;
-                            spacing: 4px;
-                            Text { width: 24px; text: ""; vertical-alignment: center; }
+                            spacing: 0px;
+                            Rectangle { width: 28px; }
                             SortHeaderCell {
-                                width: 30px;
+                                width: GuiState.col_type_width;
+                                col_width: GuiState.col_type_width;
                                 label_text: Translations.tree_view_upper_column_type;
                                 column: SortColumn.type-c;
+                                width-changed(w) => { GuiState.col_type_width = w; }
                             }
                             SortHeaderCell {
-                                horizontal-stretch: 1;
+                                width: GuiState.col_current_width;
+                                col_width: GuiState.col_current_width;
                                 label_text: Translations.tree_view_upper_column_current_name;
                                 column: SortColumn.current;
+                                width-changed(w) => { GuiState.col_current_width = w; }
+                            }
+                            SortHeaderCell {
+                                width: GuiState.col_future_width;
+                                col_width: GuiState.col_future_width;
+                                label_text: Translations.tree_view_upper_column_future_name;
+                                column: SortColumn.future;
+                                width-changed(w) => { GuiState.col_future_width = w; }
                             }
                             SortHeaderCell {
                                 horizontal-stretch: 1;
-                                label_text: Translations.tree_view_upper_column_future_name;
-                                column: SortColumn.future;
-                            }
-                            SortHeaderCell {
-                                horizontal-stretch: 2;
+                                resizable: false;
                                 label_text: Translations.tree_view_upper_column_path;
                                 column: SortColumn.path;
                             }
@@ -118,23 +154,85 @@ export component MainWindow inherits Window {
                             height: 26px;
                             background: row.selected ? Palette.accent-background : (mod(idx, 2) == 0 ? Palette.alternate-background : Palette.background);
                             ta := TouchArea {
-                                clicked => {
-                                    Callabler.set-file-selected(idx, !row.selected);
+                                double-clicked => {
+                                    Callabler.open-file(idx);
+                                }
+                                pointer-event(event) => {
+                                    if event.button == PointerEventButton.right && event.kind == PointerEventKind.up {
+                                        Callabler.open-file-folder(idx);
+                                    } else if event.button == PointerEventButton.left && event.kind == PointerEventKind.up {
+                                        if event.modifiers.control {
+                                            GuiState.last_file_anchor_idx = idx;
+                                            Callabler.file-row-click-toggle(idx);
+                                        } else if event.modifiers.shift {
+                                            if GuiState.last_file_anchor_idx == -1 {
+                                                GuiState.last_file_anchor_idx = idx;
+                                            }
+                                            Callabler.file-row-click-range(GuiState.last_file_anchor_idx, idx);
+                                        } else {
+                                            GuiState.last_file_anchor_idx = idx;
+                                            Callabler.file-row-click-select(idx);
+                                        }
+                                    }
                                 }
                             }
                             HorizontalLayout {
                                 padding-left: 8px;
                                 padding-right: 8px;
-                                spacing: 4px;
+                                spacing: 0px;
                                 CheckBox {
-                                    width: 24px;
+                                    width: 28px;
                                     checked: row.selected;
                                     toggled => { Callabler.set-file-selected(idx, self.checked); }
                                 }
-                                Text { width: 30px; text: row.dir_type == DirFileTypeUi.directory-t ? "Dir" : "File"; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
-                                Text { horizontal-stretch: 1; text: row.current_name; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
-                                Text { horizontal-stretch: 1; text: row.future_name; vertical-alignment: center; color: row.future_name != row.current_name ? #2e8b57 : (row.selected ? Palette.accent-foreground : Palette.foreground); overflow: elide; }
-                                Text { horizontal-stretch: 2; text: row.path; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                                Rectangle {
+                                    width: GuiState.col_type_width;
+                                    clip: true;
+                                    Text {
+                                        x: 6px;
+                                        width: parent.width - 10px;
+                                        text: row.dir_type == DirFileTypeUi.directory-t ? "Dir" : "File";
+                                        vertical-alignment: center;
+                                        color: row.selected ? Palette.accent-foreground : Palette.foreground;
+                                        overflow: elide;
+                                    }
+                                }
+                                Rectangle {
+                                    width: GuiState.col_current_width;
+                                    clip: true;
+                                    Text {
+                                        x: 6px;
+                                        width: parent.width - 10px;
+                                        text: row.current_name;
+                                        vertical-alignment: center;
+                                        color: row.selected ? Palette.accent-foreground : Palette.foreground;
+                                        overflow: elide;
+                                    }
+                                }
+                                Rectangle {
+                                    width: GuiState.col_future_width;
+                                    clip: true;
+                                    Text {
+                                        x: 6px;
+                                        width: parent.width - 10px;
+                                        text: row.future_name;
+                                        vertical-alignment: center;
+                                        color: row.future_name != row.current_name ? #2e8b57 : (row.selected ? Palette.accent-foreground : Palette.foreground);
+                                        overflow: elide;
+                                    }
+                                }
+                                Rectangle {
+                                    horizontal-stretch: 1;
+                                    clip: true;
+                                    Text {
+                                        x: 6px;
+                                        width: parent.width - 10px;
+                                        text: row.path;
+                                        vertical-alignment: center;
+                                        color: row.selected ? Palette.accent-foreground : Palette.foreground;
+                                        overflow: elide;
+                                    }
+                                }
                             }
                         }
                     }
@@ -149,16 +247,22 @@ export component MainWindow inherits Window {
                 Button { text: Translations.upper_add_folders_button; clicked => { Callabler.request-pick-folders(); } }
                 Button { text: Translations.upper_remove_selection_button; clicked => { Callabler.remove-selected-files(); } }
                 Button {
-                    text: Translations.upper_select_popup_button + " ▾";
+                    text: Translations.upper_select_popup_button;
+                    icon: @image-url("../../icons/szy_select.svg");
+                    colorize-icon: true;
                     clicked => { GuiState.select_popup_open = !GuiState.select_popup_open; }
                 }
                 Button { text: Translations.upper_update_names_button; clicked => { Callabler.update-names(); } }
                 Button {
-                    text: "↑ " + Translations.upper_results_one_up_button;
+                    text: Translations.upper_results_one_up_button;
+                    icon: @image-url("../../icons/szy_up.svg");
+                    colorize-icon: true;
                     clicked => { Callabler.results-move-up(); }
                 }
                 Button {
-                    text: "↓ " + Translations.upper_results_one_down_button;
+                    text: Translations.upper_results_one_down_button;
+                    icon: @image-url("../../icons/szy_down.svg");
+                    colorize-icon: true;
                     clicked => { Callabler.results-move-down(); }
                 }
                 Rectangle { vertical-stretch: 1; }
@@ -189,8 +293,18 @@ export component MainWindow inherits Window {
                 Button { text: Translations.bottom_rule_remove_button; clicked => {
                     Callabler.rule-remove(-1); // -1 means remove all selected
                 } }
-                Button { text: "↑ " + Translations.bottom_rule_one_up_button; clicked => { Callabler.rule-move-up(); } }
-                Button { text: "↓ " + Translations.bottom_rule_one_down_button; clicked => { Callabler.rule-move-down(); } }
+                Button {
+                    text: Translations.bottom_rule_one_up_button;
+                    icon: @image-url("../../icons/szy_up.svg");
+                    colorize-icon: true;
+                    clicked => { Callabler.rule-move-up(); }
+                }
+                Button {
+                    text: Translations.bottom_rule_one_down_button;
+                    icon: @image-url("../../icons/szy_down.svg");
+                    colorize-icon: true;
+                    clicked => { Callabler.rule-move-down(); }
+                }
                 Button {
                     text: Translations.bottom_rule_load_rules_button;
                     enabled: Callabler.saved_rule_sets.length > 0;
@@ -231,16 +345,31 @@ export component MainWindow inherits Window {
                             height: 26px;
                             background: row.selected ? Palette.accent-background : (mod(idx, 2) == 0 ? Palette.alternate-background : Palette.background);
                             TouchArea {
-                                clicked => { Callabler.set-rule-selected(idx, !row.selected); }
                                 double-clicked => { Callabler.open-rule-editor(idx); }
+                                pointer-event(event) => {
+                                    if event.button == PointerEventButton.left && event.kind == PointerEventKind.up {
+                                        if event.modifiers.control {
+                                            GuiState.last_rule_anchor_idx = idx;
+                                            Callabler.rule-row-click-toggle(idx);
+                                        } else if event.modifiers.shift {
+                                            if GuiState.last_rule_anchor_idx == -1 {
+                                                GuiState.last_rule_anchor_idx = idx;
+                                            }
+                                            Callabler.rule-row-click-range(GuiState.last_rule_anchor_idx, idx);
+                                        } else {
+                                            GuiState.last_rule_anchor_idx = idx;
+                                            Callabler.rule-row-click-select(idx);
+                                        }
+                                    }
+                                }
                             }
                             HorizontalLayout {
                                 padding-left: 8px;
                                 padding-right: 8px;
                                 spacing: 4px;
-                                Text { horizontal-stretch: 1; text: row.rule_type_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
-                                Text { horizontal-stretch: 1; text: row.usage_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; }
-                                Text { horizontal-stretch: 2; text: row.description; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                                Text { horizontal-stretch: 1; min-width: 0px; text: row.rule_type_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                                Text { horizontal-stretch: 1; min-width: 0px; text: row.usage_text; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
+                                Text { horizontal-stretch: 2; min-width: 0px; text: row.description; vertical-alignment: center; color: row.selected ? Palette.accent-foreground : Palette.foreground; overflow: elide; }
                             }
                         }
                     }
@@ -287,9 +416,9 @@ export component MainWindow inherits Window {
                 padding: 8px;
                 spacing: 4px;
                 Button { text: Translations.button_select_all; clicked => { Callabler.select-action(SelectMode.select-all); GuiState.select_popup_open = false; } }
+                Button { text: Translations.button_unselect_all; clicked => { Callabler.select-action(SelectMode.unselect-all); GuiState.select_popup_open = false; } }
                 Button { text: Translations.button_select_reverse; clicked => { Callabler.select-action(SelectMode.reverse); GuiState.select_popup_open = false; } }
                 Button { text: Translations.button_select_custom; clicked => { GuiState.select_popup_open = false; GuiState.select_custom_dialog_open = true; } }
-                Button { text: Translations.button_unselect_custom; clicked => { GuiState.select_popup_open = false; GuiState.select_custom_dialog_open = true; } }
                 Button { text: Translations.button_select_changed; clicked => { Callabler.select-action(SelectMode.select-changed); GuiState.select_popup_open = false; } }
                 Button { text: Translations.button_unselect_changed; clicked => { Callabler.select-action(SelectMode.unselect-changed); GuiState.select_popup_open = false; } }
             }
@@ -457,9 +586,15 @@ export component MainWindow inherits Window {
                 padding: 14px;
                 spacing: 8px;
                 Text { text: Translations.dialog_save_rule; font-weight: 700; }
+                Text { text: Translations.edit_names_choose_name; wrap: word-wrap; }
                 LineEdit {
                     placeholder-text: "Rule name";
                     text <=> GuiState.save_rule_name;
+                }
+                if GuiState.existing_rule_set_names != "" : Text {
+                    text: GuiState.existing_rule_set_names;
+                    wrap: word-wrap;
+                    font-italic: true;
                 }
                 Rectangle { vertical-stretch: 1; }
                 HorizontalLayout {
@@ -468,6 +603,7 @@ export component MainWindow inherits Window {
                     Button {
                         text: Translations.dialog_button_ok;
                         primary: true;
+                        enabled: GuiState.save_rule_name != "";
                         clicked => { GuiState.save_rule_dialog_open = false; Callabler.rule-set-save(GuiState.save_rule_name); }
                     }
                     Button { text: Translations.dialog_button_cancel; clicked => { GuiState.save_rule_dialog_open = false; } }
@@ -505,14 +641,13 @@ export component MainWindow inherits Window {
                     toggled => { GuiState.select_custom_select_dirs = self.checked; }
                 }
                 ComboBox {
-                    model: ["Path + Current Name", "Path + Future Name", "Current Path", "Future Path"];
-                    current-index: GuiState.select_custom_mode_index;
-                    selected(v) => {
-                        if (v == "Path + Current Name") { GuiState.select_custom_mode_index = 0; }
-                        else if (v == "Path + Future Name") { GuiState.select_custom_mode_index = 1; }
-                        else if (v == "Current Path") { GuiState.select_custom_mode_index = 2; }
-                        else { GuiState.select_custom_mode_index = 3; }
-                    }
+                    model: ["Path", "Current Name", "Future Name", "Path + Current Name", "Path + Future Name", "Directory / File"];
+                    current-index <=> GuiState.select_custom_mode_index;
+                }
+                if GuiState.select_custom_mode_index == 5 : Text {
+                    text: "When Directory / File mode is active, pattern is ignored — toggle 'Include directories' to choose dirs vs files.";
+                    wrap: word-wrap;
+                    font-italic: true;
                 }
                 Rectangle { vertical-stretch: 1; }
                 HorizontalLayout {
@@ -534,6 +669,35 @@ export component MainWindow inherits Window {
                         }
                     }
                     Button { text: Translations.dialog_button_cancel; clicked => { GuiState.select_custom_dialog_open = false; } }
+                }
+            }
+        }
+    }
+
+    // Outdated results warning
+    if GuiState.outdated_warning_open : Rectangle {
+        background: #00000099;
+        TouchArea { clicked => {} }
+        Rectangle {
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            width: 440px;
+            height: 200px;
+            background: Palette.background;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Palette.border;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+                Text { text: Translations.dialog_outdated_results; font-weight: 700; }
+                Text { text: Translations.renaming_some_records_not_updated; wrap: word-wrap; }
+                Rectangle { vertical-stretch: 1; }
+                HorizontalLayout {
+                    spacing: 6px;
+                    Rectangle { horizontal-stretch: 1; }
+                    Button { text: Translations.dialog_button_ok; primary: true; clicked => { GuiState.outdated_warning_open = false; GuiState.confirm_dialog_open = true; } }
+                    Button { text: Translations.dialog_button_cancel; clicked => { GuiState.outdated_warning_open = false; } }
                 }
             }
         }

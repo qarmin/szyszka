@@ -42,9 +42,9 @@ pub fn apply_translations(ui: &MainWindow) {
     t.set_settings_open_config_dir(fls!("settings_open_config_dir").into());
 
     t.set_button_select_all(fls!("button_select_all").into());
+    t.set_button_unselect_all(fls!("button_unselect_all").into());
     t.set_button_select_reverse(fls!("button_select_reverse").into());
     t.set_button_select_custom(fls!("button_select_custom").into());
-    t.set_button_unselect_custom(fls!("button_unselect_custom").into());
     t.set_button_select_changed(fls!("button_select_changed").into());
     t.set_button_unselect_changed(fls!("button_unselect_changed").into());
 
@@ -57,10 +57,11 @@ pub fn apply_translations(ui: &MainWindow) {
     t.set_dialog_ignore_folders(fls!("dialog_ignore_folders").into());
     t.set_dialog_confirm_renaming(fls!("dialog_confirm_renaming").into());
     t.set_dialog_outdated_results(fls!("dialog_outdated_results").into());
+    t.set_renaming_some_records_not_updated(fls!("renaming_some_records_not_updated").into());
     t.set_dialog_results_of_renaming(fls!("dialog_results_of_renaming").into());
     t.set_dialog_save_rule(fls!("dialog_save_rule").into());
+    t.set_edit_names_choose_name(fls!("edit_names_choose_name").into());
     t.set_dialog_select_custom(fls!("dialog_select_custom").into());
-    t.set_dialog_unselect_custom(fls!("dialog_unselect_custom").into());
 
     t.set_label_usage_type(fls!("label_usage_type").into());
     t.set_label_example(fls!("label_example").into());

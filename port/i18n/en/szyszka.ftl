@@ -35,8 +35,8 @@ tree_view_bottom_description = Description
 # Settings
 settings_language_label = Language
 settings_open_rules = Open rules settings file
-settings_open_cache_custom_texts = Open custom cache file
-settings_open_config_dir = Open cache dir
+settings_open_cache_custom_texts = Open custom texts file
+settings_open_config_dir = Open config dir
 check_button_dark_theme = Dark theme
 
 # Other in main window
@@ -47,9 +47,9 @@ upper_files_folders_label_up_to_date = Files/Folders({ $files_number }) - up to 
 
 # Select popover
 button_select_all = Select All
+button_unselect_all = Unselect All
 button_select_reverse = Reverse Selection
-button_select_custom = Select Custom
-button_unselect_custom = Unselect Custom
+button_select_custom = Select / Unselect Custom
 button_select_changed = Select Changed
 button_unselect_changed = Unselect Changed
 
@@ -77,8 +77,7 @@ dialog_confirm_renaming = Confirm renaming
 dialog_outdated_results = Outdated results
 dialog_results_of_renaming = Results of renaming
 dialog_save_rule = Save Rule
-dialog_select_custom = Select Custom
-dialog_unselect_custom = Unselect Custom
+dialog_select_custom = Select / Unselect Custom
 
 # Rule Window
 ## Common

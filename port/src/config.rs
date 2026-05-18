@@ -3,13 +3,13 @@ use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
 use directories_next::ProjectDirs;
+use serde::{Deserialize, Serialize};
 
 use crate::rule::rules::MultipleRules;
 
 pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
-pub const LANGUAGE_FILE_NAME: &str = "language.txt";
-pub const DARK_THEME_FILE_NAME: &str = "dark_theme.txt";
+pub const SETTINGS_FILE_NAME: &str = "settings.json";
 
 const BASIC_CUSTOM_COMMANDS: &str = r"FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
@@ -19,40 +19,24 @@ $(PARENT) $(K).$(EXT)
 
 const BASIC_RULE_CONTENT: &str = r"[]";
 
-pub fn get_dark_theme_config_path() -> Option<PathBuf> {
-    ProjectDirs::from("pl", "Qarmin", "SzyszkaSlint").map(|p| PathBuf::from(p.config_dir()).join(DARK_THEME_FILE_NAME))
+#[derive(Serialize, Deserialize)]
+struct SettingsJson {
+    dark_theme: bool,
+    language: String,
 }
 
-pub fn load_dark_theme_config_or_create() -> bool {
-    if let Some(path) = get_dark_theme_config_path() {
-        if !Path::new(&path).is_file() {
-            if let Some(parent) = path.parent() {
-                let _ = fs::create_dir_all(parent);
-            }
-            let _ = fs::write(&path, "true");
-        }
-        if let Ok(thing) = fs::read_to_string(&path) {
-            return thing.trim().parse().unwrap_or(true);
-        }
+impl Default for SettingsJson {
+    fn default() -> Self {
+        Self { dark_theme: true, language: "English".to_string() }
     }
-    true
-}
-
-pub fn save_dark_theme(is_dark_theme: bool) {
-    if let Some(path) = get_dark_theme_config_path() {
-        if let Some(parent) = path.parent() {
-            let _ = fs::create_dir_all(parent);
-        }
-        let _ = fs::write(path, is_dark_theme.to_string());
-    }
-}
-
-pub fn get_language_config_path() -> Option<PathBuf> {
-    ProjectDirs::from("pl", "Qarmin", "SzyszkaSlint").map(|p| PathBuf::from(p.config_dir()).join(LANGUAGE_FILE_NAME))
 }
 
 pub fn get_config_path() -> Option<PathBuf> {
     ProjectDirs::from("pl", "Qarmin", "SzyszkaSlint").map(|p| PathBuf::from(p.config_dir()))
+}
+
+pub fn get_settings_file() -> Option<PathBuf> {
+    get_config_path().map(|p| p.join(SETTINGS_FILE_NAME))
 }
 
 pub fn get_custom_text_config_file() -> Option<PathBuf> {
@@ -61,6 +45,51 @@ pub fn get_custom_text_config_file() -> Option<PathBuf> {
 
 pub fn get_rules_config_file() -> Option<PathBuf> {
     get_config_path().map(|p| p.join(RULES_FILE_NAME))
+}
+
+fn load_settings() -> SettingsJson {
+    let Some(path) = get_settings_file() else {
+        return SettingsJson::default();
+    };
+    if !path.is_file() {
+        return SettingsJson::default();
+    }
+    let Ok(file) = fs::File::open(&path) else {
+        return SettingsJson::default();
+    };
+    serde_json::from_reader(BufReader::new(file)).unwrap_or_default()
+}
+
+fn save_settings(settings: &SettingsJson) {
+    let Some(path) = get_settings_file() else {
+        return;
+    };
+    if let Some(parent) = path.parent() {
+        let _ = fs::create_dir_all(parent);
+    }
+    if let Ok(serialized) = serde_json::to_string_pretty(settings) {
+        let _ = fs::write(path, serialized);
+    }
+}
+
+pub fn load_dark_theme_config_or_create() -> bool {
+    load_settings().dark_theme
+}
+
+pub fn save_dark_theme(is_dark_theme: bool) {
+    let mut s = load_settings();
+    s.dark_theme = is_dark_theme;
+    save_settings(&s);
+}
+
+pub fn load_saved_language() -> String {
+    load_settings().language
+}
+
+pub fn save_language(combo_text: &str) {
+    let mut s = load_settings();
+    s.language = combo_text.to_string();
+    save_settings(&s);
 }
 
 pub fn load_custom_rules() -> Vec<String> {

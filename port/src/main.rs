@@ -1,5 +1,6 @@
 #![windows_subsystem = "windows"]
 
+mod cli_arguments;
 mod config;
 mod connect;
 mod files;
@@ -14,21 +15,26 @@ mod slint_gen {
 
 use slint::ComponentHandle;
 
-use crate::config::{load_dark_theme_config_or_create, save_dark_theme};
-use crate::connect::files::{confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey};
+use crate::config::{load_dark_theme_config_or_create, load_saved_language, save_dark_theme, save_language};
+use crate::cli_arguments::{handle_help_version, parse_cli_paths};
+use crate::connect::files::{add_cli_paths, confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey};
 use crate::connect::renaming::{perform_renaming, start_renaming_request};
 use crate::connect::rules_ops::{
     add_or_update_rule, close_editor, delete_custom_text, delete_rule_set, load_custom_text_into_editor, load_rule_set, move_rule_down, move_rule_up, open_editor, refresh_custom_texts,
     refresh_rule_sets, refresh_future_names, remove_rule, save_custom_text, save_rule_set, update_example,
 };
-use crate::connect::select::{apply_select, apply_select_custom};
+use crate::connect::select::{apply_select, apply_select_custom, file_click_range, file_click_select, file_click_toggle, rule_click_range, rule_click_select, rule_click_toggle};
 use crate::connect::sync::{sync_files, sync_outdated, sync_rules};
 use crate::connect::translations::apply_translations;
-use crate::language::{apply_language, load_saved_language, save_language};
+use crate::language::apply_language;
 use crate::slint_gen::{Callabler, GuiState, MainWindow, SelectMode, Settings, SortColumn};
 use crate::state::new_shared;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cli_args: Vec<String> = std::env::args().collect();
+    handle_help_version(&cli_args);
+    let cli_paths = parse_cli_paths(&cli_args);
+
     let saved_language = load_saved_language();
     apply_language(&saved_language);
 
@@ -369,6 +375,83 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         });
     }
 
+    // Row-click selection (krokiet-style multi-select)
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_file_row_click_select(move |idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                file_click_select(&ui, &state, idx);
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_file_row_click_toggle(move |idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                file_click_toggle(&ui, &state, idx);
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_file_row_click_range(move |anchor, idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                file_click_range(&ui, &state, anchor, idx);
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_rule_row_click_select(move |idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                rule_click_select(&ui, &state, idx);
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_rule_row_click_toggle(move |idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                rule_click_toggle(&ui, &state, idx);
+            }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_rule_row_click_range(move |anchor, idx| {
+            if let Some(ui) = ui_weak.upgrade() {
+                rule_click_range(&ui, &state, anchor, idx);
+            }
+        });
+    }
+
+    cb.on_filter_number(|input| input.chars().filter(char::is_ascii_digit).collect::<String>().into());
+
+    {
+        let state = state.clone();
+        cb.on_open_file(move |idx| {
+            let s = state.borrow();
+            if let Some(item) = s.files.get(idx as usize) {
+                let _ = open::that(&item.full_name);
+            }
+        });
+    }
+    {
+        let state = state.clone();
+        cb.on_open_file_folder(move |idx| {
+            let s = state.borrow();
+            if let Some(item) = s.files.get(idx as usize) {
+                let _ = open::that(&item.path);
+            }
+        });
+    }
+
     {
         let ui_weak = ui.as_weak();
         let state = state.clone();
@@ -403,6 +486,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     sync_files(&ui, &state);
     sync_rules(&ui, &state);
     sync_outdated(&ui, &state);
+
+    add_cli_paths(&ui, &state, cli_paths);
 
     ui.run()?;
     Ok(())
