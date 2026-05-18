@@ -54,12 +54,14 @@ clippy.too_many_arguments = "allow" # Sometimes such functions are needed
 clippy.type_complexity = "allow" # Sometimes such types are needed
 clippy.collapsible_else_if = "allow" # Sometimes it is more readable
 clippy.iter_on_single_items = "allow" # Allows to extend items
+clippy.unwrap_used = "allow"
+clippy.indexing_slicing = "allow"
+
 
 clippy.doc_broken_link = "warn"
 clippy.ip_constant = "warn"
 clippy.unnecessary_semicolon = "warn"
 clippy.trivially_copy_pass_by_ref = "warn"
-clippy.indexing_slicing = "warn"
 clippy.non_std_lazy_statics = "warn"
 
 clippy.allow_attributes = "warn"
@@ -149,7 +151,6 @@ clippy.unused_async = "warn"
 clippy.unused_result_ok = "warn"
 clippy.unused_rounding = "warn"
 clippy.unused_self = "warn"
-clippy.unwrap_used = "warn"
 clippy.used_underscore_binding = "warn"
 clippy.useless_let_if_seq = "warn"
 clippy.use_self = "warn"

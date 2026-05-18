@@ -14,8 +14,9 @@ clip:
     cargo clippy --fix --allow-dirty --allow-staged --all-targets
 
 fix:
-    cargo fmt
+    cargo +nightly fmt
     cargo clippy --fix --allow-dirty --allow-staged --all-targets
+    cargo +nightly fmt
     cargo fmt
 
 upgrade:

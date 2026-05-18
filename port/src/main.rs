@@ -15,13 +15,15 @@ mod slint_gen {
 
 use slint::ComponentHandle;
 
-use crate::config::{load_dark_theme_config_or_create, load_saved_language, save_dark_theme, save_language};
 use crate::cli_arguments::{handle_help_version, parse_cli_paths};
-use crate::connect::files::{add_cli_paths, confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey};
+use crate::config::{load_dark_theme_config_or_create, load_saved_language, save_dark_theme, save_language};
+use crate::connect::files::{
+    add_cli_paths, confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey,
+};
 use crate::connect::renaming::{perform_renaming, start_renaming_request};
 use crate::connect::rules_ops::{
-    add_or_update_rule, close_editor, delete_custom_text, delete_rule_set, load_custom_text_into_editor, load_rule_set, move_rule_down, move_rule_up, open_editor, refresh_custom_texts,
-    refresh_rule_sets, refresh_future_names, remove_rule, save_custom_text, save_rule_set, update_example,
+    add_or_update_rule, close_editor, delete_custom_text, delete_rule_set, load_custom_text_into_editor, load_rule_set, move_rule_down, move_rule_up, open_editor,
+    refresh_custom_texts, refresh_future_names, refresh_rule_sets, remove_rule, save_custom_text, save_rule_set, update_example,
 };
 use crate::connect::select::{apply_select, apply_select_custom, file_click_range, file_click_select, file_click_toggle, rule_click_range, rule_click_select, rule_click_toggle};
 use crate::connect::sync::{sync_files, sync_outdated, sync_rules};
@@ -174,7 +176,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(ui) = ui_weak.upgrade() {
                 let resolved = if idx == 0 {
                     let s = state.borrow();
-                    s.rule_selected.iter().position(|x| *x).map(|i| i as i32).unwrap_or(-1)
+                    s.rule_selected.iter().position(|x| *x).map_or(-1, |i| i as i32)
                 } else {
                     idx
                 };
@@ -493,5 +495,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[allow(unused)]
+#[expect(unused)]
 fn _force_used(_m: SelectMode) {}

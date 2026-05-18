@@ -10,17 +10,17 @@ pub fn apply_select(ui: &MainWindow, state: &SharedState, mode: SelectMode) {
         state_mut.file_selected.resize(len, false);
         match mode {
             SelectMode::SelectAll => {
-                for s in state_mut.file_selected.iter_mut() {
+                for s in &mut state_mut.file_selected {
                     *s = true;
                 }
             }
             SelectMode::UnselectAll => {
-                for s in state_mut.file_selected.iter_mut() {
+                for s in &mut state_mut.file_selected {
                     *s = false;
                 }
             }
             SelectMode::Reverse => {
-                for s in state_mut.file_selected.iter_mut() {
+                for s in &mut state_mut.file_selected {
                     *s = !*s;
                 }
             }
@@ -63,7 +63,7 @@ pub fn file_click_select(ui: &MainWindow, state: &SharedState, idx: i32) {
         let mut state_mut = state.borrow_mut();
         let len = state_mut.files.len();
         state_mut.file_selected.resize(len, false);
-        for s in state_mut.file_selected.iter_mut() {
+        for s in &mut state_mut.file_selected {
             *s = false;
         }
         if let Some(s) = state_mut.file_selected.get_mut(idx as usize) {
@@ -90,7 +90,7 @@ pub fn file_click_range(ui: &MainWindow, state: &SharedState, anchor: i32, idx: 
         let mut state_mut = state.borrow_mut();
         let len = state_mut.files.len();
         state_mut.file_selected.resize(len, false);
-        for s in state_mut.file_selected.iter_mut() {
+        for s in &mut state_mut.file_selected {
             *s = false;
         }
         let (lo, hi) = if anchor <= idx { (anchor, idx) } else { (idx, anchor) };
@@ -108,7 +108,7 @@ pub fn rule_click_select(ui: &MainWindow, state: &SharedState, idx: i32) {
         let mut state_mut = state.borrow_mut();
         let len = state_mut.rules.rules.len();
         state_mut.rule_selected.resize(len, false);
-        for s in state_mut.rule_selected.iter_mut() {
+        for s in &mut state_mut.rule_selected {
             *s = false;
         }
         if let Some(s) = state_mut.rule_selected.get_mut(idx as usize) {
@@ -135,7 +135,7 @@ pub fn rule_click_range(ui: &MainWindow, state: &SharedState, anchor: i32, idx: 
         let mut state_mut = state.borrow_mut();
         let len = state_mut.rules.rules.len();
         state_mut.rule_selected.resize(len, false);
-        for s in state_mut.rule_selected.iter_mut() {
+        for s in &mut state_mut.rule_selected {
             *s = false;
         }
         let (lo, hi) = if anchor <= idx { (anchor, idx) } else { (idx, anchor) };
@@ -154,11 +154,7 @@ pub fn rule_click_range(ui: &MainWindow, state: &SharedState, anchor: i32, idx: 
 pub fn apply_select_custom(ui: &MainWindow, state: &SharedState, pattern: &str, include_dirs: bool, mode_index: i32, select: bool) {
     {
         let mut state_mut = state.borrow_mut();
-        let snapshot: Vec<(String, String, String, bool)> = state_mut
-            .files
-            .iter()
-            .map(|f| (f.path.clone(), f.name.clone(), f.future_name.clone(), f.is_dir))
-            .collect();
+        let snapshot: Vec<(String, String, String, bool)> = state_mut.files.iter().map(|f| (f.path.clone(), f.name.clone(), f.future_name.clone(), f.is_dir)).collect();
 
         let len = state_mut.files.len();
         state_mut.file_selected.resize(len, false);

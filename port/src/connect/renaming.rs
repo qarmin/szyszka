@@ -5,8 +5,7 @@ use std::fs;
 use std::path::Path;
 use std::rc::Rc;
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
-use std::sync::mpsc;
-use std::sync::Arc;
+use std::sync::{mpsc, Arc};
 use std::time::Duration;
 
 use crate::connect::progress::{hide_overlay, show_overlay};
@@ -52,7 +51,7 @@ pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {
 
     {
         let state_ref = state.borrow();
-        for file in state_ref.files.iter() {
+        for file in &state_ref.files {
             let old_name = format!("{}{}{}", file.path, CHARACTER, file.name);
             let new_name = format!("{}{}{}", file.path, CHARACTER, file.future_name);
             if file.is_dir {

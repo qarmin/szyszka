@@ -124,14 +124,12 @@ fn process_one_item(file_entry: &Path, dedup: &BTreeSet<String>, timezone_offset
         .modified()
         .ok()
         .and_then(|t| t.duration_since(UNIX_EPOCH).ok())
-        .map(|d| max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64)
-        .unwrap_or(0);
+        .map_or(0, |d| max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64);
     let creation_date = file_metadata
         .created()
         .ok()
         .and_then(|t| t.duration_since(UNIX_EPOCH).ok())
-        .map(|d| max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64)
-        .unwrap_or(0);
+        .map_or(0, |d| max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64);
     let canonical = file_entry.canonicalize().ok()?.to_string_lossy().to_string();
 
     Some(ItemStruct {

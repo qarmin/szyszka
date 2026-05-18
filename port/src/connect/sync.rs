@@ -52,7 +52,7 @@ pub fn sync_outdated(ui: &MainWindow, state: &SharedState) {
     ui.global::<GuiState>().set_results_outdated(outdated);
 }
 
-#[allow(dead_code)]
+#[expect(dead_code)]
 pub fn timestamp_to_date(ts: u64) -> String {
     DateTime::from_timestamp(ts as i64, 0)
         .map(|d| d.format("%Y-%m-%d %H:%M:%S").to_string())

@@ -118,7 +118,7 @@ pub enum RuleType {
     Normalize,
 }
 
-#[allow(dead_code)]
+#[expect(dead_code)]
 #[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum RulePlace {
     None = 0,

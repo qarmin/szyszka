@@ -3,8 +3,7 @@ use std::cell::RefCell;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::atomic::Ordering as AtomicOrdering;
-use std::sync::mpsc;
-use std::sync::Arc;
+use std::sync::{mpsc, Arc};
 use std::time::Duration;
 
 use crate::connect::progress::{hide_overlay, show_overlay};
@@ -51,7 +50,8 @@ pub fn pick_folders_into_state(ui: &MainWindow, state: &SharedState) -> bool {
     }
 
     let display: Vec<slint::SharedString> = folders.iter().map(|p| p.display().to_string().into()).collect();
-    ui.global::<crate::slint_gen::GuiState>().set_add_folder_picked_paths(slint::ModelRc::new(slint::VecModel::from(display)));
+    ui.global::<crate::slint_gen::GuiState>()
+        .set_add_folder_picked_paths(slint::ModelRc::new(slint::VecModel::from(display)));
     state.borrow_mut().pending_folders = folders;
     true
 }
@@ -249,16 +249,17 @@ pub fn sort_files_by(ui: &MainWindow, state: &SharedState, key: SortKey, descend
             let fa = &files[a];
             let fb = &files[b];
             let ord = match key {
-                SortKey::None => fa
-                    .path
-                    .cmp(&fb.path)
-                    .then_with(|| natord::compare(&fa.name, &fb.name)),
+                SortKey::None => fa.path.cmp(&fb.path).then_with(|| natord::compare(&fa.name, &fb.name)),
                 SortKey::Type => (!fa.is_dir).cmp(&!fb.is_dir).then_with(|| natord::compare(&fa.name, &fb.name)),
                 SortKey::Current => natord::compare(&fa.name, &fb.name),
                 SortKey::Future => natord::compare(&fa.future_name, &fb.future_name),
                 SortKey::Path => natord::compare(&fa.path, &fb.path).then_with(|| natord::compare(&fa.name, &fb.name)),
             };
-            if descending { ord.reverse() } else { ord }
+            if descending {
+                ord.reverse()
+            } else {
+                ord
+            }
         });
 
         let files = std::mem::take(&mut state_mut.files);

@@ -97,7 +97,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
     new_string
 }
 
-#[allow(clippy::too_many_arguments)]
+#[expect(clippy::too_many_arguments)]
 pub fn parse_string_rules(
     typ: &[&str],
     new_string: &mut String,
@@ -114,47 +114,33 @@ pub fn parse_string_rules(
     let mut invalid_data = true;
     'mat: {
         match typ[0] {
-            "CURR" => {
-                if typ.len() == 1 {
-                    new_string.push_str(data_to_change);
-                    invalid_data = false;
-                }
+            "CURR" if typ.len() == 1 => {
+                new_string.push_str(data_to_change);
+                invalid_data = false;
             }
-            "NAME" => {
-                if typ.len() == 1 {
-                    new_string.push_str(name);
-                    invalid_data = false;
-                }
+            "NAME" if typ.len() == 1 => {
+                new_string.push_str(name);
+                invalid_data = false;
             }
-            "EXT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(extension);
-                    invalid_data = false;
-                }
+            "EXT" if typ.len() == 1 => {
+                new_string.push_str(extension);
+                invalid_data = false;
             }
-            "SIZE" => {
-                if typ.len() == 1 {
-                    new_string.push_str(size);
-                    invalid_data = false;
-                }
+            "SIZE" if typ.len() == 1 => {
+                new_string.push_str(size);
+                invalid_data = false;
             }
-            "CREAT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(creation_date);
-                    invalid_data = false;
-                }
+            "CREAT" if typ.len() == 1 => {
+                new_string.push_str(creation_date);
+                invalid_data = false;
             }
-            "MODIF" => {
-                if typ.len() == 1 {
-                    new_string.push_str(modification_date);
-                    invalid_data = false;
-                }
+            "MODIF" if typ.len() == 1 => {
+                new_string.push_str(modification_date);
+                invalid_data = false;
             }
-            "PARENT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(parent_folder);
-                    invalid_data = false;
-                }
+            "PARENT" if typ.len() == 1 => {
+                new_string.push_str(parent_folder);
+                invalid_data = false;
             }
             "N" | "K" => {
                 invalid_data = true;

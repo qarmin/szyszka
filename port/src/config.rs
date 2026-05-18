@@ -11,13 +11,13 @@ pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
 pub const SETTINGS_FILE_NAME: &str = "settings.json";
 
-const BASIC_CUSTOM_COMMANDS: &str = r"FILE_$(N).$(EXT)
+const BASIC_CUSTOM_COMMANDS: &str = "FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
 $(PARENT) $(N).$(EXT)
 $(PARENT) $(K).$(EXT)
 ";
 
-const BASIC_RULE_CONTENT: &str = r"[]";
+const BASIC_RULE_CONTENT: &str = "[]";
 
 #[derive(Serialize, Deserialize)]
 struct SettingsJson {
@@ -27,7 +27,10 @@ struct SettingsJson {
 
 impl Default for SettingsJson {
     fn default() -> Self {
-        Self { dark_theme: true, language: "English".to_string() }
+        Self {
+            dark_theme: true,
+            language: "English".to_string(),
+        }
     }
 }
 
@@ -101,7 +104,11 @@ pub fn load_custom_rules() -> Vec<String> {
                     .lines()
                     .filter_map(|s| {
                         let t = s.trim().to_string();
-                        if t.is_empty() { None } else { Some(t) }
+                        if t.is_empty() {
+                            None
+                        } else {
+                            Some(t)
+                        }
                     })
                     .collect();
             }

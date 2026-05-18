@@ -133,7 +133,7 @@ fn format_captures(regex: &Regex, text: &str) -> String {
             let header = fls!("label_replace_captures_number", generate_translation_hashmap(vec![("capture_number", n.to_string())]));
             let mut groups = Vec::with_capacity(n);
             for (i, m) in caps.iter().enumerate() {
-                let s = m.map(|x| x.as_str()).unwrap_or("");
+                let s = m.map_or("", |x| x.as_str());
                 groups.push(format!("{i}: {s}"));
             }
             format!("{header} - {}", groups.join(", "))
@@ -199,7 +199,7 @@ pub fn refresh_outdated_or_recompute(ui: &MainWindow, state: &SharedState) {
     if rules_n == 0 {
         // No rules → future_name == name (ItemStruct init), nothing to recompute, nothing outdated.
         let mut state_mut = state.borrow_mut();
-        for file in state_mut.files.iter_mut() {
+        for file in &mut state_mut.files {
             if file.future_name != file.name {
                 file.future_name = file.name.clone();
             }
@@ -221,13 +221,7 @@ pub fn refresh_future_names(ui: &MainWindow, state: &SharedState) {
         let compiled_regexes: Vec<Option<Regex>> = rules_clone
             .rules
             .iter()
-            .map(|r| {
-                if r.rule_data.use_regex {
-                    Regex::new(&r.rule_data.text_to_find).ok()
-                } else {
-                    None
-                }
-            })
+            .map(|r| if r.rule_data.use_regex { Regex::new(&r.rule_data.text_to_find).ok() } else { None })
             .collect();
 
         for (idx, file) in state_mut.files.iter_mut().enumerate() {
@@ -479,10 +473,7 @@ pub fn save_rule_set(ui: &MainWindow, state: &SharedState, name: &str) {
         return;
     }
     let rules = state.borrow().rules.rules.clone();
-    let new_entry = MultipleRules {
-        name: name.to_string(),
-        rules,
-    };
+    let new_entry = MultipleRules { name: name.to_string(), rules };
     let mut all = load_rules();
     if let Some(existing) = all.iter_mut().find(|m| m.name == name) {
         *existing = new_entry;
@@ -534,10 +525,7 @@ pub fn refresh_rule_sets(ui: &MainWindow) {
     };
     ui.global::<GuiState>().set_existing_rule_set_names(names_text.into());
 
-    let entries: Vec<RuleSetEntry> = all
-        .into_iter()
-        .map(|m| RuleSetEntry { name: m.name.into() })
-        .collect();
+    let entries: Vec<RuleSetEntry> = all.into_iter().map(|m| RuleSetEntry { name: m.name.into() }).collect();
     ui.global::<Callabler>().set_saved_rule_sets(ModelRc::new(VecModel::from(entries)));
 }
 
