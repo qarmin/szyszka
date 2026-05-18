@@ -56,6 +56,7 @@ clippy.collapsible_else_if = "allow" # Sometimes it is more readable
 clippy.iter_on_single_items = "allow" # Allows to extend items
 clippy.unwrap_used = "allow"
 clippy.indexing_slicing = "allow"
+clippy.todo = "allow"
 
 
 clippy.doc_broken_link = "warn"
@@ -137,7 +138,6 @@ clippy.string_add_assign = "warn"
 clippy.string_slice = "warn"
 clippy.suspicious_operation_groupings = "warn"
 clippy.suspicious_xor_used_as_pow = "warn"
-clippy.todo = "warn"
 clippy.trait_duplication_in_bounds = "warn"
 clippy.trivial_regex = "warn"
 clippy.type_repetition_in_bounds = "warn"
