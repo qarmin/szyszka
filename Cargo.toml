@@ -48,8 +48,15 @@ log-panics = { version = "2.1", features = ["with-backtrace"] }
 [build-dependencies]
 slint-build = "1.13"
 
-[profile.dev.package."*"]
-opt-level = 3
+[profile.dev.package."*"] # OPT PACKAGES
+opt-level = 3 # OPT PACKAGES
+
+# Fast compilation and small binary size, used in CI debug builds
+[profile.fastci]
+inherits = "dev"
+strip = "symbols"
+debug = false
+lto = "off"
 
 
 [lints]

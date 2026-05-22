@@ -9,52 +9,35 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  linux-default:
-    strategy:
-      matrix:
-        toolchain: [ stable, 1.92.0 ]
-        type: [ release ]
+  linux:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup rust version
-        run: rustup default ${{ matrix.toolchain }}
-
-      - name: Install basic libraries
-        run: sudo apt-get update; sudo apt install libgtk-4-dev -y
+        run: rustup default 1.94.1
 
       - name: Build Release
-        run: cargo build --release
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-C debuginfo=0"
-        if: ${{ matrix.type == 'release' }}
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          echo "VERS=release" >> $GITHUB_ENV
 
-      - name: Store Linux GUI
-        uses: actions/upload-artifact@v3
+          cargo build --release
+          mv target/release/szyszka linux_szyszka_x86_64
+
+      - name: Build Debug
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          sed -i 's/^\(\[profile\.dev\.package.*\)/#\1/' Cargo.toml
+          sed -i 's|^opt-level = 3 # OPT PACKAGES|#opt-level = 3 # OPT PACKAGES|' Cargo.toml
+
+          echo "VERS=debug" >> $GITHUB_ENV
+
+          cargo build --profile fastci
+          mv target/fastci/szyszka linux_szyszka_x86_64
+
+      - name: Store
+        uses: actions/upload-artifact@v6
         with:
-          name: szyszka-${{ runner.os }}-${{ matrix.toolchain }}
-          path: target/release/szyszka
-        if: ${{ matrix.type == 'release' }}
-
-  linux-tests:
-    strategy:
-      matrix:
-        toolchain: [ stable ]
-        type: [ debug ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup rust version
-        run: rustup default ${{ matrix.toolchain }}
-
-      - name: Install Dependencies
-        run: sudo apt-get update; sudo apt install libgtk-4-dev librsvg2-dev wget fuse libfuse2 -y xvfb
-
-      - name: Test
-        run: xvfb-run cargo test
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-C debuginfo=0"
+          name: szyszka-${{ runner.os }}-${{ env.VERS }}
+          path: linux_szyszka_x86_64

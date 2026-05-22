@@ -10,35 +10,34 @@ env:
 
 jobs:
   macos:
-    strategy:
-      matrix:
-        toolchain: [ stable ]
-        type: [ release ]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup rust version
-        run: rustup default ${{ matrix.toolchain }}
-
-      - name: Install Homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-      - name: Override link[WORKAROUND] # Looks that this is a bug with current homebrew or GitHub CI
-        run: rm '/usr/local/bin/2to3'
-
-      - name: Install GTK4
-        run: brew install rust gtk4
+        run: rustup default 1.94.1
 
       - name: Build Release
-        run: cargo build --release
-        env:
-          CARGO_INCREMENTAL: 0
-        if: ${{ matrix.type == 'release'}}
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          echo "VERS=release" >> $GITHUB_ENV
 
-      - name: Store MacOS GUI
-        uses: actions/upload-artifact@v3
+          cargo build --release
+          mv target/release/szyszka mac_szyszka
+
+      - name: Build Debug
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          sed -i '' 's/^\(\[profile\.dev\.package.*\)/#\1/' Cargo.toml
+          sed -i '' 's|^opt-level = 3 # OPT PACKAGES|#opt-level = 3 # OPT PACKAGES|' Cargo.toml
+
+          echo "VERS=debug" >> $GITHUB_ENV
+
+          cargo build --profile fastci
+          mv target/fastci/szyszka mac_szyszka
+
+      - name: Store
+        uses: actions/upload-artifact@v6
         with:
-          name: szyszka-${{ runner.os }}-${{ matrix.toolchain }}
-          path: target/release/szyszka
-        if: ${{ matrix.type == 'release' }}
+          name: szyszka-${{ runner.os }}-${{ env.VERS }}
+          path: mac_szyszka
