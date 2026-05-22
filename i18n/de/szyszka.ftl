@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - druckt Zahlen (Argumente sind optional)
     $(N:3:4:5) gibt Zahlen aus 3 aus. mit Schritt 4
             und füllt sie mit Nullen bis 5 Positionen.
-    	K statt dessen nur Position in der Liste, verwendet auch Positionselement im Ordner.
+            K statt dessen nur Position in der Liste, verwendet auch Positionselement im Ordner.
 menu_button_load_custom_rule = Eigene Regelauswahl
 button_save_custom_rule = Eigene Regel speichern
 

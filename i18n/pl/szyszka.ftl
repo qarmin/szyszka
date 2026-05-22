@@ -32,6 +32,7 @@ settings_language_label = Język
 settings_open_rules = Otwórz plik ustawień reguł
 settings_open_cache_custom_texts = Otwórz plik ustawień niestandardowych reguł
 settings_open_config_dir = Otwórz katalog konfiguracyjny
+settings_open_log_folder = Otwórz katalog z logami
 check_button_dark_theme = Ciemne ikony
 # Other in main window
 bottom_rule_label_rules = Reguły
@@ -40,9 +41,9 @@ upper_files_folders_label_update = Pliki/foldery({ $files_number }) - ##### WYMA
 upper_files_folders_label_up_to_date = Pliki/foldery({ $files_number }) - aktualne
 # Select popover
 button_select_all = Zaznacz wszystko
+button_unselect_all = Odznacz wszystko
 button_select_reverse = Odwróć zaznaczenie
-button_select_custom = Własne zaznaczanie
-button_unselect_custom = Własne odznaczanie
+button_select_custom = Własne zaznaczanie / odznaczanie
 button_select_changed = Wybierz zmienione
 button_unselect_changed = Odznacz zmienione
 # Un/Select custom
@@ -67,8 +68,7 @@ dialog_confirm_renaming = Potwierdź zmianę nazwy
 dialog_outdated_results = Nieaktualne wyniki
 dialog_results_of_renaming = Wyniki zmiany nazwy
 dialog_save_rule = Zapisz regułę
-dialog_select_custom = Własne zaznaczanie
-dialog_unselect_custom = Własne odznaczanie
+dialog_select_custom = Własne zaznaczanie / odznaczanie
 
 # Rule Window
 
@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - dodaje numery (argumenty są opcjonalne)
     $(N:3:4:5) dodaje numery od 3, z krokiem 4
             i wypełnia je zerami do 5 pozycji.
-    	K zamiast pozycji na liście, używa pozycji w folderze.
+            K zamiast pozycji na liście, używa pozycji w folderze.
 menu_button_load_custom_rule = Wybierz zapisane reguły
 button_save_custom_rule = Zapisz własną regułę
 

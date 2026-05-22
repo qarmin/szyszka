@@ -24,8 +24,8 @@ pub struct SingleRule {
     pub rule_description: String,
 }
 
+#[cfg(test)]
 impl SingleRule {
-    #[allow(dead_code)] // Used in tests for now
     pub fn new() -> Self {
         Self {
             rule_type: RuleType::Custom,
@@ -34,40 +34,29 @@ impl SingleRule {
             rule_description: String::new(),
         }
     }
-    // pub fn create_rule(rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) -> Self {
-    //     SingleRule {
-    //         rule_type,
-    //         rule_place,
-    //         rule_data,
-    //         rule_description,
-    //     }
-    // }
 }
+
 #[derive(Clone, Debug)]
 pub struct Rules {
     pub rules: Vec<SingleRule>,
-    pub edit_mode: Option<usize>,
-    // Used to store index of changed rule
-    pub updated: bool, // Used to warn user if records needs to be updated
+    pub updated: bool,
+}
+
+impl Default for Rules {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Rules {
     pub fn new() -> Self {
-        Self {
-            rules: vec![],
-            edit_mode: None,
-            updated: true,
-        }
+        Self { rules: vec![], updated: true }
     }
-    // pub fn add_rule(&mut self, rule_type: RuleType, rule_place: RulePlace, rule_data: RuleData, rule_description: String) {
-    //     self.rules.push(SingleRule::create_rule(rule_type, rule_place, rule_data, rule_description));
-    // }
+
     pub fn add_single_rule(&mut self, single_rule: SingleRule) {
         self.rules.push(single_rule);
     }
-    pub fn remove_rule(&mut self, index: usize) {
-        self.rules.remove(index);
-    }
+
     pub fn apply_all_rules_to_item(
         &self,
         mut item: String,
@@ -77,7 +66,7 @@ impl Rules {
         compiled_regexes: &[Option<Regex>],
     ) -> String {
         debug_assert_eq!(self.rules.len(), compiled_regexes.len());
-        for (rule, regex) in (self.rules.iter()).zip(compiled_regexes.iter()) {
+        for (rule, regex) in self.rules.iter().zip(compiled_regexes.iter()) {
             match rule.rule_type {
                 RuleType::CaseSize => {
                     item = rule_change_size_letters(item.as_str(), rule);
@@ -121,7 +110,6 @@ pub enum RuleType {
     Normalize,
 }
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum RulePlace {
     None = 0,
@@ -189,7 +177,6 @@ pub struct RuleData {
 }
 
 impl RuleData {
-    // A little wasteful, but rules will be max 10 most of time, so this is not necessary to optimize
     pub fn new() -> Self {
         Self {
             add_text_text: String::new(),
@@ -198,7 +185,7 @@ impl RuleData {
             case_sensitive: false,
             custom_text: String::new(),
             number_start: 0,
-            number_step: 0,
+            number_step: 1,
             fill_with_zeros: 0,
             text_to_find: String::new(),
             text_to_replace: String::new(),
@@ -206,5 +193,13 @@ impl RuleData {
             regex_replace_all: false,
             full_normalize: false,
         }
+    }
+}
+
+pub fn split_file_name(path: &std::path::Path) -> (String, String) {
+    match (path.file_stem(), path.extension()) {
+        (Some(name), Some(extension)) => (name.to_string_lossy().to_string(), extension.to_string_lossy().to_string()),
+        (Some(name), None) => (name.to_string_lossy().to_string(), String::new()),
+        (None, _) => (String::new(), String::new()),
     }
 }

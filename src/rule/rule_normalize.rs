@@ -1,4 +1,4 @@
-use crate::rule::rules::*;
+use crate::rule::rules::{RulePlace, RuleType, SingleRule};
 
 pub fn rule_normalize(data_to_change: &str, rule: &SingleRule) -> String {
     let return_string;

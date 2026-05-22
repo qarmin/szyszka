@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - imprime números (argumentos são opcionais)
     $(N:3:4:5) imprime números a partir de 3, com o passo 4
             e preenche-os com zeros a 5 posições.
-    	K em vez disso, apenas posiciona na lista, também usa a posição de item na pasta.
+            K em vez disso, apenas posiciona na lista, também usa a posição de item na pasta.
 menu_button_load_custom_rule = Seletor de regra personalizado
 button_save_custom_rule = Salvar Regra Customizada
 

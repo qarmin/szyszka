@@ -1,21 +1,23 @@
-build_all:
-    cargo build --release
-    cargo build
-    cargo clippy
-    cargo test
+run:
+    cargo run
 
-upgrade:
-    cargo +nightly -Z unstable-options update --breaking
-    cargo update
+runr:
+    cargo run --release
+
+build:
+    cargo build
+
+buildr:
+    cargo build --release
+
+clip:
+    cargo clippy --fix --allow-dirty --allow-staged --all-targets
 
 fix:
     cargo +nightly fmt
-    cargo clippy --fix --allow-dirty --allow-staged --all-features --all-targets
+    cargo clippy --fix --allow-dirty --allow-staged --all-targets
     cargo +nightly fmt
     cargo fmt
 
-fixn:
-    cargo +nightly fmt
-    RUSTUP_TOOLCHAIN=nightly cargo clippy --fix --allow-dirty --allow-staged --all-features --all-targets
-    cargo +nightly fmt
-    cargo fmt
+upgrade:
+    cargo update

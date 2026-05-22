@@ -3,80 +3,102 @@ use std::io::BufReader;
 use std::path::{Path, PathBuf};
 
 use directories_next::ProjectDirs;
+use log::error;
+use serde::{Deserialize, Serialize};
 
 use crate::rule::rules::MultipleRules;
 
 pub const CUSTOM_TEXT_FILE_NAME: &str = "custom_text_names.txt";
 pub const RULES_FILE_NAME: &str = "rules_settings.json";
-pub const LANGUAGE_FILE_NAME: &str = "language.txt";
-pub const DARK_THEME_FILE_NAME: &str = "dark_theme.txt";
+pub const SETTINGS_FILE_NAME: &str = "settings.json";
 
-const BASIC_CUSTOM_COMMANDS: &str = r"FILE_$(N).$(EXT)
+const BASIC_CUSTOM_COMMANDS: &str = "FILE_$(N).$(EXT)
 FILE_$(K).$(EXT)
 $(PARENT) $(N).$(EXT)
 $(PARENT) $(K).$(EXT)
 ";
 
-const BASIC_RULE_CONTENT: &str = r"[]";
+const BASIC_RULE_CONTENT: &str = "[]";
 
-pub fn get_dark_theme_config_path() -> Option<PathBuf> {
-    if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
-        return Some(PathBuf::from(proj_dirs.config_dir()).join(DARK_THEME_FILE_NAME));
-    }
-    None
+#[derive(Serialize, Deserialize)]
+struct SettingsJson {
+    dark_theme: bool,
+    language: String,
 }
 
-pub fn load_dark_theme_config_or_create() -> bool {
-    if let Some(path) = get_dark_theme_config_path() {
-        if !Path::new(&path).is_file() {
-            let _ = fs::write(&path, "false");
+impl Default for SettingsJson {
+    fn default() -> Self {
+        Self {
+            dark_theme: true,
+            language: "English".to_string(),
         }
-
-        if let Ok(thing) = fs::read_to_string(&path) {
-            return thing.parse().unwrap_or(false);
-        };
     }
-    false
-}
-
-pub fn save_dark_theme(is_dark_theme: bool) {
-    if let Some(path) = get_dark_theme_config_path() {
-        let _ = fs::write(path, is_dark_theme.to_string());
-    }
-}
-
-pub fn get_language_config_path() -> Option<PathBuf> {
-    if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
-        return Some(PathBuf::from(proj_dirs.config_dir()).join(LANGUAGE_FILE_NAME));
-    }
-    None
 }
 
 pub fn get_config_path() -> Option<PathBuf> {
-    if let Some(proj_dirs) = ProjectDirs::from("pl", "Qarmin", "Szyszka") {
-        return Some(PathBuf::from(proj_dirs.config_dir()));
-    }
-    None
+    ProjectDirs::from("pl", "Qarmin", "SzyszkaSlint").map(|p| PathBuf::from(p.config_dir()))
+}
+
+pub fn get_settings_file() -> Option<PathBuf> {
+    get_config_path().map(|p| p.join(SETTINGS_FILE_NAME))
 }
 
 pub fn get_custom_text_config_file() -> Option<PathBuf> {
-    if let Some(config_path) = get_config_path() {
-        return Some(config_path.join(CUSTOM_TEXT_FILE_NAME));
-    }
-    None
+    get_config_path().map(|p| p.join(CUSTOM_TEXT_FILE_NAME))
 }
 
 pub fn get_rules_config_file() -> Option<PathBuf> {
-    if let Some(config_path) = get_config_path() {
-        return Some(config_path.join(RULES_FILE_NAME));
+    get_config_path().map(|p| p.join(RULES_FILE_NAME))
+}
+
+fn load_settings() -> SettingsJson {
+    let Some(path) = get_settings_file() else {
+        return SettingsJson::default();
+    };
+    if !path.is_file() {
+        return SettingsJson::default();
     }
-    None
+    let Ok(file) = fs::File::open(&path) else {
+        return SettingsJson::default();
+    };
+    serde_json::from_reader(BufReader::new(file)).unwrap_or_default()
+}
+
+fn save_settings(settings: &SettingsJson) {
+    let Some(path) = get_settings_file() else {
+        return;
+    };
+    if let Some(parent) = path.parent() {
+        let _ = fs::create_dir_all(parent);
+    }
+    if let Ok(serialized) = serde_json::to_string_pretty(settings) {
+        let _ = fs::write(path, serialized);
+    }
+}
+
+pub fn load_dark_theme_config_or_create() -> bool {
+    load_settings().dark_theme
+}
+
+pub fn save_dark_theme(is_dark_theme: bool) {
+    let mut s = load_settings();
+    s.dark_theme = is_dark_theme;
+    save_settings(&s);
+}
+
+pub fn load_saved_language() -> String {
+    load_settings().language
+}
+
+pub fn save_language(combo_text: &str) {
+    let mut s = load_settings();
+    s.language = combo_text.to_string();
+    save_settings(&s);
 }
 
 pub fn load_custom_rules() -> Vec<String> {
     if let Some(custom_file) = get_custom_text_config_file() {
         create_custom_text_file_if_needed();
-
         match fs::read_to_string(custom_file) {
             Ok(content) => {
                 return content
@@ -92,11 +114,21 @@ pub fn load_custom_rules() -> Vec<String> {
                     .collect();
             }
             Err(e) => {
-                eprintln!("Error while reading file with custom texts {e}");
+                error!("Error while reading file with custom texts {e}");
             }
         }
     }
     vec![]
+}
+
+pub fn save_custom_rules(rules: &[String]) {
+    if let Some(custom_file) = get_custom_text_config_file() {
+        create_custom_text_file_if_needed();
+        let joined = rules.join("\n");
+        if let Err(e) = fs::write(custom_file, joined) {
+            error!("Failed to save custom texts: {e}");
+        }
+    }
 }
 
 pub fn load_rules() -> Vec<MultipleRules> {
@@ -107,14 +139,13 @@ pub fn load_rules() -> Vec<MultipleRules> {
             return vec![];
         };
         let reader = BufReader::new(file_handler);
-        let loaded_rules = match serde_json::from_reader(reader) {
-            Ok(t) => t,
+        match serde_json::from_reader(reader) {
+            Ok(t) => return t,
             Err(e) => {
-                eprintln!("Failed to load rules, reason {e}");
+                error!("Failed to load rules, reason {e}");
                 return vec![];
             }
-        };
-        return loaded_rules;
+        }
     }
     vec![]
 }
@@ -123,9 +154,15 @@ pub fn save_rules_to_file(rules: &[MultipleRules]) {
     if let Some(custom_file) = get_rules_config_file() {
         create_rules_file_if_needed();
 
-        let serialized = serde_json::to_string_pretty(rules).unwrap();
+        let serialized = match serde_json::to_string_pretty(rules) {
+            Ok(s) => s,
+            Err(e) => {
+                error!("Failed to serialize rules, reason {e}");
+                return;
+            }
+        };
         if let Err(e) = fs::write(custom_file, serialized) {
-            eprintln!("Failed to save rules, reason {e}");
+            error!("Failed to save rules, reason {e}");
         }
     }
 }
@@ -133,9 +170,11 @@ pub fn save_rules_to_file(rules: &[MultipleRules]) {
 pub fn create_custom_text_file_if_needed() {
     if let Some(custom_file) = get_custom_text_config_file() {
         if !Path::new(&custom_file).is_file() {
-            let _ = fs::create_dir_all(Path::new(&custom_file).parent().unwrap());
+            if let Some(parent) = Path::new(&custom_file).parent() {
+                let _ = fs::create_dir_all(parent);
+            }
             if let Err(e) = fs::write(&custom_file, BASIC_CUSTOM_COMMANDS) {
-                eprintln!("Failed to create file, reason {e}");
+                error!("Failed to create file, reason {e}");
             }
         }
     }
@@ -144,22 +183,11 @@ pub fn create_custom_text_file_if_needed() {
 pub fn create_rules_file_if_needed() {
     if let Some(custom_file) = get_rules_config_file() {
         if !Path::new(&custom_file).is_file() {
-            let _ = fs::create_dir_all(Path::new(&custom_file).parent().unwrap());
-            if let Err(e) = fs::write(&custom_file, BASIC_RULE_CONTENT) {
-                eprintln!("Failed to create file, reason {e}");
+            if let Some(parent) = Path::new(&custom_file).parent() {
+                let _ = fs::create_dir_all(parent);
             }
-        }
-    }
-}
-
-pub fn create_rule_settings_if_needed() {
-    if let Some(rules_config) = get_rules_config_file() {
-        if !Path::new(&rules_config).is_file() {
-            let _ = fs::create_dir_all(Path::new(&rules_config).parent().unwrap());
-
-            // TODO Add default rules
-            if let Err(e) = fs::write(&rules_config, "") {
-                eprintln!("Failed to create file {rules_config:?}, reason {e}");
+            if let Err(e) = fs::write(&custom_file, BASIC_RULE_CONTENT) {
+                error!("Failed to create file, reason {e}");
             }
         }
     }

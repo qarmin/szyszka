@@ -93,7 +93,7 @@ label_custom_instruction =
     $(N)/$(K) - stampa i numeri (gli argomenti sono opzionali)
     $(N:3:4:5) stampa i numeri da 3, con passo 4
             e li riempie con zeri a 5 posizioni.
-    	<unk> K invece solo la posizione nella lista, utilizza anche l'elemento di posizione nella cartella.
+            <unk> K invece solo la posizione nella lista, utilizza anche l'elemento di posizione nella cartella.
 menu_button_load_custom_rule = Selettore regola personalizzata
 button_save_custom_rule = Salva regola personalizzata
 

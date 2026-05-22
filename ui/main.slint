@@ -77,7 +77,7 @@ export component MainWindow inherits Window {
             }
             Rectangle { horizontal-stretch: 1; }
             Button {
-                icon: @image-url("../../icons/szy_settings.svg");
+                icon: @image-url("../icons/szy_settings.svg");
                 colorize-icon: true;
                 clicked => { GuiState.settings_open = !GuiState.settings_open; }
             }
@@ -248,20 +248,20 @@ export component MainWindow inherits Window {
                 Button { text: Translations.upper_remove_selection_button; clicked => { Callabler.remove-selected-files(); } }
                 Button {
                     text: Translations.upper_select_popup_button;
-                    icon: @image-url("../../icons/szy_select.svg");
+                    icon: @image-url("../icons/szy_select.svg");
                     colorize-icon: true;
                     clicked => { GuiState.select_popup_open = !GuiState.select_popup_open; }
                 }
                 Button { text: Translations.upper_update_names_button; clicked => { Callabler.update-names(); } }
                 Button {
                     text: Translations.upper_results_one_up_button;
-                    icon: @image-url("../../icons/szy_up.svg");
+                    icon: @image-url("../icons/szy_up.svg");
                     colorize-icon: true;
                     clicked => { Callabler.results-move-up(); }
                 }
                 Button {
                     text: Translations.upper_results_one_down_button;
-                    icon: @image-url("../../icons/szy_down.svg");
+                    icon: @image-url("../icons/szy_down.svg");
                     colorize-icon: true;
                     clicked => { Callabler.results-move-down(); }
                 }
@@ -295,13 +295,13 @@ export component MainWindow inherits Window {
                 } }
                 Button {
                     text: Translations.bottom_rule_one_up_button;
-                    icon: @image-url("../../icons/szy_up.svg");
+                    icon: @image-url("../icons/szy_up.svg");
                     colorize-icon: true;
                     clicked => { Callabler.rule-move-up(); }
                 }
                 Button {
                     text: Translations.bottom_rule_one_down_button;
-                    icon: @image-url("../../icons/szy_down.svg");
+                    icon: @image-url("../icons/szy_down.svg");
                     colorize-icon: true;
                     clicked => { Callabler.rule-move-down(); }
                 }

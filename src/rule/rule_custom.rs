@@ -1,3 +1,5 @@
+#![allow(clippy::string_slice)]
+
 use std::cmp::min;
 use std::path::Component::Normal;
 use std::path::Path;
@@ -5,8 +7,7 @@ use std::path::Path;
 use chrono::DateTime;
 use humansize::{format_size, BINARY};
 
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
+use crate::rule::rules::{split_file_name, RulePlace, RuleType, SingleRule};
 
 pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number: u64, rule_number_in_folder: u64, file_data: Option<(u64, u64, u64, &str)>) -> String {
     let (name, extension) = split_file_name(Path::new(data_to_change));
@@ -19,7 +20,6 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
 
     let mut new_string = String::new();
 
-    // Random data to visualize typical usage in examples
     if let Some(f_data) = file_data {
         modification_date = DateTime::from_timestamp(f_data.0 as i64, 0)
             .expect("Failed to create DateTime(should never happens)")
@@ -30,13 +30,8 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
             .to_string()
             .replace(':', "_");
         size = format_size(f_data.2, BINARY);
-        if let Some(last_component) = Path::new(&f_data.3).components().next_back() {
-            if let Normal(path) = last_component {
-                parent_folder = path.to_str().unwrap_or("").to_string();
-            } else {
-                parent_folder = String::new();
-                eprintln!("Failed to read latest component from {last_component:?}");
-            }
+        if let Some(Normal(path)) = Path::new(&f_data.3).components().next_back() {
+            parent_folder = path.to_str().unwrap_or("").to_string();
         } else {
             parent_folder = String::new();
         }
@@ -50,7 +45,6 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
     match rule.rule_type {
         RuleType::Custom => match rule.rule_place {
             RulePlace::None => {
-                // let mut start_index: u32 = 0;
                 let mut latest_end_index: usize = 0;
                 loop {
                     if let Some(start) = string_to_parse[latest_end_index..].find("$(") {
@@ -85,11 +79,11 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
                             }
                         } else {
                             new_string.push_str(&string_to_parse[latest_end_index + start..]);
-                            break; // No more )
+                            break;
                         }
                     } else {
                         new_string.push_str(&string_to_parse[latest_end_index..]);
-                        break; // There is no more things special things
+                        break;
                     }
                 }
             }
@@ -101,7 +95,7 @@ pub fn rule_custom(data_to_change: &str, rule: &SingleRule, general_rule_number:
     new_string
 }
 
-#[allow(clippy::too_many_arguments)]
+#[expect(clippy::too_many_arguments)]
 pub fn parse_string_rules(
     typ: &[&str],
     new_string: &mut String,
@@ -118,47 +112,33 @@ pub fn parse_string_rules(
     let mut invalid_data = true;
     'mat: {
         match typ[0] {
-            "CURR" => {
-                if typ.len() == 1 {
-                    new_string.push_str(data_to_change);
-                    invalid_data = false;
-                }
+            "CURR" if typ.len() == 1 => {
+                new_string.push_str(data_to_change);
+                invalid_data = false;
             }
-            "NAME" => {
-                if typ.len() == 1 {
-                    new_string.push_str(name);
-                    invalid_data = false;
-                }
+            "NAME" if typ.len() == 1 => {
+                new_string.push_str(name);
+                invalid_data = false;
             }
-            "EXT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(extension);
-                    invalid_data = false;
-                }
+            "EXT" if typ.len() == 1 => {
+                new_string.push_str(extension);
+                invalid_data = false;
             }
-            "SIZE" => {
-                if typ.len() == 1 {
-                    new_string.push_str(size);
-                    invalid_data = false;
-                }
+            "SIZE" if typ.len() == 1 => {
+                new_string.push_str(size);
+                invalid_data = false;
             }
-            "CREAT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(creation_date);
-                    invalid_data = false;
-                }
+            "CREAT" if typ.len() == 1 => {
+                new_string.push_str(creation_date);
+                invalid_data = false;
             }
-            "MODIF" => {
-                if typ.len() == 1 {
-                    new_string.push_str(modification_date);
-                    invalid_data = false;
-                }
+            "MODIF" if typ.len() == 1 => {
+                new_string.push_str(modification_date);
+                invalid_data = false;
             }
-            "PARENT" => {
-                if typ.len() == 1 {
-                    new_string.push_str(parent_folder);
-                    invalid_data = false;
-                }
+            "PARENT" if typ.len() == 1 => {
+                new_string.push_str(parent_folder);
+                invalid_data = false;
             }
             "N" | "K" => {
                 invalid_data = true;
@@ -193,7 +173,6 @@ pub fn parse_string_rules(
                         1
                     };
 
-                    // TODO think about putting it to docs or explaining it somewhere that bigger values will crash entire app, so value must be clamped
                     let fill_zeros = min(fill_zeros, 50);
 
                     let used_number = (if typ[0] == "N" { general_rule_number } else { rule_number_in_folder }) as i64;
@@ -218,9 +197,7 @@ pub fn parse_string_rules(
                     invalid_data = false;
                 }
             }
-            _ => {
-                // Just invalid rule
-            }
+            _ => {}
         }
     }
     invalid_data

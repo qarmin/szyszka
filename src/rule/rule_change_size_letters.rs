@@ -1,7 +1,6 @@
 use std::path::Path;
 
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
+use crate::rule::rules::{split_file_name, RulePlace, RuleType, SingleRule};
 
 pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> String {
     let (mut name, mut extension) = split_file_name(Path::new(data_to_change));
@@ -20,9 +19,7 @@ pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> Stri
                     RulePlace::Extension => {
                         extension = extension.to_uppercase();
                     }
-                    _ => {
-                        panic!("Not implemented function");
-                    }
+                    _ => panic!("Not implemented function"),
                 }
             } else {
                 match rule.rule_place {
@@ -36,18 +33,13 @@ pub fn rule_change_size_letters(data_to_change: &str, rule: &SingleRule) -> Stri
                     RulePlace::Extension => {
                         extension = extension.to_lowercase();
                     }
-                    _ => {
-                        panic!("Not implemented function");
-                    }
+                    _ => panic!("Not implemented function"),
                 }
             }
         }
-        _ => {
-            panic!("Invalid Rule type");
-        }
+        _ => panic!("Invalid Rule type"),
     }
 
-    // Handle also situation when e.g. file is "file." where there is not extension, but
     if !extension.is_empty() || data_to_change.contains('.') {
         format!("{name}.{extension}")
     } else {

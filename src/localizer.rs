@@ -28,13 +28,12 @@ macro_rules! fls {
     }};
 }
 
-// Get the `Localizer` to be used for localizing this library.
 pub fn localizer() -> Box<dyn Localizer> {
     Box::from(DefaultLocalizer::new(&*LANGUAGE_LOADER, &Localizations))
 }
 
 pub fn generate_translation_hashmap(vec: Vec<(&'static str, String)>) -> HashMap<&'static str, String> {
-    let mut hashmap: HashMap<&'static str, String> = Default::default();
+    let mut hashmap: HashMap<&'static str, String> = HashMap::new();
     for (key, value) in vec {
         hashmap.insert(key, value);
     }

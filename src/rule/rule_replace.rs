@@ -1,11 +1,11 @@
+#![allow(clippy::string_slice)]
+
 use regex::Regex;
 use std::path::Path;
 
-use crate::help_function::split_file_name;
-use crate::rule::rules::*;
+use crate::rule::rules::{split_file_name, RulePlace, RuleType, SingleRule};
 
 pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: Option<&Regex>) -> String {
-    // No data to change
     if rule.rule_data.text_to_find.is_empty() {
         return data_to_change.to_string();
     }
@@ -31,7 +31,7 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: Option<&Rege
                         return_string = regex.replace(data_to_change, text_to_replace.as_str()).to_string();
                     }
                 } else {
-                    return_string = data_to_change.to_string(); // Regex is broken, do not change content
+                    return_string = data_to_change.to_string();
                 }
             }
             RulePlace::Name => {
@@ -92,13 +92,9 @@ pub fn rule_replace(data_to_change: &str, rule: &SingleRule, regex: Option<&Rege
                     return_string = data_to_change;
                 }
             }
-            _ => {
-                panic!("Not implemented function");
-            }
+            _ => panic!("Not implemented function"),
         },
-        _ => {
-            panic!("Not implemented function");
-        }
+        _ => panic!("Not implemented function"),
     }
 
     return_string
@@ -147,6 +143,7 @@ mod test {
         rule.rule_data.case_sensitive = true;
         assert_eq!(rule_replace("aaa", &rule, None), "aaaaaa");
     }
+
     #[test]
     fn test_replace_regex() {
         let mut rule = SingleRule::new();
