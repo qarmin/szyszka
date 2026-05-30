@@ -15,6 +15,9 @@ use crate::fls;
 use crate::slint_gen::{GuiState, MainWindow, ProgressState};
 use crate::state::SharedState;
 
+/// Number of error lines shown per page in the results dialog.
+const ERROR_PAGE_SIZE: usize = 500;
+
 struct RenameResult {
     properly_renamed: u32,
     ignored: u32,
@@ -116,7 +119,7 @@ pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {
 
         match rx.try_recv() {
             Ok(result) => {
-                finalize_rename(&ui, &state_clone, result);
+                finalize_rename(&ui, &state_clone, &result);
                 if let Some(t) = th_c.borrow().as_ref() {
                     t.stop();
                 }
@@ -134,7 +137,7 @@ pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {
     state.borrow_mut().active_timer = timer_holder.borrow_mut().take();
 }
 
-fn finalize_rename(ui: &MainWindow, state: &SharedState, result: RenameResult) {
+fn finalize_rename(ui: &MainWindow, state: &SharedState, result: &RenameResult) {
     {
         let mut state_mut = state.borrow_mut();
         state_mut.files.clear();
@@ -146,22 +149,73 @@ fn finalize_rename(ui: &MainWindow, state: &SharedState, result: RenameResult) {
     gs.set_properly_renamed(result.properly_renamed as i32);
     gs.set_ignored_count(result.ignored as i32);
 
-    if result.failed.is_empty() {
-        gs.set_failed_text("".into());
-    } else {
+    {
         let text_err = fls!("renaming_error");
-        let mut text = String::new();
-        for i in result.failed {
-            text.push_str(&format!("{} -> {}, {text_err}: {}\n", i.0, i.1, i.2));
-        }
-        gs.set_failed_text(text.into());
+        let lines: Vec<String> = result.failed.iter().map(|(old, new, err)| format!("{old} -> {new}, {text_err}: {err}")).collect();
+        state.borrow_mut().failed_renames = lines;
     }
+    set_failed_page(ui, state, 0);
 
     hide_overlay(ui);
     gs.set_results_dialog_open(true);
 
     sync_files(ui, state);
     sync_outdated(ui, state);
+}
+
+/// Fills the results dialog with the requested page of the stored error list.
+pub fn set_failed_page(ui: &MainWindow, state: &SharedState, page: i32) {
+    let gs = ui.global::<GuiState>();
+    let state_ref = state.borrow();
+    let lines = &state_ref.failed_renames;
+    let total = lines.len();
+
+    if total == 0 {
+        gs.set_failed_text("".into());
+        gs.set_failed_total(0);
+        gs.set_failed_page(0);
+        gs.set_failed_pages(0);
+        return;
+    }
+
+    let pages = total.div_ceil(ERROR_PAGE_SIZE);
+    let page = page.clamp(0, pages as i32 - 1);
+    let start = page as usize * ERROR_PAGE_SIZE;
+    let end = (start + ERROR_PAGE_SIZE).min(total);
+
+    gs.set_failed_text(lines[start..end].join("\n").into());
+    gs.set_failed_total(total as i32);
+    gs.set_failed_page(page);
+    gs.set_failed_pages(pages as i32);
+}
+
+/// Copies every error line (across all pages) to the system clipboard.
+pub fn copy_all_errors(state: &SharedState) {
+    let text = state.borrow().failed_renames.join("\n");
+    if text.is_empty() {
+        return;
+    }
+
+    // X11/Wayland clipboard ownership must be held until another app reads the content.
+    // SetExtLinux::wait() blocks the thread until that happens, so we run it in the background
+    // instead of dropping the Clipboard immediately (which loses the contents).
+    std::thread::spawn(move || {
+        use arboard::Clipboard;
+        #[cfg(target_os = "linux")]
+        use arboard::SetExtLinux as _;
+        match Clipboard::new() {
+            Ok(mut ctx) => {
+                #[cfg(target_os = "linux")]
+                let result = ctx.set().wait().text(text);
+                #[cfg(not(target_os = "linux"))]
+                let result = ctx.set_text(text);
+                if let Err(e) = result {
+                    log::warn!("Failed to copy errors to clipboard: {e}");
+                }
+            }
+            Err(e) => log::warn!("Failed to create clipboard context: {e}"),
+        }
+    });
 }
 
 fn rename_one(old_name: &str, new_name: &str, ignored: &mut u32, properly_renamed: &mut u32, failed_renames: &mut Vec<(String, String, String)>, dest_exists_msg: &str) {

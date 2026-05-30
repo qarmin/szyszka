@@ -10,7 +10,7 @@ use log::{info, LevelFilter, Record};
 const APP_NAME: &str = "szyszka";
 
 pub fn get_cache_path() -> Option<PathBuf> {
-    ProjectDirs::from("pl", "Qarmin", "SzyszkaSlint").map(|p| PathBuf::from(p.cache_dir()))
+    ProjectDirs::from("pl", "Qarmin", "Szyszka").map(|p| PathBuf::from(p.cache_dir()))
 }
 
 pub fn setup_logger() {

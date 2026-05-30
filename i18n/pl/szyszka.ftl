@@ -148,14 +148,7 @@ check_button_trim_case_insensitive = Nieuwzględniaj wielkości liter
 label_trim_trim_text = Przytnij tekst
 label_trim_case_sensitivity = Wrażliwość na litery
 # Normalize name
-label_normalize_name =
-    Wszystko - zmienia nazwę na nazwę, która zawiera tylko
-                              znaki `a-z`, `0-9`, `-`, ` `, `.`.
-                              e.g. `żółć CZERona.Txt` -> `zolc-czerwona.txt`
-    
-    Częściowo - działa dokładnie tak samo jak powyższa opcja, ale pozwala
-                      na użycie spacji ` ` i dużych liter `A-Z`
-                      e.g. ` Źrebię Krokietowe.Rar ` -> `Zrebie Krokietowe.Rar`
+label_normalize_name = Wszystko – tylko znaki `a-z 0-9 - . spacja`. Częściowo – dodatkowo pozwala na `A-Z` i spacje.
 check_button_normalize_everything = Wszystko
 check_button_normalize_partial = Częściowo
 # RuleType

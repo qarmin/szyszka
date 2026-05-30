@@ -118,7 +118,6 @@ export component MainWindow inherits Window {
                             padding-left: 8px;
                             padding-right: 8px;
                             spacing: 0px;
-                            Rectangle { width: 28px; }
                             SortHeaderCell {
                                 width: GuiState.col_type_width;
                                 col_width: GuiState.col_type_width;
@@ -180,11 +179,6 @@ export component MainWindow inherits Window {
                                 padding-left: 8px;
                                 padding-right: 8px;
                                 spacing: 0px;
-                                CheckBox {
-                                    width: 28px;
-                                    checked: row.selected;
-                                    toggled => { Callabler.set-file-selected(idx, self.checked); }
-                                }
                                 Rectangle {
                                     width: GuiState.col_type_width;
                                     clip: true;
@@ -468,8 +462,8 @@ export component MainWindow inherits Window {
         Rectangle {
             x: (parent.width - self.width) / 2;
             y: (parent.height - self.height) / 2;
-            width: 420px;
-            height: 320px;
+            width: 480px;
+            height: 460px;
             background: Palette.background;
             border-radius: 8px;
             border-width: 1px;
@@ -740,8 +734,9 @@ export component MainWindow inherits Window {
         Rectangle {
             x: (parent.width - self.width) / 2;
             y: (parent.height - self.height) / 2;
-            width: 600px;
-            height: 360px;
+            // Compact when there are no errors, large when an error list is shown.
+            width: GuiState.failed_total > 0 ? 660px : 380px;
+            height: GuiState.failed_total > 0 ? 460px : 190px;
             background: Palette.background;
             border-radius: 8px;
             border-width: 1px;
@@ -752,8 +747,12 @@ export component MainWindow inherits Window {
                 Text { text: Translations.dialog_results_of_renaming; font-weight: 700; }
                 Text { text: "Properly renamed: " + GuiState.properly_renamed; }
                 Text { text: "Ignored: " + GuiState.ignored_count; }
-                if GuiState.failed_text != "" : Text { text: "Errors:"; font-weight: 700; }
-                if GuiState.failed_text != "" : Rectangle {
+                if GuiState.failed_total > 0 : Text {
+                    text: "Errors: " + GuiState.failed_total;
+                    font-weight: 700;
+                    color: red;
+                }
+                if GuiState.failed_total > 0 : Rectangle {
                     background: Palette.alternate-background;
                     border-radius: 4px;
                     vertical-stretch: 1;
@@ -764,7 +763,32 @@ export component MainWindow inherits Window {
                         }
                     }
                 }
+                if GuiState.failed_pages > 1 : HorizontalLayout {
+                    spacing: 6px;
+                    alignment: center;
+                    Button {
+                        text: "◀";
+                        enabled: GuiState.failed_page > 0;
+                        clicked => { Callabler.results-set-page(GuiState.failed_page - 1); }
+                    }
+                    Text {
+                        text: "Page " + (GuiState.failed_page + 1) + " / " + GuiState.failed_pages;
+                        vertical-alignment: center;
+                    }
+                    Button {
+                        text: "▶";
+                        enabled: GuiState.failed_page < GuiState.failed_pages - 1;
+                        clicked => { Callabler.results-set-page(GuiState.failed_page + 1); }
+                    }
+                }
+                // Keep the OK button pinned to the bottom when there is no error list to stretch.
+                if GuiState.failed_total == 0 : Rectangle { vertical-stretch: 1; }
                 HorizontalLayout {
+                    spacing: 6px;
+                    if GuiState.failed_total > 0 : Button {
+                        text: "Copy all errors";
+                        clicked => { Callabler.results-copy-errors(); }
+                    }
                     Rectangle { horizontal-stretch: 1; }
                     Button { text: Translations.dialog_button_ok; clicked => { GuiState.results_dialog_open = false; } }
                 }

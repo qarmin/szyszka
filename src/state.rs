@@ -15,6 +15,9 @@ pub struct AppState {
     pub edit_index: Option<usize>,
     pub active_timer: Option<slint::Timer>,
     pub pending_folders: Vec<PathBuf>,
+    /// Formatted error lines from the last rename, kept in full so the results
+    /// dialog can page through them and copy them all at once.
+    pub failed_renames: Vec<String>,
 }
 
 pub type SharedState = Rc<RefCell<AppState>>;

@@ -200,7 +200,7 @@ export global Translations {
     in-out property <string> label_trim_trim_text: "Trim text";
     in-out property <string> label_trim_case_sensitivity: "Case Sensitivity";
 
-    in-out property <string> label_normalize_name: "Everything / Partial normalization";
+    in-out property <string> label_normalize_name: "Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.";
     in-out property <string> check_button_normalize_everything: "Everything";
     in-out property <string> check_button_normalize_partial: "Partial";
 
@@ -303,6 +303,9 @@ export global GuiState {
     in-out property <int> properly_renamed: 0;
     in-out property <int> ignored_count: 0;
     in-out property <string> failed_text: "";
+    in-out property <int> failed_total: 0;
+    in-out property <int> failed_page: 0;
+    in-out property <int> failed_pages: 0;
 
     in-out property <string> select_custom_text: "";
     in-out property <bool> select_custom_select_dirs: true;
@@ -335,6 +338,8 @@ export global Callabler {
     callback select-custom-apply(string /*pattern*/, bool /*include_dirs*/, int /*mode_index*/, bool /*select_else_unselect*/);
     callback results-move-up();
     callback results-move-down();
+    callback results-set-page(int /*page*/);
+    callback results-copy-errors();
     callback update-names();
     callback start-renaming();
     callback confirm-renaming();
@@ -365,7 +370,6 @@ export global Callabler {
     callback open-config-dir();
     callback open-log-folder();
 
-    callback set-file-selected(int, bool);
     callback set-rule-selected(int, bool);
 
     // Row-click selection (krokiet-style):

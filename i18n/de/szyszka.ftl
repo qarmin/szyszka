@@ -148,14 +148,7 @@ check_button_trim_case_insensitive = Groß-/Kleinschreibung
 label_trim_trim_text = Text kürzen
 label_trim_case_sensitivity = Groß-/Kleinschreibung
 # Normalize name
-label_normalize_name =
-    Everything - renames the name to one that contains only the
-                              characters `a-z`, `0-9`, `-`, ` `, `.`.
-                              e.g. `żółć CZERona.Txt` -> `zolc-czerwona.txt`
-    
-    Partial - works exactly same as option above, but allows
-                      to use spaces ` ` and big letters `A-Z`
-                      e.g. ` Źrebię Krokietowe.Rar ` -> `Zrebie Krokietowe.Rar`
+label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
 check_button_normalize_everything = Alles
 check_button_normalize_partial = Teilweise
 # RuleType

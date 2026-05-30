@@ -401,7 +401,10 @@ export component RuleEditorPanel inherits Rectangle {
                     // NORMALIZE
                     if EditorState.current_tab == NotebookTab.normalize : VerticalLayout {
                         spacing: 6px;
-                        Text { text: Translations.label_normalize_name; wrap: word-wrap; }
+                        Text {
+                            text: Translations.label_normalize_name;
+                            wrap: word-wrap;
+                        }
                         HorizontalLayout {
                             spacing: 4px;
                             RadioBtn {

@@ -21,7 +21,7 @@ use crate::config::{load_dark_theme_config_or_create, load_saved_language, save_
 use crate::connect::files::{
     add_cli_paths, confirm_add_folders, move_selected_down, move_selected_up, pick_files_and_add, pick_folders_into_state, remove_selected, sort_files_by, SortKey,
 };
-use crate::connect::renaming::{perform_renaming, start_renaming_request};
+use crate::connect::renaming::{copy_all_errors, perform_renaming, set_failed_page, start_renaming_request};
 use crate::connect::rules_ops::{
     add_or_update_rule, close_editor, delete_custom_text, delete_rule_set, load_custom_text_into_editor, load_rule_set, move_rule_down, move_rule_up, open_editor,
     refresh_custom_texts, refresh_future_names, refresh_rule_sets, remove_rule, save_custom_text, save_rule_set, update_example,
@@ -167,6 +167,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(ui) = ui_weak.upgrade() {
                 perform_renaming(&ui, &state);
             }
+        });
+    }
+    {
+        let ui_weak = ui.as_weak();
+        let state = state.clone();
+        cb.on_results_set_page(move |page| {
+            if let Some(ui) = ui_weak.upgrade() {
+                set_failed_page(&ui, &state, page);
+            }
+        });
+    }
+    {
+        let state = state.clone();
+        cb.on_results_copy_errors(move || {
+            copy_all_errors(&state);
         });
     }
 
@@ -352,23 +367,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Selection toggles for individual rows
-    {
-        let ui_weak = ui.as_weak();
-        let state = state.clone();
-        cb.on_set_file_selected(move |idx, sel| {
-            if let Some(ui) = ui_weak.upgrade() {
-                {
-                    let mut state_mut = state.borrow_mut();
-                    let len = state_mut.files.len();
-                    state_mut.file_selected.resize(len, false);
-                    if let Some(s) = state_mut.file_selected.get_mut(idx as usize) {
-                        *s = sel;
-                    }
-                }
-                sync_files(&ui, &state);
-            }
-        });
-    }
     {
         let ui_weak = ui.as_weak();
         let state = state.clone();
