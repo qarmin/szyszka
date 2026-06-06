@@ -148,7 +148,7 @@ check_button_trim_case_insensitive = Без урахування регістр�
 label_trim_trim_text = Обрізати текст
 label_trim_case_sensitivity = Чутливість до регістру
 # Normalize name
-label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
+label_normalize_name = Everything - only `a-z 0-9 - . space`. Partial - also allows `A-Z` and spaces.
 check_button_normalize_everything = Все
 check_button_normalize_partial = Частково оплачено
 # RuleType

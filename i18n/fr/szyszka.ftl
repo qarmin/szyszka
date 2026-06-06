@@ -148,7 +148,7 @@ check_button_trim_case_insensitive = Cas Insensible
 label_trim_trim_text = Couper le texte
 label_trim_case_sensitivity = Sensibilité à la casse
 # Normalize name
-label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
+label_normalize_name = Everything - only `a-z 0-9 - . space`. Partial - also allows `A-Z` and spaces.
 check_button_normalize_everything = Tout
 check_button_normalize_partial = Partiellement
 # RuleType

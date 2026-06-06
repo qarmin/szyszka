@@ -148,7 +148,7 @@ check_button_trim_case_insensitive = 不敏感大小写
 label_trim_trim_text = 修剪文本
 label_trim_case_sensitivity = 案例灵敏度
 # Normalize name
-label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
+label_normalize_name = Everything - only `a-z 0-9 - . space`. Partial - also allows `A-Z` and spaces.
 check_button_normalize_everything = 全部内容
 check_button_normalize_partial = 部分的
 # RuleType

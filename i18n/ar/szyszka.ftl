@@ -148,7 +148,7 @@ check_button_trim_case_insensitive = حالة غير حساسة
 label_trim_trim_text = تقليم النص
 label_trim_case_sensitivity = حساسية الحالة
 # Normalize name
-label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
+label_normalize_name = Everything - only `a-z 0-9 - . space`. Partial - also allows `A-Z` and spaces.
 check_button_normalize_everything = كل شيء
 check_button_normalize_partial = جزئي
 # RuleType

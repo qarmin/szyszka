@@ -148,7 +148,7 @@ check_button_trim_case_insensitive = Rozlišovat velikost písmen
 label_trim_trim_text = Oříznout text
 label_trim_case_sensitivity = Citlivost případu
 # Normalize name
-label_normalize_name = Everything – only `a-z 0-9 - . space`. Partial – also allows `A-Z` and spaces.
+label_normalize_name = Everything - only `a-z 0-9 - . space`. Partial - also allows `A-Z` and spaces.
 check_button_normalize_everything = Vše
 check_button_normalize_partial = Částečné
 # RuleType
