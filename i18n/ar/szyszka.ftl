@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = الملفات/المجلدات ({ $files
 button_select_all = حدد الكل
 button_select_reverse = الاختيار العكسي
 button_select_custom = تحديد مخصص
-button_unselect_custom = إلغاء تحديد مخصص
+button_unselect_all = إلغاء تحديد الكل
 button_select_changed = حدد التغيير
 button_unselect_changed = غير محدد
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = النتائج العتيقة
 dialog_results_of_renaming = نتائج إعادة التسمية
 dialog_save_rule = حفظ القاعدة
 dialog_select_custom = تحديد مخصص
-dialog_unselect_custom = إلغاء تحديد مخصص
+settings_open_log_folder = فتح مجلد السجل
 
 # Rule Window
 

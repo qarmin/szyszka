@@ -112,8 +112,10 @@ pub fn collect_files_async(items_to_check: Vec<PathBuf>, dedup: &BTreeSet<String
 
 fn process_one_item(file_entry: &Path, dedup: &BTreeSet<String>, timezone_offset: i32) -> Option<ItemStruct> {
     let (path, name) = split_path(file_entry);
-    let full_str = file_entry.to_str()?.to_string();
-    if dedup.contains(&full_str) {
+    // Dedup on the canonical path so the same file referenced via a different (relative or
+    // symlinked) string is recognised as a duplicate. `dedup` is populated with canonical paths.
+    let canonical = file_entry.canonicalize().ok()?.to_string_lossy().to_string();
+    if dedup.contains(&canonical) {
         return None;
     }
 
@@ -130,7 +132,6 @@ fn process_one_item(file_entry: &Path, dedup: &BTreeSet<String>, timezone_offset
         .ok()
         .and_then(|t| t.duration_since(UNIX_EPOCH).ok())
         .map_or(0, |d| max(d.as_secs() as i64 + timezone_offset as i64, 0) as u64);
-    let canonical = file_entry.canonicalize().ok()?.to_string_lossy().to_string();
 
     Some(ItemStruct {
         full_name: canonical,

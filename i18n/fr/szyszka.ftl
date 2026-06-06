@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = Fichiers/Dossiers ({ $files_number }) - �
 button_select_all = Tout sélectionner
 button_select_reverse = Inverser la sélection
 button_select_custom = Sélectionnez Personnalisé
-button_unselect_custom = Désélectionner Personnalisé
+button_unselect_all = Tout désélectionner
 button_select_changed = Sélectionner les modifications
 button_unselect_changed = Désélectionner Changé
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Résultats périmés
 dialog_results_of_renaming = Résultats du renommage
 dialog_save_rule = Enregistrer la règle
 dialog_select_custom = Sélectionnez Personnalisé
-dialog_unselect_custom = Désélectionner Personnalisé
+settings_open_log_folder = Ouvrir le dossier des journaux
 
 # Rule Window
 

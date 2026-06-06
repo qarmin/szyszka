@@ -1,7 +1,5 @@
 use slint::{ComponentHandle, Timer, TimerMode};
-use std::cell::RefCell;
 use std::path::PathBuf;
-use std::rc::Rc;
 use std::sync::atomic::Ordering as AtomicOrdering;
 use std::sync::{mpsc, Arc};
 use std::time::Duration;
@@ -73,8 +71,6 @@ pub fn confirm_add_folders(ui: &MainWindow, state: &SharedState, scan_inside: bo
     let ui_weak = ui.as_weak();
     let state_clone = state.clone();
     let timer = Timer::default();
-    let timer_holder: Rc<RefCell<Option<Timer>>> = Rc::new(RefCell::new(None));
-    let th_c = timer_holder.clone();
 
     timer.start(TimerMode::Repeated, Duration::from_millis(80), move || {
         let Some(ui) = ui_weak.upgrade() else {
@@ -82,22 +78,19 @@ pub fn confirm_add_folders(ui: &MainWindow, state: &SharedState, scan_inside: bo
         };
         match rx.try_recv() {
             Ok(items) => {
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                // start_async_scan installs its own timer in `active_timer`, replacing (and
+                // dropping) this one, which stops the current callback.
                 start_async_scan(&ui, &state_clone, items, "Reading file metadata…");
             }
             Err(mpsc::TryRecvError::Empty) => {}
             Err(mpsc::TryRecvError::Disconnected) => {
                 hide_overlay(&ui);
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                state_clone.borrow_mut().active_timer = None;
             }
         }
     });
-    *timer_holder.borrow_mut() = Some(timer);
-    state.borrow_mut().active_timer = timer_holder.borrow_mut().take();
+    // Keep the timer alive so it keeps firing; the callback stops it by clearing this slot.
+    state.borrow_mut().active_timer = Some(timer);
 }
 
 fn start_async_scan(ui: &MainWindow, state: &SharedState, items: Vec<PathBuf>, message: &str) {
@@ -124,8 +117,6 @@ fn start_async_scan(ui: &MainWindow, state: &SharedState, items: Vec<PathBuf>, m
     let ui_weak = ui.as_weak();
     let state_clone = state.clone();
     let timer = Timer::default();
-    let timer_holder: Rc<RefCell<Option<Timer>>> = Rc::new(RefCell::new(None));
-    let th_c = timer_holder.clone();
 
     timer.start(TimerMode::Repeated, Duration::from_millis(70), move || {
         let Some(ui) = ui_weak.upgrade() else {
@@ -156,21 +147,18 @@ fn start_async_scan(ui: &MainWindow, state: &SharedState, items: Vec<PathBuf>, m
                 sync_files(&ui, &state_clone);
                 refresh_outdated_or_recompute(&ui, &state_clone);
                 hide_overlay(&ui);
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                // Drop the timer (held in state) to stop this repeated callback.
+                state_clone.borrow_mut().active_timer = None;
             }
             Err(mpsc::TryRecvError::Empty) => {}
             Err(mpsc::TryRecvError::Disconnected) => {
                 hide_overlay(&ui);
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                state_clone.borrow_mut().active_timer = None;
             }
         }
     });
-    *timer_holder.borrow_mut() = Some(timer);
-    state.borrow_mut().active_timer = timer_holder.borrow_mut().take();
+    // Keep the timer alive so it keeps firing; the callback stops it by clearing this slot.
+    state.borrow_mut().active_timer = Some(timer);
 }
 
 pub fn remove_selected(ui: &MainWindow, state: &SharedState) {

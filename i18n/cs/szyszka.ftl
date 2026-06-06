@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = Soubory/Složky({ $files_number }) - aktu
 button_select_all = Vybrat vše
 button_select_reverse = Reverzní výběr
 button_select_custom = Vybrat vlastní
-button_unselect_custom = Zrušit výběr vlastních
+button_unselect_all = Zrušit výběr vše
 button_select_changed = Vybrat změněné
 button_unselect_changed = Zrušit výběr změněn
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Zastaralé výsledky
 dialog_results_of_renaming = Výsledky přejmenování
 dialog_save_rule = Uložit pravidlo
 dialog_select_custom = Vybrat vlastní
-dialog_unselect_custom = Zrušit výběr vlastních
+settings_open_log_folder = Otevřít složku logů
 
 # Rule Window
 

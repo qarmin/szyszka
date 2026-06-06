@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = File/Cartelle({ $files_number }) - aggior
 button_select_all = Seleziona Tutto
 button_select_reverse = Selezione Inversa
 button_select_custom = Seleziona Personalizzato
-button_unselect_custom = Deseleziona Personalizzato
+button_unselect_all = Deseleziona tutto
 button_select_changed = Seleziona Modificato
 button_unselect_changed = Deseleziona Modificato
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Risultati obsoleti
 dialog_results_of_renaming = Risultati della rinominazione
 dialog_save_rule = Salva Regola
 dialog_select_custom = Seleziona Personalizzato
-dialog_unselect_custom = Deseleziona Personalizzato
+settings_open_log_folder = Apri cartella dei log
 
 # Rule Window
 

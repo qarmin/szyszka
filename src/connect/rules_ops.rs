@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use regex::Regex;
 use slint::{ComponentHandle, ModelRc, VecModel};
 
@@ -215,11 +217,16 @@ pub fn refresh_future_names(ui: &MainWindow, state: &SharedState) {
             .map(|r| if r.rule_data.use_regex { Regex::new(&r.rule_data.text_to_find).ok() } else { None })
             .collect();
 
+        // Indices are 1-based and the per-folder counter resets for each distinct path, matching
+        // the original GTK behaviour so $(N) (global), $(K) (per-folder) and AddNumber stay correct.
+        let mut folder_counter: HashMap<String, u32> = HashMap::new();
         for (idx, file) in state_mut.files.iter_mut().enumerate() {
+            let in_folder = folder_counter.entry(file.path.clone()).or_insert(0);
+            *in_folder += 1;
             let future = rules_clone.apply_all_rules_to_item(
                 file.name.clone(),
-                idx as u64,
-                idx as u32,
+                (idx + 1) as u64,
+                *in_folder,
                 (file.modification_date, file.creation_date, file.size, &file.path),
                 &compiled_regexes,
             );

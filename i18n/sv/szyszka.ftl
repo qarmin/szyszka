@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = Filer/Mappar({ $files_number }) - aktuell
 button_select_all = Markera alla
 button_select_reverse = Omvänd markering
 button_select_custom = Välj anpassad
-button_unselect_custom = Avmarkera anpassad
+button_unselect_all = Avmarkera alla
 button_select_changed = Välj Ändrad
 button_unselect_changed = Avmarkera ändrad
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Föråldrade resultat
 dialog_results_of_renaming = Resultat av att byta namn
 dialog_save_rule = Spara regel
 dialog_select_custom = Välj anpassad
-dialog_unselect_custom = Avmarkera anpassad
+settings_open_log_folder = Öppna loggmapp
 
 # Rule Window
 

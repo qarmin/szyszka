@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = 文件/文件夹({ $files_number }) - 最
 button_select_all = 选择所有
 button_select_reverse = 反向选择
 button_select_custom = 选择自定义
-button_unselect_custom = 取消选择自定义
+button_unselect_all = 取消选择所有
 button_select_changed = 选择已更改
 button_unselect_changed = 取消选择更改
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = 过时的结果
 dialog_results_of_renaming = 重命名结果
 dialog_save_rule = 保存规则
 dialog_select_custom = 选择自定义
-dialog_unselect_custom = 取消选择自定义
+settings_open_log_folder = 打开日志文件夹
 
 # Rule Window
 

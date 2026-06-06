@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = Arquivos/Pastas ({ $files_number }) - atu
 button_select_all = Selecionar Todos
 button_select_reverse = Seleção inversa
 button_select_custom = Selecionar personalizado
-button_unselect_custom = Desmarcar Personalizado
+button_unselect_all = Desmarcar todos
 button_select_changed = Selecionar Alterado
 button_unselect_changed = Desmarcar Alterado
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Resultados desatualizados
 dialog_results_of_renaming = Resultados da renomeação
 dialog_save_rule = Salvar Regra
 dialog_select_custom = Selecionar personalizado
-dialog_unselect_custom = Desmarcar Personalizado
+settings_open_log_folder = Abrir pasta de logs
 
 # Rule Window
 

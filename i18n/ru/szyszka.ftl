@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = Файлы/Папки({ $files_number }) 
 button_select_all = Выделить все
 button_select_reverse = Обратный выбор
 button_select_custom = Выбрать пользовательский
-button_unselect_custom = Снять выбор
+button_unselect_all = Снять выделение со всех
 button_select_changed = Выбрать измененные
 button_unselect_changed = Снять отметку с изменений
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = Результаты устарели
 dialog_results_of_renaming = Результаты переименования
 dialog_save_rule = Сохранить правило
 dialog_select_custom = Выбрать пользовательский
-dialog_unselect_custom = Снять выбор
+settings_open_log_folder = Открыть папку журналов
 
 # Rule Window
 

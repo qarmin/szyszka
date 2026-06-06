@@ -1,9 +1,7 @@
 use slint::{ComponentHandle, Timer, TimerMode};
-use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
-use std::rc::Rc;
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{mpsc, Arc};
 use std::time::Duration;
@@ -104,8 +102,6 @@ pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {
     let ui_weak = ui.as_weak();
     let state_clone = state.clone();
     let timer = Timer::default();
-    let timer_holder: Rc<RefCell<Option<Timer>>> = Rc::new(RefCell::new(None));
-    let th_c = timer_holder.clone();
     let counter_p = counter;
 
     timer.start(TimerMode::Repeated, Duration::from_millis(60), move || {
@@ -120,21 +116,18 @@ pub fn perform_renaming(ui: &MainWindow, state: &SharedState) {
         match rx.try_recv() {
             Ok(result) => {
                 finalize_rename(&ui, &state_clone, &result);
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                // Drop the timer (held in state) to stop this repeated callback.
+                state_clone.borrow_mut().active_timer = None;
             }
             Err(mpsc::TryRecvError::Empty) => {}
             Err(mpsc::TryRecvError::Disconnected) => {
                 hide_overlay(&ui);
-                if let Some(t) = th_c.borrow().as_ref() {
-                    t.stop();
-                }
+                state_clone.borrow_mut().active_timer = None;
             }
         }
     });
-    *timer_holder.borrow_mut() = Some(timer);
-    state.borrow_mut().active_timer = timer_holder.borrow_mut().take();
+    // Keep the timer alive so it keeps firing; the callback stops it by clearing this slot.
+    state.borrow_mut().active_timer = Some(timer);
 }
 
 fn finalize_rename(ui: &MainWindow, state: &SharedState, result: &RenameResult) {

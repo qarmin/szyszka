@@ -42,7 +42,7 @@ upper_files_folders_label_up_to_date = ファイル/フォルダ({ $files_number
 button_select_all = すべて選択
 button_select_reverse = 選択を逆にする
 button_select_custom = カスタムを選択
-button_unselect_custom = カスタムの選択を解除
+button_unselect_all = すべて選択解除
 button_select_changed = 変更を選択
 button_unselect_changed = 選択解除の変更
 # Un/Select custom
@@ -68,7 +68,7 @@ dialog_outdated_results = 古い結果
 dialog_results_of_renaming = 名前を変更した結果
 dialog_save_rule = ルールの保存
 dialog_select_custom = カスタムを選択
-dialog_unselect_custom = カスタムの選択を解除
+settings_open_log_folder = ログフォルダーを開く
 
 # Rule Window
 
