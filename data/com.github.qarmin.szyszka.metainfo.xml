@@ -24,4 +24,10 @@
   <url type="homepage">https://github.com/qarmin/szyszka</url>
   <url type="bugtracker">https://github.com/qarmin/szyszka/issues</url>
   <url type="donation">https://github.com/sponsors/qarmin</url>
+  <keywords>
+    <keyword>file renamer</keyword>
+    <keyword>rust application</keyword>
+    <keyword>fast file renaming</keyword>
+    <keyword>simple file renaming tool</keyword>
+  </keywords>
 </component>
