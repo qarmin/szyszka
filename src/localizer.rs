@@ -14,6 +14,12 @@ pub static LANGUAGE_LOADER: Lazy<FluentLanguageLoader> = Lazy::new(|| {
 
     loader.load_fallback_language(&Localizations).expect("Error while loading fallback language");
 
+    // Fluent wraps interpolated placeables in Unicode bidi-isolation marks (U+2068/U+2069) by
+    // default, which leak into persisted strings like rule descriptions saved to JSON.
+    // Note: language::apply_language() must re-disable this after every language switch, since
+    // FluentLanguageLoader::select() reloads bundles internally and resets this to true.
+    loader.set_use_isolating(false);
+
     loader
 });
 
@@ -38,4 +44,15 @@ pub fn generate_translation_hashmap(vec: Vec<(&'static str, String)>) -> HashMap
         hashmap.insert(key, value);
     }
     hashmap
+}
+
+#[cfg(test)]
+mod test {
+    use super::generate_translation_hashmap;
+
+    #[test]
+    fn test_no_bidi_isolate_chars_in_interpolated_strings() {
+        let s = fls!("rule_description_zeros", generate_translation_hashmap(vec![("zeros", "3".to_string())]));
+        assert!(!s.contains('\u{2068}') && !s.contains('\u{2069}'), "bidi isolate chars found in: {s:?}");
+    }
 }

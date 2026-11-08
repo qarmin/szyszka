@@ -2,11 +2,12 @@
 
 Szyszka is a simple but powerful and fast bulk file renamer.
 
-![Szyszka](https://github.com/qarmin/szyszka/assets/41945903/c8da9bf2-2962-46cb-a9e3-0172e2bd6033)
+<div align="center"><img src="https://github.com/user-attachments/assets/58e9e05e-8ab2-44fc-91a5-f5859427b7b7" alt="Szyszka" width="800" /></div>
+
 ## Features
 - Great performance
 - Available for Linux, Mac and Windows
-- Gui created with GTK 4
+- Gui created with Slint
 - Multiple rules which can be freely combined:
   - Replace text
   - Trim text
@@ -20,45 +21,16 @@ Szyszka is a simple but powerful and fast bulk file renamer.
 - Handle even hundreds thousands of records
 
 ## Requirements
-### Linux
-You need to install GTK 4.6 (it should be available by default on most distributions), which is bundled in Ubuntu 22.04 and newer.
-```shell
-sudo apt install libgtk-4-bin
-```
-### MacOS (not tested)
-You need to install GTK using brew
-```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install gtk4 adwaita-icon-theme librsvg pkg-config
-```
-
-### Windows
-The released zip file contains all dependencies, so it work out of the box on Windows 10+;
+Prebuilt binaries have no mandatory runtime dependencies on any platform (Linux, macOS, Windows).
 
 ## Installation
 ### Precompiled Binaries
 Available at https://github.com/qarmin/szyszka/releases
 
-### Snap
-https://snapcraft.io/szyszka  
-```
-snap install szyszka
-sudo snap connect szyszka:removable-media # Allows to see files on external devices
-```
-
-### Flatpak
-TODO
-
 ### Cargo/Crates.io
 https://crates.io/crates/szyszka
 ```
 cargo install szyszka
-```
-
-### Gentoo Linux
-szyszka is available on Gentoo's GURU overlay
-```
-emerge -av gui-apps/szyszka
 ```
 
 ## Alternatives

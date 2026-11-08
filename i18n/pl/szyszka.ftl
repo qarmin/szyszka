@@ -39,6 +39,10 @@ bottom_rule_label_rules = Reguły
 upper_files_folders_label = Pliki/Foldery
 upper_files_folders_label_update = Pliki/foldery({ $files_number }) - ##### WYMAGANA AKTUALIZACJA #####
 upper_files_folders_label_up_to_date = Pliki/foldery({ $files_number }) - aktualne
+# Context menu
+context_menu_open_item_text = Otwórz element
+context_menu_open_parent_text = Otwórz folder nadrzędny
+
 # Select popover
 button_select_all = Zaznacz wszystko
 button_unselect_all = Odznacz wszystko

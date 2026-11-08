@@ -1,6 +1,7 @@
 import { Button, LineEdit, CheckBox, ComboBox, ScrollView, GroupBox, HorizontalBox, VerticalBox, ListView, StandardButton, Palette } from "std-widgets.slint";
 import { Translations, Settings, Callabler, GuiState, EditorState, ProgressState, FileRow, RuleRow, RuleSetEntry, SelectMode, DirFileTypeUi, NotebookTab, RuleTypeUi, RulePlaceUi, SortColumn } from "common.slint";
 import { RuleEditorPanel } from "rule_editor.slint";
+import { PopupContextMenu } from "popup_context_menu.slint";
 
 component SortHeaderCell inherits Rectangle {
     in property <string> label_text;
@@ -56,6 +57,9 @@ export component MainWindow inherits Window {
 
     in property <[FileRow]> files: [];
     in property <[RuleRow]> rules: [];
+
+    private property <int> context_menu_row_idx: -1;
+    private property <length> file_row_height: 26px;
 
     property <bool> theme_sync: Settings.dark_theme;
     changed theme_sync => { Palette.color-scheme = self.theme_sync ? ColorScheme.dark : ColorScheme.light; }
@@ -147,10 +151,10 @@ export component MainWindow inherits Window {
                             }
                         }
                     }
-                    ListView {
+                    file_list_view := ListView {
                         vertical-stretch: 1;
                         for row[idx] in root.files : Rectangle {
-                            height: 26px;
+                            height: file_row_height;
                             background: row.selected ? Palette.accent-background : (mod(idx, 2) == 0 ? Palette.alternate-background : Palette.background);
                             ta := TouchArea {
                                 double-clicked => {
@@ -158,7 +162,10 @@ export component MainWindow inherits Window {
                                 }
                                 pointer-event(event) => {
                                     if event.button == PointerEventButton.right && event.kind == PointerEventKind.up {
-                                        Callabler.open-file-folder(idx);
+                                        context_menu_row_idx = idx;
+                                        context_menu.x = ta.mouse-x;
+                                        context_menu.y = file_list_view.y + idx * file_row_height + file_list_view.viewport-y;
+                                        context_menu.show_popup();
                                     } else if event.button == PointerEventButton.left && event.kind == PointerEventKind.up {
                                         if event.modifiers.control {
                                             GuiState.last_file_anchor_idx = idx;
@@ -228,6 +235,19 @@ export component MainWindow inherits Window {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+
+                context_menu := PopupContextMenu {
+                    open_item() => {
+                        if context_menu_row_idx != -1 {
+                            Callabler.open-file(context_menu_row_idx);
+                        }
+                    }
+                    open_parent() => {
+                        if context_menu_row_idx != -1 {
+                            Callabler.open-file-folder(context_menu_row_idx);
                         }
                     }
                 }

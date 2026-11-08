@@ -1,0 +1,42 @@
+import { Button, Palette } from "std-widgets.slint";
+import { Translations } from "common.slint";
+
+export component PopupContextMenu inherits Rectangle {
+    callback open_item();
+    callback open_parent();
+    callback show_popup();
+
+    private property <length> menu_item_height: 28px;
+
+    popup_window := PopupWindow {
+        close-policy: PopupClosePolicy.close-on-click-outside;
+        width: menu_layout.preferred-width;
+        height: menu_layout.preferred-height;
+
+        Rectangle {
+            width: parent.width;
+            height: parent.height;
+            border-radius: 5px;
+            background: Palette.background;
+            border-color: Palette.border;
+            border-width: 1px;
+
+            menu_layout := VerticalLayout {
+                Button {
+                    text: Translations.context_menu_open_item_text;
+                    height: menu_item_height;
+                    clicked => { popup_window.close(); root.open_item(); }
+                }
+                Button {
+                    text: Translations.context_menu_open_parent_text;
+                    height: menu_item_height;
+                    clicked => { popup_window.close(); root.open_parent(); }
+                }
+            }
+        }
+    }
+
+    show_popup() => {
+        popup_window.show();
+    }
+}

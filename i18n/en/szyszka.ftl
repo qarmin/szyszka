@@ -46,6 +46,10 @@ upper_files_folders_label = Files/Folders
 upper_files_folders_label_update = Files/Folders({ $files_number }) - ##### UPDATE REQUIRED #####
 upper_files_folders_label_up_to_date = Files/Folders({ $files_number }) - up to date
 
+# Context menu
+context_menu_open_item_text = Open Item
+context_menu_open_parent_text = Open Parent Folder
+
 # Select popover
 button_select_all = Select All
 button_unselect_all = Unselect All

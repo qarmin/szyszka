@@ -1,4 +1,4 @@
-use crate::localizer::localizer;
+use crate::localizer::{localizer, LANGUAGE_LOADER};
 
 #[derive(Clone)]
 pub struct Language {
@@ -70,4 +70,8 @@ pub fn apply_language(combo_text: &str) {
     let localizer = localizer();
     let requested = vec![lang.short_text.parse().expect("Invalid language identifier")];
     let _ = localizer.select(&requested);
+
+    // select() reloads Fluent bundles internally, resetting use_isolating to its default
+    // (true), so it must be disabled again after every language switch.
+    LANGUAGE_LOADER.set_use_isolating(false);
 }

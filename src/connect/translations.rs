@@ -26,6 +26,9 @@ pub fn apply_translations(ui: &MainWindow) {
     t.set_bottom_rule_label_rules(fls!("bottom_rule_label_rules").into());
     t.set_upper_files_folders_label(fls!("upper_files_folders_label").into());
 
+    t.set_context_menu_open_item_text(fls!("context_menu_open_item_text").into());
+    t.set_context_menu_open_parent_text(fls!("context_menu_open_parent_text").into());
+
     t.set_tree_view_upper_column_type(fls!("tree_view_upper_column_type").into());
     t.set_tree_view_upper_column_current_name(fls!("tree_view_upper_column_current_name").into());
     t.set_tree_view_upper_column_future_name(fls!("tree_view_upper_column_future_name").into());
